@@ -2213,7 +2213,7 @@ p { font-size: 14px; }
 .wrapper.nav-collapsed .page-wrap .app-sidebar:hover .sidebar-content .nav-container .navigation-main .nav-lavel { display: block; }
 .wrapper.nav-collapsed .page-wrap .app-sidebar:hover .sidebar-content .nav-container .navigation-main .nav-item a span { display: inline-block; }
 .wrapper.nav-collapsed .page-wrap .app-sidebar:hover .sidebar-content .nav-container .navigation-main .nav-item a::before { display: inline-block; }
-.wrapper.nav-collapsed .page-wrap .main-content { padding-left: 75px; }
+.wrapper.nav-collapsed .page-wrap .main-content { padding-left: 60px !important; }
 .wrapper.nav-collapsed .page-wrap .footer { padding-left: 90px; }
 .wrapper.menu-collapsed .page-wrap .app-sidebar .sidebar-header .nav-toggle { display: none; }
 .wrapper.right-sidebar-expand .right-sidebar { -moz-transform: translateX(0); -o-transform: translateX(0); -ms-transform: translateX(0); -webkit-transform: translateX(0); transform: translateX(0); }

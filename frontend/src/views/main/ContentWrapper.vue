@@ -40,62 +40,66 @@
           </div>
         </div>
       </a>
-      <div class="c-i-wrapper">
-        <!-- 더 뭔가 추가할 거 같아서 div로 감싸놓음 -->
-        <div style="flex-grow:1;" class="myflex-column">
-          <div style="position: relative;">
-            <div class="mytextarea-wrapper" v-if="!$store.state.isInviteMode && !$store.state.isSearchMode">
-              <v-icon class="my-mail" v-bind:class="{'active-m': sendMail}" @click="sendMailToggle">mail</v-icon>
-              <i class="im im-users myfile-upload" style="right: 50px;" @click="inviteToggle"></i>
-              <label for="file-input" style="display: block;margin-bottom: 0;">
-                <i class="im im-cloud-upload myfile-upload"></i>
-              </label>
-              <input id="file-input" type="file" ref="fileInput" multiple @change="attachFile" hidden/>
-              <b-form-textarea
-                class="mytextarea"
-                autofocus
-                id="textarea-no-resize"
-                placeholder="Enter chat message"
-                rows="2"
-                no-resize
-                v-model="message.content"
-                @keydown.ctrl.shift.70="toggleSearchMode"
-                @keydown.enter.exact="send"
-                @keyup="byteCheck"
-                @keydown.shift.alt.50='inviteToggle'
-              ></b-form-textarea>
+        <div class="c-i-wrapper">
+          <!-- 더 뭔가 추가할 거 같아서 div로 감싸놓음 -->
+          <div style="flex-grow:1;" class="myflex-column">
+            <div style="position: relative;">
+              <div class="mytextarea-wrapper" v-if="!$store.state.isInviteMode && !$store.state.isSearchMode">
+                <v-icon class="my-mail" v-bind:class="{'active-m': sendMail}" @click="sendMailToggle">mail</v-icon>
+                <i class="im im-users myfile-upload" style="right: 50px;" @click="inviteToggle"></i>
+                <label for="file-input" style="display: block;margin-bottom: 0;">
+                  <i class="im im-cloud-upload myfile-upload"></i>
+                </label>
+                <input id="file-input" type="file" ref="fileInput" multiple @change="attachFile" hidden/>
+                <b-form-textarea
+                  class="mytextarea"
+                  autofocus
+                  id="textarea-no-resize"
+                  placeholder="Enter chat message"
+                  rows="2"
+                  no-resize
+                  v-model="message.content"
+                  @keydown.ctrl.shift.70="toggleSearchMode"
+                  @keydown.enter.exact="send"
+                  @keyup="byteCheck"
+                  @keydown.shift.alt.50='inviteToggle'
+                ></b-form-textarea>
+              </div>
+              <div style="position: relative" v-if="$store.state.isInviteMode">
+                <i style="position:absolute;left: 15px;top: calc(50% - 12px);" class="im im-user-circle"></i>
+                <b-form-input
+                  autocomplete="off"
+                  @keydown.enter.exact="invite"
+                  @keydown.esc.exact="inviteToggle"
+                  list="user-info-list"
+                  placeholder="invite user"
+                  style="height: 80px;padding-left: 50px;"
+                  v-model="message.content"
+                  autofocus
+                  @change="splitData"
+                ></b-form-input>
+                <datalist id="user-info-list">
+                  <option v-for="user in userList" :key="user.email">{{ user.name }}-{{ user.email }}</option>
+                </datalist>
+              </div>
+              <SearchInput
+                :msgArray="msgArray"
+                :cursorPoint="cursorPoint"
+                :wrapperEl="wrapperEl"
+                @getMessage="getMessage"></SearchInput>
             </div>
-            <div style="position: relative" v-if="$store.state.isInviteMode">
-              <i style="position:absolute;left: 15px;top: calc(50% - 12px);" class="im im-user-circle"></i>
-              <b-form-input
-                autocomplete="off"
-                @keydown.enter.exact="invite"
-                @keydown.esc.exact="inviteToggle"
-                list="user-info-list"
-                placeholder="invite user"
-                style="height: 80px;padding-left: 50px;"
-                v-model="message.content"
-                autofocus
-                @change="splitData"
-              ></b-form-input>
-              <datalist id="user-info-list">
-                <option v-for="user in userList" :key="user.email">{{ user.name }}-{{ user.email }}</option>
-              </datalist>
+            <div style="display: flex;flex-grow: 1;">
+              <span class="ml-auto"> {{ stringByteLength }} / 30000Byte</span>
             </div>
-            <SearchInput
-              :msgArray="msgArray"
-              :cursorPoint="cursorPoint"
-              :wrapperEl="wrapperEl"
-              @getMessage="getMessage"></SearchInput>
           </div>
-          <div style="display: flex;flex-grow: 1;">
-            <span class="ml-auto"> {{ stringByteLength }} / 30000Byte</span>
-          </div>
+          <v-btn class="mx-2" fab dark large color="cyan" style="margin-top: 15px;">
+            <i class="im im-paperplane"></i>
+          </v-btn>
+
+          <!--        <b-button v-if="!$store.state.isInviteMode && !$store.state.isSearchMode" @click="send"-->
+          <!--                  style="height: 57px; width: 70px; margin-left:20px;" variant="primary">전송-->
+          <!--        </b-button>-->
         </div>
-        <b-button v-if="!$store.state.isInviteMode && !$store.state.isSearchMode" @click="send"
-                  style="height: 57px; width: 70px; margin-left:20px;" variant="primary">전송
-        </b-button>
-      </div>
     </div>
   </main>
 </template>

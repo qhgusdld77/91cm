@@ -1,8 +1,8 @@
 <template>
-  <v-app data-app >
+  <v-app data-app>
     <router-view/>
-  </v-app >
-  
+  </div >
+  </v-app>
 </template>
 
 <script>

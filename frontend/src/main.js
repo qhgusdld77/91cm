@@ -1,18 +1,14 @@
 import 'babel-polyfill'
 import 'expose-loader?$!expose-loader?jQuery!jquery'
-// import '../dist/css/theme.css'
-// import '../plugins/bootstrap/dist/css/bootstrap.min.css'
+import '../plugins/fontawesome-free/css/all.min.css'
 import '../plugins/icon-kit/dist/css/iconkit.min.css'
 import '../plugins/ionicons/dist/css/ionicons.min.css'
 import '../plugins/bootstrap/dist/js/bootstrap.min.js'
-
- 
-import Vue from 'vue' 
+import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
 import BootstrapVue from 'bootstrap-vue'
-Vue.use(BootstrapVue)
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -22,14 +18,10 @@ import VueSession from 'vue-session'
 import AlertModal from "./plugins/AlertModal";
 import './assets/font/iconmonstr/css/iconmonstr-iconic-font.min.css';
 import 'animate.css'
-
 import './assets/css/main.css'
 import '../dist/css/theme.css'
-//
 
-
-
-
+Vue.use(BootstrapVue)
 Date.prototype.addDays = function (days) {
   var date = new Date(this.valueOf());
   date.setDate(date.getDate() + days);
