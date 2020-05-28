@@ -1,6 +1,5 @@
 import 'babel-polyfill'
 import 'expose-loader?$!expose-loader?jQuery!jquery'
-import '../plugins/fontawesome-free/css/all.min.css'
 import '../plugins/icon-kit/dist/css/iconkit.min.css'
 import '../plugins/ionicons/dist/css/ionicons.min.css'
 import '../plugins/bootstrap/dist/js/bootstrap.min.js'
