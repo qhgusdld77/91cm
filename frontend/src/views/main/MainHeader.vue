@@ -91,18 +91,6 @@ import theme from '../../../dist/js/theme.js'
         alarmList: [],
       }
     },
-
-    // watch: {
-    //   // stomp 클라이언트가 null 일때가 없음으로 다시 구현
-    //   StompClient: function (newVal, oldVal) {
-    //     if(newVal.connected){
-    //       newVal.subscribe("/sub/alarm/" + this.$store.state.currentUser.email, (e) => {
-    //         let invite = JSON.parse(e.body)
-    //         this.alarmList.unshift(invite)
-    //       })
-    //     }
-    //   }
-    // },
     computed: {
       getUserRoles: function(){
         if (this.$store.state.currentUser.roles.includes('ROLE_ADMIN')){
