@@ -171,7 +171,6 @@
         })
       },
       channelUpdate() {
-        console.log(this.$store.state.currentChannel.id,'??')
         this.$store.state.stompClient.subscribe("/sub/chat/room/" + this.$store.state.currentChannel.id, (e) => {
           let data = JSON.parse(e.body)
           if (data.message == 'updateChannel') {
@@ -182,10 +181,8 @@
             return;
           }
         })
-        // this.$store.commit('setChannelList', newChannelList)
       },
       msgArrayUpdate(newmsgArray) {
-        
         this.msgArray = newmsgArray
       },
       channelSubscribeCallBack(e, fail) {

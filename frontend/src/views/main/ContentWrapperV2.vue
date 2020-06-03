@@ -18,7 +18,7 @@
                  class="mychat-content"></div>
             <b-container fluid v-else-if="msg.files.length > 0" class="p-4 bg-white">
               <b-row>
-                <b-col v-for="file in msg.files">
+                <b-col v-for="(file,index) in msg.files" :key="index">
                   <a @click="fileDownload(file)">
                     <b-img thumbnail rounded fluid :src="selectImage(file)" alt="이미지를 찾을 수 없습니다."
                            style="max-width: 200px" @load="imgLoad"></b-img>
@@ -65,26 +65,6 @@
                 @keydown.shift.alt.50='inviteToggle'
               ></b-form-textarea>
             </div>
-
-            <!-- <div style="position: relative" v-if="$store.state.isInviteMode">
-              <i style="position:absolute;left: 15px;top: calc(50% - 12px);" class="im im-user-circle"></i>
-              <b-form-input
-                autocomplete="off"
-                @keydown.enter.exact="invite"
-                @keydown.esc.exact="inviteToggle"
-                list="user-info-list"
-                placeholder="invite user"
-                style="height: 80px;padding-left: 50px;"
-                v-model="message.content"
-                autofocus
-                @change="splitData"
-              ></b-form-input>
-              <datalist id="user-info-list">
-                <option v-for="user in userList" :key="user.email">{{ user.name }}-{{ user.email }}</option>
-              </datalist>
-            </div> -->
-
-
 
             <div v-if="$store.state.isInviteMode">
               <v-row>
@@ -135,11 +115,6 @@
                 </v-col>
               </v-row>
             </div>
-
-
-
-
-
             <SearchInput
               :msgArray="msgArray"
               :cursorPoint="cursorPoint"
