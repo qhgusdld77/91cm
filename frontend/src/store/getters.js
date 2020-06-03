@@ -16,5 +16,6 @@ export default {
   getSyncChannelUser: state => state.syncSignal.syncChannelUser,
   getChannelUsers: state => state.channelUsers,
   getSelectComponent: state => state.selectComponent,
-  getUserList: state => state.userList
+  getUserList: state => state.userList,
+  getMsgArray: state => state.msgArray
 }

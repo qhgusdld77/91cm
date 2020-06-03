@@ -7,8 +7,9 @@
                             <h3>{{taskList.name}}</h3>
                             <div class="card-header-right">
                                 <ul class="list-unstyled card-option">
+                                  <!-- <i class="ik ik-chevron-up"></i> -->
                                     <li><i class="ik ik-chevron-left action-toggle"></i></li>
-                                    <li><i class="ik ik-minus minimize-card"></i></li>
+                                    <li><i class="ik ik-chevron-up minimize-card"></i></li>
                                     <li @click="msgBox" ><i class="ik ik-x close-card"></i></li>
                                     <li @click="editToggle"><i class="ik ik-edit-2"></i></li>
                                     <li @click="createFormToggle"><i class="ik ik-plus"  ></i></li>

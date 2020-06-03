@@ -38,5 +38,13 @@ export default {
   },
   setCreateListActive: function(state,payload){
     state.isCreateListActive = payload
+  },
+  setMsgArray: function(state,payload){
+    state.msgArray = payload
+  },
+  pushMsg: function(state,payload){
+    state.msgArray.push(payload)
   }
+
+
 }

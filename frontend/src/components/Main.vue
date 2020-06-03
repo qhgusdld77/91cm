@@ -49,6 +49,9 @@
   import Calendar from "../views/calendar/Calendar";
   import AdminPage from "../views/admin/AdminPage"
   import AppsModal from "../views/main/AppsModal"
+  import {mapGetters} from "vuex";
+
+
   import VideoChat from "./VideoChat";
 
   export default {
@@ -74,7 +77,6 @@
         channelTitle: '',
         channelList: [],
         isRActive: false,
-        msgArray: [],
         modalObj: {modalTitle: '', currentChannel: null},
       }
     },
@@ -104,7 +106,10 @@
         if (this.$store.state.stompClient != null) {
           return this.$store.state.stompClient.connected
         }
-      }
+      },
+      ...mapGetters({
+        msgArray: 'getMsgArray'
+      })
     },
     deactivated() {
     },
@@ -164,7 +169,6 @@
         })
       },
       channelUpdate() {
-        console.log(this.$store.state.currentChannel.id, '??')
         this.$store.state.stompClient.subscribe("/sub/chat/room/" + this.$store.state.currentChannel.id, (e) => {
           let data = JSON.parse(e.body)
           if (data.message == 'updateChannel') {
@@ -175,11 +179,6 @@
             return;
           }
         })
-        // this.$store.commit('setChannelList', newChannelList)
-      },
-      msgArrayUpdate(newmsgArray) {
-
-        this.msgArray = newmsgArray
       },
       channelSubscribeCallBack(e, fail) {
         let data = JSON.parse(e.body)
@@ -189,7 +188,7 @@
           if (fail) {
             data.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + data.content
           }
-          this.msgArray.push(data)
+          this.$store.commit('pushMsg',data)
           if (!this.$store.state.isfocus) {
             this.msgCountUpdate(data.channel_id, true)
           }

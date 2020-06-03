@@ -22,5 +22,6 @@ export default {
   isInviteMode: false,
   searchText: '',
   isSmallWidth:false,
-  isCreateListActive : false
+  isCreateListActive : false,
+  msgArray: []
 }
