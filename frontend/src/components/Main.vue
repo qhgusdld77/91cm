@@ -9,8 +9,6 @@
                   <NoChannel v-if="$store.state.userChannelList[0]==null && $store.state.selectComponent=='main'"/>
                     <keep-alive v-else>
                       <component :is="whichComponent"
-                      :msgArray="msgArray"
-                      @msgArrayUpdate="msgArrayUpdate"
                       ></component>
                     </keep-alive>  
                   <RSidebar v-if="$store.state.currentChannel!=null"></RSidebar>
@@ -19,7 +17,6 @@
               <footer class="footer" >
                   <div class="w-100 clearfix">
                       <span class="text-center text-sm-left d-md-inline-block">Copyright © 2018 ThemeKit</span>
-                      <!-- <span class="float-none float-sm-right mt-1 mt-sm-0 text-center">Crafted with <i class="fa fa-heart text-danger"></i> by <a href="http://lavalite.org/" class="text-dark" target="_blank">Lavalite</a></span> -->
                   </div>
               </footer>
                 
@@ -60,7 +57,9 @@
   import Calendar from "../views/calendar/Calendar";
   import AdminPage from "../views/admin/AdminPage"
   import AppsModal from "../views/main/AppsModal"
-  
+  import {mapGetters} from "vuex";
+
+
   export default {
     name: 'Main',
     components: {
@@ -83,7 +82,6 @@
         channelTitle: '',
         channelList: [],
         isRActive: false,
-        msgArray: [],
         modalObj: {modalTitle: '', currentChannel: null},
       }
     },
@@ -111,7 +109,10 @@
         if (this.$store.state.stompClient != null) {
           return this.$store.state.stompClient.connected
         }
-      }
+      },
+      ...mapGetters({
+        msgArray: 'getMsgArray'
+      })
     },
     deactivated() {
     },
@@ -171,7 +172,6 @@
         })
       },
       channelUpdate() {
-        console.log(this.$store.state.currentChannel.id,'??')
         this.$store.state.stompClient.subscribe("/sub/chat/room/" + this.$store.state.currentChannel.id, (e) => {
           let data = JSON.parse(e.body)
           if (data.message == 'updateChannel') {
@@ -182,11 +182,6 @@
             return;
           }
         })
-        // this.$store.commit('setChannelList', newChannelList)
-      },
-      msgArrayUpdate(newmsgArray) {
-        
-        this.msgArray = newmsgArray
       },
       channelSubscribeCallBack(e, fail) {
         let data = JSON.parse(e.body)
@@ -196,7 +191,7 @@
           if (fail) {
             data.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + data.content
           }
-          this.msgArray.push(data)
+          this.$store.commit('pushMsg',data)
           if (!this.$store.state.isfocus) {
             this.msgCountUpdate(data.channel_id, true)
           }

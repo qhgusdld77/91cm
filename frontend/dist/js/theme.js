@@ -56,7 +56,7 @@
         var e = i(this),
             s = i(e.parents(".card"));
         i(s).children(".card-body").slideToggle();
-        i(this).toggleClass("ik-minus").fadeIn("slow"), i(this).toggleClass("ik-plus").fadeIn("slow")
+        i(this).toggleClass("ik-chevron-up").fadeIn("slow"), i(this).toggleClass("ik-chevron-down").fadeIn("slow")
     })
 
     i(s).on("click", ".navigation li:not(.has-sub)", function() {
