@@ -140,7 +140,6 @@
   import {mapGetters} from "vuex";
 
   export default {
-    // props: ['msgArray'],
     name: 'ContentWrapper',
     components: {
       MsgBox, SearchInput
@@ -204,9 +203,6 @@
     },
     methods: {
       enter: async function(event) {
-
-        // 대신에 다른 곳에서 menuable__content__active라는 클래스가 쓰여진다면
-        // 이 작동은 제대로 동작 안할 수도 있음
         let el = document.querySelector(".menuable__content__active.inviteClass")
         if(el == null){
           if(this.friends.length!=0){
@@ -375,8 +371,6 @@
             let errormsg = JSON.parse(JSON.stringify(this.message))
             //dd
             this.$store.commit('pushMsg',errormsg)
-            // this.$store.state.msgArray.push(errormsg)
-            // this.msgArray.push(errormsg)
             this.message.content = ''
           }
         }
@@ -410,11 +404,7 @@
 
             res.data[i].content = CommonClass.replacemsg(res.data[i].content)
           }
-          console.log(this.msgArray)
-          // dd
           this.$store.commit('setMsgArray', res.data.reverse().concat(this.msgArray))
-          // this.$store.commit('setMsgArray', res.data.reverse().concat(this.$store.state.msgArray))
-          // this.msgArray = res.data.reverse().concat(this.msgArray)
           if (wrapperEl != null) {
             this.$nextTick(() => {
               wrapperEl.scrollTop = wrapperEl.scrollHeight - this.oldScrollHeight
@@ -422,8 +412,6 @@
             })
           }
           this.getmsgBool = true
-          // dd
-          // this.$emit('msgArrayUpdate', this.msgArray)
         })
       },
       scrollToEnd(bool) {
@@ -462,12 +450,8 @@
         this.cursorPoint.cursorId = 0
         this.cursorPoint.empty = false
         this.$store.commit('setMsgArray',[])
-        //dd
-        // this.msgArray = []
         this.firstLoad = true
         this.scrollHeight = 0
-        //dd
-          // this.$emit('msgArrayUpdate', this.msgArray)
       },
       byteCheck(e) {
         // v-model을 썼음에도 e.target.value를 사용하는 이유는 한글은 바로 바인딩이 안되기때문에 수동적으로 값들을 message.content에 넣기 위함이다.
