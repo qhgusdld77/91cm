@@ -1,7 +1,8 @@
 <template>
-  <div>
+  <!-- <div>
     <v-layout row wrap>
-      <v-col cols="9">
+      <v-col cols="9"> -->
+        <div>
         <v-card
           v-for="item in videoList"
           v-bind:video="item"
@@ -13,9 +14,10 @@
             {{$store.state.currentUser.name}}
           </v-card-title>
         </v-card>
-      </v-col>
+        </div>
+      <!-- </v-col>
     </v-layout>
-  </div>
+  </div> -->
 </template>
 
 <script>
