@@ -110,7 +110,6 @@ import theme from '../../../dist/js/theme.js'
       this.$store.state.stompClient.subscribe("/sub/alarm/" + this.$store.state.currentUser.email, (e) => {
         let invite = JSON.parse(e.body)
         this.alarmList.unshift(invite)
-        // this.shakeAnimation()
       }),
       this.$http.get('/api/invite/list')
         .then(res => {
@@ -124,7 +123,6 @@ import theme from '../../../dist/js/theme.js'
     },
     methods: {
       rightSidebarToggle: function(e){
-        // console.log(e)
         $('.right-sidebar-toggle')[0].classList.toggle('active');
         $('.wrapper').toggleClass('right-sidebar-expand');
         return false;
@@ -134,13 +132,6 @@ import theme from '../../../dist/js/theme.js'
         console.log('click')
         this.$bvModal.show(modalId)
       },
-      // shakeAnimation: function(){
-      //   const element = this.$refs.bell;
-      //   element.classList.add('animate__animated','animate__swing');
-      //   element.addEventListener('animationend',()=>{
-      //     element.classList.remove('animate__animated','animate__swing')
-      //   });
-      // },
       inviteAccept: function (alarm, index) {
         const message = {
           channel_id: alarm.channel_id,
