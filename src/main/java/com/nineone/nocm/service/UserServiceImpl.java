@@ -25,14 +25,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
 
-//	@Override
-//	public boolean insertUser(User user) {
-////		user.setPassword(passwordEncoder.encode(user.getPassword()));
-//		return (userRepository.insertUser(user) > 0) ? true : false;
-//		
-//	}
-
-
+    // 추후 Form 로그인 용
     @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
 //		Map<String,String> userInfo = (Map<String, String>) userRepository.getUserfindByEmail(userEmail);
@@ -55,7 +48,6 @@ public class UserServiceImpl implements UserService {
         return (userRepository.getUserfindByEmail(email) == null) ? true : false;
     }
 
-
     @Override
     @Transactional
     public boolean insertUser(User user, DefaultOAuth2User oauth2user, HttpSession httpsession) {
@@ -73,7 +65,6 @@ public class UserServiceImpl implements UserService {
         int snsResult = userRepository.insertSNSInfo(map);
 
         if (userResult > 0 && snsResult > 0) {
-
             if (dbUser == null) {
                 User settingUser = (User) httpsession.getAttribute("user");
                 settingUser.setName(user.getEmail());
@@ -83,7 +74,6 @@ public class UserServiceImpl implements UserService {
             } else {
                 httpsession.setAttribute("user", dbUser);
             }
-
             return true;
         } else {
             return false;

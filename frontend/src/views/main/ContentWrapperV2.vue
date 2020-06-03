@@ -65,36 +65,15 @@
                 @keydown.shift.alt.50='inviteToggle'
               ></b-form-textarea>
             </div>
-
-            <!-- <div style="position: relative" v-if="$store.state.isInviteMode">
-              <i style="position:absolute;left: 15px;top: calc(50% - 12px);" class="im im-user-circle"></i>
-              <b-form-input
-                autocomplete="off"
-                @keydown.enter.exact="invite"
-                @keydown.esc.exact="inviteToggle"
-                list="user-info-list"
-                placeholder="invite user"
-                style="height: 80px;padding-left: 50px;"
-                v-model="message.content"
-                autofocus
-                @change="splitData"
-              ></b-form-input>
-              <datalist id="user-info-list">
-                <option v-for="user in userList" :key="user.email">{{ user.name }}-{{ user.email }}</option>
-              </datalist>
-            </div> -->
-
-
-
             <div v-if="$store.state.isInviteMode">
               <v-row>
                 <v-col cols="12">
                   <v-autocomplete
                     v-model="friends"
                     :items="userList"
-                    @keydown.enter.exact="enter"  
+                    @keydown.enter.exact="enter"
                     @keydown.esc.exact="inviteToggle"
-                    filled  
+                    filled
                     autofocus
                     chips
                     label="Select"
@@ -134,11 +113,6 @@
                 </v-col>
               </v-row>
             </div>
-
-
-
-
-
             <SearchInput
               :msgArray="msgArray"
               :cursorPoint="cursorPoint"
@@ -149,9 +123,12 @@
             <span class="ml-auto"> {{ stringByteLength }} / 30000Byte</span>
           </div>
         </div>
-        <b-button v-if="!$store.state.isInviteMode && !$store.state.isSearchMode" @click="send"
-                  style="height: 57px; width: 70px; margin-left:20px;" variant="primary">전송
-        </b-button>
+        <v-btn class="mx-2" fab dark large color="cyan" style="margin-top: 15px;">
+          <i class="im im-paperplane"></i>
+        </v-btn>
+<!--        <b-button v-if="!$store.state.isInviteMode && !$store.state.isSearchMode" @click="send"-->
+<!--                  style="height: 57px; width: 70px; margin-left:20px;" variant="primary">전송-->
+<!--        </b-button>-->
       </div>
     </div>
   </main>
@@ -172,8 +149,8 @@
     },
     data() {
       return {
-        friends:[],
-        sendMail:false,
+        friends: [],
+        sendMail: false,
         tempImg: '',
         stringByteLength: 0,
         previewObj: {
@@ -202,7 +179,7 @@
       }
     },
     created() {
-      if(this.$store.state.currentChannel!=null){
+      if (this.$store.state.currentChannel != null) {
         this.getMessage()
       }
     },
@@ -223,64 +200,68 @@
       if (this.$store.state.oldComponent != 'main' && this.$store.state.selectComponent == 'main') {
         this.scrollToEnd(true)
       }
-      this.friends= []
+      this.friends = []
       this.$store.state.isInviteMode = false
       this.$store.state.isSearchMode = false
     },
     methods: {
-      enter: async function() {
+      enter: async function () {
         // 대신에 다른 곳에서 menuable__content__active라는 클래스가 쓰여진다면
         // 이 작동은 제대로 동작 안할 수도 있음
         let el = document.querySelector(".menuable__content__active")
-        if(el == null){
-          if(this.friends.length!=0){
+        if (el == null) {
+          if (this.friends.length != 0) {
             await InviteService.invite(this.$store.state.currentUser.email, this.$store.state.currentChannel.id, this.friends)
-            .then(res => {
-              //메일 보내는 비동기 통신 있어야 함
-
-              for(let i=0; i < this.friends.length; i++){
-                const user = this.userList.find(el=> el.email == this.friends[i] )
-                this.message.content += user.name + '님 ' 
-              }
-              
-              //메일 오류 계속 떠서 일단 임시로 주석 처리함
-              //   this.$http.post('/api/invite/mail', invite).then(res=>{
-              //     console.log(res.data)
-              //   })
-              this.message.content += '을 초대했습니다.'
-              this.$eventBus.$emit('getUserList', true)
-              this.send()
-              this.inviteDataInit()
-
-            }).catch(error => {
-              let alertmsg = ''
-              if(error.response.data.list != null){
-                const alertList = error.response.data.list
-                for(let i=0; i < alertList.length; i++){
-                  const user = this.userList.find(el=> el.email == alertList[i] )
-                  alertmsg += user.name + '님 ' 
+              .then(res => {
+                const invite = {
+                  channel_id: this.$store.state.currentChannel.id,
+                  sender: this.$store.state.currentUser.email,
+                  recipients: this.friends
                 }
-                alertmsg += '은 이미 이 채널에 초대 받았습니다. 확인해주세요.'
-                this.$alertModal('error', alertmsg)
-              }else{
-                this.$alertModal('error', error.response.data.message)
-              }
-              console.error(error.response)
-              this.message.content = ''
-            })
-          }else{
-            this.$alertModal('alert','초대할 사용자를 선택해주세요')
-          }  
-        }  
+                for (let i = 0; i < this.friends.length; i++) {
+                  const user = this.userList.find(el => el.email == this.friends[i])
+                  this.message.content += user.name + '님 '
+                }
+
+                //메일 오류 계속 떠서 일단 임시로 주석 처리함
+                  this.$http.post('/api/invite/mail', invite)
+                    .then(res=>{
+                    console.log(res.data)
+                  })
+                this.message.content += '을 초대했습니다.'
+                this.$eventBus.$emit('getUserList', true)
+                this.send()
+                this.inviteDataInit()
+
+              }).catch(error => {
+                let alertmsg = ''
+                if (error.response.data.list != null) {
+                  const alertList = error.response.data.list
+                  for (let i = 0; i < alertList.length; i++) {
+                    const user = this.userList.find(el => el.email == alertList[i])
+                    alertmsg += user.name + '님 '
+                  }
+                  alertmsg += '은 이미 이 채널에 초대 받았습니다. 확인해주세요.'
+                  this.$alertModal('error', alertmsg)
+                } else {
+                  this.$alertModal('error', error.response.data.message)
+                }
+                console.error(error.response)
+                this.message.content = ''
+              })
+          } else {
+            this.$alertModal('alert', '초대할 사용자를 선택해주세요')
+          }
+        }
       },
       remove(item) {
         const index = this.friends.indexOf(item.email);
         if (index >= 0) this.friends.splice(index, 1);
       },
-      sendMailToggle(){
-        this.sendMail =!this.sendMail
-        if(this.sendMail){
-          this.$alertModal('alert','지금부터 보내는 메시지는'+this.$store.state.currentChannel.name +' 채널 사용자들에게 '+'메일로 보내집니다.')
+      sendMailToggle() {
+        this.sendMail = !this.sendMail
+        if (this.sendMail) {
+          this.$alertModal('alert', '지금부터 보내는 메시지는' + this.$store.state.currentChannel.name + ' 채널 사용자들에게 ' + '메일로 보내집니다.')
         }
       },
       toggleSearchMode: function () {
@@ -368,9 +349,9 @@
             console.log(this.$store.state.currentUser)
 
             //메일 오류 계속 떠서 일단 임시로 주석 처리함
-          //   this.$http.post('/api/invite/mail', invite).then(res=>{
-          //     console.log(res.data)
-          //   })
+            this.$http.post('/api/invite/mail', invite).then(res => {
+              console.log(res.data)
+            })
 
             this.message.content = userName + '님을 초대했습니다.'
             this.$eventBus.$emit('getUserList', true)
@@ -385,15 +366,15 @@
       },
       inviteToggle: function (e) {
         let el = document.querySelector(".menuable__content__active")
-        if(this.$store.state.isInviteMode == false){
+        if (this.$store.state.isInviteMode == false) {
           this.$store.state.isInviteMode = !this.$store.state.isInviteMode
-        }else{
-          if(el == null){
+        } else {
+          if (el == null) {
             this.inviteDataInit()
           }
         }
       },
-      inviteDataInit: function(){
+      inviteDataInit: function () {
         this.friends = []
         this.message.content = ''
         this.$store.state.isInviteMode = !this.$store.state.isInviteMode
@@ -410,19 +391,19 @@
             this.$store.state.stompClient.send("/pub/chat/message", JSON.stringify(this.message), {})
             this.message.content = ''
             this.scrollToEnd(true)
-            if (this.sendMail){
-              console.log(this.$store.state.channelUsers.filter(channelUser=> channelUser!=this.$store.state.currentUser))
-              this.$store.state.channelUsers.filter(channelUser=> channelUser!=this.$store.state.currentUser)
-                .forEach(channelUser =>{
-                this.$http.post('/api/message/send/mail',{
-                  channelName: this.$store.state.currentChannel.name,
-                  fromUser: this.$store.state.currentUser.name,
-                  toUser: channelUser.email
-                })
-                  .then(res =>{
-                    this.sendMail = false
+            if (this.sendMail) {
+              console.log(this.$store.state.channelUsers.filter(channelUser => channelUser != this.$store.state.currentUser))
+              this.$store.state.channelUsers.filter(channelUser => channelUser != this.$store.state.currentUser)
+                .forEach(channelUser => {
+                  this.$http.post('/api/message/send/mail', {
+                    channelName: this.$store.state.currentChannel.name,
+                    fromUser: this.$store.state.currentUser.name,
+                    toUser: channelUser.email
                   })
-              })
+                    .then(res => {
+                      this.sendMail = false
+                    })
+                })
             }
           } else {
             this.message.content = CommonClass.replaceErrorMsg(this.message.content)
@@ -499,7 +480,7 @@
         this.msgPreviewBool = false
       },
       initData() {
-        this.friends= []
+        this.friends = []
         this.$store.state.isInviteMode = false
         this.$store.state.isSearchMode = false
         this.message.channel_id = this.getCurrentChannel.id
@@ -511,7 +492,7 @@
         this.msgArray = []
         this.firstLoad = true
         this.scrollHeight = 0
-          this.$emit('msgArrayUpdate', this.msgArray)
+        this.$emit('msgArrayUpdate', this.msgArray)
       },
       byteCheck(e) {
         // v-model을 썼음에도 e.target.value를 사용하는 이유는 한글은 바로 바인딩이 안되기때문에 수동적으로 값들을 message.content에 넣기 위함이다.
@@ -553,8 +534,8 @@
           }
         }
       },
-      checkbox: function (){
-        if(this.checkbox){
+      checkbox: function () {
+        if (this.checkbox) {
           alert('지금부터 보내는 메시지는 나인원소프트 전체 메일로 보내집니다.')
         }
       }
@@ -576,11 +557,11 @@
 
 <style scoped>
 
-@media only screen and (max-width: 1023px){
-  .wrapper .page-wrap .main-content {
-    padding-left: 0px !important;
+  @media only screen and (max-width: 1023px) {
+    .wrapper .page-wrap .main-content {
+      padding-left: 0px !important;
+    }
   }
-}
 
 
 </style>

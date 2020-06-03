@@ -19,7 +19,6 @@
           <footer class="footer">
             <div class="w-100 clearfix">
               <span class="text-center text-sm-left d-md-inline-block">Copyright © 2018 ThemeKit</span>
-              <!-- <span class="float-none float-sm-right mt-1 mt-sm-0 text-center">Crafted with <i class="fa fa-heart text-danger"></i> by <a href="http://lavalite.org/" class="text-dark" target="_blank">Lavalite</a></span> -->
             </div>
           </footer>
         </div>
@@ -31,7 +30,6 @@
 </template>
 <script>
 
-  import theme from '../../dist/js/theme.js'
   import LSidebar from '../views/main/LSidebar'
   import RSidebar from '../views/main/RSidebar'
   import MainHeader from '../views/main/MainHeader'
@@ -180,7 +178,7 @@
         // this.$store.commit('setChannelList', newChannelList)
       },
       msgArrayUpdate(newmsgArray) {
-        
+
         this.msgArray = newmsgArray
       },
       channelSubscribeCallBack(e, fail) {

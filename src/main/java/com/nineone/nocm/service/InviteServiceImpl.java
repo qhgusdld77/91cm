@@ -18,7 +18,6 @@ public class InviteServiceImpl implements InviteService {
     @Override
     @Transactional
     public boolean saveInvite(Invite invite) {
-    	//리턴타입이 boolean이던 void던 컨트롤러 단에서 확인하지 않아서 뭐든 상관없을 듯
         return (inviteRepository.saveInvite(invite)>0);
     }
 

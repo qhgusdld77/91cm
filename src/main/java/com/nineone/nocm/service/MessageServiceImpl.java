@@ -1,33 +1,27 @@
 package com.nineone.nocm.service;
 
-import java.text.ParseException;
+import com.nineone.nocm.domain.Message;
+import com.nineone.nocm.repository.MessageRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.datetime.DateFormatter;
-import org.springframework.stereotype.Service;
-
-import com.nineone.nocm.domain.Message;
-import com.nineone.nocm.repository.MessageRepository;
-
 @Service
 public class MessageServiceImpl implements MessageService {
- 
+
 	@Autowired
 	private MessageRepository messageRepository;
-	
+
 	@Override
 	public int insertMessage(Message msg) {
 		return messageRepository.insertMessage(msg);
 	}
-	
+
 
 	@Override
 	public List<Message> getMessageList(Map<String, Object> map) {
@@ -54,11 +48,5 @@ public class MessageServiceImpl implements MessageService {
 			newMsg += "<p>" + origin + "</p>";
 		}
 		return newMsg;
-	}
-
-	// 추후 수정 해야함
-	@Override
-	public String testDate(){
-		return LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm aa MMMM dd"));
 	}
 }

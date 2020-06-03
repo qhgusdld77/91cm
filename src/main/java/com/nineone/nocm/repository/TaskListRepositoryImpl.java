@@ -11,7 +11,7 @@ import com.nineone.nocm.domain.TaskList;
 
 @Repository
 public class TaskListRepositoryImpl implements TaskListRepository{
-	
+
 	@Autowired
     private SqlSessionTemplate sqlSession;
 
@@ -41,12 +41,6 @@ public class TaskListRepositoryImpl implements TaskListRepository{
 	public int updateTaskListPosition(Map<String, Object> map) {
 		return sqlSession.update(namespace + ".updateTaskListPosition",map);
 	}
-
-//	@Override
-//	public int initTaskListPosition(Map<String, Object> map) {
-//		// TODO Auto-generated method stub
-//		return sqlSession.update(namespace + ".initTaskListPosition",map);
-//	}
 
 	@Override
 	public int moveTaskListPosition(Map<String, Object> map) {
