@@ -81,7 +81,7 @@
                     item-text="name"
                     item-value="email"
                     multiple
-                    :menu-props="{  contentClass: 'inviteClass'}"
+                    :menu-props="{contentClass: 'inviteClass'}"
                   >
                     <template v-slot:selection="data">
                       <v-chip
@@ -373,7 +373,6 @@
             this.message.content = CommonClass.replaceErrorMsg(this.message.content)
             this.message.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + this.message.content
             let errormsg = JSON.parse(JSON.stringify(this.message))
-            //dd
             this.$store.commit('pushMsg',errormsg)
             this.message.content = ''
           }
