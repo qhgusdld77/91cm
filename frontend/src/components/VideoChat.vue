@@ -1,18 +1,10 @@
 <template>
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-4">
-        <content-wrapper :msg-array="msgArray" @msgArrayUpdate="msgArrayUpdate">
-        </content-wrapper>
-      </div>
-      <div class="col-md-8">
-        <VueWebRTC
-          ref="webrtc"
-          :room-id="$store.state.currentChannel.id"
-          :socket-u-r-l="'http://91cm.nineonesoft.com:9001/'"
-        ></VueWebRTC>
-      </div>
-    </div>
+    <VueWebRTC
+      ref="webrtc"
+      :room-id="$store.state.currentChannel.id"
+      :socket-u-r-l="'http://91cm.nineonesoft.com:9001/'"
+    ></VueWebRTC>
   </div>
 </template>
 

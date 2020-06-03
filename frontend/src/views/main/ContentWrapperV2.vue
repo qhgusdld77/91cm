@@ -127,9 +127,6 @@
         <v-btn class="mx-2" fab dark large color="cyan" style="margin-top: 15px;">
           <i class="im im-paperplane"></i>
         </v-btn>
-<!--        <b-button v-if="!$store.state.isInviteMode && !$store.state.isSearchMode" @click="send"-->
-<!--                  style="height: 57px; width: 70px; margin-left:20px;" variant="primary">전송-->
-<!--        </b-button>-->
       </div>
     </div>
   </main>

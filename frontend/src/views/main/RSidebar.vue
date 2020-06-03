@@ -56,7 +56,7 @@
           <b-collapse id="video-chat">
             <div class="s-coll-style">
               <p>화상 채팅 유저 수 : 1</p>
-              <v-btn color="blue-grey" class="white--text" @click="callComponent('videoChat')">
+              <v-btn color="blue-grey" class="white--text" @click="callComponent('main')">
                 Join
                 <v-icon right dark>play_circle_outline</v-icon>
               </v-btn>
@@ -111,7 +111,7 @@
       },
       callComponent: function (componentName) {
         this.RSidebarClose()
-        this.$store.commit('getSelectComponent',componentName)
+        this.$store.commit('getSelectComponent', componentName)
       },
       leaveChannle: function () {
         this.$http.post('/api/channel/leave', {

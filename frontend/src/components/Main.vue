@@ -9,10 +9,7 @@
                :class="{'disactive-padding': $store.state.selectComponent=='main' }">
             <NoChannel v-if="$store.state.userChannelList[0]==null && $store.state.selectComponent=='main'"/>
             <keep-alive v-else>
-              <component :is="whichComponent"
-                         :msgArray="msgArray"
-                         @msgArrayUpdate="msgArrayUpdate"
-              ></component>
+              <component :is="whichComponent"></component>
             </keep-alive>
             <RSidebar v-if="$store.state.currentChannel!=null"></RSidebar>
           </div>
@@ -70,7 +67,7 @@
       'Calendar': Calendar,
       'AdminPage': AdminPage,
       'AppsModal': AppsModal,
-      'VideoChat' : VideoChat
+      'VideoChat': VideoChat
     },
     data() {
       return {
@@ -183,12 +180,13 @@
       channelSubscribeCallBack(e, fail) {
         let data = JSON.parse(e.body)
         NotificationClass.sendNotification(this.$store.state.isfocus, data)
-        if (data.channel_id == this.$store.state.currentChannel.id && this.$store.state.selectComponent == 'main') {
+        if (data.channel_id == this.$store.state.currentChannel.id && this.enableComponent) {
           data.content = CommonClass.replacemsg(data.content)
           if (fail) {
             data.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + data.content
           }
-          this.$store.commit('pushMsg',data)
+          this.$store.commit('pushMsg', data)
+          console.log(this.$store.state.msgArray)
           if (!this.$store.state.isfocus) {
             this.msgCountUpdate(data.channel_id, true)
           }
@@ -215,6 +213,17 @@
       },
       msgCountReset(i) {
         this.$store.state.userChannelList[i].count = 0
+      },
+      enableComponent: function () {
+        // sokect 통신을 위한 컴포넌트 체크
+        switch (this.$store.state.selectComponent) {
+          case "main":
+          case "videoChat":
+              return true
+          default:
+            return false
+        }
+
       }
 
     }
