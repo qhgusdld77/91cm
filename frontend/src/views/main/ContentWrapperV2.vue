@@ -1,5 +1,5 @@
 <template>
-  <main class="mainwrapper" style="height: calc(100vh - 91px);">
+  <main class="mainwrapper" style="height: calc(100vh - 91px);" :class="{'chat-minimalize': $store.state.isVideoMode}">
     <div class="h-inherit" v-cloak @drop.prevent="dropFile" @dragover.prevent>
       <ul class="c-c-wrapper list-unstyled" @scroll="scrollEvt">
         <MsgBox v-for="msg in msgArray" :key="msg.id">
@@ -525,6 +525,8 @@
       padding-left: 0px !important;
     }
   }
-
+.chat-minimalize{
+  width: 30%;
+}
 
 </style>

@@ -11,6 +11,9 @@
             <keep-alive v-else>
               <component :is="whichComponent"></component>
             </keep-alive>
+
+            <VideoChat v-if="$store.state.isVideoMode" />
+
             <RSidebar v-if="$store.state.currentChannel!=null"></RSidebar>
           </div>
           <footer class="footer">
@@ -21,6 +24,7 @@
         </div>
       </template>
       <Loading v-else/>
+      
     </div>
     <AppsModal></AppsModal>
   </div>
@@ -47,8 +51,6 @@
   import AdminPage from "../views/admin/AdminPage"
   import AppsModal from "../views/main/AppsModal"
   import {mapGetters} from "vuex";
-
-
   import VideoChat from "./VideoChat";
 
   export default {

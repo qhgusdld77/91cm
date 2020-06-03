@@ -23,5 +23,6 @@ export default {
   searchText: '',
   isSmallWidth:false,
   isCreateListActive : false,
-  msgArray: []
+  msgArray: [],
+  isVideoMode: false
 }
