@@ -101,6 +101,7 @@
                     item-text="name"
                     item-value="email"
                     multiple
+                    :menu-props="{  contentClass: 'inviteClass'}"
                   >
                     <template v-slot:selection="data">
                       <v-chip
@@ -228,10 +229,11 @@
       this.$store.state.isSearchMode = false
     },
     methods: {
-      enter: async function() {
+      enter: async function(event) {
+
         // 대신에 다른 곳에서 menuable__content__active라는 클래스가 쓰여진다면
         // 이 작동은 제대로 동작 안할 수도 있음
-        let el = document.querySelector(".menuable__content__active")
+        let el = document.querySelector(".menuable__content__active.inviteClass")
         if(el == null){
           if(this.friends.length!=0){
             await InviteService.invite(this.$store.state.currentUser.email, this.$store.state.currentChannel.id, this.friends)
@@ -352,39 +354,8 @@
           this.$alertModal('error', '폴더는 업로드 할 수 없습니다.')
         })
       },
-      invite: async function () {
-        const userName = this.message.content
-        const userEmail = this.selectedUserEmail
-        this.selectedUserEmail = null
-        await InviteService.invite(this.$store.state.currentUser.email, this.$store.state.currentChannel.id, userEmail)
-          .then(res => {
-            // 모두가 초대 메시지를 보게 할 것인지 아닌지
-            // 그리고 지금은 초대했다는 메시지가 보여도 상대방이 수락하기 전까지는 채널에 대상 유저가 없다.
-            const invite = {
-              channel_id: this.$store.state.currentChannel.id,
-              sender: this.$store.state.currentUser.email,
-              recipient: userEmail
-            }
-            console.log(this.$store.state.currentUser)
-
-            //메일 오류 계속 떠서 일단 임시로 주석 처리함
-          //   this.$http.post('/api/invite/mail', invite).then(res=>{
-          //     console.log(res.data)
-          //   })
-
-            this.message.content = userName + '님을 초대했습니다.'
-            this.$eventBus.$emit('getUserList', true)
-            this.send()
-            this.inviteDataInit()
-
-          }).catch(error => {
-            this.$alertModal('error', error.response.data.message)
-            console.error(error.response)
-            this.message.content = ''
-          })
-      },
       inviteToggle: function (e) {
-        let el = document.querySelector(".menuable__content__active")
+        let el = document.querySelector(".menuable__content__active.inviteClass")
         if(this.$store.state.isInviteMode == false){
           this.$store.state.isInviteMode = !this.$store.state.isInviteMode
         }else{
