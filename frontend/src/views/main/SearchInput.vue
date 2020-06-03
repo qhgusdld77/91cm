@@ -15,8 +15,9 @@
     </div>
 </template>
 <script>
+import {mapGetters} from "vuex";
 export default {
-    props: ['cursorPoint','msgArray'],
+    props: ['cursorPoint'],
     name: 'SearchInput',
     data() {
       return {
@@ -125,10 +126,13 @@ export default {
             }
         }
     },
-    // computed: {
-    //    getSearchMode () {
-    //      return this.$store.getters.getSearchMode
-    //    }
-    // }
+    computed: {
+      //  getSearchMode () {
+      //    return this.$store.getters.getSearchMode
+      //  }
+      ...mapGetters({
+        msgArray: 'getMsgArray'
+      })
+    }
 }
 </script>
