@@ -10,13 +10,11 @@
 
 <script>
   import * as io from 'socket.io-client'
-  import ContentWrapper from "../views/main/ContentWrapper";
   import VueWebRTC from "../views/util/vue-webRTC"
 
   export default {
     name: "VideoChat",
-    props: ['msgArray'],
-    components: {ContentWrapper, VueWebRTC},
+    components: { VueWebRTC},
     data() {
       return {
         img: null,
@@ -33,10 +31,6 @@
       this.$refs.webrtc.join();
     },
     methods: {
-      msgArrayUpdate: function (newMsgArray) {
-        this.msgArray = newMsgArray
-        this.$emit('msgArrayUpdate', newMsgArray)
-      },
       onCapture() {
         this.img = this.$refs.webrtc.capture();
       },

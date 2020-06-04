@@ -23,8 +23,10 @@ public class UserServiceImpl implements UserService {
 	private HttpSession httpSession;
     @Autowired
     private UserRepository userRepository;
-
-
+    
+    @Autowired
+    private FileStorageService fileStorageService;
+    
     // 추후 Form 로그인 용
     @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
@@ -47,6 +49,8 @@ public class UserServiceImpl implements UserService {
     public boolean emailCheck(String email) {
         return (userRepository.getUserfindByEmail(email) == null) ? true : false;
     }
+    
+    
 
     @Override
     @Transactional
@@ -59,7 +63,13 @@ public class UserServiceImpl implements UserService {
         if (dbUser != null) {
             userResult = 1;
         } else {
-            userResult = userRepository.insertUser(user);
+        	String fileName = fileStorageService.download(user.getPicture());
+        	if(fileName==null) {
+        		return false;
+        	}else {
+        		user.setPicture("/api/file/download/" + fileName);
+                userResult = userRepository.insertUser(user);
+        	}
         }
 
         int snsResult = userRepository.insertSNSInfo(map);

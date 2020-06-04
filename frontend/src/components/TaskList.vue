@@ -1,99 +1,94 @@
 <template>
-  <div class="card task-board">
-    <div v-if="taskList.name != ''">
-      <draggable :list="getTasks" :group="'tasks'" @change="taskEventHandler" draggable=".item">
-        <div class="card-header">
-          <div v-if="!edit">
-            <h3>{{taskList.name}}</h3>
-            <div class="card-header-right">
-              <ul class="list-unstyled card-option">
-                <!-- <i class="ik ik-chevron-up"></i> -->
-                <li><i class="ik ik-chevron-left action-toggle"></i></li>
-                <li><i class="ik ik-chevron-up minimize-card"></i></li>
-                <li @click="msgBox"><i class="ik ik-x close-card"></i></li>
-                <li @click="editToggle"><i class="ik ik-edit-2"></i></li>
-                <li @click="createFormToggle"><i class="ik ik-plus"></i></li>
-              </ul>
-            </div>
-          </div>
-          <template v-else>
-            <b-form-input
-              @keydown.enter.exact="editTaskListName"
-              @keydown.esc="editToggle"
-              v-model="taskList.name"
-              autofocus></b-form-input>
-            <li class="list-unstyled" @click="editToggle"><i class="ik ik-x close-card" style="cursor: pointer;"></i>
-            </li>
-            <li class="list-unstyled" @click="editTaskListName"><i class="ik ik-plus" style="cursor: pointer;"></i></li>
-          </template>
-        </div>
-      </draggable>
-    </div>
-    <div v-else>
-      <div class="card-header">
-
-        <b-form-input placeholder="내용을 입력해주세요" v-model="taskListName" autofocus @keydown.enter.exact="setTaskListName"
-                      @keydown.esc="closeTaskList"></b-form-input>
-        <li class="list-unstyled" @click="closeTaskList"><i class="ik ik-x close-card" style="cursor: pointer;"></i>
-        </li>
-        <li class="list-unstyled" @click="setTaskListName"><i class="ik ik-plus" style="cursor: pointer;"></i></li>
-      </div>
-    </div>
-
-    <div class="card-body">
-      <div v-if="create">
-        <li class="dd-item list-unstyled">
-          <div class="dd-handle">
-            <TaskEdit @createFormToggle="createFormToggle" :color="color" :date="date"
-                      :tasks="getTasks" :task-list-id="taskList.id"></TaskEdit>
-          </div>
-        </li>
-      </div>
-
-      <ol class="dd-list" name="task-list">
-        <draggable :list="getTasks" :group="'tasks'" @change="taskEventHandler" draggable=".item">
-          <li class="dd-item item" v-for="(task,index) in getTasks" :key="index">
-
-            <div class="dd-handle" v-if="index != editSelector">
-              <div>
-                <div style="display: flex; align-items: center;">
-                  <span class="small text-muted" v-if="task.start_date">{{getDateFormat(task.start_date)}} ~ {{getDateFormat(task.end_date)}}</span>
-                  <div class="dropdown d-inline-block" style="position: absolute;right: 0;">
-                    <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false"><i class="ik ik-more-horizontal"></i></a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="moreDropdown"
-                         x-placement="bottom-end"
-                         style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-140px, 30px, 0px);">
-                      <a class="dropdown-item" @click="editFormToggle(index)">Edit</a>
-                      <a class="dropdown-item" v-if="task.state" @click="editTask(task,false)">Done</a>
-                      <a class="dropdown-item" v-else @click="editTask(task,true)">Revoke</a>
-                      <a class="dropdown-item" @click="deleteTask(task,index)" style="color:red;">Delete</a>
+       <div class="card task-board">
+            <div v-if="taskList.name != ''">
+                <draggable :list="getTasks" :group="'tasks'" @change="taskEventHandler" draggable=".item" :disabled="isSmallWidth">
+                    <div class="card-header">
+                        <div v-if="!edit">
+                            <h3>{{taskList.name}}</h3>
+                            <div class="card-header-right">
+                                <ul class="list-unstyled card-option">
+                                  <!-- <i class="ik ik-chevron-up"></i> -->
+                                    <li><i class="ik ik-chevron-left action-toggle"></i></li>
+                                    <li><i class="ik ik-chevron-up minimize-card"></i></li>
+                                    <li @click="msgBox" ><i class="ik ik-x close-card"></i></li>
+                                    <li @click="editToggle"><i class="ik ik-edit-2"></i></li>
+                                    <li @click="createFormToggle"><i class="ik ik-plus"  ></i></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <template v-else>
+                          <b-form-input 
+                          @keydown.enter.exact="editTaskListName"
+                          @keydown.esc="editToggle"
+                          v-model="taskList.name"
+                          autofocus></b-form-input>
+                          <li class="list-unstyled" @click="editToggle"><i class="ik ik-x close-card" style="cursor: pointer;"></i></li>
+                          <li class="list-unstyled" @click="editTaskListName"><i class="ik ik-plus" style="cursor: pointer;"></i></li>
+                        </template>
                     </div>
-                  </div>
+                </draggable>
+            </div>
+            <div v-else>
+              <div class="card-header">
 
+                <b-form-input placeholder="내용을 입력해주세요" v-model="taskListName" autofocus @keydown.enter.exact="setTaskListName" @keydown.esc="closeTaskList"></b-form-input>
+                <li class="list-unstyled" @click="closeTaskList"><i class="ik ik-x close-card" style="cursor: pointer;"></i></li>
+                <li class="list-unstyled" @click="setTaskListName"><i class="ik ik-plus" style="cursor: pointer;"></i></li>
                 </div>
-
-                <p id="content" style="margin:0">{{task.content}}</p>
-                <footer style="display: flex;justify-content: flex-end;">
-                  <small>created by {{channelUsers.find(user => user.email ==
-                    task.member_email).name}}</small>
-                </footer>
-              </div>
-              <div class="task-color" :style="{'background-color':task.color}"></div>
-
             </div>
-            <div class="dd-handle" v-else>
-              <TaskEdit @editFormToggle="editFormToggle" :color="color" :date="date"
-                        :tasks="getTasks" :task-list-id="taskList.id" :index="index"></TaskEdit>
+
+            <div class="card-body">
+                <div v-if="create">
+                    <li class="dd-item list-unstyled">
+                        <div class="dd-handle">
+                                <TaskEdit @createFormToggle="createFormToggle" :color="color" :date="date"
+                                    :tasks="getTasks" :task-list-id="taskList.id"></TaskEdit>
+                        </div>
+                    </li>
+                </div>
+                
+                        <ol class="dd-list" name="task-list">
+                            <draggable :list="getTasks" :group="'tasks'" @change="taskEventHandler" draggable=".item" :disabled="isSmallWidth">            
+                            <li class="dd-item item" v-for="(task,index) in getTasks" :key="index" >
+                                
+                            <div class="dd-handle" v-if="index != editSelector">
+                                <div>
+                                    <div style="display: flex; align-items: center;">
+                                        <span class="small text-muted" v-if="task.start_date">{{getDateFormat(task.start_date)}} ~ {{getDateFormat(task.end_date)}}</span>
+                                        <div class="dropdown d-inline-block" style="position: absolute;right: 0;">
+                                            <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="ik ik-more-horizontal"></i></a>
+                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="moreDropdown" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-140px, 30px, 0px);">
+                                                <a class="dropdown-item" @click="editFormToggle(index)" >Edit</a>
+                                                <a class="dropdown-item" v-if="task.state" @click="editTask(task,false)" >Done</a>
+                                                <a class="dropdown-item" v-else @click="editTask(task,true)" >Revoke</a>
+                                                <a class="dropdown-item"  @click="deleteTask(task,index)" style="color:red;" >Delete</a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                             
+                                    <p id="content" style="margin:0">{{task.content}}</p>
+                                    <footer style="display: flex;justify-content: flex-end;">
+                                        <small>created by {{channelUsers.find(user => user.email ==
+                                        task.member_email).name}}</small>
+                                    </footer>
+                                </div>
+                                <div class="task-color" :style="{'background-color':task.color}"></div>
+
+                            </div>
+                            <div class="dd-handle" v-else>
+                                <TaskEdit @editFormToggle="editFormToggle" :color="color" :date="date"
+                                    :tasks="getTasks" :task-list-id="taskList.id" :index="index"></TaskEdit>
+                            </div>
+                        </li>   
+                        </draggable>
+                        </ol>
+                    
             </div>
-          </li>
-        </draggable>
-      </ol>
 
-    </div>
+            
 
-
-  </div>
+        </div>
 </template>
 
 <script>
@@ -111,7 +106,8 @@
     computed: {
       ...mapGetters({
         channelUsers: 'getChannelUsers',
-        currentChannel: 'getCurrentChannel'
+        currentChannel: 'getCurrentChannel',
+        isSmallWidth: 'getIsSmallWidth'
       }),
       getTasks: function () {
         return this.taskList.tasks
@@ -148,7 +144,7 @@
       }
     },
     methods: {
-      closeTaskList: function () {
+      closeTaskList: function(){
         this.$emit('closeTaskList')
       },
       taskEventHandler: function ({added, moved, removed}) {
@@ -220,11 +216,11 @@
           console.error(error)
         })
       },
-      editTask: function (task, state) {
+      editTask: function (task,state) {
         task.state = state
         this.$http.post('/api/task/update/content', task)
           .then(res => {
-            this.$store.state.stompClient.send('/sub/todo/' + this.currentChannel.id, {}, {typename: 'taskUpdate'})
+            this.$store.state.stompClient.send('/sub/todo/'+this.currentChannel.id,{},{typename: 'taskUpdate'})
           }).catch(error => {
           console.error(error)
         })
@@ -263,10 +259,10 @@
             console.error(error)
           })
       },
-      getDateFormat: function (dateData) {
+      getDateFormat: function(dateData){
         const date = new Date(dateData)
         let dateToString = ''
-        dateToString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+        dateToString = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate()
         return dateToString
       },
       msgBox: async function () {
@@ -278,7 +274,7 @@
           cancelTitle: '취소'
         })
           .then(value => {
-            if (value) {
+            if (value){
               this.deleteTaskList()
             }
           })
@@ -289,10 +285,9 @@
 </script>
 <style scoped>
 
-  .v-application ol {
-    padding: 0px !important;
+  .v-application ol{
+      padding :0px !important;
   }
-
   .task-list-enter-active, .task-list-leave-active {
     transition: all 1s;
   }
@@ -333,16 +328,15 @@
     word-wrap: break-word;
   }
 
-  .task-color {
-    width: 5px;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-
-  .dd-handle {
-    overflow: visible;
-  }
+    .task-color {
+        width: 5px;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .dd-handle{
+        overflow:visible;
+    }
 
 </style>
