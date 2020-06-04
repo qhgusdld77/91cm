@@ -16,17 +16,12 @@ import com.nineone.nocm.util.DateUtil;
 @Service
 public class JoinInfoServiceImpl implements JoinInfoService {
 
-	@Autowired
-	private MessageService messageService;
-	
-	
-	
     @Autowired
     private JoinInfoRepository joinInfoRepository;
-    
+
     @Autowired
     private InviteRepository inviteRepository;
-    
+
     @Override
     @Transactional
     public boolean leaveUser(Map<String, Object> info) {

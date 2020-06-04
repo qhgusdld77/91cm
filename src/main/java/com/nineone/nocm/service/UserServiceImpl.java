@@ -23,16 +23,11 @@ public class UserServiceImpl implements UserService {
 	private HttpSession httpSession;
     @Autowired
     private UserRepository userRepository;
-
-
-//	@Override
-//	public boolean insertUser(User user) {
-////		user.setPassword(passwordEncoder.encode(user.getPassword()));
-//		return (userRepository.insertUser(user) > 0) ? true : false;
-//		
-//	}
-
-
+    
+    @Autowired
+    private FileStorageService fileStorageService;
+    
+    // 추후 Form 로그인 용
     @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
 //		Map<String,String> userInfo = (Map<String, String>) userRepository.getUserfindByEmail(userEmail);
@@ -54,7 +49,8 @@ public class UserServiceImpl implements UserService {
     public boolean emailCheck(String email) {
         return (userRepository.getUserfindByEmail(email) == null) ? true : false;
     }
-
+    
+    
 
     @Override
     @Transactional
@@ -67,13 +63,18 @@ public class UserServiceImpl implements UserService {
         if (dbUser != null) {
             userResult = 1;
         } else {
-            userResult = userRepository.insertUser(user);
+        	String fileName = fileStorageService.download(user.getPicture());
+        	if(fileName==null) {
+        		return false;
+        	}else {
+        		user.setPicture("/api/file/download/" + fileName);
+                userResult = userRepository.insertUser(user);
+        	}
         }
 
         int snsResult = userRepository.insertSNSInfo(map);
 
         if (userResult > 0 && snsResult > 0) {
-
             if (dbUser == null) {
                 User settingUser = (User) httpsession.getAttribute("user");
                 settingUser.setName(user.getEmail());
@@ -83,7 +84,6 @@ public class UserServiceImpl implements UserService {
             } else {
                 httpsession.setAttribute("user", dbUser);
             }
-
             return true;
         } else {
             return false;

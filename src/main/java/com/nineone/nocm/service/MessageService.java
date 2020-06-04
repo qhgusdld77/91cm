@@ -7,7 +7,6 @@ import java.util.Map;
 import com.nineone.nocm.domain.Message;
 
 public interface MessageService {
-	String testDate();
 	int insertMessage(Message msg);
 	List<Message> getMessageList(Map<String, Object> map);
 	String makeStrDate(Date date);

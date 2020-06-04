@@ -1,11 +1,11 @@
-  
+
 ! function(e, s, i) {
     "use strict";
 
-    window.addEventListener('resize', function(){       
+    window.addEventListener('resize', function(){
         var n = i(".app-sidebar"),
             l = i(".wrapper")
-          
+
         i(e).width() < 992 && (n.addClass("hide-sidebar"), l.removeClass("nav-collapsed menu-collapsed")), i(e).resize(function() {
             i(e).width() < 992 && (n.addClass("hide-sidebar"), l.removeClass("nav-collapsed menu-collapsed")), i(e).width() > 992 && (n.removeClass("hide-sidebar"), "collapsed" === i(".toggle-icon").attr("data-toggle") && l.not(".nav-collapsed menu-collapsed") && l.addClass("nav-collapsed menu-collapsed"))
         })
@@ -39,7 +39,7 @@
             width: "135px"
         }), i(this).toggleClass("ik-chevron-right").fadeIn("slow")
     })
-    
+
     // i(s).on("click", ".card-header-right .close-card",function() {
     //     var e = i(this);
     //     e.parents(".card").animate({
@@ -50,30 +50,30 @@
     //         e.parents(".card").remove()
     //     }, 800)
     // })
-    
-    
+
+
     i(s).on("click",".card-header-right .minimize-card",function() {
         var e = i(this),
             s = i(e.parents(".card"));
         i(s).children(".card-body").slideToggle();
-        i(this).toggleClass("ik-minus").fadeIn("slow"), i(this).toggleClass("ik-plus").fadeIn("slow")
+        i(this).toggleClass("ik-chevron-up").fadeIn("slow"), i(this).toggleClass("ik-chevron-down").fadeIn("slow")
     })
 
     i(s).on("click", ".navigation li:not(.has-sub)", function() {
         var n = i(".app-sidebar")
         i(e).width() < 992 && n.addClass("hide-sidebar")
     })
-    
+
     i(s).on("click", ".logo-text", function() {
         var n = i(".app-sidebar")
         i(e).width() < 992 && n.addClass("hide-sidebar")
     })
-    
+
     i(s).on("click", ".mobile-nav-toggle",function(e) {
         var n = i(".app-sidebar")
         e.stopPropagation(), n.toggleClass("hide-sidebar")
     })
- 
+
 
     i(s).on("click","#sidebarClose", function() {
         var n = i(".app-sidebar")
@@ -94,11 +94,11 @@
         }
 
         var  t = i(".sidebar-content")
-         
+
         var e = i(this).parent(".nav-item");
             if (e.hasClass("has-sub") && e.hasClass("open")){
                 a(e);
-            } 
+            }
             else {
                 if (e.hasClass("has-sub") && function(e, s) {
                         var a = e.children(".submenu-content"),
@@ -132,7 +132,7 @@
         // });
         t.on("click", ".navigation-main .nav-item a", function() {
             var e = i(this).parent(".nav-item");
-           
+
             if (e.hasClass("has-sub") && e.hasClass("open")) a(e);
             else {
                 if (e.hasClass("has-sub") && function(e, s) {
@@ -146,7 +146,7 @@
                     }(e), t.data("collapsible")) return !1;
                 a(e.siblings(".open")), e.siblings(".open").find(".nav-item.open").removeClass("open")
             }
-           
+
         })
         // , i(".nav-toggle").on("click", function() {
         //     var e = i(this).find(".toggle-icon");
@@ -222,7 +222,7 @@
             }), setTimeout(function() {
                 e.parents(".widget").remove()
             }, 800)
-        }), 
+        }),
         // i(".card-header-right .card-option .action-toggle").on("click", function() {
         //     var e = i(this);
         //     e.hasClass("ik-chevron-right") ? e.parents(".card-option").animate({
@@ -270,7 +270,7 @@
         //     wheelPropagation: true,
         //     minScrollbarLength: 5
         // });
-        
+
         // $(".right-sidebar-toggle").on("click",function(e) {
         //     console.log('?')
         //     this.classList.toggle('active');
@@ -279,7 +279,7 @@
         // });
 
         document.addEventListener('click', function(event) {
-          
+
         });
 
         var el = $('[data-plugin="chat-sidebar"]');

@@ -1,7 +1,6 @@
 package com.nineone.nocm.service;
 
 import com.nineone.nocm.domain.Invite;
-import com.nineone.nocm.domain.User;
 
 import java.util.List;
 

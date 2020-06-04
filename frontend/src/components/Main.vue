@@ -7,35 +7,41 @@
           <LSidebar @channelUpdate="channelUpdate"></LSidebar>
           <div class="main-content" style="padding-bottom:0;"
                :class="{'disactive-padding': $store.state.selectComponent=='main' }">
-            <NoChannel v-if="$store.state.userChannelList[0]==null && $store.state.selectComponent=='main'"/>
-            <keep-alive v-else>
-              <component :is="whichComponent"
-                         :msgArray="msgArray"
-                         @msgArrayUpdate="msgArrayUpdate"
-              ></component>
-            </keep-alive>
+            <div :class="{'row': isVideoMode,'no-gutters':isVideoMode}">
+              <div :class="{'col': isVideoMode,'col-3':isVideoMode}">
+                <NoChannel v-if="$store.state.userChannelList[0]==null && $store.state.selectComponent=='main'"/>
+                <keep-alive v-else>
+                  <component :is="whichComponent"></component>
+                </keep-alive>
+              </div>
+                <div :class="{'col': isVideoMode,'col-9':isVideoMode}">
+                  <VideoChat v-if="$store.state.isVideoMode" />
+                </div>
+            </div>
+
             <RSidebar v-if="$store.state.currentChannel!=null"></RSidebar>
+
+
           </div>
           <footer class="footer">
             <div class="w-100 clearfix">
-              <span class="text-center text-sm-left d-md-inline-block">Copyright © 2018 ThemeKit</span>
-              <!-- <span class="float-none float-sm-right mt-1 mt-sm-0 text-center">Crafted with <i class="fa fa-heart text-danger"></i> by <a href="http://lavalite.org/" class="text-dark" target="_blank">Lavalite</a></span> -->
+              <span class="text-center text-sm-left overline d-md-inline-block">Copyright © 2018 ThemeKit</span>
             </div>
           </footer>
         </div>
       </template>
       <Loading v-else/>
+
     </div>
     <AppsModal></AppsModal>
   </div>
 </template>
 <script>
 
-  import theme from '../../dist/js/theme.js'
   import LSidebar from '../views/main/LSidebar'
   import RSidebar from '../views/main/RSidebar'
   import MainHeader from '../views/main/MainHeader'
-  import ContentWrapper from '../views/main/ContentWrapperV2'
+  import ContentWrapper from '../views/main/ContentWrapper'
   import AboutChannel from '../service/aboutchannel'
   import NotificationClass from '../service/notification'
   import EventListener from '../service/eventlistener'
@@ -51,6 +57,7 @@
   import Calendar from "../views/calendar/Calendar";
   import AdminPage from "../views/admin/AdminPage"
   import AppsModal from "../views/main/AppsModal"
+  import {mapGetters} from "vuex";
   import VideoChat from "./VideoChat";
 
   export default {
@@ -69,14 +76,13 @@
       'Calendar': Calendar,
       'AdminPage': AdminPage,
       'AppsModal': AppsModal,
-      'VideoChat' : VideoChat
+      'VideoChat': VideoChat
     },
     data() {
       return {
         channelTitle: '',
         channelList: [],
         isRActive: false,
-        msgArray: [],
         modalObj: {modalTitle: '', currentChannel: null},
       }
     },
@@ -106,7 +112,11 @@
         if (this.$store.state.stompClient != null) {
           return this.$store.state.stompClient.connected
         }
-      }
+      },
+      ...mapGetters({
+        msgArray: 'getMsgArray',
+        isVideoMode: 'getIsVideoMode'
+      })
     },
     deactivated() {
     },
@@ -166,7 +176,6 @@
         })
       },
       channelUpdate() {
-        console.log(this.$store.state.currentChannel.id, '??')
         this.$store.state.stompClient.subscribe("/sub/chat/room/" + this.$store.state.currentChannel.id, (e) => {
           let data = JSON.parse(e.body)
           if (data.message == 'updateChannel') {
@@ -177,21 +186,17 @@
             return;
           }
         })
-        // this.$store.commit('setChannelList', newChannelList)
-      },
-      msgArrayUpdate(newmsgArray) {
-        
-        this.msgArray = newmsgArray
       },
       channelSubscribeCallBack(e, fail) {
         let data = JSON.parse(e.body)
         NotificationClass.sendNotification(this.$store.state.isfocus, data)
-        if (data.channel_id == this.$store.state.currentChannel.id && this.$store.state.selectComponent == 'main') {
+        if (data.channel_id == this.$store.state.currentChannel.id && this.enableComponent) {
           data.content = CommonClass.replacemsg(data.content)
           if (fail) {
             data.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + data.content
           }
-          this.msgArray.push(data)
+          this.$store.commit('pushMsg', data)
+          console.log(this.$store.state.msgArray)
           if (!this.$store.state.isfocus) {
             this.msgCountUpdate(data.channel_id, true)
           }
@@ -218,6 +223,17 @@
       },
       msgCountReset(i) {
         this.$store.state.userChannelList[i].count = 0
+      },
+      enableComponent: function () {
+        // sokect 통신을 위한 컴포넌트 체크
+        switch (this.$store.state.selectComponent) {
+          case "main":
+          case "videoChat":
+              return true
+          default:
+            return false
+        }
+
       }
 
     }

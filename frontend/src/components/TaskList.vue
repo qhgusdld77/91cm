@@ -1,14 +1,15 @@
 <template>
        <div class="card task-board">
             <div v-if="taskList.name != ''">
-                <draggable :list="getTasks" :group="'tasks'" @change="taskEventHandler" draggable=".item">
+                <draggable :list="getTasks" :group="'tasks'" @change="taskEventHandler" draggable=".item" :disabled="disableCheck">
                     <div class="card-header">
                         <div v-if="!edit">
                             <h3>{{taskList.name}}</h3>
                             <div class="card-header-right">
                                 <ul class="list-unstyled card-option">
+                                  <!-- <i class="ik ik-chevron-up"></i> -->
                                     <li><i class="ik ik-chevron-left action-toggle"></i></li>
-                                    <li><i class="ik ik-minus minimize-card"></i></li>
+                                    <li><i class="ik ik-chevron-up minimize-card"></i></li>
                                     <li @click="msgBox" ><i class="ik ik-x close-card"></i></li>
                                     <li @click="editToggle"><i class="ik ik-edit-2"></i></li>
                                     <li @click="createFormToggle"><i class="ik ik-plus"  ></i></li>
@@ -47,7 +48,7 @@
                 </div>
                 
                         <ol class="dd-list" name="task-list">
-                            <draggable :list="getTasks" :group="'tasks'" @change="taskEventHandler" draggable=".item">            
+                            <draggable :list="getTasks" :group="'tasks'" @change="taskEventHandler" draggable=".item" :disabled="disableCheck">            
                             <li class="dd-item item" v-for="(task,index) in getTasks" :key="index" >
                                 
                             <div class="dd-handle" v-if="index != editSelector">
@@ -105,11 +106,21 @@
     computed: {
       ...mapGetters({
         channelUsers: 'getChannelUsers',
-        currentChannel: 'getCurrentChannel'
+        currentChannel: 'getCurrentChannel',
+        isSmallWidth: 'getIsSmallWidth'
       }),
       getTasks: function () {
         return this.taskList.tasks
       },
+      disableCheck: function(){
+        if(this.$store.state.isSmallWidth || this.$store.state.isCreateListActive){
+          console.log('dis true')
+          return true
+        }else{
+          console.log('diss false')
+          return false
+        }
+      }
     },
     watch: {
       getTasks: function (newVal, oldVal) {
@@ -241,13 +252,16 @@
         this.editSelector = index
       },
       setTaskListName: function () {
-        this.taskList.channel_id = this.currentChannel.id
-        this.taskList.name = this.taskListName
-        this.$http.post('/api/tasklist/insert', JSON.stringify(this.taskList), {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
+        if(this.taskListName == '' || this.taskListName == null){
+          this.$alertModal('alert','내용을 입력해주세요.')
+        }else{
+          this.taskList.channel_id = this.currentChannel.id
+          this.taskList.name = this.taskListName
+          this.$http.post('/api/tasklist/insert', JSON.stringify(this.taskList), {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
           .then(res => {
             this.taskList.id = res.data.id
             this.$store.state.stompClient.send('/sub/todo/' + this.currentChannel.id, {}, {typename: 'taskUpdate'})
@@ -255,7 +269,8 @@
           })
           .catch(error => {
             console.error(error)
-          })
+          }) 
+        }
       },
       getDateFormat: function(dateData){
         const date = new Date(dateData)

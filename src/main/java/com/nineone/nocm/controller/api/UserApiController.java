@@ -1,24 +1,18 @@
 package com.nineone.nocm.controller.api;
 
 
-import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import com.nineone.nocm.domain.Authorities;
-import com.nineone.nocm.domain.enums.Role;
-import com.nineone.nocm.repository.UserAuthoritiesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nineone.nocm.annotation.Socialuser;
+import com.nineone.nocm.domain.Authorities;
 import com.nineone.nocm.domain.User;
+import com.nineone.nocm.repository.UserAuthoritiesRepository;
 import com.nineone.nocm.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -97,6 +93,7 @@ public class UserApiController {
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    @Transactional
     public boolean signup(@RequestBody User user, Authentication authentication, HttpSession httpsession) {
         DefaultOAuth2User oauth2user = (DefaultOAuth2User) authentication.getPrincipal();
         if (userService.insertUser(user, oauth2user, httpsession)) {

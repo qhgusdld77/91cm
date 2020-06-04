@@ -1,5 +1,4 @@
 export default {
-  msgArray: [],
   channelUsers: [],
   taskBoard: [],
   syncSignal: {
@@ -22,5 +21,7 @@ export default {
   isInviteMode: false,
   searchText: '',
   isSmallWidth:false,
-  isCreateListActive : false
+  isCreateListActive : false,
+  msgArray: [],
+  isVideoMode: false
 }

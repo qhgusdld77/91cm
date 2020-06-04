@@ -24,9 +24,9 @@ public class MessageController {
 
 	@Autowired
 	private SimpMessageSendingOperations messagingTemplate;
-	
+
 	@Autowired
-	private MessageService messageService; 
+	private MessageService messageService;
 
 	@MessageMapping("/chat/message")
 	@Transactional
@@ -49,7 +49,7 @@ public class MessageController {
 	public void syncMessage(@DestinationVariable String id, @Payload ApiResponse apiResponse)throws Exception{
 		messagingTemplate.convertAndSend("/sub/chat/room/"+id,apiResponse);
 	}
-	
+
 
 //	@MessageMapping("/notification")
 //	public void notification(Notification notification) {

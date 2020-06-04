@@ -1,30 +1,18 @@
 <template>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-4">
-        <content-wrapper :msg-array="msgArray" @msgArrayUpdate="msgArrayUpdate">
-        </content-wrapper>
-      </div>
-      <div class="col-md-8">
-        <VueWebRTC
-          ref="webrtc"
-          :room-id="$store.state.currentChannel.id"
-          :socket-u-r-l="'http://91cm.nineonesoft.com:9001/'"
-        ></VueWebRTC>
-      </div>
-    </div>
-  </div>
+  <VueWebRTC
+    ref="webrtc"
+    :room-id="$store.state.currentChannel.id"
+    :socket-u-r-l="'http://91cm.nineonesoft.com:9001/'"
+  ></VueWebRTC>
 </template>
 
 <script>
   import * as io from 'socket.io-client'
-  import ContentWrapper from "../views/main/ContentWrapper";
   import VueWebRTC from "../views/util/vue-webRTC"
 
   export default {
     name: "VideoChat",
-    props: ['msgArray'],
-    components: {ContentWrapper, VueWebRTC},
+    components: { VueWebRTC},
     data() {
       return {
         img: null,
@@ -38,13 +26,14 @@
       })
     },
     mounted() {
+      $('.nav-toggle').click()
       this.$refs.webrtc.join();
+
+    },
+    beforeDestroy() {
+      this.$refs.webrtc.leave();
     },
     methods: {
-      msgArrayUpdate: function (newMsgArray) {
-        this.msgArray = newMsgArray
-        this.$emit('msgArrayUpdate', newMsgArray)
-      },
       onCapture() {
         this.img = this.$refs.webrtc.capture();
       },

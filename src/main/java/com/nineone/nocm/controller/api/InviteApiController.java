@@ -57,46 +57,33 @@ public class InviteApiController {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> inviteUser(@RequestBody Invite invite) {
         try {
-        	
-        	
-        	
-        	for(String recipient : invite.getRecipients()) {
-        		invite.setRecipient(recipient);
-        		if(joinInfoService.isExistUser(invite)) {
-        			return new ResponseEntity<>(ApiResponse.builder().error("405")
+            for (String recipient : invite.getRecipients()) {
+                invite.setRecipient(recipient);
+                if (joinInfoService.isExistUser(invite)) {
+                    return new ResponseEntity<>(ApiResponse.builder().error("405")
                             .message("이미 가입되어 있는 유저가 있습니다. 확인해주세요.")
                             .build(), HttpStatus.METHOD_NOT_ALLOWED);
-        		}
-        	}
-        	
-        	
-        	for(String recipient : invite.getRecipients()) {
-        		invite.setRecipient(recipient);
-        		List<String> list = new ArrayList<>();
-        		if(inviteService.isExistInvite(invite)) {
-        			list.add(recipient);
-        		}
-        		
-        		if(list.size() > 0){
-        			return new ResponseEntity<>(ApiResponse.builder().error("405")
-        					.list(list)
+                }
+            }
+            for (String recipient : invite.getRecipients()) {
+                invite.setRecipient(recipient);
+                List<String> list = new ArrayList<>();
+                if (inviteService.isExistInvite(invite)) {
+                    list.add(recipient);
+                }
+                if (list.size() > 0) {
+                    return new ResponseEntity<>(ApiResponse.builder().error("405")
+                            .list(list)
                             .build(), HttpStatus.METHOD_NOT_ALLOWED);
-        		}
-        	}
-        	
-        	
-//            if (joinInfoService.isExistUser(invite)) {
-//                return new ResponseEntity<>(ApiResponse.builder().error("405")
-//                        .message("해당 유저는 이미 채널에 가입되어 있습니다.")
-//                        .build(), HttpStatus.METHOD_NOT_ALLOWED);
-//            }
+                }
+            }
             if (joinInfoService.AuthorityCheck(invite)) {
-                for(String recipient : invite.getRecipients()) {
-                	invite.setRecipient(recipient);
-                	inviteService.saveInvite(invite);
+                for (String recipient : invite.getRecipients()) {
+                    invite.setRecipient(recipient);
+                    inviteService.saveInvite(invite);
                     messagingTemplate.convertAndSend("/sub/alarm/" + invite.getRecipient(), invite);
                 }
-            	return new ResponseEntity<>("{}", HttpStatus.OK);
+                return new ResponseEntity<>("{}", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(ApiResponse.builder().error("403")
                         .message("채널에 대한 권한이 없습니다.").build(), HttpStatus.FORBIDDEN);
@@ -115,15 +102,13 @@ public class InviteApiController {
 
     @PostMapping("/mail")
     public boolean sendInviteMail(@RequestBody Invite invite) throws RuntimeException {
-        log.info(invite.getSender());
-        log.info(invite.getChannel_id()+"");
-        User user = userRepository.getUserfindByEmail(invite.getSender());
-        Channel inviteChannel = channelRepository.getChannel(invite.getChannel_id());
-        log.info(user.getEmail());
-        log.info(inviteChannel.getName());
-        googleMailSender.MailSend(user.getName() + "님이 " + inviteChannel.getName() + " 채널로 초대하였습니다."
-                , invite.getRecipient(), user.getName() + "님이 " + inviteChannel.getName() + " 채널로 초대하였습니다." +
-                        "\n 91cm로 이동 : http://91cm.nineonesoft.com:9191/");
+        for(String recipient : invite.getRecipients()){
+            User user = userRepository.getUserfindByEmail(invite.getSender());
+            Channel inviteChannel = channelRepository.getChannel(invite.getChannel_id());
+            googleMailSender.MailSend(user.getName() + "님이 " + inviteChannel.getName() + " 채널로 초대하였습니다."
+                    , recipient, user.getName() + "님이 " + inviteChannel.getName() + " 채널로 초대하였습니다." +
+                            "\n 91cm로 이동 : http://91cm.nineonesoft.com:9191/");
+        }
         return true;
     }
 

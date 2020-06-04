@@ -1,12 +1,9 @@
 package com.nineone.nocm.service;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
 import com.nineone.nocm.domain.Invite;
 import com.nineone.nocm.domain.JoinInfo;
-import com.nineone.nocm.domain.LastAccess;
+
+import java.util.Map;
 
 public interface JoinInfoService {
     boolean leaveUser(Map<String, Object> info);
@@ -14,5 +11,4 @@ public interface JoinInfoService {
     boolean AuthorityCheck(Invite invite);
     boolean insertJoinInfo(JoinInfo joinInfo);
     int updateLastAccessDate(int CurrentChannelId,String email);
-//    LastAccess changeLastAccess(LastAccess lastAccess);
 }

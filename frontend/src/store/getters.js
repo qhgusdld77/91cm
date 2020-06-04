@@ -9,12 +9,14 @@ export default {
       }
     }
   },
-  getMsgArray: state => state.msgArray,
   getUserChannelList: state => state.userChannelList,
   getTaskBoard: state=> state.taskBoard,
   getCurrentChannel: state => state.currentChannel,
   getSyncChannelUser: state => state.syncSignal.syncChannelUser,
   getChannelUsers: state => state.channelUsers,
   getSelectComponent: state => state.selectComponent,
-  getUserList: state => state.userList
+  getUserList: state => state.userList,
+  getMsgArray: state => state.msgArray,
+  getIsVideoMode: state => state.isVideoMode,
+  getIsSmallWidth: state => state.isSmallWidth
 }
