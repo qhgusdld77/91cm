@@ -1,7 +1,7 @@
 <template>
        <div class="card task-board">
             <div v-if="taskList.name != ''">
-                <draggable :list="getTasks" :group="'tasks'" @change="taskEventHandler" draggable=".item">
+                <draggable :list="getTasks" :group="'tasks'" @change="taskEventHandler" draggable=".item" :disabled="isSmallWidth">
                     <div class="card-header">
                         <div v-if="!edit">
                             <h3>{{taskList.name}}</h3>
@@ -48,7 +48,7 @@
                 </div>
                 
                         <ol class="dd-list" name="task-list">
-                            <draggable :list="getTasks" :group="'tasks'" @change="taskEventHandler" draggable=".item">            
+                            <draggable :list="getTasks" :group="'tasks'" @change="taskEventHandler" draggable=".item" :disabled="isSmallWidth">            
                             <li class="dd-item item" v-for="(task,index) in getTasks" :key="index" >
                                 
                             <div class="dd-handle" v-if="index != editSelector">
@@ -106,7 +106,8 @@
     computed: {
       ...mapGetters({
         channelUsers: 'getChannelUsers',
-        currentChannel: 'getCurrentChannel'
+        currentChannel: 'getCurrentChannel',
+        isSmallWidth: 'getIsSmallWidth'
       }),
       getTasks: function () {
         return this.taskList.tasks

@@ -18,5 +18,6 @@ export default {
   getSelectComponent: state => state.selectComponent,
   getUserList: state => state.userList,
   getMsgArray: state => state.msgArray,
-  getIsVideoMode: state => state.isVideoMode
+  getIsVideoMode: state => state.isVideoMode,
+  getIsSmallWidth: state => state.isSmallWidth
 }
