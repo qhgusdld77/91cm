@@ -44,7 +44,11 @@ export default {
   },
   pushMsg: function(state,payload){
     state.msgArray.push(payload)
+  },
+  setIsVideoMode: function(state,payload){
+    state.isVideoMode = payload
   }
+  
 
 
 }

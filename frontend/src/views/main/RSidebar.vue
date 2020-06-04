@@ -56,9 +56,9 @@
           <b-collapse id="video-chat">
             <div class="s-coll-style">
               <p>화상 채팅 유저 수 : 1</p>
-              <v-btn color="blue-grey" class="white--text" @click="callComponent('main')">
+              <v-btn color="blue-grey" class="white--text" @click="toggleVideoMode()">
                 Join
-                <v-icon right dark>play_circle_outline</v-icon>
+                <v-icon right dark class="my-video">play_circle_outline</v-icon>
               </v-btn>
             </div>
           </b-collapse>
@@ -103,15 +103,22 @@
 
     },
     methods: {
+      toggleVideoMode: function(){
+        this.$store.commit('setIsVideoMode',true)
+        this.callComponent('main',true)
+      },
       rightSidebarToggle: function (e) {
         // console.log(e)
         $('.right-sidebar-toggle')[0].classList.toggle('active');
         $('.wrapper').toggleClass('right-sidebar-expand');
         return false;
       },
-      callComponent: function (componentName) {
+      callComponent: function (componentName,bool) {
         this.RSidebarClose()
         this.$store.commit('getSelectComponent', componentName)
+        if(bool == null){
+          this.$store.commit('setIsVideoMode',false)
+        }        
       },
       leaveChannle: function () {
         this.$http.post('/api/channel/leave', {

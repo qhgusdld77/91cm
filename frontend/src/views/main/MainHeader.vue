@@ -101,7 +101,6 @@
       this.$store.state.stompClient.subscribe("/sub/alarm/" + this.$store.state.currentUser.email, (e) => {
         let invite = JSON.parse(e.body)
         this.alarmList.unshift(invite)
-        // this.shakeAnimation()
       }),
         this.$http.get('/api/invite/list')
           .then(res => {
@@ -114,23 +113,17 @@
 
     },
     methods: {
-      rightSidebarToggle: function (e) {
-        // console.log(e)
+      rightSidebarToggle: function(e){
         $('.right-sidebar-toggle')[0].classList.toggle('active');
         $('.wrapper').toggleClass('right-sidebar-expand');
         return false;
       },
 
-      // showModal: function (modalId) {
-      //   this.$bvModal.show(modalId)
-      // },
-      // shakeAnimation: function(){
-      //   const element = this.$refs.bell;
-      //   element.classList.add('animate__animated','animate__swing');
-      //   element.addEventListener('animationend',()=>{
-      //     element.classList.remove('animate__animated','animate__swing')
-      //   });
-      // },
+      },
+      showModal: function(modalId){
+        console.log('click')
+        this.$bvModal.show(modalId)
+      },
       inviteAccept: function (alarm, index) {
         const message = {
           channel_id: alarm.channel_id,
