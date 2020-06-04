@@ -1,18 +1,6 @@
 package com.nineone.nocm.service;
 
-import com.nineone.nocm.domain.ContentsFile;
-import com.nineone.nocm.exception.FileStorageException;
-import com.nineone.nocm.exception.UploadFileNotFoundException;
-import com.nineone.nocm.repository.FileStorage;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
-
-
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,8 +12,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Base64;
 import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.nineone.nocm.domain.ContentsFile;
+import com.nineone.nocm.exception.FileStorageException;
+import com.nineone.nocm.exception.UploadFileNotFoundException;
+import com.nineone.nocm.repository.FileStorage;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -92,8 +93,21 @@ public class FileStorageService {
 		FileOutputStream fos = null;
 		String targetFilename = "u-"+ getUUID(); 
 		InputStream is = null;
+		
+		String path = "C:/userImage/"; //폴더 경로
+		File Folder = new File(path);
+		
+		if (!Folder.exists()) {
+			try{
+			    Folder.mkdir(); //폴더 생성합니다.
+			    System.out.println("폴더가 생성되었습니다.");
+		        } 
+		        catch(Exception e){
+			    e.getStackTrace();
+			}        
+	    }
 		try {
-			fos = new FileOutputStream("C:/userImage/" + targetFilename);
+			fos = new FileOutputStream(path + targetFilename);
 
 			URL url = new URL(sourceUrl);
 			URLConnection urlConnection = url.openConnection();
