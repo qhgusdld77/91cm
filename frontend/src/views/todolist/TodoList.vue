@@ -28,7 +28,7 @@
 
 
         <div class="row">
-            <draggable :list="getTaskBoard" v-bind="dragOptions" @change="tasklistEventHandler" style="width: 100%;flex-direction: row;display: flex;flex-wrap: wrap;">
+            <draggable :disabled="isSmallWidth" :list="getTaskBoard" v-bind="dragOptions" @change="tasklistEventHandler" style="width: 100%;flex-direction: row;display: flex;flex-wrap: wrap;">
                 <div class="col-md-4" v-for="item in getTaskBoard" :key="item.id">
                     <TaskList :taskList="item" @closeTaskList="closeTaskList"></TaskList>
                 </div>
@@ -66,7 +66,8 @@
     },
     computed: {
       ...mapGetters({
-        getTaskBoard: 'getTaskBoard'
+        getTaskBoard: 'getTaskBoard',
+        isSmallWidth: 'getIsSmallWidth'
       }),
       getAllTaskList: function () {
         for (let i = 0; i < this.taskList.length; i++) {

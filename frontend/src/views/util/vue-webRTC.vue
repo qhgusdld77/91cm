@@ -2,19 +2,19 @@
   <!-- <div>
     <v-layout row wrap>
       <v-col cols="9"> -->
-        <div>
-        <v-card
-          v-for="item in videoList"
-          v-bind:video="item"
-          v-bind:key="item.id"
-          class="video-item">
-          <video controls autoplay playsinline ref="videos" :muted="item.muted"
-                 :id="item.id" style="max-width: 100%;"></video>
-          <v-card-title>
-            {{$store.state.currentUser.name}}
-          </v-card-title>
-        </v-card>
-        </div>
+       <div>
+          <v-card
+            v-for="item in videoList"
+            v-bind:video="item"
+            v-bind:key="item.id"
+            class="video-item">
+            <video controls autoplay playsinline ref="videos" :muted="item.muted"
+                  :id="item.id" style="max-width: 100%;"></video>
+            <v-card-title>
+              {{$store.state.currentUser.name}}
+            </v-card-title>
+          </v-card>
+          </div>
       <!-- </v-col>
     </v-layout>
   </div> -->
