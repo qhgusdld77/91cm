@@ -17,5 +17,6 @@ export default {
   getChannelUsers: state => state.channelUsers,
   getSelectComponent: state => state.selectComponent,
   getUserList: state => state.userList,
-  getMsgArray: state => state.msgArray
+  getMsgArray: state => state.msgArray,
+  getIsVideoMode: state => state.isVideoMode
 }

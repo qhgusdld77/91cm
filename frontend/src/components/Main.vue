@@ -7,14 +7,21 @@
           <LSidebar @channelUpdate="channelUpdate"></LSidebar>
           <div class="main-content" style="padding-bottom:0;"
                :class="{'disactive-padding': $store.state.selectComponent=='main' }">
-            <NoChannel v-if="$store.state.userChannelList[0]==null && $store.state.selectComponent=='main'"/>
-            <keep-alive v-else>
-              <component :is="whichComponent"></component>
-            </keep-alive>
-
-            <VideoChat v-if="$store.state.isVideoMode" />
+            <div :class="{'row': isVideoMode,'no-gutters':isVideoMode}">
+              <div :class="{'col': isVideoMode,'col-3':isVideoMode}">
+                <NoChannel v-if="$store.state.userChannelList[0]==null && $store.state.selectComponent=='main'"/>
+                <keep-alive v-else>
+                  <component :is="whichComponent"></component>
+                </keep-alive>
+              </div>  
+                <div :class="{'col': isVideoMode,'col-9':isVideoMode}">
+                  <VideoChat v-if="$store.state.isVideoMode" />
+                </div>
+            </div>
 
             <RSidebar v-if="$store.state.currentChannel!=null"></RSidebar>
+              
+            
           </div>
           <footer class="footer">
             <div class="w-100 clearfix">
@@ -107,7 +114,8 @@
         }
       },
       ...mapGetters({
-        msgArray: 'getMsgArray'
+        msgArray: 'getMsgArray',
+        isVideoMode: 'getIsVideoMode'
       })
     },
     deactivated() {

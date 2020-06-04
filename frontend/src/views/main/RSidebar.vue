@@ -105,7 +105,7 @@
     methods: {
       toggleVideoMode: function(){
         this.$store.commit('setIsVideoMode',true)
-        callComponent('main')
+        this.callComponent('main',true)
       },
       rightSidebarToggle: function (e) {
         // console.log(e)
@@ -113,10 +113,12 @@
         $('.wrapper').toggleClass('right-sidebar-expand');
         return false;
       },
-      callComponent: function (componentName) {
+      callComponent: function (componentName,bool) {
         this.RSidebarClose()
         this.$store.commit('getSelectComponent', componentName)
-        this.$store.commit('setIsVideoMode',false)
+        if(bool == null){
+          this.$store.commit('setIsVideoMode',false)
+        }        
       },
       leaveChannle: function () {
         this.$http.post('/api/channel/leave', {
