@@ -85,7 +85,7 @@
 #c-c-preview {
     z-index: 998;
     position: fixed;
-    bottom: 175px;
+    bottom: 146px;
     width: calc(100% - 240px);
     background-color: rgba(80, 188, 223, 0.75);
     font-weight: bold;
