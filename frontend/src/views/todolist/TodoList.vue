@@ -28,7 +28,7 @@
 
 
         <div class="row">
-            <draggable :disabled="isSmallWidth" :list="getTaskBoard" v-bind="dragOptions" @change="tasklistEventHandler" style="width: 100%;flex-direction: row;display: flex;flex-wrap: wrap;">
+            <draggable :disabled="isSmallWidth || this.$store.state.isCreateListActive" :list="getTaskBoard" v-bind="dragOptions" @change="tasklistEventHandler" style="width: 100%;flex-direction: row;display: flex;flex-wrap: wrap;">
                 <div class="col-md-4" v-for="item in getTaskBoard" :key="item.id">
                     <TaskList :taskList="item" @closeTaskList="closeTaskList"></TaskList>
                 </div>
