@@ -1,135 +1,137 @@
 <template>
-  <main class="mainwrapper" style="height: calc(100vh - 91px);" :class="{'chat-minimalize': $store.state.isVideoMode}">
-    <div class="h-inherit" v-cloak @drop.prevent="dropFile" @dragover.prevent>
-      <ul class="c-c-wrapper list-unstyled" @scroll="scrollEvt">
-        <MsgBox v-for="msg in msgArray" :key="msg.id">
-          <template #m-icon>
-            <img v-if="msg.user.picture" class="icon-round" :src="msg.user.picture" width="40" height="40"/>
-            <img v-else class="icon-round" src="../../assets/images/default-user-picture.png" width="40" height="40">
-          </template>
-          <template #m-info>
-            <!-- #으로 단축해서 사용 -->
-            <strong>{{ msg.user.name }}</strong>
-            <span style="font-size: 11px; margin-left:3px; ">{{ msg.str_send_date }}</span>
-          </template>
-          <template #m-content>
-            <!-- #으로 단축해서 사용 -->
-            <div v-if="msg.files == null || msg.content" v-html="TextbyFilter(msg.content)"
-                 class="mychat-content"></div>
-            <b-container fluid v-else-if="msg.files.length > 0" class="p-4 bg-white">
-              <b-row>
-                <b-col v-for="(file,index) in msg.files" :key="index">
-                  <a @click="fileDownload(file)">
-                    <b-img thumbnail rounded fluid :src="selectImage(file)" alt="이미지를 찾을 수 없습니다."
-                           style="max-width: 200px" @load="imgLoad"></b-img>
-                    <p><b>{{file.original_name}}</b></p>
-                    <p>file size : {{(file.file_size / 1024).toLocaleString(undefined,{minimumFractionDigits:2})}}
-                      kb</p>
-                  </a>
-                </b-col>
-              </b-row>
-            </b-container>
-          </template>
-        </MsgBox>
-      </ul>
-      <a v-if="msgPreviewBool" @click="clickMsgPreview">
-        <div id="c-c-preview" v-bind:class="{active: $store.state.isLActive}">
-          <div class="p-wrapper">
-            <div>{{ previewObj.username }} : &nbsp;</div>
-            <div class="p-nowrap" v-html="previewObj.content"></div>
-          </div>
-        </div>
-      </a>
-      <div class="c-i-wrapper">
-        <!-- 더 뭔가 추가할 거 같아서 div로 감싸놓음 -->
-        <div style="flex-grow:1;" class="myflex-column">
-          <div style="position: relative;">
-            <div class="mytextarea-wrapper" v-if="!$store.state.isInviteMode && !$store.state.isSearchMode">
-              <v-icon class="my-mail" v-bind:class="{'active-m': sendMail}" @click="sendMailToggle">mail</v-icon>
-              <i class="im im-users myfile-upload" style="right: 50px;" @click="inviteToggle"></i>
-              <label for="file-input" style="display: block;margin-bottom: 0;">
-                <i class="im im-cloud-upload myfile-upload"></i>
-              </label>
-              <input id="file-input" type="file" ref="fileInput" multiple @change="attachFile" hidden/>
-              <b-form-textarea
-                class="mytextarea"
-                autofocus
-                id="textarea-no-resize"
-                placeholder="Enter chat message"
-                rows="2"
-                no-resize
-                v-model="message.content"
-                @keydown.ctrl.shift.70="toggleSearchMode"
-                @keydown.enter.exact="send"
-                @keyup="byteCheck"
-                @keydown.shift.alt.50='inviteToggle'
-              ></b-form-textarea>
-            </div>
 
-            <div v-if="$store.state.isInviteMode">
-              <v-row>
-                <v-col cols="12">
-                  <v-autocomplete
-                    v-model="friends"
-                    :items="userList"
-                    @keydown.enter.exact="enter"
-                    @keydown.esc.exact="inviteToggle"
-                    filled
-                    autofocus
-                    chips
-                    label="Select"
-                    item-text="name"
-                    item-value="email"
-                    multiple
-                    :menu-props="{contentClass: 'inviteClass'}"
-                  >
-                    <template v-slot:selection="data">
-                      <v-chip
-                        v-bind="data.attrs"
-                        :input-value="data.selected"
-                        close
-                        @click="data.select"
-                        @click:close="remove(data.item)"
-                      >
-                        <v-avatar left>
-                          <v-img :src="data.item.picture"></v-img>
-                        </v-avatar>
-                        {{ data.item.name }}
-                      </v-chip>
-                    </template>
-                    <template v-slot:item="data">
-                      <template v-if="typeof data.item !== 'object'">
-                        <v-list-item-content v-text="data.item"></v-list-item-content>
-                      </template>
-                      <template v-else>
-                        <v-list-item-avatar>
-                          <img :src="data.item.picture">
-                        </v-list-item-avatar>
-                        <v-list-item-content>
-                          <v-list-item-title v-html="data.item.name"></v-list-item-title>
-                          <v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>
-                        </v-list-item-content>
-                      </template>
-                    </template>
-                  </v-autocomplete>
-                </v-col>
-              </v-row>
+      <main class="mainwrapper" style="height: calc(100vh - 91px);" >
+        <div class="h-inherit" v-cloak @drop.prevent="dropFile" @dragover.prevent>
+          <ul class="c-c-wrapper list-unstyled" @scroll="scrollEvt">
+            <MsgBox v-for="msg in msgArray" :key="msg.id">
+              <template #m-icon>
+                <img v-if="msg.user.picture" class="icon-round" :src="msg.user.picture" width="40" height="40"/>
+                <img v-else class="icon-round" src="../../assets/images/default-user-picture.png" width="40" height="40">
+              </template>
+              <template #m-info>
+                <!-- #으로 단축해서 사용 -->
+                <strong>{{ msg.user.name }}</strong>
+                <span style="font-size: 11px; margin-left:3px; ">{{ msg.str_send_date }}</span>
+              </template>
+              <template #m-content>
+                <!-- #으로 단축해서 사용 -->
+                <div v-if="msg.files == null || msg.content" v-html="TextbyFilter(msg.content)"
+                    class="mychat-content"></div>
+                <b-container fluid v-else-if="msg.files.length > 0" class="p-4 bg-white">
+                  <b-row>
+                    <b-col v-for="(file,index) in msg.files" :key="index">
+                      <a @click="fileDownload(file)">
+                        <b-img thumbnail rounded fluid :src="selectImage(file)" alt="이미지를 찾을 수 없습니다."
+                              style="max-width: 200px" @load="imgLoad"></b-img>
+                        <p><b>{{file.original_name}}</b></p>
+                        <p>file size : {{(file.file_size / 1024).toLocaleString(undefined,{minimumFractionDigits:2})}}
+                          kb</p>
+                      </a>
+                    </b-col>
+                  </b-row>
+                </b-container>
+              </template>
+            </MsgBox>
+          </ul>
+          <a v-if="msgPreviewBool" @click="clickMsgPreview">
+            <div id="c-c-preview" v-bind:class="{active: $store.state.isLActive}">
+              <div class="p-wrapper">
+                <div>{{ previewObj.username }} : &nbsp;</div>
+                <div class="p-nowrap" v-html="previewObj.content"></div>
+              </div>
             </div>
-            <SearchInput
-              :cursorPoint="cursorPoint"
-              :wrapperEl="wrapperEl"
-              @getMessage="getMessage"></SearchInput>
-          </div>
-          <div style="display: flex;flex-grow: 1;">
-            <span class="ml-auto"> {{ stringByteLength }} / 30000Byte</span>
+          </a>
+          <div class="c-i-wrapper">
+            <!-- 더 뭔가 추가할 거 같아서 div로 감싸놓음 -->
+            <div style="flex-grow:1;" class="myflex-column">
+              <div style="position: relative;">
+                <div class="mytextarea-wrapper" v-if="!$store.state.isInviteMode && !$store.state.isSearchMode">
+                  <v-icon class="my-mail" v-bind:class="{'active-m': sendMail}" @click="sendMailToggle">mail</v-icon>
+                  <i class="im im-users myfile-upload" style="right: 50px;" @click="inviteToggle"></i>
+                  <label for="file-input" style="display: block;margin-bottom: 0;">
+                    <i class="im im-cloud-upload myfile-upload"></i>
+                  </label>
+                  <input id="file-input" type="file" ref="fileInput" multiple @change="attachFile" hidden/>
+                  <b-form-textarea
+                    class="mytextarea"
+                    autofocus
+                    id="textarea-no-resize"
+                    placeholder="Enter chat message"
+                    rows="2"
+                    no-resize
+                    v-model="message.content"
+                    @keydown.ctrl.shift.70="toggleSearchMode"
+                    @keydown.enter.exact="send"
+                    @keyup="byteCheck"
+                    @keydown.shift.alt.50='inviteToggle'
+                  ></b-form-textarea>
+                </div>
+
+                <div v-if="$store.state.isInviteMode">
+                  <v-row>
+                    <v-col cols="12">
+                      <v-autocomplete
+                        v-model="friends"
+                        :items="userList"
+                        @keydown.enter.exact="enter"
+                        @keydown.esc.exact="inviteToggle"
+                        filled
+                        autofocus
+                        chips
+                        label="Select"
+                        item-text="name"
+                        item-value="email"
+                        multiple
+                        :menu-props="{contentClass: 'inviteClass'}"
+                      >
+                        <template v-slot:selection="data">
+                          <v-chip
+                            v-bind="data.attrs"
+                            :input-value="data.selected"
+                            close
+                            @click="data.select"
+                            @click:close="remove(data.item)"
+                          >
+                            <v-avatar left>
+                              <v-img :src="data.item.picture"></v-img>
+                            </v-avatar>
+                            {{ data.item.name }}
+                          </v-chip>
+                        </template>
+                        <template v-slot:item="data">
+                          <template v-if="typeof data.item !== 'object'">
+                            <v-list-item-content v-text="data.item"></v-list-item-content>
+                          </template>
+                          <template v-else>
+                            <v-list-item-avatar>
+                              <img :src="data.item.picture">
+                            </v-list-item-avatar>
+                            <v-list-item-content>
+                              <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                              <v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>
+                            </v-list-item-content>
+                          </template>
+                        </template>
+                      </v-autocomplete>
+                    </v-col>
+                  </v-row>
+                </div>
+                <SearchInput
+                  :cursorPoint="cursorPoint"
+                  :wrapperEl="wrapperEl"
+                  @getMessage="getMessage"></SearchInput>
+              </div>
+              <div style="display: flex;flex-grow: 1;">
+                <span class="ml-auto"> {{ stringByteLength }} / 30000Byte</span>
+              </div>
+            </div>
+            <v-btn class="mx-2" fab dark large color="cyan" style="margin-top: 15px;">
+              <i class="im im-paperplane"></i>
+            </v-btn>
           </div>
         </div>
-        <v-btn class="mx-2" fab dark large color="cyan" style="margin-top: 15px;">
-          <i class="im im-paperplane"></i>
-        </v-btn>
-      </div>
-    </div>
-  </main>
+      </main>
+  
 </template>
 <script>
   import MsgBox from './MsgBox'
@@ -475,7 +477,7 @@
       },
       ...mapGetters({
         userList: 'getUserList',
-        msgArray: 'getMsgArray'
+        msgArray: 'getMsgArray',
       })
     },
     watch: {
