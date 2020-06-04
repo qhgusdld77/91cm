@@ -12,10 +12,16 @@ import About from "../views/About";
 import Calendar from "../views/calendar/Calendar";
 import DevelopView from "../views/util/DevelopView";
 import VideoChat from "../components/VideoChat";
+import CopyRight from "../views/util/CopyRight";
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/license',
+    name: 'CopyRight',
+    component: CopyRight
+  },
   {
     path: '/video',
     name: 'VideoChat',

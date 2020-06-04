@@ -1,42 +1,38 @@
 <template>
-  <div >
-     <div class="container-fluid">
-        <div class="page-header">
-            <div class="row align-items-end">
-                <div class="col-lg-8">
-                    <div class="page-header-title">
-                        <i class="ik ik-server bg-blue"></i>
-                        <div class="d-inline">
-                            <h5>Taskboard</h5>
-                            <span>해당 채널 이름을 넣어줍시다</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <nav class="breadcrumb-container" aria-label="breadcrumb">
-                       <ol class="breadcrumb" style="display: flex;align-items: center;">
-                           
-                           <li class="breadcrumb-item"> 리스트 생성</li>
-                            <li class="breadcrumb-item" @click="addTaskList">
-                                <i class="ik ik-plus-circle" style="font-size:1.8rem;cursor: pointer;"></i>
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
+  <div>
+    <div class="container-fluid">
+      <div class="page-header">
+        <div class="row align-items-end">
+          <div class="col-lg-8">
+            <div class="page-header-title">
+              <i class="ik ik-server bg-blue"></i>
+              <div class="d-inline">
+                <h5>Taskboard</h5>
+                <span>해당 채널 이름을 넣어줍시다</span>
+              </div>
             </div>
+          </div>
+          <div class="col-lg-4">
+            <nav class="breadcrumb-container" aria-label="breadcrumb">
+              <ol class="breadcrumb" style="display: flex;align-items: center;">
+                <li class="breadcrumb-item"> 리스트 생성</li>
+                <li class="breadcrumb-item" @click="addTaskList">
+                  <i class="ik ik-plus-circle" style="font-size:1.8rem;cursor: pointer;"></i>
+                </li>
+              </ol>
+            </nav>
+          </div>
         </div>
-
-
-        <div class="row">
-            <draggable :list="getTaskBoard" v-bind="dragOptions" @change="tasklistEventHandler" style="width: 100%;flex-direction: row;display: flex;flex-wrap: wrap;">
-                <div class="col-md-4" v-for="item in getTaskBoard" :key="item.id">
-                    <TaskList :taskList="item" @closeTaskList="closeTaskList"></TaskList>
-                </div>
-            </draggable>
-  
-        </div>
+      </div>
+      <div class="row">
+        <draggable :list="getTaskBoard" v-bind="dragOptions" @change="tasklistEventHandler"
+                   style="width: 100%;flex-direction: row;display: flex;flex-wrap: wrap;">
+          <div class="col-md-4" v-for="item in getTaskBoard" :key="item.id">
+            <TaskList :taskList="item" @closeTaskList="closeTaskList"></TaskList>
+          </div>
+        </draggable>
+      </div>
     </div>
-
   </div>
 </template>
 <script>
@@ -85,7 +81,7 @@
       }
     },
     activated() {
-      this.taskSubscribe=this.$store.state.stompClient.subscribe('/sub/todo/' + this.$store.state.currentChannel.id, (res) => {
+      this.taskSubscribe = this.$store.state.stompClient.subscribe('/sub/todo/' + this.$store.state.currentChannel.id, (res) => {
         if (res.headers.typename == 'taskUpdate') {
           this.$store.dispatch('updateTaskBoard')
         }
@@ -99,7 +95,7 @@
       this.$http.get('/api/tasklist/get/' + this.$store.state.currentChannel.id)
         .then(res => {
           this.taskList = res.data
-          this.$store.commit('setTaskBoard',this.taskList)
+          this.$store.commit('setTaskBoard', this.taskList)
         })
       this.$eventBus.$on('deleteTaskList', data => {
         this.taskList.splice(this.taskList.indexOf(data), 1)
@@ -107,7 +103,6 @@
     },
     data() {
       return {
-      
         taskSubscribe: null,
         connetionCheck: false,
         taskList: [],
@@ -121,13 +116,14 @@
       }
     },
     methods: {
-      closeTaskList: function(){
+      closeTaskList: function () {
         this.taskList.pop()
         this.$store.commit('setCreateListActive', false)
       },
-      
+
       addTaskList: function () {
-        if(!this.$store.state.isCreateListActive){
+        // isCreateListActive가 true인 상태로 창이닫히면 isCreateListActive는 계속 true라서 add창이 안열림
+        if (!this.$store.state.isCreateListActive) {
           this.taskList.push(JSON.parse(JSON.stringify(this.taskListItem)))
           this.$store.commit('setCreateListActive', true)
         }
@@ -176,5 +172,5 @@
     padding-right: 0.5rem;
     color: #6c757d;
     content: "";
-    }
+  }
 </style>
