@@ -1,5 +1,4 @@
 <template>
-
       <main class="mainwrapper" style="height: calc(100vh - 91px);" >
         <div class="h-inherit" v-cloak @drop.prevent="dropFile" @dragover.prevent>
           <ul class="c-c-wrapper list-unstyled" @scroll="scrollEvt">
@@ -125,13 +124,13 @@
                 <span class="ml-auto"> {{ stringByteLength }} / 30000Byte</span>
               </div>
             </div>
-            <v-btn class="mx-2" fab dark large color="cyan" style="margin-top: 15px;">
+            <v-btn class="mx-2" fab dark color="cyan" style="margin-top: 15px;">
               <i class="im im-paperplane"></i>
             </v-btn>
           </div>
         </div>
       </main>
-  
+
 </template>
 <script>
   import MsgBox from './MsgBox'

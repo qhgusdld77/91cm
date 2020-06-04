@@ -1,11 +1,9 @@
 <template>
-  
-    <VueWebRTC
-      ref="webrtc"
-      :room-id="$store.state.currentChannel.id"
-      :socket-u-r-l="'http://91cm.nineonesoft.com:9001/'"
-    ></VueWebRTC>
-  
+  <VueWebRTC
+    ref="webrtc"
+    :room-id="$store.state.currentChannel.id"
+    :socket-u-r-l="'http://91cm.nineonesoft.com:9001/'"
+  ></VueWebRTC>
 </template>
 
 <script>
@@ -28,7 +26,12 @@
       })
     },
     mounted() {
+      $('.nav-toggle').click()
       this.$refs.webrtc.join();
+
+    },
+    beforeDestroy() {
+      this.$refs.webrtc.leave();
     },
     methods: {
       onCapture() {

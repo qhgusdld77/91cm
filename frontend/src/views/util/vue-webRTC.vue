@@ -1,23 +1,37 @@
 <template>
-  <!-- <div>
-    <v-layout row wrap>
-      <v-col cols="9"> -->
-       <div>
+  <div style="height: 100%">
+    <v-row justify="end">
+      <div style="margin-right: 5vh">
+        <v-btn color="blue-grey"
+               class="white--text"
+               @click="shareScreen"
+        >
+          Screen Share
+          <v-icon style="margin-left: 10px;">airplay</v-icon>
+        </v-btn>
+        <v-btn color="blue-grey"
+               class="white--text"
+               @click="capture"
+        >
+          Capture
+          <v-icon style="margin-left: 10px;">add_photo_alternate</v-icon>
+        </v-btn>
+      </div>
+    </v-row>
+    <v-row justify="center" align="center" no-gutters style="height: 90%;">
+      <v-col :cols="getVideoCols" v-for="item in videoList" style="margin-top: 0px; padding: 5px;">
+        <v-card class="d-inline" flat tile>
           <v-card
-            v-for="item in videoList"
             v-bind:video="item"
             v-bind:key="item.id"
             class="video-item">
             <video controls autoplay playsinline ref="videos" :muted="item.muted"
-                  :id="item.id" style="max-width: 100%;"></video>
-            <v-card-title>
-              {{$store.state.currentUser.name}}
-            </v-card-title>
+                   :id="item.id" style="max-width:100%;"></video>
           </v-card>
-          </div>
-      <!-- </v-col>
-    </v-layout>
-  </div> -->
+        </v-card>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
@@ -29,12 +43,34 @@
     components: {
       RTCMultiConnection
     },
+    computed: {
+      getVideoCols: function () {
+        switch (this.videoList.length) {
+          case 1:
+            return 10;
+          case 2:
+            return 6;
+          case 3:
+          case 4:
+            return 5;
+          case 5:
+          case 6:
+            return 4;
+          default:
+            return 3;
+        }
+      },
+    },
     data() {
       return {
         rtcmConnection: null,
         localVideo: null,
         videoList: [],
         canvas: null,
+        windowSize: {
+          x: 0,
+          y: 0,
+        },
       };
     },
     props: {
@@ -133,6 +169,10 @@
       };
     },
     methods: {
+      onResize() {
+        this.windowSize = {x: window.innerWidth, y: window.innerHeight}
+        console.log(this.windowSize)
+      },
       join() {
         var that = this;
         this.rtcmConnection.openOrJoin(this.roomId, function (isRoomExist, roomid) {
@@ -148,7 +188,16 @@
         this.videoList = [];
       },
       capture() {
-        return this.getCanvas().toDataURL(this.screenshotFormat);
+        // let img = this.getCanvas().toDataURL(this.screenshotFormat)
+        // const url = window.URL.createObjectURL(new Blob([img]))
+        // const link = document.createElement('a')
+        // link.href = url
+        // link.setAttribute('download',new Date().toDateString())
+        // document.body.appendChild(link)
+        // link.click()
+        // link.remove()
+        // window.URL.revokeObjectURL(url)
+        return;
       },
       getCanvas() {
         let video = this.getCurrentVideo();

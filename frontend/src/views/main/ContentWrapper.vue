@@ -124,7 +124,10 @@
             <span class="ml-auto"> {{ stringByteLength }} / 30000Byte</span>
           </div>
         </div>
-        <v-btn class="mx-2" fab dark large color="cyan" style="margin-top: 15px;">
+        <v-btn class="mx-2" fab dark large color="cyan" style="margin-top: 15px;" v-if="!$store.state.isVideoMode">
+          <i class="im im-paperplane"></i>
+        </v-btn>
+        <v-btn class="mx-2" fab dark small color="cyan" style="margin-top: 20px;" v-else>
           <i class="im im-paperplane"></i>
         </v-btn>
       </div>

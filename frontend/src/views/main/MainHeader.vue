@@ -65,18 +65,15 @@
         </div>
       </div>
     </div>
-    <CopyRight></CopyRight>
   </header>
-
 </template>
 
 <script>
-  import CopyRight from "../util/CopyRight";
+  import '../../../dist/js/theme.js'
   import AboutChannel from '../../service/aboutchannel'
 
   export default {
     name: 'MainHeader',
-    components: {CopyRight},
     data() {
       return {
         alarmList: [],
@@ -118,12 +115,10 @@
         $('.wrapper').toggleClass('right-sidebar-expand');
         return false;
       },
-
-      },
-      showModal: function(modalId){
-        console.log('click')
-        this.$bvModal.show(modalId)
-      },
+      // showModal: function(modalId){
+      //   console.log('click')
+      //   this.$bvModal.show(modalId)
+      // },
       inviteAccept: function (alarm, index) {
         const message = {
           channel_id: alarm.channel_id,
