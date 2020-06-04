@@ -28,7 +28,7 @@
 			values (
 				#{name},
 				#{channel_id},
-				(select * from (select ifnull(max(position)+1 , 0) from tasklist) a)
+				(select * from (select ifnull(max(position)+1 , 0) from tasklist  where channel_id = #{channel_id} ) a)
 				)
 	</insert>
 	
