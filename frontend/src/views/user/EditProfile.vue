@@ -26,8 +26,8 @@
                 <div style="margin: 20px 0px 35px;">
                   <input type="file" hidden ref="fileInput" @change="attachFile">
                   <div @click="fileInputClick">
-                    <v-img v-if="$store.state.currentUser.picture" class="icon-round"
-                           :src="$store.state.currentUser.picture" width="200" height="200">
+                    <v-img v-if="user.picture" class="icon-round"
+                           :src="user.picture" width="200" height="200">
                     </v-img>
                     <v-img v-else class="icon-round" src="../../assets/images/default-user-picture.png" width="200"
                            height="200"></v-img>
@@ -103,6 +103,7 @@
     name: 'EditUser',
     data() {
       return {
+        imageForm: null,
         imageUrl: '',
         nameState: null,
         user: Object.assign({}, this.$store.state.currentUser)
@@ -118,18 +119,9 @@
           this.$alertModal('alert', '한번에 보낼 수 있는 파일 용량은 100MB 입니다.')
           return;
         }
-        let formData = new FormData();
-        formData.append('file',uploadFiles[0])
-        this.$http.post('/api/file/upload/user/image', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }).then(res => {
-          this.$store.state.currentUser.picture = res.data
-          this.user.picture = res.data
-        }).catch(error => {
-          this.$alertModal('error', '이미지 파일만 업로드 할 수 있습니다.')
-        })
+        this.imageForm = new FormData();
+        this.imageForm.append('file',uploadFiles[0])
+
       },
       attachFile: function (e) {
         this.addFile(e.target.files)
@@ -170,6 +162,15 @@
         this.$http.post('/api/user/update', this.user)
           .then(res => {
             if (res.data) {
+              this.$http.post('/api/file/upload/user/image', formData, {
+                headers: {
+                  'Content-Type': 'multipart/form-data'
+                }
+              }).then(res => {
+                this.user.picture = res.data
+              }).catch(error => {
+                this.$alertModal('error', '이미지 파일만 업로드 할 수 있습니다.')
+              })
               this.$store.state.stompClient.send('/pub/sync/info', null, {})
               this.$store.dispatch('initCurrentUser')
               this.$store.commit('getSelectComponent', 'user')
