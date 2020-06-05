@@ -52,7 +52,13 @@ public class TaskListController {
 	public boolean updateTaskListPostion(@RequestBody Map<String, Object> map) {
 		// 필요한 값 : 드래그앤드랍하기 전에 리스트의 인덱스 값과 드래그앤드랍 이후의 해당 리스트의 인덱스값, 해당 리스트의 id 값
 		// tasklistOldIndex, tasklistNewIndex,tasklistId 
-		return taskListService.updateTaskListPosition(map);
+		
+		try {
+			return taskListService.updateTaskListPosition(map);
+		} catch (Exception e) {
+			return false;
+		}
+		
 	}
 
 }
