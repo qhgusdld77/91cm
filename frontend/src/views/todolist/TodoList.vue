@@ -140,7 +140,9 @@
             tasklistNewIndex: moved.newIndex,
             tasklistId: moved.element.id
           }).then(res => {
-            this.$store.state.stompClient.send('/sub/todo/' + this.$store.state.currentChannel.id, {}, {typename: 'taskUpdate'})
+            console.log(res.data,'position')
+            if(res.data) this.$store.state.stompClient.send('/sub/todo/' + this.$store.state.currentChannel.id, {}, {typename: 'taskUpdate'})
+            else this.$alertModal('alert', '위치 변경에 실패했습니다.')            
           }).catch(error => {
             console.error(error)
           })

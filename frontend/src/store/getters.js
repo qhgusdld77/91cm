@@ -9,7 +9,6 @@ export default {
       }
     }
   },
-  getMsgArray: state => state.msgArray,
   getUserChannelList: state => state.userChannelList,
   getTaskBoard: state=> state.taskBoard,
   getCurrentChannel: state => state.currentChannel,

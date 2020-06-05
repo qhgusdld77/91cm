@@ -45,7 +45,7 @@
                                     <a href="/develop"><i class="ik ik-server"></i><span>Menus</span></a>
                                 </div>
                                 <div class="app-item">
-                                    <a href="/develop"><i class="ik ik-clipboard"></i><span>Pages</span></a>
+                                    <a href="/license"><i class="ik ik-clipboard"></i><span>라이센스</span></a>
                                 </div>
                                 <div class="app-item">
                                     <a href="/develop"><i class="ik ik-message-square"></i><span>Chats</span></a>
@@ -95,7 +95,6 @@
             }
         },
         methods: {
-
         }
     }
 

@@ -13,25 +13,25 @@
                 <keep-alive v-else>
                   <component :is="whichComponent"></component>
                 </keep-alive>
-              </div>  
+              </div>
                 <div :class="{'col': isVideoMode,'col-9':isVideoMode}">
                   <VideoChat v-if="$store.state.isVideoMode" />
                 </div>
             </div>
 
             <RSidebar v-if="$store.state.currentChannel!=null"></RSidebar>
-              
-            
+
+
           </div>
           <footer class="footer">
             <div class="w-100 clearfix">
-              <span class="text-center text-sm-left d-md-inline-block">Copyright © 2018 ThemeKit</span>
+              <span class="text-center text-sm-left overline d-md-inline-block">Copyright © 2018 ThemeKit</span>
             </div>
           </footer>
         </div>
       </template>
       <Loading v-else/>
-      
+
     </div>
     <AppsModal></AppsModal>
   </div>
@@ -41,7 +41,7 @@
   import LSidebar from '../views/main/LSidebar'
   import RSidebar from '../views/main/RSidebar'
   import MainHeader from '../views/main/MainHeader'
-  import ContentWrapper from '../views/main/ContentWrapperV2'
+  import ContentWrapper from '../views/main/ContentWrapper'
   import AboutChannel from '../service/aboutchannel'
   import NotificationClass from '../service/notification'
   import EventListener from '../service/eventlistener'

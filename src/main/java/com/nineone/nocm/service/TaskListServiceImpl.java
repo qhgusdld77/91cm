@@ -25,7 +25,7 @@ public class TaskListServiceImpl implements TaskListService {
 	}
 
 	@Override
-	@Transactional(isolation = Isolation.REPEATABLE_READ)
+	@Transactional(isolation = Isolation.SERIALIZABLE)
 	public boolean deleteTaskList(TaskList taskList) {
 		taskListRepository.updateTaskListPositionByDelete(taskList.getPosition());
 		return (taskListRepository.deleteTaskList(taskList.getId()) > 0 )? true: false;
@@ -44,7 +44,7 @@ public class TaskListServiceImpl implements TaskListService {
 	}
 
 	@Override
-	@Transactional(isolation = Isolation.REPEATABLE_READ)
+	@Transactional(isolation = Isolation.SERIALIZABLE)
 	public boolean updateTaskListPosition(Map<String, Object> map) {
 		boolean isUp = (int)map.get("tasklistNewIndex") < (int)map.get("tasklistOldIndex") ? true : false;
 		map.put("isUp", isUp);

@@ -1,84 +1,84 @@
 <template>
   <div class="app-sidebar colored" @mouseover="activeBlock" @mouseleave="activeNone">
-                    <div class="sidebar-header">
-                        <a class="header-brand" href="/main">
-                            <!-- <div class="logo-img">
-                               <img src="" class="header-brand-img" alt="lavalite"> 
-                            </div> -->
-                            <span class="text">91CM</span>
-                        </a>
-                        <button type="button" class="nav-toggle"><i data-toggle="expanded" class="ik ik-toggle-right toggle-icon"></i></button>
-                        <button id="sidebarClose" class="nav-close"><i class="ik ik-x"></i></button>  
-                    </div>
-                    
-                    <div class="sidebar-content">
-                        <div class="nav-container">
-                            <nav id="main-menu-navigation" class="navigation-main">
-                            
-                                  <div class="nav-item has-sub open" >
-                                    <a href="javascript:void(0)">
-                                      <div style="display: flex;align-items: center;">
-                                        <i class="ik ik-layers"></i><span>Channels</span>
-                                        
-                                        <div style="flex-grow: 1;display: flex;justify-content: flex-end;">
-                                            <button @click="prepareModal('create')" style="margin-right: 5px;display: flex;color: white;">
-                                            <i class="im im-plus-circle" style="margin-right: 15px;display: flex;"></i>
-                                            </button> 
-                                        </div>
+    <div class="sidebar-header">
+      <a class="header-brand" href="/main">
+        <!-- <div class="logo-img">
+           <img src="" class="header-brand-img" alt="lavalite">
+        </div> -->
+        <span class="text">91CM</span>
+      </a>
+      <button type="button" class="nav-toggle"><i data-toggle="expanded" class="ik ik-toggle-right toggle-icon"></i>
+      </button>
+      <button id="sidebarClose" class="nav-close"><i class="ik ik-x"></i></button>
+    </div>
 
-                                      </div>
-                                    </a>
-                                    <div class="submenu-content">
-                                        <div v-for="(channel, index ) in userChannelList" :key="channel.id">
-                                            <a @click="sendSelectChannel(index)" class="menu-item" style="display: flex;" :class="{ 'active-channel': channel.id == $store.state.currentChannel.id}">
-                                                 <div>{{ channel.name }}</div>
-                                                <div style="display: flex;justify-content: flex-end;flex-grow: 1;" v-if="channel.count!=0">
-                                                    <span class="badge badge-danger" style="position: inherit;" >{{channel.count }}</span>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                  </div>
-                                
-                                <!-- <div class="nav-lavel">Users</div> -->
+    <div class="sidebar-content">
+      <div class="nav-container">
+        <nav id="main-menu-navigation" class="navigation-main">
 
-                                <div class="nav-item has-sub open">
-                                    <a href="javascript:void(0)" style="display: flex;align-items: center;"><i class="ik ik-users"></i><span>Users</span> </a>
-                                    <div class="submenu-content" >
-                                        <a style="cursor:default;" v-for="(user) in channelUsers" :key="user.email" class="menu-item"><span>{{ user.name }}</span></a>  
-                                        
-                                    </div>
-                                </div>
+          <div class="nav-item has-sub open">
+            <a href="javascript:void(0)">
+              <div style="display: flex;align-items: center;">
+                <i class="ik ik-layers"></i><span>Channels</span>
 
-
-
-
-                               <!-- <div class="nav-item">
-                                  <div v-for="(user) in channelUsers" :key="user.email">
-                                    <a style="cursor:default;"><span>{{ user.name }}</span></a>
-                                  </div>
-                              </div> -->
-                            </nav>
-                        </div>
-                    </div>
-                    <b-modal id="channelCU" centered ref="modal" @hidden="resetModal" @ok="handleOk">
-                      <template #modal-title>
-                        {{ channelmode }}
-                      </template>
-                      <form ref="channelCreateForm" @submit.stop.prevent="channelForm">
-                        <b-form-group label="채널 이름" :state="nameState" label-for="channel-input" invalid-feedback="채널 이름이 필요합니다.">
-                          <b-form-input id="channel-input" :state="nameState" v-model="channelTitle" required autofocus>
-                          </b-form-input>
-                        </b-form-group>
-                      </form>
-                    </b-modal>
-
-                   
+                <div style="flex-grow: 1;display: flex;justify-content: flex-end;">
+                  <button @click="prepareModal('create')" style="margin-right: 5px;display: flex;color: white;">
+                    <i class="im im-plus-circle" style="margin-right: 15px;display: flex;"></i>
+                  </button>
                 </div>
-          
+
+              </div>
+            </a>
+            <div class="submenu-content">
+              <div v-for="(channel, index ) in userChannelList" :key="channel.id">
+                <a @click="sendSelectChannel(index)" class="menu-item" style="display: flex;"
+                   :class="{ 'active-channel': channel.id == $store.state.currentChannel.id}">
+                  <div>{{ channel.name }}</div>
+                  <div style="display: flex;justify-content: flex-end;flex-grow: 1;" v-if="channel.count!=0">
+                    <span class="badge badge-danger" style="position: inherit;">{{channel.count }}</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="nav-lavel">Users</div> -->
+
+          <div class="nav-item has-sub open">
+            <a href="javascript:void(0)" style="display: flex;align-items: center;"><i class="ik ik-users"></i><span>Users</span>
+            </a>
+            <div class="submenu-content">
+              <a style="cursor:default;" v-for="(user) in channelUsers" :key="user.email" class="menu-item"><span>{{ user.name }}</span></a>
+
+            </div>
+          </div>
+
+
+          <!-- <div class="nav-item">
+             <div v-for="(user) in channelUsers" :key="user.email">
+               <a style="cursor:default;"><span>{{ user.name }}</span></a>
+             </div>
+         </div> -->
+        </nav>
+      </div>
+    </div>
+    <b-modal id="channelCU" centered ref="modal" @hidden="resetModal" @ok="handleOk">
+      <template #modal-title>
+        {{ channelmode }}
+      </template>
+      <form ref="channelCreateForm" @submit.stop.prevent="channelForm">
+        <b-form-group label="채널 이름" :state="nameState" label-for="channel-input" invalid-feedback="채널 이름이 필요합니다.">
+          <b-form-input id="channel-input" :state="nameState" v-model="channelTitle" required autofocus>
+          </b-form-input>
+        </b-form-group>
+      </form>
+    </b-modal>
+
+
+  </div>
+
 </template>
 <script>
-  // import theme from '../../../dist/js/theme.js'
   import AboutChannel from '../../service/aboutchannel'
   import {mapGetters} from "vuex";
 
@@ -87,8 +87,8 @@
     watch: {
       currentChannel(newCurrentChannel, oldCurrentChannel) {
         this.updateUserList(newCurrentChannel)
-        console.log('oldCompo',this.$store.state.oldComponent)
-        console.log('currentc',this.$store.state.currentChannel)
+        console.log('oldCompo', this.$store.state.oldComponent)
+        console.log('currentc', this.$store.state.currentChannel)
       },
       syncChannelUser() {
         this.updateUserList(this.$store.state.currentChannel)
@@ -99,7 +99,7 @@
         userChannelList: 'getUserChannelList',
         currentChannel: 'getCurrentChannel',
         syncChannelUser: 'getSyncChannelUser'
-        
+
       }),
     },
     name: 'LSidebar',
@@ -113,7 +113,7 @@
       }
     },
     created() {
-     this.updateUserList(this.currentChannel)
+      this.updateUserList(this.currentChannel)
     },
     mounted() {
       this.$eventBus.$on('useModal', res => {
@@ -121,58 +121,59 @@
       })
       // if(window.innerWidth < 500){
       //   this.$nextTick(function() {
-      //     let el = document.querySelector('.app-sidebar')  
+      //     let el = document.querySelector('.app-sidebar')
       //     el.classList.add("hide-sidebar")
       //   });
-        
-        
+
+
       // }
     },
     updated() {
-      
+
     },
     methods: {
-      activeCurrentChannel:function(){
+      activeCurrentChannel: function () {
         this.$store.state.currentChannel
         return true
       },
-      activeBlock:function(){
-        this.$nextTick(function() {
+      activeBlock: function () {
+        this.$nextTick(function () {
           let el = document.querySelector('.wrapper')
           let t = $(".sidebar-content")
-          if(el.classList.contains('nav-collapsed')){
-            el.classList.remove( 'menu-collapsed' );
+          if (el.classList.contains('nav-collapsed')) {
+            el.classList.remove('menu-collapsed');
             var e = $(".navigation-main .nav-item.nav-collapsed-open");
-            e.children(".submenu-content").hide().slideDown(300, function() {
-                $(this).css("display", "")
+            e.children(".submenu-content").hide().slideDown(300, function () {
+              $(this).css("display", "")
             }), t.find(".nav-item.active").parents(".nav-item").addClass("open"), e.addClass("open").removeClass("nav-collapsed-open")
           }
         })
       },
-      activeNone: function(){
+      activeNone: function () {
         function a(e, s) {
-            e.children(".submenu-content").show().slideUp(200, function() {
-                i(this).css("display", ""), i(this).find(".menu-item").removeClass("is-shown"), e.removeClass("open"), s && s()
-            })
+          e.children(".submenu-content").show().slideUp(200, function () {
+            i(this).css("display", ""), i(this).find(".menu-item").removeClass("is-shown"), e.removeClass("open"), s && s()
+          })
         }
+
         let l = $(".wrapper")
         if (l.hasClass("nav-collapsed")) {
-            l.addClass("menu-collapsed");
-            let s = $(".navigation-main .nav-item.open"),
-                a = s.children(".submenu-content");
-            s.addClass("nav-collapsed-open"), a.show().slideUp(300, function() {
-                $(this).css("display", "")
-            }), s.removeClass("open")
+          l.addClass("menu-collapsed");
+          let s = $(".navigation-main .nav-item.open"),
+            a = s.children(".submenu-content");
+          s.addClass("nav-collapsed-open"), a.show().slideUp(300, function () {
+            $(this).css("display", "")
+          }), s.removeClass("open")
         }
       },
       updateUserList: function (currentChannel) {
-        console.log(currentChannel,'updateUserList')
-        if(currentChannel!=null){
+        console.log(currentChannel, 'updateUserList')
+        if (currentChannel != null) {
           this.$http.get('/api/user/channel/' + currentChannel.id)
-          .then(res => {
-            this.channelUsers = res.data
-            this.$store.commit('setChannelUsers', res.data)
-          })
+            .then(res => {
+              this.channelUsers = res.data
+              this.$store.commit('setChannelUsers', res.data)
+            })
         }
       },
       LSidebarClose: function () {
@@ -182,16 +183,16 @@
         // this.$store.state.isLActive = !this.$store.state.isLActive
       },
       sendSelectChannel: function (index) {
-        if(window.innerWidth<600){
+        if (window.innerWidth < 600) {
           this.LSidebarClose()
         }
         console.log("user select channel list index " + index)
-        console.log("select channel info : "+this.$store.state.userChannelList[index].id)
+        console.log("select channel info : " + this.$store.state.userChannelList[index].id)
         this.$store.commit('getSelectComponent', 'main')
         if (this.$store.state.oldComponent == 'main') {
-            AboutChannel.updateLastAccessDate(this.$store.state.userChannelList[index].id, this.$store.state.currentChannel.id)
+          AboutChannel.updateLastAccessDate(this.$store.state.userChannelList[index].id, this.$store.state.currentChannel.id)
         }
-        this.$store.commit('setCurrentChannel',this.$store.state.userChannelList[index])
+        this.$store.commit('setCurrentChannel', this.$store.state.userChannelList[index])
         this.$store.state.currentChannel.count = 0
         this.$store.state.isSearchMode = false
       },
@@ -250,7 +251,7 @@
         AboutChannel.createChannel(this.channelTitle, this.$store.state.currentUser.email)
           .then(async (res) => {
             //res.data = 새로 생성된 channel 인스턴스
-            if(this.$store.state.currentChannel != null){
+            if (this.$store.state.currentChannel != null) {
               AboutChannel.updateLastAccessDate(res.data.id, this.$store.state.currentChannel.id)
             }
             this.$store.commit('setCurrentChannel', res.data)
@@ -266,9 +267,9 @@
   }
 </script>
 <style scoped>
-.active-channel{
-  background-color:white;
-  color:black !important; 
-}
+  .active-channel {
+    background-color: white;
+    color: black !important;
+  }
 </style>
 

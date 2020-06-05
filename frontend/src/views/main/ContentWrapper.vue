@@ -18,7 +18,7 @@
                  class="mychat-content"></div>
             <b-container fluid v-else-if="msg.files.length > 0" class="p-4 bg-white">
               <b-row>
-                <b-col v-for="file in msg.files">
+                <b-col v-for="(file,index) in msg.files" :key="index">
                   <a @click="fileDownload(file)">
                     <b-img thumbnail rounded fluid :src="selectImage(file)" alt="이미지를 찾을 수 없습니다."
                            style="max-width: 200px" @load="imgLoad"></b-img>
@@ -31,6 +31,7 @@
             </b-container>
           </template>
         </MsgBox>
+        
       </ul>
       <a v-if="msgPreviewBool" @click="clickMsgPreview">
         <div id="c-c-preview" v-bind:class="{active: $store.state.isLActive}">
@@ -45,6 +46,22 @@
         <div style="flex-grow:1;" class="myflex-column">
           <div style="position: relative;">
             <div class="mytextarea-wrapper" v-if="!$store.state.isInviteMode && !$store.state.isSearchMode">
+               
+
+
+              <!-- <v-progress-linear
+                style="left: 10px; width: 50%;"
+                class="my-mail"
+                v-model="skill"
+                color="blue-grey"
+                height="25"
+                reactive
+              >
+                <template v-slot="{ value }">
+                  <strong>{{ Math.ceil(value) }}%</strong>
+                </template>
+              </v-progress-linear> -->
+
               <v-icon class="my-mail" v-bind:class="{'active-m': sendMail}" @click="sendMailToggle">mail</v-icon>
               <i class="im im-users myfile-upload" style="right: 50px;" @click="inviteToggle"></i>
               <label for="file-input" style="display: block;margin-bottom: 0;">
@@ -62,39 +79,81 @@
                 @keydown.ctrl.shift.70="toggleSearchMode"
                 @keydown.enter.exact="send"
                 @keyup="byteCheck"
-                @keydown.shift.ctrl.50='inviteToggle'
+                @keydown.shift.alt.50='inviteToggle'
               ></b-form-textarea>
             </div>
-            <div style="position: relative" v-if="$store.state.isInviteMode">
-              <i style="position:absolute;left: 15px;top: calc(50% - 12px);" class="im im-user-circle"></i>
-              <b-form-input
-                autocomplete="off"
-                @keydown.enter.exact="invite"
-                @keydown.esc.exact="inviteToggle"
-                list="user-info-list"
-                placeholder="invite user"
-                style="height: 80px;padding-left: 50px;"
-                v-model="message.content"
-                autofocus
-                @change="splitData"
-              ></b-form-input>
-              <datalist id="user-info-list">
-                <option v-for="user in userList" :key="user.email">{{ user.name }}-{{ user.email }}</option>
-              </datalist>
+
+            <div v-if="$store.state.isInviteMode">
+              <v-row>
+                <v-col cols="12">
+                  <v-autocomplete
+                    v-model="friends"
+                    :items="userList"
+                    @keydown.enter.exact="enter"
+                    @keydown.esc.exact="inviteToggle"
+                    filled
+                    autofocus
+                    chips
+                    label="Select"
+                    item-text="name"
+                    item-value="email"
+                    multiple
+                    :menu-props="{  contentClass: 'inviteClass'}"
+                  >
+                    <template v-slot:selection="data">
+                      <v-chip
+                        v-bind="data.attrs"
+                        :input-value="data.selected"
+                        close
+                        @click="data.select"
+                        @click:close="remove(data.item)"
+                      >
+                        <v-avatar left>
+                          <v-img :src="data.item.picture"></v-img>
+                        </v-avatar>
+                        {{ data.item.name }}
+                      </v-chip>
+                    </template>
+                    <template v-slot:item="data">
+                      <template v-if="typeof data.item !== 'object'">
+                        <v-list-item-content v-text="data.item"></v-list-item-content>
+                      </template>
+                      <template v-else>
+                        <v-list-item-avatar>
+                          <img :src="data.item.picture">
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                          <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                          <v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>
+                        </v-list-item-content>
+                      </template>
+                    </template>
+                  </v-autocomplete>
+                </v-col>
+              </v-row>
             </div>
             <SearchInput
-              :msgArray="msgArray"
               :cursorPoint="cursorPoint"
               :wrapperEl="wrapperEl"
               @getMessage="getMessage"></SearchInput>
           </div>
           <div style="display: flex;flex-grow: 1;">
-            <span class="ml-auto"> {{ stringByteLength }} / 30000Byte</span>
+            <v-progress-linear
+                  v-if="isFileUpload"
+                  color="cyan darken-4"
+                  height="10"
+                  v-model="progressValue"
+                  striped
+                ></v-progress-linear>
+            <span style="position: absolute;right: 108px;"> {{ stringByteLength }} / 30000Byte</span>
           </div>
         </div>
-        <b-button v-if="!$store.state.isInviteMode && !$store.state.isSearchMode" @click="send"
-                  style="height: 57px; width: 70px; margin-left:20px;" variant="primary">전송
-        </b-button>
+        <v-btn class="mx-2" fab dark large color="cyan" style="margin-top: 15px;" v-if="!$store.state.isVideoMode">
+          <i class="im im-paperplane"></i>
+        </v-btn>
+        <v-btn class="mx-2" fab dark small color="cyan" style="margin-top: 20px;" v-else>
+          <i class="im im-paperplane"></i>
+        </v-btn>
       </div>
     </div>
   </main>
@@ -108,15 +167,16 @@
   import {mapGetters} from "vuex";
 
   export default {
-    props: ['msgArray'],
     name: 'ContentWrapper',
     components: {
       MsgBox, SearchInput
     },
-
     data() {
       return {
-        sendMail:false,
+        isFileUpload: false,
+        progressValue:0,
+        friends: [],
+        sendMail: false,
         tempImg: '',
         stringByteLength: 0,
         previewObj: {
@@ -145,10 +205,9 @@
       }
     },
     created() {
-      if(this.$store.state.currentChannel!=null){
+      if (this.$store.state.currentChannel != null) {
         this.getMessage()
       }
-
     },
     mounted() {
       this.$nextTick(() => {
@@ -167,12 +226,66 @@
       if (this.$store.state.oldComponent != 'main' && this.$store.state.selectComponent == 'main') {
         this.scrollToEnd(true)
       }
+      this.friends = []
+      this.$store.state.isInviteMode = false
+      this.$store.state.isSearchMode = false
     },
     methods: {
-      sendMailToggle(){
-        this.sendMail =!this.sendMail
-        if(this.sendMail){
-          this.$alertModal('alert','지금부터 보내는 메시지는'+this.$store.state.currentChannel.name +' 채널 사용자들에게 '+'메일로 보내집니다.')
+      enter: async function(event) {
+        let el = document.querySelector(".menuable__content__active.inviteClass")
+        if(el == null){
+          if(this.friends.length!=0){
+            await InviteService.invite(this.$store.state.currentUser.email, this.$store.state.currentChannel.id, this.friends)
+              .then(res => {
+                const invite = {
+                  channel_id: this.$store.state.currentChannel.id,
+                  sender: this.$store.state.currentUser.email,
+                  recipients: this.friends
+                }
+                for (let i = 0; i < this.friends.length; i++) {
+                  const user = this.userList.find(el => el.email == this.friends[i])
+                  this.message.content += user.name + '님 '
+                }
+
+                //메일 오류 계속 떠서 일단 임시로 주석 처리함
+                this.$http.post('/api/invite/mail', invite)
+                  .then(res=>{
+                    console.log(res.data)
+                  })
+                this.message.content += '을 초대했습니다.'
+                this.$eventBus.$emit('getUserList', true)
+                this.send()
+                this.inviteDataInit()
+
+              }).catch(error => {
+                let alertmsg = ''
+                if (error.response.data.list != null) {
+                  const alertList = error.response.data.list
+                  for (let i = 0; i < alertList.length; i++) {
+                    const user = this.userList.find(el => el.email == alertList[i])
+                    alertmsg += user.name + '님 '
+                  }
+                  alertmsg += '은 이미 이 채널에 초대 받았습니다. 확인해주세요.'
+                  this.$alertModal('error', alertmsg)
+                } else {
+                  this.$alertModal('error', error.response.data.message)
+                }
+                console.error(error.response)
+                this.message.content = ''
+              })
+          } else {
+            this.$alertModal('alert', '초대할 사용자를 선택해주세요')
+          }
+        }
+      },
+      remove(item) {
+        const index = this.friends.indexOf(item.email);
+        if (index >= 0) this.friends.splice(index, 1);
+      },
+      sendMailToggle() {
+        this.sendMail = !this.sendMail
+        if (this.sendMail) {
+          this.$alertModal('alert', '지금부터 보내는 메시지는' + this.$store.state.currentChannel.name + ' 채널 사용자들에게 ' + '메일로 보내집니다.')
         }
       },
       toggleSearchMode: function () {
@@ -217,6 +330,7 @@
           })
       },
       addFile: function (uploadFiles) {
+        this.progressValue = 0
         const maxUploadSize = 100 * 1024 * 1024;
         let fileSize = 0;
         if (uploadFiles[0] == null) {
@@ -235,49 +349,35 @@
         /////////////////////////////////////
         formData.append('channel_id', this.$store.state.currentChannel.id)
         formData.append('sender', this.$store.state.currentUser.email)
-        this.$http.post('/api/file/upload', formData, {
+        this.isFileUpload = true
+        this.$http.post('/api/file/upload', formData, 
+        {
           headers: {
             'Content-Type': 'multipart/form-data'
+          },
+          onUploadProgress: event => {
+              this.progressValue = Math.round((100 * event.loaded) / event.total);
           }
         }).then(res => {
+        this.isFileUpload = false
         }).catch(error => {
+          this.isFileUpload = false
+          this.progressValue = 0
           this.$alertModal('error', '폴더는 업로드 할 수 없습니다.')
         })
       },
-      invite: async function () {
-        const userName = this.message.content
-        const userEmail = this.selectedUserEmail
-        this.selectedUserEmail = null
-        await InviteService.invite(this.$store.state.currentUser.email, this.$store.state.currentChannel.id, userEmail)
-          .then(res => {
-            // 모두가 초대 메시지를 보게 할 것인지 아닌지
-            // 그리고 지금은 초대했다는 메시지가 보여도 상대방이 수락하기 전까지는 채널에 대상 유저가 없다.
-            const invite = {
-              channel_id: this.$store.state.currentChannel.id,
-              sender: this.$store.state.currentUser.email,
-              recipient: userEmail
-            }
-            console.log(this.$store.state.currentUser)
-
-            //메일 오류 계속 떠서 일단 임시로 주석 처리함
-          //   this.$http.post('/api/invite/mail', invite).then(res=>{
-          //     console.log(res.data)
-          //   })
-
-            this.message.content = userName + '님을 초대했습니다.'
-            this.$eventBus.$emit('getUserList', true)
-            this.send()
-            this.inviteToggle()
-
-
-          }).catch(error => {
-            this.$alertModal('error', error.response.data.message)
-            console.error(error.response)
-            this.message.content = ''
-            this.inviteToggle()
-          })
-      },
       inviteToggle: function (e) {
+        let el = document.querySelector(".menuable__content__active.inviteClass")
+        if(this.$store.state.isInviteMode == false){
+          this.$store.state.isInviteMode = !this.$store.state.isInviteMode
+        } else {
+          if (el == null) {
+            this.inviteDataInit()
+          }
+        }
+      },
+      inviteDataInit: function () {
+        this.friends = []
         this.message.content = ''
         this.$store.state.isInviteMode = !this.$store.state.isInviteMode
       },
@@ -293,25 +393,26 @@
             this.$store.state.stompClient.send("/pub/chat/message", JSON.stringify(this.message), {})
             this.message.content = ''
             this.scrollToEnd(true)
-            if (this.sendMail){
-              console.log(this.$store.state.channelUsers.filter(channelUser=> channelUser!=this.$store.state.currentUser))
-              this.$store.state.channelUsers.filter(channelUser=> channelUser!=this.$store.state.currentUser)
-                .forEach(channelUser =>{
-                this.$http.post('/api/message/send/mail',{
-                  channelName: this.$store.state.currentChannel.name,
-                  fromUser: this.$store.state.currentUser.name,
-                  toUser: channelUser.email
-                })
-                  .then(res =>{
-                    this.sendMail = false
+            if (this.sendMail) {
+              console.log(this.$store.state.channelUsers.filter(channelUser => channelUser != this.$store.state.currentUser))
+              this.$store.state.channelUsers.filter(channelUser => channelUser != this.$store.state.currentUser)
+                .forEach(channelUser => {
+                  this.$http.post('/api/message/send/mail', {
+                    channelName: this.$store.state.currentChannel.name,
+                    fromUser: this.$store.state.currentUser.name,
+                    toUser: channelUser.email
                   })
-              })
+                    .then(res => {
+                      this.sendMail = false
+                    })
+                })
             }
           } else {
             this.message.content = CommonClass.replaceErrorMsg(this.message.content)
             this.message.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + this.message.content
             let errormsg = JSON.parse(JSON.stringify(this.message))
-            this.msgArray.push(errormsg)
+            //dd
+            this.$store.commit('pushMsg',errormsg)
             this.message.content = ''
           }
         }
@@ -345,7 +446,7 @@
 
             res.data[i].content = CommonClass.replacemsg(res.data[i].content)
           }
-          this.msgArray = res.data.reverse().concat(this.msgArray)
+          this.$store.commit('setMsgArray', res.data.reverse().concat(this.msgArray))
           if (wrapperEl != null) {
             this.$nextTick(() => {
               wrapperEl.scrollTop = wrapperEl.scrollHeight - this.oldScrollHeight
@@ -353,7 +454,6 @@
             })
           }
           this.getmsgBool = true
-          this.$emit('msgArrayUpdate', this.msgArray)
         })
       },
       scrollToEnd(bool) {
@@ -382,16 +482,18 @@
         this.msgPreviewBool = false
       },
       initData() {
+        this.friends = []
+        this.$store.state.isInviteMode = false
+        this.$store.state.isSearchMode = false
         this.message.channel_id = this.getCurrentChannel.id
         this.message.sender = this.$store.state.currentUser.email
         this.cursorPoint.channel_id = this.$store.state.currentChannel
         this.cursorPoint.first = true
         this.cursorPoint.cursorId = 0
         this.cursorPoint.empty = false
-        this.msgArray = []
-        this.firstLoad = true,
-          this.scrollHeight = 0,
-          this.$emit('msgArrayUpdate', this.msgArray)
+        this.$store.commit('setMsgArray',[])
+        this.firstLoad = true
+        this.scrollHeight = 0
       },
       byteCheck(e) {
         // v-model을 썼음에도 e.target.value를 사용하는 이유는 한글은 바로 바인딩이 안되기때문에 수동적으로 값들을 message.content에 넣기 위함이다.
@@ -412,7 +514,7 @@
       },
       ...mapGetters({
         userList: 'getUserList',
-
+        msgArray: 'getMsgArray'
       })
     },
     watch: {
@@ -434,8 +536,8 @@
           }
         }
       },
-      checkbox: function (){
-        if(this.checkbox){
+      checkbox: function () {
+        if (this.checkbox) {
           alert('지금부터 보내는 메시지는 나인원소프트 전체 메일로 보내집니다.')
         }
       }
@@ -457,11 +559,11 @@
 
 <style scoped>
 
-@media only screen and (max-width: 1023px){
-  .wrapper .page-wrap .main-content {
-    padding-left: 0px !important;
+  @media only screen and (max-width: 1023px) {
+    .wrapper .page-wrap .main-content {
+      padding-left: 0px !important;
+    }
   }
-}
 
 
 </style>

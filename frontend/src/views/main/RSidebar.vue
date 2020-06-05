@@ -56,9 +56,13 @@
           <b-collapse id="video-chat">
             <div class="s-coll-style">
               <p>화상 채팅 유저 수 : 1</p>
-              <v-btn color="blue-grey" class="white--text" @click="toggleVideoMode()">
+              <v-btn color="blue-grey" class="white--text" @click="toggleVideoMode()" v-if="!isVideoMode">
                 Join
                 <v-icon right dark class="my-video">play_circle_outline</v-icon>
+              </v-btn>
+              <v-btn v-else color="blue-grey" class="white--text" @click="toggleVideoMode">
+                Leave
+                <v-icon right dark class="my-video">exit_to_app</v-icon>
               </v-btn>
             </div>
           </b-collapse>
@@ -90,7 +94,9 @@
     name: 'RSidebar',
     computed: {
       ...mapGetters({
-        channelUsers: 'getChannelUsers'
+        channelUsers: 'getChannelUsers',
+        isVideoMode: 'getIsVideoMode',
+
       })
     },
     data() {
@@ -104,7 +110,10 @@
     },
     methods: {
       toggleVideoMode: function(){
-        this.$store.commit('setIsVideoMode',true)
+        if (this.isVideoMode){
+
+        }
+        this.$store.commit('setIsVideoMode',!this.isVideoMode)
         this.callComponent('main',true)
       },
       rightSidebarToggle: function (e) {
@@ -118,7 +127,7 @@
         this.$store.commit('getSelectComponent', componentName)
         if(bool == null){
           this.$store.commit('setIsVideoMode',false)
-        }        
+        }
       },
       leaveChannle: function () {
         this.$http.post('/api/channel/leave', {
