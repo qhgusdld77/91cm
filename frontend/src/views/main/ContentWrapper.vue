@@ -46,22 +46,6 @@
         <div style="flex-grow:1;" class="myflex-column">
           <div style="position: relative;">
             <div class="mytextarea-wrapper" v-if="!$store.state.isInviteMode && !$store.state.isSearchMode">
-               
-
-
-              <!-- <v-progress-linear
-                style="left: 10px; width: 50%;"
-                class="my-mail"
-                v-model="skill"
-                color="blue-grey"
-                height="25"
-                reactive
-              >
-                <template v-slot="{ value }">
-                  <strong>{{ Math.ceil(value) }}%</strong>
-                </template>
-              </v-progress-linear> -->
-
               <v-icon class="my-mail" v-bind:class="{'active-m': sendMail}" @click="sendMailToggle">mail</v-icon>
               <i class="im im-users myfile-upload" style="right: 50px;" @click="inviteToggle"></i>
               <label for="file-input" style="display: block;margin-bottom: 0;">
