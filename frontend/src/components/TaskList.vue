@@ -114,10 +114,8 @@
       },
       disableCheck: function(){
         if(this.$store.state.isSmallWidth || this.$store.state.isCreateListActive){
-          console.log('dis true')
           return true
         }else{
-          console.log('diss false')
           return false
         }
       }

@@ -74,7 +74,15 @@ public class FileController {
         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getChannel_id(), message);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
+    @PostMapping("/upload/user/image")
+    public ResponseEntity<?> uploadUserImage(@RequestParam("file") MultipartFile file,
+                                             @Socialuser User user){
+        if (file.getContentType().startsWith("image")){
+            fileStorageService.storeFile(file, user);
+            return new ResponseEntity<>(user.getPicture(),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
     @GetMapping("/download/{fileName}")
     public ResponseEntity<Resource> downloadFile(@PathVariable(value = "fileName") String fileName) {
         // id를 통해서 UUID로 인코딩된 file을 가져오는 로직
