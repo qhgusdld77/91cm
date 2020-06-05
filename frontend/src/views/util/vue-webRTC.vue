@@ -19,7 +19,7 @@
       </div>
     </v-row>
     <v-row justify="center" align="center" no-gutters style="height: 90%;">
-      <v-col :cols="getVideoCols" v-for="item in videoList" style="margin-top: 0px; padding: 5px;">
+      <v-col :cols="getVideoCols" v-for="(item,index) in videoList" :key="index" style="margin-top: 0px; padding: 5px;">
         <v-card class="d-inline" flat tile>
           <v-card
             v-bind:video="item"

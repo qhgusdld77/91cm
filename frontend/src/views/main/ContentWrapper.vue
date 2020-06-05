@@ -31,6 +31,7 @@
             </b-container>
           </template>
         </MsgBox>
+        
       </ul>
       <a v-if="msgPreviewBool" @click="clickMsgPreview">
         <div id="c-c-preview" v-bind:class="{active: $store.state.isLActive}">
@@ -45,6 +46,22 @@
         <div style="flex-grow:1;" class="myflex-column">
           <div style="position: relative;">
             <div class="mytextarea-wrapper" v-if="!$store.state.isInviteMode && !$store.state.isSearchMode">
+               
+
+
+              <!-- <v-progress-linear
+                style="left: 10px; width: 50%;"
+                class="my-mail"
+                v-model="skill"
+                color="blue-grey"
+                height="25"
+                reactive
+              >
+                <template v-slot="{ value }">
+                  <strong>{{ Math.ceil(value) }}%</strong>
+                </template>
+              </v-progress-linear> -->
+
               <v-icon class="my-mail" v-bind:class="{'active-m': sendMail}" @click="sendMailToggle">mail</v-icon>
               <i class="im im-users myfile-upload" style="right: 50px;" @click="inviteToggle"></i>
               <label for="file-input" style="display: block;margin-bottom: 0;">
@@ -121,7 +138,14 @@
               @getMessage="getMessage"></SearchInput>
           </div>
           <div style="display: flex;flex-grow: 1;">
-            <span class="ml-auto"> {{ stringByteLength }} / 30000Byte</span>
+            <v-progress-linear
+                  v-if="isFileUpload"
+                  color="cyan darken-4"
+                  height="10"
+                  v-model="progressValue"
+                  striped
+                ></v-progress-linear>
+            <span style="position: absolute;right: 108px;"> {{ stringByteLength }} / 30000Byte</span>
           </div>
         </div>
         <v-btn class="mx-2" fab dark large color="cyan" style="margin-top: 15px;" v-if="!$store.state.isVideoMode">
@@ -149,6 +173,8 @@
     },
     data() {
       return {
+        isFileUpload: false,
+        progressValue:0,
         friends: [],
         sendMail: false,
         tempImg: '',
@@ -304,6 +330,7 @@
           })
       },
       addFile: function (uploadFiles) {
+        this.progressValue = 0
         const maxUploadSize = 100 * 1024 * 1024;
         let fileSize = 0;
         if (uploadFiles[0] == null) {
@@ -322,12 +349,20 @@
         /////////////////////////////////////
         formData.append('channel_id', this.$store.state.currentChannel.id)
         formData.append('sender', this.$store.state.currentUser.email)
-        this.$http.post('/api/file/upload', formData, {
+        this.isFileUpload = true
+        this.$http.post('/api/file/upload', formData, 
+        {
           headers: {
             'Content-Type': 'multipart/form-data'
+          },
+          onUploadProgress: event => {
+              this.progressValue = Math.round((100 * event.loaded) / event.total);
           }
         }).then(res => {
+        this.isFileUpload = false
         }).catch(error => {
+          this.isFileUpload = false
+          this.progressValue = 0
           this.$alertModal('error', '폴더는 업로드 할 수 없습니다.')
         })
       },
