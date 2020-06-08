@@ -83,10 +83,10 @@
     padding: 10px 25px;
 }
 #c-c-preview {
-    z-index: 998;
-    position: fixed;
-    bottom: 146px;
-    width: calc(100% - 240px);
+    z-index: 7;
+    position: absolute;
+    bottom: 115px;
+    width: 100%;
     background-color: rgba(80, 188, 223, 0.75);
     font-weight: bold;
     transition: all ease 0.3s 0s;
@@ -221,6 +221,7 @@ MainContents
 .mainwrapper {
     height: calc(100vh - 105px);
     overflow: hidden;
+    position: relative;
 }
 
 .h-inherit {
