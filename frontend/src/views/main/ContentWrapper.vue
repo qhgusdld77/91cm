@@ -31,7 +31,7 @@
             </b-container>
           </template>
         </MsgBox>
-        
+
       </ul>
       <a v-if="msgPreviewBool" @click="clickMsgPreview">
         <div id="c-c-preview" v-bind:class="{active: $store.state.isLActive}">
@@ -46,22 +46,6 @@
         <div style="flex-grow:1;" class="myflex-column">
           <div style="position: relative;">
             <div class="mytextarea-wrapper" v-if="!$store.state.isInviteMode && !$store.state.isSearchMode">
-               
-
-
-              <!-- <v-progress-linear
-                style="left: 10px; width: 50%;"
-                class="my-mail"
-                v-model="skill"
-                color="blue-grey"
-                height="25"
-                reactive
-              >
-                <template v-slot="{ value }">
-                  <strong>{{ Math.ceil(value) }}%</strong>
-                </template>
-              </v-progress-linear> -->
-
               <v-icon class="my-mail" v-bind:class="{'active-m': sendMail}" @click="sendMailToggle">mail</v-icon>
               <i class="im im-users myfile-upload" style="right: 50px;" @click="inviteToggle"></i>
               <label for="file-input" style="display: block;margin-bottom: 0;">
@@ -165,7 +149,6 @@
   import SearchInput from './SearchInput'
   import AboutChannel from '../../service/aboutchannel'
   import {mapGetters} from "vuex";
-
   export default {
     name: 'ContentWrapper',
     components: {
@@ -350,7 +333,7 @@
         formData.append('channel_id', this.$store.state.currentChannel.id)
         formData.append('sender', this.$store.state.currentUser.email)
         this.isFileUpload = true
-        this.$http.post('/api/file/upload', formData, 
+        this.$http.post('/api/file/upload', formData,
         {
           headers: {
             'Content-Type': 'multipart/form-data'
@@ -385,6 +368,7 @@
         if (e != null) {
           e.preventDefault()
         }
+
         this.message.sender = this.$store.state.currentUser.email
         this.message.channel_id = this.$store.state.currentChannel.id
         this.message.user = this.$store.state.currentUser
@@ -418,6 +402,7 @@
         }
       },
       scrollEvt(e) {
+
         let element = e.target;
         //스크롤이 없을때에도 스크롤 위치가 최상단이기 때문에 스크롤이 있는지 없는지 판단해야한다.
         if (element.scrollTop <= 0 && element.scrollHeight != element.clientHeight) {
@@ -505,6 +490,10 @@
         }
       },
       TextbyFilter(content) {
+        const urlRegexp = new RegExp(/(http(s)?:\/\/|www.)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}([\/a-z0-9-%#?&=\w])+(\.[a-z0-9]{2,4}(\?[\/a-z0-9-%#?&=\w]+)*)*/gi)
+        if (urlRegexp.test(content) && this.$store.state.searchText==''){
+          return "<a style='color: blue' href='"+content.replace(/(<([^>]+)>)/ig,'')+"'>"+content+"</a>"
+        }
         return this.$options.filters.highlight(content, this.$store.state.searchText);
       }
     },
@@ -563,6 +552,9 @@
     .wrapper .page-wrap .main-content {
       padding-left: 0px !important;
     }
+  }
+  a{
+
   }
 
 
