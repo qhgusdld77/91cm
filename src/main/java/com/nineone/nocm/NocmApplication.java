@@ -22,7 +22,7 @@ public class NocmApplication {
     }
 
 
-    
+
     // http(80) to https(9191) redirection setup
     @Bean
     public ServletWebServerFactory servletContainer() {
