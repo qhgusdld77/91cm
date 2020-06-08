@@ -5,9 +5,10 @@ module.exports = {
   // productionSourceMap: false,
   outputDir: path.resolve(__dirname, '../' + 'src/main/resources/static'),
   devServer: {
+    https: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:9191',
+        target: 'https://localhost:9191',
         // ws: false,
         changeOrigin: true,
         headers: {
@@ -16,7 +17,7 @@ module.exports = {
         }
       },
       '/oauth2':{
-        target: 'http://localhost:9191',
+        target: 'https://localhost:9191',
         changeOrigin: true,
         headers: {
           'Access-Control-Allow-Origin': '*',
@@ -24,7 +25,7 @@ module.exports = {
         }
       },
       '/endpoint':{
-        target: 'http://localhost:9191',
+        target: 'https://localhost:9191',
         changeOrigin: true,
         headers: {
           'Access-Control-Allow-Origin': '*',
