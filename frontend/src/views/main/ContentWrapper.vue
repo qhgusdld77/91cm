@@ -368,7 +368,6 @@
         if (e != null) {
           e.preventDefault()
         }
-
         this.message.sender = this.$store.state.currentUser.email
         this.message.channel_id = this.$store.state.currentChannel.id
         this.message.user = this.$store.state.currentUser
@@ -492,7 +491,7 @@
       TextbyFilter(content) {
         const urlRegexp = new RegExp(/(http(s)?:\/\/|www.)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}([\/a-z0-9-%#?&=\w])+(\.[a-z0-9]{2,4}(\?[\/a-z0-9-%#?&=\w]+)*)*/gi)
         if (urlRegexp.test(content) && this.$store.state.searchText==''){
-          return "<a style='color: blue' href='"+content.replace(/(<([^>]+)>)/ig,'')+"'>"+content+"</a>"
+          return "<a style='color: blue' href='"+content.replace(/(<([^>]+)>)/ig,'')+"' target='_blank'>"+content+"</a>"
         }
         return this.$options.filters.highlight(content, this.$store.state.searchText);
       }
@@ -553,9 +552,5 @@
       padding-left: 0px !important;
     }
   }
-  a{
-
-  }
-
 
 </style>
