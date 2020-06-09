@@ -2,36 +2,9 @@
   <main class="mainwrapper" style="height: calc(100vh - 91px);">
     <div class="h-inherit" v-cloak @drop.prevent="dropFile" @dragover.prevent>
       <ul class="c-c-wrapper list-unstyled" @scroll="scrollEvt">
-        <MsgBox v-for="msg in msgArray" :key="msg.id">
-          <template #m-icon>
-            <img v-if="msg.user.picture" class="icon-round" :src="msg.user.picture" width="40" height="40"/>
-            <img v-else class="icon-round" src="../../assets/images/default-user-picture.png" width="40" height="40">
-          </template>
-          <template #m-info>
-            <!-- #으로 단축해서 사용 -->
-            <strong>{{ msg.user.name }}</strong>
-            <span style="font-size: 11px; margin-left:3px; ">{{ msg.str_send_date }}</span>
-          </template>
-          <template #m-content>
-            <!-- #으로 단축해서 사용 -->
-            <div v-if="msg.files == null || msg.content" v-html="TextbyFilter(msg.content)"
-                 class="mychat-content"></div>
-            <b-container fluid v-else-if="msg.files.length > 0" class="p-4 bg-white">
-              <b-row>
-                <b-col v-for="(file,index) in msg.files" :key="index">
-                  <a @click="fileDownload(file)">
-                    <b-img thumbnail rounded fluid :src="selectImage(file)" alt="이미지를 찾을 수 없습니다."
-                           style="max-width: 200px" @load="imgLoad"></b-img>
-                    <p><b>{{file.original_name}}</b></p>
-                    <p>file size : {{(file.file_size / 1024).toLocaleString(undefined,{minimumFractionDigits:2})}}
-                      kb</p>
-                  </a>
-                </b-col>
-              </b-row>
-            </b-container>
-          </template>
-        </MsgBox>
-
+        <div v-for="msg in msgArray" :key="msg.id">
+          <MsgBox :msg="msg" :msgPreviewBool="msgPreviewBool" @scrollToEnd="scrollToEnd"></MsgBox>
+        </div>
       </ul>
       <a v-if="msgPreviewBool" @click="clickMsgPreview">
         <div id="c-c-preview" v-bind:class="{active: $store.state.isLActive}">
@@ -68,6 +41,7 @@
             </div>
 
             <div v-if="$store.state.isInviteMode">
+<!--              <InviteInput @send="send"></InviteInput>-->
               <v-row>
                 <v-col cols="12">
                   <v-autocomplete
@@ -149,10 +123,12 @@
   import SearchInput from './SearchInput'
   import AboutChannel from '../../service/aboutchannel'
   import {mapGetters} from "vuex";
+  import InviteInput from "../../components/InviteInput";
 
   export default {
     name: 'ContentWrapper',
     components: {
+      InviteInput,
       MsgBox, SearchInput
     },
     data() {
@@ -283,35 +259,12 @@
         this.message.content = data.split("-")[0]
         this.selectedUserEmail = data.split("-")[1]
       },
-      imgLoad() {
-        if (!this.msgPreviewBool) {
-          this.scrollToEnd(true)
-        }
-      },
       dropFile: function (e) {
         this.addFile(e.dataTransfer.files)
       },
       attachFile: function (e) {
         this.addFile(e.target.files)
         this.$refs.fileInput.value = null
-      },
-      selectImage: function (file) {
-        return CommonClass.checkFileType(file)
-      },
-      fileDownload: function (file) {
-        this.$http.get(file.path, {
-          responseType: 'blob'
-        })
-          .then(res => {
-            const url = window.URL.createObjectURL(new Blob([res.data]))
-            const link = document.createElement('a')
-            link.href = url;
-            link.setAttribute('download', file.original_name)
-            document.body.appendChild(link)
-            link.click()
-            link.remove()
-            window.URL.revokeObjectURL(url)
-          })
       },
       addFile: function (uploadFiles) {
         this.progressValue = 0
@@ -374,6 +327,7 @@
         this.message.user = this.$store.state.currentUser
         if (CommonClass.byteLimit(this.stringByteLength)) {
           if (this.$store.state.stompClient && this.$store.state.stompClient.connected) {
+            console.log("message sned")
             this.$store.state.stompClient.send("/pub/chat/message", JSON.stringify(this.message), {})
             this.message.content = ''
             this.scrollToEnd(true)
@@ -489,13 +443,6 @@
           CommonClass.byteLimit(this.stringByteLength)
         }
       },
-      TextbyFilter(content) {
-        const urlRegexp = new RegExp(/(http(s)?:\/\/|www.)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}([\/a-z0-9-%#?&=\w])+(\.[a-z0-9]{2,4}(\?[\/a-z0-9-%#?&=\w]+)*)*/gi)
-        if (urlRegexp.test(content) && this.$store.state.searchText == '') {
-          return "<a style='color: blue' href='" + content.replace(/(<([^>]+)>)/ig, '') + "' target='_blank'>" + content + "</a>"
-        }
-        return this.$options.filters.highlight(content, this.$store.state.searchText);
-      }
     },
     computed: {
       getCurrentChannel: function () {
@@ -531,17 +478,6 @@
         }
       }
     },
-    filters: {
-      highlight: function (stringToSearch, searchTerm) {
-        if (searchTerm === "") return stringToSearch;
-        var iQuery = new RegExp(searchTerm, "ig");
-        return stringToSearch
-          .toString()
-          .replace(iQuery, function (matchedText, a, b) {
-            return "<span class='highlight'>" + matchedText + "</span>";
-          });
-      }
-    }
 
   }
 </script>

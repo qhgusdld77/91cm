@@ -18,10 +18,7 @@
                 <VideoChat v-if="$store.state.isVideoMode"/>
               </div>
             </div>
-
             <RSidebar v-if="$store.state.currentChannel!=null"></RSidebar>
-
-
           </div>
           <footer class="footer">
             <div class="w-100 clearfix">
@@ -30,11 +27,13 @@
           </footer>
         </div>
       </template>
+      <!-- v-if="connctionCheck" else -->
       <Loading v-else/>
 
     </div>
     <AppsModal></AppsModal>
-    <v-snackbar v-model="noticeMsgToggle" timeout="5000" top="true"
+    <!-- 전체 공지용 스낵바 modal -->
+    <v-snackbar v-model="noticeMsgToggle" :timeout='5000' :top="true"
                 style="margin-top: 8vh; font-size: medium;"
                 color="#404E67">
       {{noticeMsg}}
