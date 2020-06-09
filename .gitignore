@@ -2,6 +2,7 @@ HELP.md
 .gradle
 build/
 ### custom 설정 ###
+logs/**
 bin/**
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/java/**
