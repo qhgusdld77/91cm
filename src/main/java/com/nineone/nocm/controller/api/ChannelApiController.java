@@ -1,29 +1,16 @@
 package com.nineone.nocm.controller.api;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.nineone.nocm.annotation.Socialuser;
 import com.nineone.nocm.domain.Channel;
-import com.nineone.nocm.domain.JoinInfo;
-import com.nineone.nocm.domain.LastAccess;
 import com.nineone.nocm.domain.User;
 import com.nineone.nocm.service.ChannelService;
 import com.nineone.nocm.service.JoinInfoService;
-import com.nineone.nocm.service.MessageService;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -35,7 +22,6 @@ public class ChannelApiController {
 
     @Autowired
     private JoinInfoService joinInfoService;
-    
 
     @PostMapping("/current")
     public Channel getCurrentChannel(@RequestBody Channel channel){
@@ -79,8 +65,7 @@ public class ChannelApiController {
     public boolean deleteChannel(@RequestBody Channel channel) {
         return channelService.deleteChannel(channel.getId());
     }
-    
-    
+
     @RequestMapping(value ="/update/lastaccessdate", method=RequestMethod.PUT)
     public void updateLastAccessDate(@RequestBody Map<String,Object> map) {
     	if(map.get("oldChannelId")==null) {

@@ -21,12 +21,9 @@ public class NocmApplication {
         SpringApplication.run(NocmApplication.class, args);
     }
 
-
-
     // http(80) to https(9191) redirection setup
     @Bean
     public ServletWebServerFactory servletContainer() {
-
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory(){
             @Override
             protected void postProcessContext(Context context) {
@@ -46,7 +43,7 @@ public class NocmApplication {
         Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
         connector.setScheme("http");
         connector.setSecure(false);
-        connector.setPort(80);
+        connector.setPort(9999);
         connector.setRedirectPort(9191);
         return connector;
     }
