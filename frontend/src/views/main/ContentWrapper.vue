@@ -123,12 +123,12 @@
           </div>
           <div style="display: flex;flex-grow: 1;">
             <v-progress-linear
-                  v-if="isFileUpload"
-                  color="cyan darken-4"
-                  height="10"
-                  v-model="progressValue"
-                  striped
-                ></v-progress-linear>
+              v-if="isFileUpload"
+              color="cyan darken-4"
+              height="10"
+              v-model="progressValue"
+              striped
+            ></v-progress-linear>
             <span style="position: absolute;right: 108px;"> {{ stringByteLength }} / 30000Byte</span>
           </div>
         </div>
@@ -149,6 +149,7 @@
   import SearchInput from './SearchInput'
   import AboutChannel from '../../service/aboutchannel'
   import {mapGetters} from "vuex";
+
   export default {
     name: 'ContentWrapper',
     components: {
@@ -157,7 +158,7 @@
     data() {
       return {
         isFileUpload: false,
-        progressValue:0,
+        progressValue: 0,
         friends: [],
         sendMail: false,
         tempImg: '',
@@ -214,10 +215,10 @@
       this.$store.state.isSearchMode = false
     },
     methods: {
-      enter: async function(event) {
+      enter: async function (event) {
         let el = document.querySelector(".menuable__content__active.inviteClass")
-        if(el == null){
-          if(this.friends.length!=0){
+        if (el == null) {
+          if (this.friends.length != 0) {
             await InviteService.invite(this.$store.state.currentUser.email, this.$store.state.currentChannel.id, this.friends)
               .then(res => {
                 const invite = {
@@ -232,7 +233,7 @@
 
                 //메일 오류 계속 떠서 일단 임시로 주석 처리함
                 this.$http.post('/api/invite/mail', invite)
-                  .then(res=>{
+                  .then(res => {
                     console.log(res.data)
                   })
                 this.message.content += '을 초대했습니다.'
@@ -334,15 +335,15 @@
         formData.append('sender', this.$store.state.currentUser.email)
         this.isFileUpload = true
         this.$http.post('/api/file/upload', formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          },
-          onUploadProgress: event => {
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            },
+            onUploadProgress: event => {
               this.progressValue = Math.round((100 * event.loaded) / event.total);
-          }
-        }).then(res => {
-        this.isFileUpload = false
+            }
+          }).then(res => {
+          this.isFileUpload = false
         }).catch(error => {
           this.isFileUpload = false
           this.progressValue = 0
@@ -351,7 +352,7 @@
       },
       inviteToggle: function (e) {
         let el = document.querySelector(".menuable__content__active.inviteClass")
-        if(this.$store.state.isInviteMode == false){
+        if (this.$store.state.isInviteMode == false) {
           this.$store.state.isInviteMode = !this.$store.state.isInviteMode
         } else {
           if (el == null) {
@@ -395,7 +396,7 @@
             this.message.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + this.message.content
             let errormsg = JSON.parse(JSON.stringify(this.message))
             //dd
-            this.$store.commit('pushMsg',errormsg)
+            this.$store.commit('pushMsg', errormsg)
             this.message.content = ''
           }
         }
@@ -475,7 +476,7 @@
         this.cursorPoint.first = true
         this.cursorPoint.cursorId = 0
         this.cursorPoint.empty = false
-        this.$store.commit('setMsgArray',[])
+        this.$store.commit('setMsgArray', [])
         this.firstLoad = true
         this.scrollHeight = 0
       },
@@ -490,8 +491,8 @@
       },
       TextbyFilter(content) {
         const urlRegexp = new RegExp(/(http(s)?:\/\/|www.)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}([\/a-z0-9-%#?&=\w])+(\.[a-z0-9]{2,4}(\?[\/a-z0-9-%#?&=\w]+)*)*/gi)
-        if (urlRegexp.test(content) && this.$store.state.searchText==''){
-          return "<a style='color: blue' href='"+content.replace(/(<([^>]+)>)/ig,'')+"' target='_blank'>"+content+"</a>"
+        if (urlRegexp.test(content) && this.$store.state.searchText == '') {
+          return "<a style='color: blue' href='" + content.replace(/(<([^>]+)>)/ig, '') + "' target='_blank'>" + content + "</a>"
         }
         return this.$options.filters.highlight(content, this.$store.state.searchText);
       }

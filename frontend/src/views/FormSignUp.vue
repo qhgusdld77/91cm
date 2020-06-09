@@ -9,7 +9,7 @@
         <img src="../assets/images/login.png" alt=""
              class="img-fluid mb-3 d-none d-md-block">
         <h1>91CM Login</h1>
-                <p class="font-italic text-muted mb-0">협업 메신저</p>
+        <p class="font-italic text-muted mb-0">협업 메신저</p>
         <!--        <p class="font-italic text-muted">Snippet By <a href="https://bootstrapious.com" class="text-muted">-->
         <!--          <u>Bootstrapious</u></a>-->
         <!--        </p>-->
@@ -42,7 +42,6 @@
             </div>
 
 
-
             <!-- Submit Button -->
             <div class="form-group col-lg-12 mx-auto mb-0">
               <a href="#" class="btn btn-primary btn-block py-2">
@@ -51,9 +50,12 @@
             </div>
 
             <div class="social-wrapper">
-              <a class="logo-wrapper" href="/oauth2/authorization/github"><img class="social-logo" src="../assets/images/github_logo.png"></a>
-              <a class="logo-wrapper" href="/oauth2/authorization/google"><img class="social-logo" src="../assets/images/google_logo.png"></a>
-              <a class="logo-wrapper" href="/oauth2/authorization/naver"><img class="social-logo" src="../assets/images/naver_logo.png"></a>
+              <a class="logo-wrapper" href="/oauth2/authorization/github"><img class="social-logo"
+                                                                               src="../assets/images/github_logo.png"></a>
+              <a class="logo-wrapper" href="/oauth2/authorization/google"><img class="social-logo"
+                                                                               src="../assets/images/google_logo.png"></a>
+              <a class="logo-wrapper" href="/oauth2/authorization/naver"><img class="social-logo"
+                                                                              src="../assets/images/naver_logo.png"></a>
               <!--        동작 에러 인해 주석처리-->
               <!--        <a href="/oauth2/authorization/kakao"><img class="social-logo" src="../assets/images/kakao_logo.png"></a>-->
             </div>
@@ -90,35 +92,42 @@
 </script>
 
 <style scoped>
-.social-logo{
-  width: 50px;
-  height: 50px;
-}
-.social-wrapper{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
-.logo-wrapper{
-  margin: 10px;
-}
-.mycustom{
-   margin-bottom: 0px;
-}
-.margincustom{
-  margin-top: 120px;
-}
-@media (max-width: 768px) {
-  .mycustom{
-    margin-bottom: 188px;
+  .social-logo {
+    width: 50px;
+    height: 50px;
   }
-  .margincustom{
-    margin-top: 0px;
+
+  .social-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 20px;
   }
-}
+
+  .logo-wrapper {
+    margin: 10px;
+  }
+
+  .mycustom {
+    margin-bottom: 0px;
+  }
+
+  .margincustom {
+    margin-top: 120px;
+  }
+
+  @media (max-width: 768px) {
+    .mycustom {
+      margin-bottom: 188px;
+    }
+
+    .margincustom {
+      margin-top: 0px;
+    }
+  }
+
   /*
   *
   * ==========================================
@@ -162,6 +171,7 @@
   .form-control:not(select) {
     padding: 1.5rem 0.5rem;
   }
+
   .form-control::placeholder {
     color: #ccc;
     font-weight: bold;
@@ -173,8 +183,8 @@
     box-shadow: none;
     color: #495057;
     background-color: #fff;
-    border-color:#ced4da;;
+    border-color: #ced4da;;
     outline: none;
-}
+  }
 
 </style>

@@ -24,19 +24,19 @@ public class ChannelApiController {
     private JoinInfoService joinInfoService;
 
     @PostMapping("/current")
-    public Channel getCurrentChannel(@RequestBody Channel channel){
+    public Channel getCurrentChannel(@RequestBody Channel channel) {
         return channelService.getCurrentChannel(channel);
     }
 
     @PostMapping("/leave")
-    public boolean leaveChannel(@RequestBody Map<String, Object> info){
+    public boolean leaveChannel(@RequestBody Map<String, Object> info) {
         // info에는 해당 유저의 email 값과 채널 id값이 들어 있음 -> key : (email , channel_id)
-    	// leaveUser(mapper)를   joininfo테이블에 있는 가입 정보 뿐만 아니라 초대 정보까지 지우는 쿼리로 수정함.
+        // leaveUser(mapper)를   joininfo테이블에 있는 가입 정보 뿐만 아니라 초대 정보까지 지우는 쿼리로 수정함.
         return joinInfoService.leaveUser(info);
     }
 
     @GetMapping("/all")
-    public List<Channel> channelListAll(){
+    public List<Channel> channelListAll() {
         return channelService.channelListAll();
     }
 
@@ -58,7 +58,7 @@ public class ChannelApiController {
 
     @PostMapping("/update")
     public boolean updateChannel(@RequestBody Channel channel, @Socialuser User user) {
-         return channelService.updateChannel(channel);
+        return channelService.updateChannel(channel);
     }
 
     @PostMapping("/delete")
@@ -66,13 +66,13 @@ public class ChannelApiController {
         return channelService.deleteChannel(channel.getId());
     }
 
-    @RequestMapping(value ="/update/lastaccessdate", method=RequestMethod.PUT)
-    public void updateLastAccessDate(@RequestBody Map<String,Object> map) {
-    	if(map.get("oldChannelId")==null) {
-    		joinInfoService.updateLastAccessDate((int)map.get("currentChannelId"),map.get("userEmail").toString());
-    	}else {
-    		joinInfoService.updateLastAccessDate((int)map.get("oldChannelId"),map.get("userEmail").toString());
-    	}
+    @RequestMapping(value = "/update/lastaccessdate", method = RequestMethod.PUT)
+    public void updateLastAccessDate(@RequestBody Map<String, Object> map) {
+        if (map.get("oldChannelId") == null) {
+            joinInfoService.updateLastAccessDate((int) map.get("currentChannelId"), map.get("userEmail").toString());
+        } else {
+            joinInfoService.updateLastAccessDate((int) map.get("oldChannelId"), map.get("userEmail").toString());
+        }
     }
 
 }

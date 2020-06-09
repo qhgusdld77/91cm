@@ -47,7 +47,7 @@
 
             <!-- Submit Button -->
             <div class="form-group col-lg-12 mx-auto mb-0">
-              <a  class="btn btn-primary btn-block py-2">
+              <a class="btn btn-primary btn-block py-2">
                 <span class="font-weight-bold" style="color: white;">로그인</span>
               </a>
             </div>
@@ -86,25 +86,25 @@
     data() {
       return {
         userid: '',
-        password: '' 
+        password: ''
       }
     },
-    methods: {
-
-    },
+    methods: {},
     mounted() {
     }
   }
 </script>
 <style scoped>
-  
-  .input-group .input-group-prepend .input-group-text {   
-      border-top-left-radius: 4px; 
-      border-bottom-left-radius: 4px;  
-      height: inherit; 
-      border-color: #ced4da;
-      padding-left: 15px; font-size: 14px; 
+
+  .input-group .input-group-prepend .input-group-text {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    height: inherit;
+    border-color: #ced4da;
+    padding-left: 15px;
+    font-size: 14px;
   }
+
   .social-logo {
     width: 50px;
     height: 50px;

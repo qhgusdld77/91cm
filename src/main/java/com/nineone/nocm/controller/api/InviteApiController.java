@@ -102,7 +102,7 @@ public class InviteApiController {
 
     @PostMapping("/mail")
     public boolean sendInviteMail(@RequestBody Invite invite) throws RuntimeException {
-        for(String recipient : invite.getRecipients()){
+        for (String recipient : invite.getRecipients()) {
             User user = userRepository.getUserfindByEmail(invite.getSender());
             Channel inviteChannel = channelRepository.getChannel(invite.getChannel_id());
             googleMailSender.MailSend(user.getName() + "님이 " + inviteChannel.getName() + " 채널로 초대하였습니다."
