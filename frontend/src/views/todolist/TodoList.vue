@@ -138,7 +138,8 @@
           this.$http.post('/api/tasklist/update/position', {
             tasklistOldIndex: moved.oldIndex,
             tasklistNewIndex: moved.newIndex,
-            tasklistId: moved.element.id
+            tasklistId: moved.element.id,
+            channelId : this.$store.state.currentChannel.id
           }).then(res => {
             console.log(res.data,'position')
             if(res.data) this.$store.state.stompClient.send('/sub/todo/' + this.$store.state.currentChannel.id, {}, {typename: 'taskUpdate'})

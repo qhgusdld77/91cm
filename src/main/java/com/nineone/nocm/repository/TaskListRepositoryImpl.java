@@ -48,8 +48,8 @@ public class TaskListRepositoryImpl implements TaskListRepository{
 	}
 
 	@Override
-	public int updateTaskListPositionByDelete(int position) {
-		return sqlSession.update(namespace + ".updateTaskListPositionByDelete",position);
+	public int updateTaskListPositionByDelete(TaskList taskList) {
+		return sqlSession.update(namespace + ".updateTaskListPositionByDelete",taskList);
 	}
 
 }

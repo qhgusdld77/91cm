@@ -37,7 +37,7 @@
 	</delete>
 	
 	<update id="updateTaskListPositionByDelete">
-		update tasklist set position = (position - 1) where position > #{position}
+		update tasklist set position = (position - 1) where position > #{position} and channel_id = #{channel_id}
 	</update>
 	
 	<update id="updateTaskListName">
@@ -72,6 +72,7 @@
 				and position <![CDATA[<=]]> #{tasklistNewIndex}
 			</otherwise>
 		</choose>
+		and channel_id = #{channelId}
 	</update>
 	
 	<update id="updateTaskListPosition">
