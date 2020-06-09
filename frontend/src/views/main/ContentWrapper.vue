@@ -132,10 +132,12 @@
             <span style="position: absolute;right: 108px;"> {{ stringByteLength }} / 30000Byte</span>
           </div>
         </div>
-        <v-btn class="mx-2" fab dark large color="cyan" style="margin-top: 15px;" v-if="!$store.state.isVideoMode">
+        <v-btn class="mx-2" fab dark large color="cyan" style="margin-top: 15px;"
+               v-if="!$store.state.isVideoMode" @click="send">
           <i class="im im-paperplane"></i>
         </v-btn>
-        <v-btn class="mx-2" fab dark small color="cyan" style="margin-top: 20px;" v-else>
+        <v-btn class="mx-2" fab dark small color="cyan" style="margin-top: 20px;"
+               v-else @click="send">
           <i class="im im-paperplane"></i>
         </v-btn>
       </div>
