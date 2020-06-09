@@ -8,7 +8,7 @@ import com.nineone.nocm.domain.TaskList;
 public interface TaskListRepository {
 	int insertTaskList(TaskList taskList);
 	int deleteTaskList(int id);
-	int updateTaskListPositionByDelete(int position);
+	int updateTaskListPositionByDelete(TaskList taskList);
 	int updateTaskListName(TaskList taskList);
 	List<TaskList> getTaskList(int channel_id);
 	int moveTaskListPosition(Map<String,Object> map);

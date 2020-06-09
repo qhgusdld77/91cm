@@ -27,7 +27,7 @@ public class TaskListServiceImpl implements TaskListService {
 	@Override
 	@Transactional(isolation = Isolation.SERIALIZABLE)
 	public boolean deleteTaskList(TaskList taskList) {
-		taskListRepository.updateTaskListPositionByDelete(taskList.getPosition());
+		taskListRepository.updateTaskListPositionByDelete(taskList);
 		return (taskListRepository.deleteTaskList(taskList.getId()) > 0 )? true: false;
 	}
 
