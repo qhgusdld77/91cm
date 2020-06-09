@@ -120,7 +120,7 @@
           return;
         }
         this.imageForm = new FormData();
-        this.imageForm.append('file',uploadFiles[0])
+        this.imageForm.append('file', uploadFiles[0])
 
       },
       attachFile: function (e) {

@@ -109,12 +109,12 @@
 
     },
     methods: {
-      toggleVideoMode: function(){
-        if (this.isVideoMode){
+      toggleVideoMode: function () {
+        if (this.isVideoMode) {
 
         }
-        this.$store.commit('setIsVideoMode',!this.isVideoMode)
-        this.callComponent('main',true)
+        this.$store.commit('setIsVideoMode', !this.isVideoMode)
+        this.callComponent('main', true)
       },
       rightSidebarToggle: function (e) {
         // console.log(e)
@@ -122,11 +122,11 @@
         $('.wrapper').toggleClass('right-sidebar-expand');
         return false;
       },
-      callComponent: function (componentName,bool) {
+      callComponent: function (componentName, bool) {
         this.RSidebarClose()
         this.$store.commit('getSelectComponent', componentName)
-        if(bool == null){
-          this.$store.commit('setIsVideoMode',false)
+        if (bool == null) {
+          this.$store.commit('setIsVideoMode', false)
         }
       },
       leaveChannle: function () {

@@ -32,7 +32,8 @@
                                   variant="nonoutline" @click="inviteAccept(alarm,index)">
                           <i class="im im-check-mark-circle" style="color: #42b983;"></i>
                         </b-button>
-                        <b-button style="padding: 0 0.5rem 0 0;" size="sm" variant="nonoutline" @click="inviteRefuse(alarm,index)">
+                        <b-button style="padding: 0 0.5rem 0 0;" size="sm" variant="nonoutline"
+                                  @click="inviteRefuse(alarm,index)">
                           <i class="im im-x-mark-circle" style="color: red;"></i>
                         </b-button>
                       </div>
@@ -55,8 +56,8 @@
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
               <a class="dropdown-item" @click="callComponent('user')"><i class="ik ik-user dropdown-icon"></i>
                 Profile</a>
-<!--              <a class="dropdown-item" @click="showModal('copyRight-modal')"><i-->
-<!--                class="ik ik-navigation dropdown-icon"></i> Opensource license</a>-->
+              <!--              <a class="dropdown-item" @click="showModal('copyRight-modal')"><i-->
+              <!--                class="ik ik-navigation dropdown-icon"></i> Opensource license</a>-->
               <a class="dropdown-item" @click="SignOut"><i class="ik ik-power dropdown-icon"></i> Logout</a>
               <a class="dropdown-item" v-if="getUserRoles" @click="callComponent('admin')"><i
                 class="ik ik-settings dropdown-icon"></i> Permission</a>
@@ -110,7 +111,7 @@
 
     },
     methods: {
-      rightSidebarToggle: function(e){
+      rightSidebarToggle: function (e) {
         $('.right-sidebar-toggle')[0].classList.toggle('active');
         $('.wrapper').toggleClass('right-sidebar-expand');
         return false;
