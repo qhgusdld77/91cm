@@ -34,6 +34,14 @@
 
     </div>
     <AppsModal></AppsModal>
+    <v-snackbar v-model="noticeMsgToggle" timeout="5000" top="true"
+                style="margin-top: 8vh; font-size: medium;"
+                color="#404E67">
+      {{noticeMsg}}
+      <v-btn icon color="white" @click="noticeMsgToggle = false">
+        <v-icon>close</v-icon>
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 <script>
@@ -80,6 +88,8 @@
     },
     data() {
       return {
+        noticeMsgToggle: false,
+        noticeMsg: '',
         channelTitle: '',
         channelList: [],
         isRActive: false,
@@ -160,6 +170,10 @@
             })
           })
           this.$store.state.stompClient.subscribe("/sub/sync/info", (res) => {
+            if (res.headers.noticeMsg != null) {
+              this.noticeMsg = res.headers.noticeMsg
+              this.noticeMsgToggle = true
+            }
             if (res.body == '"userList"') {
               this.$store.dispatch('userListUpdate')
             }
