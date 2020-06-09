@@ -199,7 +199,8 @@
       deleteTaskList: function () {
         this.$http.post('/api/tasklist/delete', {
           id: this.taskList.id,
-          position: this.taskList.position
+          position: this.taskList.position,
+          channel_id: this.currentChannel.id
         })
           .then(res => {
             this.$eventBus.$emit('deleteTaskList', this.taskList)
