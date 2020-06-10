@@ -72,7 +72,7 @@
 				and position <![CDATA[<=]]> #{tasklistNewIndex}
 			</otherwise>
 		</choose>
-		and channel_id = #{channelId}
+		and channel_id = #{channelId} 
 	</update>
 	
 	<update id="updateTaskListPosition">

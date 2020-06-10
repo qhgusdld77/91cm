@@ -25,11 +25,7 @@ public class JoinInfoServiceImpl implements JoinInfoService {
     @Override
     @Transactional
     public boolean leaveUser(Map<String, Object> info) {
-    	if(joinInfoRepository.leaveUser(info)&&inviteRepository.deleteInvite(info)) {
-    		return true;
-    	}else {
-    		return false;
-    	}
+    	return joinInfoRepository.leaveUser(info) ? true : false;
     }
 
     @Override

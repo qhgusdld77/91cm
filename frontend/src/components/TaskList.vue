@@ -79,6 +79,7 @@
                 <footer style="display: flex;justify-content: flex-end;">
                   <small>created by {{channelUsers.find(user => user.email ==
                     task.member_email).name}}</small>
+                    <!-- 채널 옮길때마다 아래 name에서 error 일어나는 것 같음 -->
                 </footer>
               </div>
               <div class="task-color" :style="{'background-color':task.color}"></div>
