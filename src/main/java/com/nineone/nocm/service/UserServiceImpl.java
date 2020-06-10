@@ -19,8 +19,8 @@ import com.nineone.nocm.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
-	@Autowired
-	private HttpSession httpSession;
+    @Autowired
+    private HttpSession httpSession;
     @Autowired
     private UserRepository userRepository;
 
@@ -51,7 +51,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     @Override
     @Transactional
     public boolean insertUser(User user, DefaultOAuth2User oauth2user, HttpSession httpsession) {
@@ -62,16 +61,15 @@ public class UserServiceImpl implements UserService {
         User dbUser = userRepository.getUserfindByEmail(user.getEmail());
         if (dbUser != null) {
             userResult = 1;
-        } else {
-        	String fileName = fileStorageService.download(user.getPicture());
-        	if(fileName==null) {
-        		return false;
-        	}else {
-        		user.setPicture("/api/file/download/" + fileName);
-                userResult = userRepository.insertUser(user);
-        	}
+        } else if (user.getPicture() != null) {
+            String fileName = fileStorageService.download(user.getPicture());
+            if (fileName == null) {
+                return false;
+            } else {
+                user.setPicture("/api/file/download/" + fileName);
+            }
         }
-
+        userResult = userRepository.insertUser(user);
         int snsResult = userRepository.insertSNSInfo(map);
 
         if (userResult > 0 && snsResult > 0) {
@@ -93,7 +91,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean userinfoUpdate(User user) {
         if ((userRepository.userInfoUpdate(user) > 0)) {
-			httpSession.setAttribute("user",user);
+            httpSession.setAttribute("user", user);
             return true;
         }
         return false;
