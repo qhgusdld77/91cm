@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
+import com.nineone.nocm.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -31,8 +32,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class FileStorageService {
+	private final String USER_IMAGE_PATH = "C:/userImage/";
     private final Path fileStorageLocation;
 
+    @Autowired
+	private UserService userService;
     @Autowired
     private FileStorage fileStorage;
 
@@ -53,23 +57,41 @@ public class FileStorageService {
             }
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-
             return fileName;
         }catch (IOException ex){
             throw new FileStorageException("Could not store file "+ fileName + ", please try again",ex);
         }
     }
+    public String storeFile(MultipartFile file, User user){
+		String fileName = StringUtils.cleanPath("u-"+getUUID());
+		Path filePath = null;
+		Path UserImageStorageLocation = null;
+		try{
+			if (fileName.contains("..")){
+				throw new FileStorageException("Sorry! Filename contains invalid path sequenced "+ fileName);
+			}
+			UserImageStorageLocation = Paths.get(USER_IMAGE_PATH).toAbsolutePath().normalize();
+			Files.createDirectories(UserImageStorageLocation);
+			filePath = UserImageStorageLocation.resolve(fileName);
+			Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+			deleteOldUserPicture(user.getPicture().replace("/api/file/download/",""));
+			user.setPicture("/api/file/download/"+fileName);
+			userService.userinfoUpdate(user);
+			return fileName;
+		}catch (IOException ex){
+			throw new FileStorageException("Could not store file "+ fileName + ", please try again",ex);
+		}
+	}
     public Resource loadFileAsResource(String fileName){
         try{
         	Path filePath = null;
         	Path UserImageStorageLocation = null;
         	if(fileName.contains("u-")) {
-        		UserImageStorageLocation = Paths.get("C:/userImage/").toAbsolutePath().normalize();
+        		UserImageStorageLocation = Paths.get(USER_IMAGE_PATH).toAbsolutePath().normalize();
         		filePath = UserImageStorageLocation.resolve(fileName).normalize();
         	}else {
         		filePath = this.fileStorageLocation.resolve(fileName).normalize();
         	}
-            
             Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists()){
                 return  resource;
@@ -83,28 +105,31 @@ public class FileStorageService {
     public void DBStoreFile(ContentsFile file){
         fileStorage.saveFile(file);
     }
-
+	public void deleteOldUserPicture(String fileName) throws RuntimeException{
+		File file = new File(USER_IMAGE_PATH+fileName);
+		if (file.exists()){
+			file.delete();
+		}
+	}
     public String getUUID(){
         return UUID.randomUUID().toString().replaceAll("-","");
     }
 
-    
     public String download(String sourceUrl) {
 		FileOutputStream fos = null;
-		String targetFilename = "u-"+ getUUID(); 
+		String targetFilename = "u-"+ getUUID();
 		InputStream is = null;
-		
 		String path = "C:/userImage/"; //폴더 경로
 		File Folder = new File(path);
-		
+
 		if (!Folder.exists()) {
 			try{
 			    Folder.mkdir(); //폴더 생성합니다.
 			    System.out.println("폴더가 생성되었습니다.");
-		        } 
+		        }
 		        catch(Exception e){
 			    e.getStackTrace();
-			}        
+			}
 	    }
 		try {
 			fos = new FileOutputStream(path + targetFilename);

@@ -102,7 +102,7 @@ public class InviteApiController {
 
     @PostMapping("/mail")
     public boolean sendInviteMail(@RequestBody Invite invite) throws RuntimeException {
-        for(String recipient : invite.getRecipients()){
+        for (String recipient : invite.getRecipients()) {
             User user = userRepository.getUserfindByEmail(invite.getSender());
             Channel inviteChannel = channelRepository.getChannel(invite.getChannel_id());
             googleMailSender.MailSend(user.getName() + "님이 " + inviteChannel.getName() + " 채널로 초대하였습니다."
@@ -132,7 +132,9 @@ public class InviteApiController {
     public ResponseEntity<?> refuseUser(@RequestBody Invite invite) throws RuntimeException {
         // 거절 내용을 채널에 보내는 로직을 구현해야함
         invite.setInvite_state(InviteState.REFUSE);
-        inviteService.updateInvite(invite);
+        if(inviteService.updateInvite(invite)) {
+        	messagingTemplate.convertAndSend("/sub/chat/room/" + invite.getChannel_id(), invite);
+        }
         return new ResponseEntity<>("{}", HttpStatus.OK);
     }
 

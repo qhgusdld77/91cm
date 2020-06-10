@@ -33,12 +33,12 @@
 
   export default {
     name: "TaskEdit",
-    props:['tasks','color','date','taskListId','index'],
-    components:{
+    props: ['tasks', 'color', 'date', 'taskListId', 'index'],
+    components: {
       DatePicker,
       VSwatches
     },
-    data(){
+    data() {
       return {
         task: {
           tasklist_id: this.taskListId,
@@ -53,16 +53,16 @@
       }
     },
     created() {
-      if (this.index != null){
+      if (this.index != null) {
         this.color = this.tasks[this.index].color
       }
     },
     mounted() {
-      if (this.index != null){
+      if (this.index != null) {
         this.taskContent = this.tasks[this.index].content
       }
     },
-    methods:{
+    methods: {
       addTask: function () {
         this.task.content = this.taskContent
         this.task.start_date = this.date[0]
@@ -73,7 +73,7 @@
             this.taskContent = ''
             this.tasks.unshift(res.data)
             this.$emit('createFormToggle')
-            this.$store.state.stompClient.send('/sub/todo/'+this.$store.state.currentChannel.id,null,{typename: 'taskUpdate'})
+            this.$store.state.stompClient.send('/sub/todo/' + this.$store.state.currentChannel.id, null, {typename: 'taskUpdate'})
           }).catch(error => {
           console.error(error)
         })
@@ -81,17 +81,17 @@
       editTask: function (index) {
         let task = this.tasks[index]
         task.content = this.taskContent
-        if (this.date[0]!= null){
+        if (this.date[0] != null) {
           task.start_date = this.date[0]
           task.end_date = this.date[1]
         }
-        if (this.color != null){
+        if (this.color != null) {
           task.color = this.color
         }
         this.$http.post('/api/task/update/content', task)
           .then(res => {
-            this.$store.state.stompClient.send('/sub/todo/'+this.$store.state.currentChannel.id,null,{typename: 'taskUpdate'})
-            this.$emit('editFormToggle',-1)
+            this.$store.state.stompClient.send('/sub/todo/' + this.$store.state.currentChannel.id, null, {typename: 'taskUpdate'})
+            this.$emit('editFormToggle', -1)
           }).catch(error => {
           console.error(error)
         })

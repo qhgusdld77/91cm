@@ -2,36 +2,43 @@
   <main class="mainwrapper" style="height: calc(100vh - 91px);">
     <div class="h-inherit" v-cloak @drop.prevent="dropFile" @dragover.prevent>
       <ul class="c-c-wrapper list-unstyled" @scroll="scrollEvt">
-        <MsgBox v-for="msg in msgArray" :key="msg.id">
-          <template #m-icon>
-            <img v-if="msg.user.picture" class="icon-round" :src="msg.user.picture" width="40" height="40"/>
-            <img v-else class="icon-round" src="../../assets/images/default-user-picture.png" width="40" height="40">
-          </template>
-          <template #m-info>
-            <!-- #으로 단축해서 사용 -->
-            <strong>{{ msg.user.name }}</strong>
-            <span style="font-size: 11px; margin-left:3px; ">{{ msg.str_send_date }}</span>
-          </template>
-          <template #m-content>
-            <!-- #으로 단축해서 사용 -->
-            <div v-if="msg.files == null || msg.content" v-html="TextbyFilter(msg.content)"
-                 class="mychat-content"></div>
-            <b-container fluid v-else-if="msg.files.length > 0" class="p-4 bg-white">
-              <b-row>
-                <b-col v-for="(file,index) in msg.files" :key="index">
-                  <a @click="fileDownload(file)">
-                    <b-img thumbnail rounded fluid :src="selectImage(file)" alt="이미지를 찾을 수 없습니다."
-                           style="max-width: 200px" @load="imgLoad"></b-img>
-                    <p><b>{{file.original_name}}</b></p>
-                    <p>file size : {{(file.file_size / 1024).toLocaleString(undefined,{minimumFractionDigits:2})}}
-                      kb</p>
-                  </a>
-                </b-col>
-              </b-row>
-            </b-container>
-          </template>
-        </MsgBox>
-        
+        <div v-for="msg in msgArray" :key="msg.id">
+          <MsgBox v-if="msg.sender!=null">
+              <template #m-icon v-if="msg.sender!=null">
+                <img v-if="msg.user.picture" class="icon-round" :src="msg.user.picture" width="40" height="40"/>
+                <img v-else class="icon-round" src="../../assets/images/default-user-picture.png" width="40" height="40">
+              </template>
+              <template #m-info v-if="msg.sender!=null">
+                <!-- #으로 단축해서 사용 -->
+                <strong>{{ msg.user.name }}</strong>
+                <span style="font-size: 11px; margin-left:3px; ">{{ msg.str_send_date }}</span>
+              </template>
+              <template #m-content v-if="msg.sender!=null">
+                <!-- #으로 단축해서 사용 -->
+                <div v-if="msg.files == null || msg.content" v-html="TextbyFilter(msg.content)"
+                    class="mychat-content"></div>
+                <b-container fluid v-else-if="msg.files.length > 0" class="p-4 bg-white">
+                  <b-row>
+                    <b-col v-for="(file,index) in msg.files" :key="index">
+                      <a @click="fileDownload(file)">
+                        <b-img thumbnail rounded fluid :src="selectImage(file)" alt="이미지를 찾을 수 없습니다."
+                              style="max-width: 200px" @load="imgLoad"></b-img>
+                        <p><b>{{file.original_name}}</b></p>
+                        <p>file size : {{(file.file_size / 1024).toLocaleString(undefined,{minimumFractionDigits:2})}}
+                          kb</p>
+                      </a>
+                    </b-col>
+                  </b-row>
+                </b-container>
+              </template>
+          </MsgBox>
+          <div class=" hori-align">
+          <v-chip v-if="msg.sender==null" class="ma-2" style="font-weight:bold;">
+            {{msg.content}}
+          </v-chip>
+          </div>
+        </div>
+
       </ul>
       <a v-if="msgPreviewBool" @click="clickMsgPreview">
         <div id="c-c-preview" v-bind:class="{active: $store.state.isLActive}">
@@ -61,7 +68,7 @@
                 no-resize
                 v-model="message.content"
                 @keydown.ctrl.shift.70="toggleSearchMode"
-                @keydown.enter.exact="send"
+                @keydown.enter.exact="send($event)"
                 @keyup="byteCheck"
                 @keydown.shift.alt.50='inviteToggle'
               ></b-form-textarea>
@@ -123,12 +130,12 @@
           </div>
           <div style="display: flex;flex-grow: 1;">
             <v-progress-linear
-                  v-if="isFileUpload"
-                  color="cyan darken-4"
-                  height="10"
-                  v-model="progressValue"
-                  striped
-                ></v-progress-linear>
+              v-if="isFileUpload"
+              color="cyan darken-4"
+              height="10"
+              v-model="progressValue"
+              striped
+            ></v-progress-linear>
             <span style="position: absolute;right: 108px;"> {{ stringByteLength }} / 30000Byte</span>
           </div>
         </div>
@@ -158,7 +165,7 @@
     data() {
       return {
         isFileUpload: false,
-        progressValue:0,
+        progressValue: 0,
         friends: [],
         sendMail: false,
         tempImg: '',
@@ -200,7 +207,7 @@
       })
       this.$eventBus.$on('leaveChannelMsg', () => {
         this.message.content = this.$store.state.currentUser.name + '님이 나가셨습니다.'
-        this.send()
+        this.send(null,true)
       })
     },
     updated() {
@@ -215,30 +222,31 @@
       this.$store.state.isSearchMode = false
     },
     methods: {
-      enter: async function(event) {
+      enter: async function (event) {
         let el = document.querySelector(".menuable__content__active.inviteClass")
-        if(el == null){
-          if(this.friends.length!=0){
-            await InviteService.invite(this.$store.state.currentUser.email, this.$store.state.currentChannel.id, this.friends)
+        if (el == null) {
+          if (this.friends.length != 0) {
+            await InviteService.invite(this.$store.state.currentUser.email, this.$store.state.currentChannel.id, this.friends,this.$store.state.currentChannel.name)
               .then(res => {
                 const invite = {
                   channel_id: this.$store.state.currentChannel.id,
                   sender: this.$store.state.currentUser.email,
                   recipients: this.friends
                 }
+                this.message.content += this.$store.state.currentUser.name + '님께서 '
                 for (let i = 0; i < this.friends.length; i++) {
                   const user = this.userList.find(el => el.email == this.friends[i])
                   this.message.content += user.name + '님 '
                 }
 
-                //메일 오류 계속 떠서 일단 임시로 주석 처리함
-                this.$http.post('/api/invite/mail', invite)
-                  .then(res=>{
-                    console.log(res.data)
-                  })
-                this.message.content += '을 초대했습니다.'
+               
+                // this.$http.post('/api/invite/mail', invite)
+                //   .then(res => {
+                //     console.log(res.data)
+                //   })
+                this.message.content += '을 초대하였습니다.'
                 this.$eventBus.$emit('getUserList', true)
-                this.send()
+                this.send(null,true)
                 this.inviteDataInit()
 
               }).catch(error => {
@@ -334,16 +342,16 @@
         formData.append('channel_id', this.$store.state.currentChannel.id)
         formData.append('sender', this.$store.state.currentUser.email)
         this.isFileUpload = true
-        this.$http.post('/api/file/upload', formData, 
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          },
-          onUploadProgress: event => {
+        this.$http.post('/api/file/upload', formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            },
+            onUploadProgress: event => {
               this.progressValue = Math.round((100 * event.loaded) / event.total);
-          }
-        }).then(res => {
-        this.isFileUpload = false
+            }
+          }).then(res => {
+          this.isFileUpload = false
         }).catch(error => {
           this.isFileUpload = false
           this.progressValue = 0
@@ -352,7 +360,7 @@
       },
       inviteToggle: function (e) {
         let el = document.querySelector(".menuable__content__active.inviteClass")
-        if(this.$store.state.isInviteMode == false){
+        if (this.$store.state.isInviteMode == false) {
           this.$store.state.isInviteMode = !this.$store.state.isInviteMode
         } else {
           if (el == null) {
@@ -365,13 +373,17 @@
         this.message.content = ''
         this.$store.state.isInviteMode = !this.$store.state.isInviteMode
       },
-      send: async function (e) {
+      send: async function (e,isSysMsg) {
         if (e != null) {
           e.preventDefault()
         }
-        this.message.sender = this.$store.state.currentUser.email
+        if(isSysMsg){
+          this.message.sender = null
+        }else{
+          this.message.sender = this.$store.state.currentUser.email
+          this.message.user = this.$store.state.currentUser
+        }
         this.message.channel_id = this.$store.state.currentChannel.id
-        this.message.user = this.$store.state.currentUser
         if (CommonClass.byteLimit(this.stringByteLength)) {
           if (this.$store.state.stompClient && this.$store.state.stompClient.connected) {
             this.$store.state.stompClient.send("/pub/chat/message", JSON.stringify(this.message), {})
@@ -396,12 +408,13 @@
             this.message.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + this.message.content
             let errormsg = JSON.parse(JSON.stringify(this.message))
             //dd
-            this.$store.commit('pushMsg',errormsg)
+            this.$store.commit('pushMsg', errormsg)
             this.message.content = ''
           }
         }
       },
       scrollEvt(e) {
+
         let element = e.target;
         //스크롤이 없을때에도 스크롤 위치가 최상단이기 때문에 스크롤이 있는지 없는지 판단해야한다.
         if (element.scrollTop <= 0 && element.scrollHeight != element.clientHeight) {
@@ -475,7 +488,7 @@
         this.cursorPoint.first = true
         this.cursorPoint.cursorId = 0
         this.cursorPoint.empty = false
-        this.$store.commit('setMsgArray',[])
+        this.$store.commit('setMsgArray', [])
         this.firstLoad = true
         this.scrollHeight = 0
       },
@@ -489,6 +502,10 @@
         }
       },
       TextbyFilter(content) {
+        const urlRegexp = new RegExp(/(http(s)?:\/\/|www.)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}([\/a-z0-9-%#?&=\w])+(\.[a-z0-9]{2,4}(\?[\/a-z0-9-%#?&=\w]+)*)*/gi)
+        if (urlRegexp.test(content) && this.$store.state.searchText == '') {
+          return "<a style='color: blue' href='" + content.replace(/(<([^>]+)>)/ig, '') + "' target='_blank'>" + content + "</a>"
+        }
         return this.$options.filters.highlight(content, this.$store.state.searchText);
       }
     },
@@ -508,6 +525,8 @@
         this.scrollToEnd()
       },
       msgArray: function () {
+
+        console.log(this.msgArray)
         // 스크롤을 최상단으로 올려 메시지를 가져올 때 실행되는 것을 막기 위한 if문
         if (this.getmsgBool) {
           this.getmsgBool = false
@@ -549,5 +568,19 @@
     }
   }
 
+/* .v-chip{
+  padding: 0 30px;
+} */
+.theme--light.v-chip:hover:before {
+    opacity: 0;
+}
 
+.v-chip.v-size--default{
+  min-height: 32px;
+  height: auto;
+}
+
+.v-chip{
+  white-space: normal;
+}
 </style>

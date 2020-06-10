@@ -2,7 +2,6 @@
   <VueWebRTC
     ref="webrtc"
     :room-id="$store.state.currentChannel.id"
-    :socket-u-r-l="'http://91cm.nineonesoft.com:9001/'"
   ></VueWebRTC>
 </template>
 
@@ -12,7 +11,7 @@
 
   export default {
     name: "VideoChat",
-    components: { VueWebRTC},
+    components: {VueWebRTC},
     data() {
       return {
         img: null,
@@ -27,21 +26,22 @@
     },
     mounted() {
       $('.nav-toggle').click()
-      function a(e, s) {
-          e.children(".submenu-content").show().slideUp(200, function () {
-            i(this).css("display", ""), i(this).find(".menu-item").removeClass("is-shown"), e.removeClass("open"), s && s()
-          })
-        }
 
-        let l = $(".wrapper")
-        if (l.hasClass("nav-collapsed")) {
-          l.addClass("menu-collapsed");
-          let s = $(".navigation-main .nav-item.open"),
-            a = s.children(".submenu-content");
-          s.addClass("nav-collapsed-open"), a.show().slideUp(300, function () {
-            $(this).css("display", "")
-          }), s.removeClass("open")
-        }
+      function a(e, s) {
+        e.children(".submenu-content").show().slideUp(200, function () {
+          i(this).css("display", ""), i(this).find(".menu-item").removeClass("is-shown"), e.removeClass("open"), s && s()
+        })
+      }
+
+      let l = $(".wrapper")
+      if (l.hasClass("nav-collapsed")) {
+        l.addClass("menu-collapsed");
+        let s = $(".navigation-main .nav-item.open"),
+          a = s.children(".submenu-content");
+        s.addClass("nav-collapsed-open"), a.show().slideUp(300, function () {
+          $(this).css("display", "")
+        }), s.removeClass("open")
+      }
       this.$refs.webrtc.join();
 
     },

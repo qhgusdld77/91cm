@@ -14,9 +14,9 @@
                   <component :is="whichComponent"></component>
                 </keep-alive>
               </div>
-                <div :class="{'col': isVideoMode,'col-9':isVideoMode}">
-                  <VideoChat v-if="$store.state.isVideoMode" />
-                </div>
+              <div :class="{'col': isVideoMode,'col-9':isVideoMode}">
+                <VideoChat v-if="$store.state.isVideoMode"/>
+              </div>
             </div>
 
             <RSidebar v-if="$store.state.currentChannel!=null"></RSidebar>
@@ -229,7 +229,7 @@
         switch (this.$store.state.selectComponent) {
           case "main":
           case "videoChat":
-              return true
+            return true
           default:
             return false
         }
