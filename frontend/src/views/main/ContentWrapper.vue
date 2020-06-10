@@ -292,7 +292,8 @@
         this.selectedUserEmail = data.split("-")[1]
       },
       imgLoad() {
-        if (!this.msgPreviewBool) {
+        this.oldScrollHeight = this.wrapperEl.scrollHeight
+        if (!this.msgPreviewBool && this.isScrollAtEnd(this.wrapperEl)) {
           this.scrollToEnd(true)
         }
       },
@@ -525,12 +526,10 @@
         this.scrollToEnd()
       },
       msgArray: function () {
-
-        console.log(this.msgArray)
         // 스크롤을 최상단으로 올려 메시지를 가져올 때 실행되는 것을 막기 위한 if문
         if (this.getmsgBool) {
           this.getmsgBool = false
-        } else {
+        } else { //메세지 미리보기(preview) 실행
           if (!this.isScrollAtEnd(this.wrapperEl) && this.msgArray.length > 0) {
             let copymsg = JSON.parse(JSON.stringify(this.msgArray[this.msgArray.length - 1]))
             this.previewObj.content = copymsg.content == null ? "첨부파일" : CommonClass.replacemsgForPreview(copymsg.content)
