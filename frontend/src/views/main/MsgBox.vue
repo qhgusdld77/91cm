@@ -47,9 +47,18 @@
     props: ['msg','msgPreviewBool'],
     methods: {
       textbyFilter: function(content) {
+        // 임시 코드
+        // 생각해봐야 할것 일반 택스트가 위고 링크가 아래 혹은 반대의 상황이 있을 수 있음
+        // 링크가 여러개 있을 수 있음
+        // 링크만 존재할 수 있음
         const urlRegexp = new RegExp(/(http(s)?:\/\/|www.)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}([\/a-z0-9-%#?&=\w])+(\.[a-z0-9]{2,4}(\?[\/a-z0-9-%#?&=\w]+)*)*/gi)
         if (urlRegexp.test(content) && this.$store.state.searchText == '') {
-          return "<a style='color: blue' href='" + content.replace(/(<([^>]+)>)/ig, '') + "' target='_blank'>" + content + "</a>"
+          // url이 여러개 일때도 생각해서 코딩 match가 배열로 반환됨으로 여러개 일때는 match 배열에 다 들어가있을것으로 추측
+          let result =""
+          content.match(urlRegexp).forEach(url =>{
+            result+= "<a style='color: blue' href='" + url+ "' target='_blank'>" + url + "</a><br>"
+          })
+          return result+=content.replace(urlRegexp,'')
         }
         return this.$options.filters.highlight(content, this.$store.state.searchText);
       },
