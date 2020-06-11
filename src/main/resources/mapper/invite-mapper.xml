@@ -11,7 +11,8 @@
     </insert>
 
     <select id="receiveInvites" resultType="com.nineone.nocm.domain.Invite">
-        select * from invite where recipient = #{recipient} and invite_state = 'STAND_BY'
+        select *,name as channel_name from invite join channel on invite.channel_id = channel.id
+         where recipient = #{recipient} and invite_state = 'STAND_BY'
     </select><!-- 추후에 STAND_BY만 가져올 수 있도록 변경?   -->
     <update id="updateInvite">
         update invite set invite_state = #{invite_state} where id = #{id}

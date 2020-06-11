@@ -8,7 +8,7 @@
               <i class="ik ik-server bg-blue"></i>
               <div class="d-inline">
                 <h5>Taskboard</h5>
-                <span>해당 채널 이름을 넣어줍시다</span>
+                <span>{{getCurrentChannel.name}}</span>
               </div>
             </div>
           </div>

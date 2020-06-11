@@ -42,8 +42,7 @@ id int unsigned  primary key auto_increment not null,
 channel_id int unsigned not null,
 content text,
 sender varchar(100) not null,
-send_date datetime not null default CURRENT_TIMESTAMP,
-foreign key (sender) references member(email) on update cascade
+send_date datetime not null default CURRENT_TIMESTAMP
 );
 
 create table file(
@@ -95,8 +94,7 @@ end_date datetime,
 allday tinyint,
 color varchar(20),
 title varchar(45),
-foreign key (tasklist_id) references tasklist(id) on delete cascade on update cascade,
-foreign key (member_email) references member(email) on update cascade
+foreign key (tasklist_id) references tasklist(id) on delete cascade on update cascade
 );
 create table roles (
 authority varchar(50) not null primary key,
