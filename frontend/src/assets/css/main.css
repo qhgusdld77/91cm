@@ -4,12 +4,20 @@
 .mytextarea-wrapper .active-m{
     color: #FF4848 !important;
 }
+.mytextarea-wrapper .my-search{
+    position: absolute !important;
+    z-index: 1;
+    bottom: 5px;
+    cursor: pointer;
+    right: 85px;
+    color: #2C3E50;
+}
 .mytextarea-wrapper .my-mail{
     position: absolute !important;
     z-index: 1;
     bottom: 5px;
     cursor: pointer;
-    right: 90px; 
+    right: 115px;
     color: #2C3E50;
 }
 .list-inline, .list-unstyled{
@@ -110,13 +118,13 @@
     display: flex;
     justify-content: flex-end;
   }
-  
+
   .info-wrapper table,
   .hori-align {
     display: flex;
     justify-content: center;
   }
-  
+
   .info-wrapper {
     width: 100%;
     height: inherit;
@@ -240,13 +248,13 @@ MainContents
     overflow-x:hidden;
     height: calc(100% - 115px);
     padding: 20px 25px 0px 25px !important;
-    margin-bottom: 0px;    
+    margin-bottom: 0px;
     position: relative;
 }
 
 .c-i-wrapper {
-    height: 115px;
-    padding: 0px 25px; 
+    height: 110px;
+    padding: 0px 25px;
     display: flex;
     /* border-top: 1px solid #e6e6e6; */
 }
@@ -543,11 +551,11 @@ ul.CTAs a {
     #sidebar {
      margin-left: -100%;
      width: 100%;
-     
+
    }
    #sidebar.active {
     margin-left: 0;
-    
+
     }
    #r-sidebar{
     width: 100%;

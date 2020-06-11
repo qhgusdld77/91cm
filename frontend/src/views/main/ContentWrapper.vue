@@ -14,12 +14,14 @@
           </div>
         </div>
       </a>
-      <div class="c-i-wrapper">
+      <v-row align="end" justify="center" class="c-i-wrapper">
         <div style="flex-grow:1;" class="myflex-column">
           <div style="position: relative;">
             <div class="mytextarea-wrapper" v-if="!$store.state.isInviteMode && !$store.state.isSearchMode">
               <v-icon class="my-mail" v-bind:class="{'active-m': sendMail}" @click="sendMailToggle">mail</v-icon>
+              <v-icon class="my-search" @click="toggleSearchMode">find_in_page</v-icon>
               <i class="im im-users myfile-upload" style="right: 50px;" @click="inviteToggle"></i>
+
               <label for="file-input" style="display: block;margin-bottom: 0;">
                 <i class="im im-cloud-upload myfile-upload"></i>
               </label>
@@ -60,18 +62,20 @@
               v-model="progressValue"
               striped
             ></v-progress-linear>
-            <span style="position: absolute;right: 108px;"> {{ stringByteLength }} / 30000Byte</span>
+<!--            <span style="position: absolute;right: 108px;"> {{ stringByteLength }} / 30000Byte</span>-->
           </div>
         </div>
-        <v-btn class="mx-2" fab dark large color="cyan" style="margin-top: 15px;"
+<!--        일반 채팅 모드 일때 아이콘-->
+        <v-btn class="mx-2" fab dark large color="cyan" style="margin-bottom: 15px;"
                v-if="!$store.state.isVideoMode" @click="send">
           <i class="im im-paperplane"></i>
         </v-btn>
-        <v-btn class="mx-2" fab dark small color="cyan" style="margin-top: 20px;"
+<!--        화상 채팅 모드 일때 아이콘-->
+        <v-btn class="mx-2" fab dark small color="cyan" style="margin-bottom: 25px;"
                v-else @click="send">
           <i class="im im-paperplane"></i>
         </v-btn>
-      </div>
+      </v-row>
     </div>
   </main>
 </template>
