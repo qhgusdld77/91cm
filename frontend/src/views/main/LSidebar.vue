@@ -45,7 +45,16 @@
           <!-- <div class="nav-lavel">Users</div> -->
 
           <div class="nav-item has-sub open">
-            <a href="javascript:void(0)" style="display: flex;align-items: center;"><i class="ik ik-users"></i><span>Users</span>
+            <a href="javascript:void(0)" style="display: flex;align-items: center;">
+              <i class="ik ik-users"></i>
+              <span>Users</span>
+              <v-badge
+                style="margin-left: 105px"
+                color="#bcc8d8"
+                overlap
+                left
+                content="1"
+              ></v-badge>
             </a>
             <div class="submenu-content">
               <a style="cursor:default;" v-for="(user) in channelUsers" :key="user.email" class="menu-item"><span>{{ user.name }}</span></a>
@@ -87,8 +96,6 @@
     watch: {
       currentChannel(newCurrentChannel, oldCurrentChannel) {
         this.updateUserList(newCurrentChannel)
-        console.log('oldCompo', this.$store.state.oldComponent)
-        console.log('currentc', this.$store.state.currentChannel)
       },
       syncChannelUser() {
         this.updateUserList(this.$store.state.currentChannel)
@@ -167,7 +174,6 @@
         }
       },
       updateUserList: function (currentChannel) {
-        console.log(currentChannel, 'updateUserList')
         if (currentChannel != null) {
           this.$http.get('/api/user/channel/' + currentChannel.id)
             .then(res => {
@@ -267,9 +273,12 @@
   }
 </script>
 <style scoped>
+
+  >>>.v-badge__badge{
+    color: #404E67 !important;
+  }
   .active-channel {
     background-color: white;
     color: black !important;
   }
 </style>
-
