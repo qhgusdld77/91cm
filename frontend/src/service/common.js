@@ -10,8 +10,6 @@ class CommonClass {
     return content
   }
 
-
-
   replaceErrorMsg(originContent) {
     let array = originContent.split("\n")
     let content = ''

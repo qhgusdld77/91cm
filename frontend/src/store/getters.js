@@ -9,6 +9,7 @@ export default {
       }
     }
   },
+  getCurrentUser: state => state.currentUser,
   getUserChannelList: state => state.userChannelList,
   getTaskBoard: state=> state.taskBoard,
   getCurrentChannel: state => state.currentChannel,

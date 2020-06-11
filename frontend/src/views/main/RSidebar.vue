@@ -48,7 +48,7 @@
           </a>
           <b-collapse id="video-chat">
             <div class="s-coll-style">
-              <p>화상 채팅 유저 수 : 1</p>
+              <p>화상 채팅 유저 수 : 0</p>
               <v-btn color="blue-grey" class="white--text" @click="toggleVideoMode()" v-if="!isVideoMode">
                 Join
                 <v-icon right dark class="my-video">play_circle_outline</v-icon>
@@ -94,11 +94,16 @@
     },
     data() {
       return {
+        videoChatUsers: 0,
         channelUserSize: 0,
         userSelect: null
       }
     },
     mounted() {
+      // vue-webRTC.vue의 화상채팅 사용자 수 데이터 받기
+      // this.$eventBus.$on('videoChatUsers', res=>{
+      //   this.videoChatUsers = res
+      // })
 
     },
     methods: {
