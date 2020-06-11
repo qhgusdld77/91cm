@@ -8,18 +8,22 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Collection;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     private String name;
     private String phone;
     private String email;
     private String picture;
     private List<String> roles;
+    private boolean isOnline;
 
     @Builder
     public User(String name, String phone, String picture, String email, String password,

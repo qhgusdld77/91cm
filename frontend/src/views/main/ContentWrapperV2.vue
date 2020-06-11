@@ -226,7 +226,7 @@
                   })
                 this.message.content += '을 초대했습니다.'
                 this.$eventBus.$emit('getUserList', true)
-                this.send()
+                this.send(null,true)
                 this.inviteDataInit()
 
               }).catch(error => {
@@ -357,7 +357,6 @@
             this.message.content = ''
             this.scrollToEnd(true)
             if (this.sendMail) {
-              console.log(this.$store.state.channelUsers.filter(channelUser => channelUser != this.$store.state.currentUser))
               this.$store.state.channelUsers.filter(channelUser => channelUser != this.$store.state.currentUser)
                 .forEach(channelUser => {
                   this.$http.post('/api/message/send/mail', {
