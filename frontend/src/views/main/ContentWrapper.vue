@@ -3,7 +3,7 @@
     <div class="h-inherit" v-cloak @drop.prevent="dropFile" @dragover.prevent>
       <ul class="c-c-wrapper list-unstyled" @scroll="scrollEvt">
         <div v-for="msg in msgArray" :key="msg.id">
-          <MsgBox :msg="msg" :msgPreviewBool="msgPreviewBool" @scrollToEnd="scrollToEnd"></MsgBox>
+          <MsgBox :msg="msg" :msgPreviewBool="msgPreviewBool" @scrollToEnd="scrollToEnd" @imgLoad="imgLoad"></MsgBox>
         </div>
       </ul>
       <a v-if="msgPreviewBool" @click="clickMsgPreview">
@@ -144,6 +144,12 @@
       this.$store.state.isSearchMode = false
     },
     methods: {
+      imgLoad() {
+        this.oldScrollHeight = this.wrapperEl.scrollHeight
+        if (!this.msgPreviewBool && this.isScrollAtEnd(this.wrapperEl)) {
+          this.scrollToEnd(true)
+        }
+      },
       inviteToggle: function (e) {
         let el = document.querySelector(".menuable__content__active.inviteClass")
         if (this.$store.state.isInviteMode == false) {
@@ -219,7 +225,7 @@
           this.$alertModal('error', '폴더는 업로드 할 수 없습니다.')
         })
       },
-      send: async function (e) {
+      send: async function (e,isSysMsg) {
         if (e != null) {
           e.preventDefault()
         }
@@ -379,6 +385,7 @@
         }
       }
     },
+
 
   }
 </script>

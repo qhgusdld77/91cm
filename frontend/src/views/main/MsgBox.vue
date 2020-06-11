@@ -13,7 +13,6 @@
           <strong>{{ msg.user.name }}</strong>
           <span style="font-size: 11px; margin-left:3px; ">{{ msg.str_send_date }}</span>
         </slot>
-
       </div>
       <!-- 채팅메세지내용 -->
       <div class="verti-align">
@@ -25,7 +24,7 @@
               <b-col v-for="(file,index) in msg.files" :key="index">
                 <a @click="fileDownload(file)">
                   <b-img thumbnail rounded fluid :src="selectImage(file)" alt="이미지를 찾을 수 없습니다."
-                         style="max-width: 200px" @load="imgLoad"></b-img>
+                         style="max-width: 200px" @load="$emit('imgLoad')"></b-img>
                   <p><b>{{file.original_name}}</b></p>
                   <p>file size : {{(file.file_size / 1024).toLocaleString(undefined,{minimumFractionDigits:2})}}
                     kb</p>
@@ -47,11 +46,19 @@
     props: ['msg','msgPreviewBool'],
     methods: {
       textbyFilter: function(content) {
+        const testRegexp = new RegExp(/<p>(.*?)<\/p>/g);
+        const htmlTagRegexp = new RegExp(/(<([^>]+)>)/ig);
+        const urlRegexp = new RegExp(/(http(s)?:\/\/|www.)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}([\/a-z0-9-%#?&=\w])+(\.[a-z0-9]{2,4}(\?[\/a-z0-9-%#?&=\w]+)*)*/gi,)
+
+        // content.match(testRegexp).forEach(contentItem =>{
+        //   console.log(contentItem)
+        //   console.log(urlRegexp.test(contentItem))
+        // });
+
         // 임시 코드
         // 생각해봐야 할것 일반 택스트가 위고 링크가 아래 혹은 반대의 상황이 있을 수 있음
         // 링크가 여러개 있을 수 있음
         // 링크만 존재할 수 있음
-        const urlRegexp = new RegExp(/(http(s)?:\/\/|www.)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}([\/a-z0-9-%#?&=\w])+(\.[a-z0-9]{2,4}(\?[\/a-z0-9-%#?&=\w]+)*)*/gi)
         if (urlRegexp.test(content) && this.$store.state.searchText == '') {
           // url이 여러개 일때도 생각해서 코딩 match가 배열로 반환됨으로 여러개 일때는 match 배열에 다 들어가있을것으로 추측
           let result =""
@@ -79,11 +86,6 @@
             link.remove()
             window.URL.revokeObjectURL(url)
           })
-      },
-      imgLoad() {
-        if (!this.msgPreviewBool) {
-          this.$emit('scrollToEnd',true)
-        }
       },
     },
     filters: {
