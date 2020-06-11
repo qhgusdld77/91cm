@@ -33,7 +33,10 @@ public class MessageController {
 	public void message(Message message)throws ParseException {
 		message.setSend_date(DateUtil.makeDate());
 		message.setStr_send_date(messageService.makeStrDate(message.getSend_date()));
-		message.setContent(messageService.replacemsg(message.getContent()));
+		// sender가 null이면 시스템메시지이기 때문에.
+		if(message.getSender()!=null) {
+			message.setContent(messageService.replacemsg(message.getContent()));
+		}
 		if(messageService.insertMessage(message) > 0) {
 			messagingTemplate.convertAndSend("/sub/chat/room/"+message.getChannel_id(), message);
 		}else {
@@ -49,23 +52,5 @@ public class MessageController {
 	public void syncMessage(@DestinationVariable String id, @Payload ApiResponse apiResponse)throws Exception{
 		messagingTemplate.convertAndSend("/sub/chat/room/"+id,apiResponse);
 	}
-
-
-//	@MessageMapping("/notification")
-//	public void notification(Notification notification) {
-//
-//		// 메세지 전송하기 전에 DB에 notification을 저장하는 로직이 있어야함
-//		/*
-//		String sessionId = sessionListener.getSessions().get(notification.getRecipient()).toString();
-//		if(sessionId != null) {
-//			messagingTemplate.convertAndSendToUser(sessionId, "/queue/noti", notification);
-//		}
-//		*/
-//
-//		if(sessionListener.getSessions().get(notification.getRecipient())!=null) {
-//			messagingTemplate.convertAndSendToUser(notification.getRecipient(), "/queue/noti", notification);
-//		}
-
-//	}
 
 }

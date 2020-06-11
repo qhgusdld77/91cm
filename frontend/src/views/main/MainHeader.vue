@@ -21,11 +21,11 @@
             <div class="dropdown-menu dropdown-menu-right notification-dropdown" aria-labelledby="notiDropdown">
               <h4 class="header">Notifications</h4>
               <div class="notifications-wrap">
-                <div v-for="(alarm,index) in getAlarmList" :key="alarm">
+                <div v-for="(alarm,index) in getAlarmList" :key="index">
                   <a class="media" style="cursor: default;">
                     <span class="media-body">
                       <div class="heading-font-family media-heading">
-                        {{getUserNameByEmail(alarm.sender)}} 님이 채널에 초대했습니다. 수락하시겠습니까?
+                        {{getUserNameByEmail(alarm.sender)}} 님이 {{alarm.channel_name}}에 초대했습니다. 수락하시겠습니까?
                       </div>
                       <div class="menulist-header-icon">
                         <b-button style="padding: 0 0.5rem 0 0;" size="sm"
@@ -103,6 +103,7 @@
         this.$http.get('/api/invite/list')
           .then(res => {
             this.alarmList = res.data.reverse()
+            console.log(this.alarmList,"invite list")
           })
           .catch(error => {
           })
@@ -123,9 +124,9 @@
       inviteAccept: function (alarm, index) {
         const message = {
           channel_id: alarm.channel_id,
-          sender: this.$store.state.currentUser.email,
+          sender: null,
           content: this.$store.state.currentUser.name + '님이 채널에 초대되었습니다.',
-          user: this.$store.state.currentUser
+          // user: this.$store.state.currentUser
         }
         this.$http.post('/api/invite/accept', alarm)
           .then(async (res) => {
@@ -156,7 +157,15 @@
         // 초대가 거절됐다는 메시지를 채널에 보내는 로직을 구현해야함
         this.$http.post('/api/invite/refuse', alarm)
           .then(res => {
+
+            const message = {
+              channel_id: alarm.channel_id,
+              sender: null,
+              content: this.$store.state.currentUser.name + '님이 채널 초대를 거부하셨습니다.',
+            }
             this.alarmList.splice(index, 1);
+
+            this.$store.state.stompClient.send('/pub/chat/message', JSON.stringify(message))
           })
           .catch(error => {
             console.error(error)

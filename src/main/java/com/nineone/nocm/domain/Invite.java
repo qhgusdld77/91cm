@@ -20,6 +20,8 @@ public class Invite {
    private List<String> recipients;
    private String send_date;
    private InviteState invite_state;
+   private String channel_name;
+   
    @Builder
    public Invite(int id, int channel_id, String sender,
                  String recipient, String send_date, InviteState invite_state){

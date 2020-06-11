@@ -97,7 +97,6 @@ public class UserApiController {
     public boolean signup(@RequestBody User user, Authentication authentication, HttpSession httpsession) {
         DefaultOAuth2User oauth2user = (DefaultOAuth2User) authentication.getPrincipal();
         if (userService.insertUser(user, oauth2user, httpsession)) {
-            log.info(user.getEmail());
             authoritiesRepository.insertAuthority(Authorities.builder()
                     .member_email(user.getEmail())
                     .roles_authority("ROLE_ANON")

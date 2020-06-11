@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Slf4j
@@ -22,8 +21,6 @@ public class AopConfig {
 
     @Autowired
     private UserAuthoritiesRepository authoritiesRepository;
-    @Autowired
-    private HttpSession httpSession;
 
     @Pointcut("execution(* com.nineone.nocm.controller.api.UserApiController.getSessionUser(..))")
     public void getSessionUser(){}
