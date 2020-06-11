@@ -33,7 +33,7 @@
                 no-resize
                 v-model="message.content"
                 @keydown.ctrl.shift.70="toggleSearchMode"
-                @keydown.enter.exact="send"
+                @keydown.enter.exact="send($event)"
                 @keyup="byteCheck"
                 @keydown.shift.alt.50='inviteToggle'
               ></b-form-textarea>
@@ -130,7 +130,7 @@
       })
       this.$eventBus.$on('leaveChannelMsg', () => {
         this.message.content = this.$store.state.currentUser.name + '님이 나가셨습니다.'
-        this.send()
+        this.send(null,true)
       })
     },
     updated() {
@@ -223,9 +223,13 @@
         if (e != null) {
           e.preventDefault()
         }
-        this.message.sender = this.$store.state.currentUser.email
+        if(isSysMsg){
+          this.message.sender = null
+        }else{
+          this.message.sender = this.$store.state.currentUser.email
+          this.message.user = this.$store.state.currentUser
+        }
         this.message.channel_id = this.$store.state.currentChannel.id
-        this.message.user = this.$store.state.currentUser
         if (CommonClass.byteLimit(this.stringByteLength)) {
           if (this.$store.state.stompClient && this.$store.state.stompClient.connected) {
             console.log("message sned")
@@ -360,7 +364,7 @@
         // 스크롤을 최상단으로 올려 메시지를 가져올 때 실행되는 것을 막기 위한 if문
         if (this.getmsgBool) {
           this.getmsgBool = false
-        } else {
+        } else { //메세지 미리보기(preview) 실행
           if (!this.isScrollAtEnd(this.wrapperEl) && this.msgArray.length > 0) {
             let copymsg = JSON.parse(JSON.stringify(this.msgArray[this.msgArray.length - 1]))
             this.previewObj.content = copymsg.content == null ? "첨부파일" : CommonClass.replacemsgForPreview(copymsg.content)
@@ -387,4 +391,19 @@
     }
   }
 
+/* .v-chip{
+  padding: 0 30px;
+} */
+.theme--light.v-chip:hover:before {
+    opacity: 0;
+}
+
+.v-chip.v-size--default{
+  min-height: 32px;
+  height: auto;
+}
+
+.v-chip{
+  white-space: normal;
+}
 </style>

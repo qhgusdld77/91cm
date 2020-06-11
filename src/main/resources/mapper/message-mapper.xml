@@ -28,7 +28,7 @@
     
     <select id="getMessageList" resultMap="messageList">
     
-   		select * from message join member on member.email = message.sender
+   		select * from message left join member on member.email = message.sender
 			where channel_id = #{channel_id} 
 			<if test="first.equals(false)">
 				and (send_date <![CDATA[<]]> (select send_date from message where id = #{cursorId}) or 
