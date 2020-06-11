@@ -3,6 +3,7 @@ package com.nineone.nocm.controller.api;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nineone.nocm.annotation.Socialuser;
 import com.nineone.nocm.domain.Authorities;
 import com.nineone.nocm.domain.User;
+import com.nineone.nocm.listener.WebsocketEventListener;
 import com.nineone.nocm.repository.UserAuthoritiesRepository;
 import com.nineone.nocm.service.UserService;
 
@@ -33,6 +35,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/user")
 public class UserApiController {
 
+	@Autowired
+	private WebsocketEventListener websocketEventListener;
+	
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
     @Autowired
@@ -97,7 +102,6 @@ public class UserApiController {
     public boolean signup(@RequestBody User user, Authentication authentication, HttpSession httpsession) {
         DefaultOAuth2User oauth2user = (DefaultOAuth2User) authentication.getPrincipal();
         if (userService.insertUser(user, oauth2user, httpsession)) {
-            log.info(user.getEmail());
             authoritiesRepository.insertAuthority(Authorities.builder()
                     .member_email(user.getEmail())
                     .roles_authority("ROLE_ANON")
@@ -116,7 +120,16 @@ public class UserApiController {
 
     @RequestMapping(value = "/channel/{channel_id}")
     public List<User> getChannelUserList(@PathVariable int channel_id) {
-        return userService.getCurrentChannelUserList(channel_id);
+    	List<User> userList = userService.getCurrentChannelUserList(channel_id);
+    	Map<String,Object> sessions = websocketEventListener.getOnlineSessions();
+    	for(User user : userList) {
+    		if(sessions.get(user.getEmail()) !=null ) {
+    			user.setOnline(true);
+    		}else {
+    			user.setOnline(false);
+    		}
+    	}
+        return userList;
     }
 
 }

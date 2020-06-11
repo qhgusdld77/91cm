@@ -18,10 +18,7 @@
                 <VideoChat v-if="$store.state.isVideoMode"/>
               </div>
             </div>
-
             <RSidebar v-if="$store.state.currentChannel!=null"></RSidebar>
-
-
           </div>
           <footer class="footer">
             <div class="w-100 clearfix">
@@ -30,10 +27,20 @@
           </footer>
         </div>
       </template>
+      <!-- v-if="connctionCheck" else -->
       <Loading v-else/>
 
     </div>
     <AppsModal></AppsModal>
+    <!-- 전체 공지용 스낵바 modal -->
+    <v-snackbar v-model="noticeMsgToggle" :timeout='5000' :top="true"
+                style="margin-top: 8vh; font-size: medium;"
+                color="#404E67">
+      {{noticeMsg}}
+      <v-btn icon color="white" @click="noticeMsgToggle = false">
+        <v-icon>close</v-icon>
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 <script>
@@ -80,6 +87,8 @@
     },
     data() {
       return {
+        noticeMsgToggle: false,
+        noticeMsg: '',
         channelTitle: '',
         channelList: [],
         isRActive: false,
@@ -143,7 +152,7 @@
         // 새로고침 했을때 Main의 로직이 실행되지 않는 환경에서는 문제가 생길 수 있음
         this.$store.state.stompClient = Stomp.over(new SockJS('/endpoint/'))
         // this.$store.state.stompClient.debug = f => f;
-        this.$store.state.stompClient.connect({}, () => {
+        this.$store.state.stompClient.connect(this.$store.state.currentUser, () => {
           this.$store.state.userChannelList.forEach(channel => {
             this.$store.state.stompClient.subscribe("/sub/chat/room/" + channel.id, (e) => {
               let data = JSON.parse(e.body)
@@ -160,15 +169,23 @@
             })
           })
           this.$store.state.stompClient.subscribe("/sub/sync/info", (res) => {
+            if (res.headers.noticeMsg != null) {
+              this.noticeMsg = res.headers.noticeMsg
+              this.noticeMsgToggle = true
+            }
             if (res.body == '"userList"') {
               this.$store.dispatch('userListUpdate')
             }
+            if(res.body == '"getChannelUserList"'){
+              this.$store.dispatch('updateUserList')
+            }
+
           })
           this.$store.state.stompClient.subscribe("/sub/" + this.$store.state.currentUser.email, (e) => {
             //메시지 전송 실패시
             this.channelSubscribeCallBack(e, true)
           })
-        }, () => {
+        }, (e) => {
           console.log('stomp close', this.$store.state.isLogout)
           if (!this.$store.state.isLogout) {
             window.location.href = "/"
@@ -196,7 +213,6 @@
             data.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + data.content
           }
           this.$store.commit('pushMsg', data)
-          console.log(this.$store.state.msgArray)
           if (!this.$store.state.isfocus) {
             this.msgCountUpdate(data.channel_id, true)
           }

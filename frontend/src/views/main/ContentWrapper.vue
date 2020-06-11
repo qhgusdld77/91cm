@@ -3,42 +3,13 @@
     <div class="h-inherit" v-cloak @drop.prevent="dropFile" @dragover.prevent>
       <ul class="c-c-wrapper list-unstyled" @scroll="scrollEvt">
         <div v-for="msg in msgArray" :key="msg.id">
-          <MsgBox v-if="msg.sender!=null">
-              <template #m-icon v-if="msg.sender!=null">
-                <img v-if="msg.user.picture" class="icon-round" :src="msg.user.picture" width="40" height="40"/>
-                <img v-else class="icon-round" src="../../assets/images/default-user-picture.png" width="40" height="40">
-              </template>
-              <template #m-info v-if="msg.sender!=null">
-                <!-- #으로 단축해서 사용 -->
-                <strong>{{ msg.user.name }}</strong>
-                <span style="font-size: 11px; margin-left:3px; ">{{ msg.str_send_date }}</span>
-              </template>
-              <template #m-content v-if="msg.sender!=null">
-                <!-- #으로 단축해서 사용 -->
-                <div v-if="msg.files == null || msg.content" v-html="TextbyFilter(msg.content)"
-                    class="mychat-content"></div>
-                <b-container fluid v-else-if="msg.files.length > 0" class="p-4 bg-white">
-                  <b-row>
-                    <b-col v-for="(file,index) in msg.files" :key="index">
-                      <a @click="fileDownload(file)">
-                        <b-img thumbnail rounded fluid :src="selectImage(file)" alt="이미지를 찾을 수 없습니다."
-                              style="max-width: 200px" @load="imgLoad"></b-img>
-                        <p><b>{{file.original_name}}</b></p>
-                        <p>file size : {{(file.file_size / 1024).toLocaleString(undefined,{minimumFractionDigits:2})}}
-                          kb</p>
-                      </a>
-                    </b-col>
-                  </b-row>
-                </b-container>
-              </template>
-          </MsgBox>
+          <MsgBox v-if="msg.sender!=null" :msg="msg" :msgPreviewBool="msgPreviewBool" @scrollToEnd="scrollToEnd" @imgLoad="imgLoad"></MsgBox>
           <div class=" hori-align">
-          <v-chip v-if="msg.sender==null" class="ma-2" style="font-weight:bold;">
-            {{msg.content}}
-          </v-chip>
+            <v-chip v-if="msg.sender==null" class="ma-2" style="font-weight:bold;">
+              {{msg.content}}
+            </v-chip>
           </div>
         </div>
-
       </ul>
       <a v-if="msgPreviewBool" @click="clickMsgPreview">
         <div id="c-c-preview" v-bind:class="{active: $store.state.isLActive}">
@@ -49,7 +20,6 @@
         </div>
       </a>
       <div class="c-i-wrapper">
-        <!-- 더 뭔가 추가할 거 같아서 div로 감싸놓음 -->
         <div style="flex-grow:1;" class="myflex-column">
           <div style="position: relative;">
             <div class="mytextarea-wrapper" v-if="!$store.state.isInviteMode && !$store.state.isSearchMode">
@@ -73,62 +43,21 @@
                 @keydown.shift.alt.50='inviteToggle'
               ></b-form-textarea>
             </div>
-
+            <!--  초대 모드 시작 -->
             <div v-if="$store.state.isInviteMode">
-              <v-row>
-                <v-col cols="12">
-                  <v-autocomplete
-                    v-model="friends"
-                    :items="userList"
-                    @keydown.enter.exact="enter"
-                    @keydown.esc.exact="inviteToggle"
-                    filled
-                    autofocus
-                    chips
-                    label="Select"
-                    item-text="name"
-                    item-value="email"
-                    multiple
-                    :menu-props="{  contentClass: 'inviteClass'}"
-                  >
-                    <template v-slot:selection="data">
-                      <v-chip
-                        v-bind="data.attrs"
-                        :input-value="data.selected"
-                        close
-                        @click="data.select"
-                        @click:close="remove(data.item)"
-                      >
-                        <v-avatar left>
-                          <v-img :src="data.item.picture"></v-img>
-                        </v-avatar>
-                        {{ data.item.name }}
-                      </v-chip>
-                    </template>
-                    <template v-slot:item="data">
-                      <template v-if="typeof data.item !== 'object'">
-                        <v-list-item-content v-text="data.item"></v-list-item-content>
-                      </template>
-                      <template v-else>
-                        <v-list-item-avatar>
-                          <img :src="data.item.picture">
-                        </v-list-item-avatar>
-                        <v-list-item-content>
-                          <v-list-item-title v-html="data.item.name"></v-list-item-title>
-                          <v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>
-                        </v-list-item-content>
-                      </template>
-                    </template>
-                  </v-autocomplete>
-                </v-col>
-              </v-row>
+              <InviteInput @send="send" @inviteToggle="inviteToggle" :message="message"></InviteInput>
             </div>
+            <!-- 초대 모드 끝  -->
+            <!-- 채팅 검색 모드 시작 -->
             <SearchInput
               :cursorPoint="cursorPoint"
               :wrapperEl="wrapperEl"
-              @getMessage="getMessage"></SearchInput>
+              @getMessage="getMessage">
+            </SearchInput>
+            <!-- 채팅 검색 모드 끝 -->
           </div>
           <div style="display: flex;flex-grow: 1;">
+            <!-- 파일 업로드 progress bar -->
             <v-progress-linear
               v-if="isFileUpload"
               color="cyan darken-4"
@@ -139,10 +68,12 @@
             <span style="position: absolute;right: 108px;"> {{ stringByteLength }} / 30000Byte</span>
           </div>
         </div>
-        <v-btn class="mx-2" fab dark large color="cyan" style="margin-top: 15px;" v-if="!$store.state.isVideoMode">
+        <v-btn class="mx-2" fab dark large color="cyan" style="margin-top: 15px;"
+               v-if="!$store.state.isVideoMode" @click="send">
           <i class="im im-paperplane"></i>
         </v-btn>
-        <v-btn class="mx-2" fab dark small color="cyan" style="margin-top: 20px;" v-else>
+        <v-btn class="mx-2" fab dark small color="cyan" style="margin-top: 20px;"
+               v-else @click="send">
           <i class="im im-paperplane"></i>
         </v-btn>
       </div>
@@ -151,22 +82,21 @@
 </template>
 <script>
   import MsgBox from './MsgBox'
-  import InviteService from '../../service/inviteService'
   import CommonClass from '../../service/common'
   import SearchInput from './SearchInput'
-  import AboutChannel from '../../service/aboutchannel'
   import {mapGetters} from "vuex";
+  import InviteInput from "../../components/InviteInput";
 
   export default {
     name: 'ContentWrapper',
     components: {
+      InviteInput,
       MsgBox, SearchInput
     },
     data() {
       return {
         isFileUpload: false,
         progressValue: 0,
-        friends: [],
         sendMail: false,
         tempImg: '',
         stringByteLength: 0,
@@ -217,62 +147,29 @@
       if (this.$store.state.oldComponent != 'main' && this.$store.state.selectComponent == 'main') {
         this.scrollToEnd(true)
       }
-      this.friends = []
       this.$store.state.isInviteMode = false
       this.$store.state.isSearchMode = false
     },
     methods: {
-      enter: async function (event) {
+      imgLoad() {
+        this.oldScrollHeight = this.wrapperEl.scrollHeight
+        if (!this.msgPreviewBool && this.isScrollAtEnd(this.wrapperEl)) {
+          this.scrollToEnd(true)
+        }
+      },
+      inviteToggle: function (e) {
         let el = document.querySelector(".menuable__content__active.inviteClass")
-        if (el == null) {
-          if (this.friends.length != 0) {
-            await InviteService.invite(this.$store.state.currentUser.email, this.$store.state.currentChannel.id, this.friends,this.$store.state.currentChannel.name)
-              .then(res => {
-                const invite = {
-                  channel_id: this.$store.state.currentChannel.id,
-                  sender: this.$store.state.currentUser.email,
-                  recipients: this.friends
-                }
-                this.message.content += this.$store.state.currentUser.name + '님께서 '
-                for (let i = 0; i < this.friends.length; i++) {
-                  const user = this.userList.find(el => el.email == this.friends[i])
-                  this.message.content += user.name + '님 '
-                }
-
-               
-                // this.$http.post('/api/invite/mail', invite)
-                //   .then(res => {
-                //     console.log(res.data)
-                //   })
-                this.message.content += '을 초대하였습니다.'
-                this.$eventBus.$emit('getUserList', true)
-                this.send(null,true)
-                this.inviteDataInit()
-
-              }).catch(error => {
-                let alertmsg = ''
-                if (error.response.data.list != null) {
-                  const alertList = error.response.data.list
-                  for (let i = 0; i < alertList.length; i++) {
-                    const user = this.userList.find(el => el.email == alertList[i])
-                    alertmsg += user.name + '님 '
-                  }
-                  alertmsg += '은 이미 이 채널에 초대 받았습니다. 확인해주세요.'
-                  this.$alertModal('error', alertmsg)
-                } else {
-                  this.$alertModal('error', error.response.data.message)
-                }
-                console.error(error.response)
-                this.message.content = ''
-              })
-          } else {
-            this.$alertModal('alert', '초대할 사용자를 선택해주세요')
+        if (this.$store.state.isInviteMode == false) {
+          this.$store.state.isInviteMode = !this.$store.state.isInviteMode
+        } else {
+          if (el == null) {
+            this.inviteDataInit()
           }
         }
       },
-      remove(item) {
-        const index = this.friends.indexOf(item.email);
-        if (index >= 0) this.friends.splice(index, 1);
+      inviteDataInit: function () {
+        this.message.content = ''
+        this.$store.state.isInviteMode = !this.$store.state.isInviteMode
       },
       sendMailToggle() {
         this.sendMail = !this.sendMail
@@ -291,36 +188,12 @@
         this.message.content = data.split("-")[0]
         this.selectedUserEmail = data.split("-")[1]
       },
-      imgLoad() {
-        this.oldScrollHeight = this.wrapperEl.scrollHeight
-        if (!this.msgPreviewBool && this.isScrollAtEnd(this.wrapperEl)) {
-          this.scrollToEnd(true)
-        }
-      },
       dropFile: function (e) {
         this.addFile(e.dataTransfer.files)
       },
       attachFile: function (e) {
         this.addFile(e.target.files)
         this.$refs.fileInput.value = null
-      },
-      selectImage: function (file) {
-        return CommonClass.checkFileType(file)
-      },
-      fileDownload: function (file) {
-        this.$http.get(file.path, {
-          responseType: 'blob'
-        })
-          .then(res => {
-            const url = window.URL.createObjectURL(new Blob([res.data]))
-            const link = document.createElement('a')
-            link.href = url;
-            link.setAttribute('download', file.original_name)
-            document.body.appendChild(link)
-            link.click()
-            link.remove()
-            window.URL.revokeObjectURL(url)
-          })
       },
       addFile: function (uploadFiles) {
         this.progressValue = 0
@@ -359,21 +232,6 @@
           this.$alertModal('error', '폴더는 업로드 할 수 없습니다.')
         })
       },
-      inviteToggle: function (e) {
-        let el = document.querySelector(".menuable__content__active.inviteClass")
-        if (this.$store.state.isInviteMode == false) {
-          this.$store.state.isInviteMode = !this.$store.state.isInviteMode
-        } else {
-          if (el == null) {
-            this.inviteDataInit()
-          }
-        }
-      },
-      inviteDataInit: function () {
-        this.friends = []
-        this.message.content = ''
-        this.$store.state.isInviteMode = !this.$store.state.isInviteMode
-      },
       send: async function (e,isSysMsg) {
         if (e != null) {
           e.preventDefault()
@@ -391,7 +249,7 @@
             this.message.content = ''
             this.scrollToEnd(true)
             if (this.sendMail) {
-              console.log(this.$store.state.channelUsers.filter(channelUser => channelUser != this.$store.state.currentUser))
+              // console.log(this.$store.state.channelUsers.filter(channelUser => channelUser != this.$store.state.currentUser))
               this.$store.state.channelUsers.filter(channelUser => channelUser != this.$store.state.currentUser)
                 .forEach(channelUser => {
                   this.$http.post('/api/message/send/mail', {
@@ -408,14 +266,12 @@
             this.message.content = CommonClass.replaceErrorMsg(this.message.content)
             this.message.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + this.message.content
             let errormsg = JSON.parse(JSON.stringify(this.message))
-            //dd
             this.$store.commit('pushMsg', errormsg)
             this.message.content = ''
           }
         }
       },
       scrollEvt(e) {
-
         let element = e.target;
         //스크롤이 없을때에도 스크롤 위치가 최상단이기 때문에 스크롤이 있는지 없는지 판단해야한다.
         if (element.scrollTop <= 0 && element.scrollHeight != element.clientHeight) {
@@ -426,7 +282,6 @@
           this.msgPreviewBool = false
         }
       },
-
       getMessage: function (wrapperEl) {
         this.cursorPoint.channel_id = this.$store.state.currentChannel.id
         this.$http.post('/api/message/getmsg', JSON.stringify(this.cursorPoint), {
@@ -480,7 +335,6 @@
         this.msgPreviewBool = false
       },
       initData() {
-        this.friends = []
         this.$store.state.isInviteMode = false
         this.$store.state.isSearchMode = false
         this.message.channel_id = this.getCurrentChannel.id
@@ -502,13 +356,6 @@
           CommonClass.byteLimit(this.stringByteLength)
         }
       },
-      TextbyFilter(content) {
-        const urlRegexp = new RegExp(/(http(s)?:\/\/|www.)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}([\/a-z0-9-%#?&=\w])+(\.[a-z0-9]{2,4}(\?[\/a-z0-9-%#?&=\w]+)*)*/gi)
-        if (urlRegexp.test(content) && this.$store.state.searchText == '') {
-          return "<a style='color: blue' href='" + content.replace(/(<([^>]+)>)/ig, '') + "' target='_blank'>" + content + "</a>"
-        }
-        return this.$options.filters.highlight(content, this.$store.state.searchText);
-      }
     },
     computed: {
       getCurrentChannel: function () {
@@ -544,17 +391,7 @@
         }
       }
     },
-    filters: {
-      highlight: function (stringToSearch, searchTerm) {
-        if (searchTerm === "") return stringToSearch;
-        var iQuery = new RegExp(searchTerm, "ig");
-        return stringToSearch
-          .toString()
-          .replace(iQuery, function (matchedText, a, b) {
-            return "<span class='highlight'>" + matchedText + "</span>";
-          });
-      }
-    }
+
 
   }
 </script>
