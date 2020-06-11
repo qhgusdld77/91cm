@@ -37,13 +37,6 @@
             </div>
           </b-collapse>
 
-          <!-- Users 메뉴 시작 -->
-          <a class="list-group-item">
-            <i class="im im-users"></i>
-            <span style="margin-left:20px;">{{channelUsers.length}} Users</span>
-          </a>
-          <!-- Users 메뉴 끝 -->
-
           <!-- 화상 채닝 메뉴 시작 -->
 
           <a class="list-group-item" v-b-toggle.video-chat>
