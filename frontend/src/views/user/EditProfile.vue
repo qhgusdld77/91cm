@@ -162,7 +162,7 @@
         this.$http.post('/api/user/update', this.user)
           .then(res => {
             if (res.data) {
-              this.$http.post('/api/file/upload/user/image', formData, {
+              this.$http.post('/api/file/upload/user/image', this.imageForm, {
                 headers: {
                   'Content-Type': 'multipart/form-data'
                 }
