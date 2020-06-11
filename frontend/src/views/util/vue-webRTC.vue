@@ -31,6 +31,7 @@
         </v-card>
       </v-col>
     </v-row>
+<!--    <p v-show="false">{{getVideoUsers}}</p>-->
   </div>
 </template>
 
@@ -44,6 +45,12 @@
       RTCMultiConnection
     },
     computed: {
+      // getVideoUsers: function(){
+      //   console.log(this.videoList.length)
+      //   // RSidebar.vue 의 화상채팅 사용자 수 데이터 넘기는 용
+      //   this.$eventBus.$emit('videoChatUsers',this.videoList.length)
+      //   return this.videoList.length
+      // },
       getVideoCols: function () {
         switch (this.videoList.length) {
           case 1:
@@ -111,7 +118,8 @@
         default: false
       },
     },
-    watch: {},
+    watch: {
+    },
     mounted() {
       let that = this;
       this.rtcmConnection = new RTCMultiConnection();
@@ -180,6 +188,7 @@
             that.$emit('opened-room', roomid);
           }
         });
+
       },
       leave() {
         this.rtcmConnection.attachStreams.forEach(function (localStream) {

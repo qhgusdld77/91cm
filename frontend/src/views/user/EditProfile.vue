@@ -106,8 +106,11 @@
         imageForm: null,
         imageUrl: '',
         nameState: null,
-        user: Object.assign({}, this.$store.state.currentUser)
+        user: {}
       }
+    },
+    activated() {
+      this.user=Object.assign({}, this.$store.state.currentUser)
     },
     methods: {
       addFile: function (uploadFiles) {
@@ -121,7 +124,8 @@
         }
         this.imageForm = new FormData();
         this.imageForm.append('file', uploadFiles[0])
-
+        const url = window.URL.createObjectURL(uploadFiles[0])
+        this.user.picture = url
       },
       attachFile: function (e) {
         this.addFile(e.target.files)
@@ -167,7 +171,7 @@
                   'Content-Type': 'multipart/form-data'
                 }
               }).then(res => {
-                this.user.picture = res.data
+                this.$store.state.currentUser.picture = res.data
               }).catch(error => {
                 this.$alertModal('error', '이미지 파일만 업로드 할 수 있습니다.')
               })

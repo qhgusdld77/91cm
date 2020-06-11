@@ -9,9 +9,7 @@ class CommonClass {
     content = content.replace(/&lt;\/p&gt;/gim, '</p>')
     return content
   }
-  
-  
-  
+
   replaceErrorMsg(originContent) {
     let array = originContent.split("\n")
     let content = ''

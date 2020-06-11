@@ -46,26 +46,20 @@
     props: ['msg','msgPreviewBool'],
     methods: {
       textbyFilter: function(content) {
-        const testRegexp = new RegExp(/<p>(.*?)<\/p>/g);
+        const tagConentRegexp = new RegExp(/<p>(.*?)<\/p>/g);
         const htmlTagRegexp = new RegExp(/(<([^>]+)>)/ig);
-        const urlRegexp = new RegExp(/(http(s)?:\/\/|www.)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}([\/a-z0-9-%#?&=\w])+(\.[a-z0-9]{2,4}(\?[\/a-z0-9-%#?&=\w]+)*)*/gi,)
-
-        // content.match(testRegexp).forEach(contentItem =>{
-        //   console.log(contentItem)
-        //   console.log(urlRegexp.test(contentItem))
-        // });
-
-        // 임시 코드
-        // 생각해봐야 할것 일반 택스트가 위고 링크가 아래 혹은 반대의 상황이 있을 수 있음
-        // 링크가 여러개 있을 수 있음
-        // 링크만 존재할 수 있음
-        if (urlRegexp.test(content) && this.$store.state.searchText == '') {
-          // url이 여러개 일때도 생각해서 코딩 match가 배열로 반환됨으로 여러개 일때는 match 배열에 다 들어가있을것으로 추측
-          let result =""
-          content.match(urlRegexp).forEach(url =>{
-            result+= "<a style='color: blue' href='" + url+ "' target='_blank'>" + url + "</a><br>"
-          })
-          return result+=content.replace(urlRegexp,'')
+        const urlRegexp = new RegExp(/(http(s)?:\/\/|www.)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}([\/a-z0-9-%#?&=\w])+(\.[a-z0-9]{2,4}(\?[\/a-z0-9-%#?&=\w]+)*)*/)
+        let result = '';
+        if (this.$store.state.searchText == ''){
+          content.match(tagConentRegexp).forEach(contentItem =>{
+            if (urlRegexp.test(contentItem)){
+              contentItem = contentItem.replace(htmlTagRegexp,'')
+              result +=  "<p><a style='color: blue' href='" + contentItem+ "' target='_blank'>" + contentItem + "</a></p>"
+            }else{
+              result += contentItem
+            }
+          });
+          return result
         }
         return this.$options.filters.highlight(content, this.$store.state.searchText);
       },
