@@ -273,7 +273,7 @@
   }
 </script>
 <style scoped>
-
+/* >>>는 deep selector  */
   >>>.v-badge__badge{
     color: #404E67 !important;
   }
