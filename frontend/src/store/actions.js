@@ -20,6 +20,17 @@ export default {
       console.error(error);
     })
   },
+  updateUserList: function (context) {
+    // console.log(currentChannel, 'updateUserList')
+    let currentChannel = context.state.currentChannel
+    if (currentChannel != null) {
+      axios.get('/api/user/channel/' + currentChannel.id)
+        .then(res => {
+          this.channelUsers = res.data
+          context.commit('setChannelUsers', res.data)
+        })
+    }
+  },
   // 현재 유저의 채널 리스트 가져오기
   channelList: async function (context) {
     await axios.get('/api/channel/list')

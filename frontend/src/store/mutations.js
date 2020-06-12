@@ -47,7 +47,7 @@ export default {
   },
   setIsVideoMode: function(state,payload){
     state.isVideoMode = payload
-  }
+  },
   
 
 

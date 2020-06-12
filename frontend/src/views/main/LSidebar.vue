@@ -57,7 +57,31 @@
               ></v-badge>
             </a>
             <div class="submenu-content">
-              <a style="cursor:default;" v-for="(user) in channelUsers" :key="user.email" class="menu-item"><span>{{ user.name }}</span></a>
+              <a style="cursor:default;display:flex; padding-left: 15px;" v-for="(user) in channelUsers" :key="user.email" class="menu-item verti-align" >
+                <div v-if="user.online">
+                  <v-badge 
+                    bottom
+                    color="cyan lighten-1"
+                    dot
+                    offset-x="10"
+                    offset-y="10"
+                  >
+                    <img class="avatar"  :src="user.picture">
+                  </v-badge> 
+                </div>
+                <div v-else>
+                  <img class="avatar"  :src="user.picture">
+                </div>
+                
+                <!-- <v-badge
+                  color="pink"
+                  dot
+                  inline
+                > -->
+                
+                  <span style="margin-left:15px;">{{ user.name }}</span>
+                <!-- </v-badge> -->
+              </a>
 
             </div>
           </div>
@@ -95,18 +119,19 @@
     props: ['modalObj'],
     watch: {
       currentChannel(newCurrentChannel, oldCurrentChannel) {
-        this.updateUserList(newCurrentChannel)
+        this.$store.dispatch('updateUserList')
       },
       syncChannelUser() {
-        this.updateUserList(this.$store.state.currentChannel)
+        // this.updateUserList(this.$store.state.currentChannel)
+        this.$store.dispatch('updateUserList')
       }
     },
     computed: {
       ...mapGetters({
         userChannelList: 'getUserChannelList',
         currentChannel: 'getCurrentChannel',
-        syncChannelUser: 'getSyncChannelUser'
-
+        syncChannelUser: 'getSyncChannelUser',
+        channelUsers: 'getChannelUsers'
       }),
     },
     name: 'LSidebar',
@@ -116,11 +141,12 @@
         nameState: null,
         channelmode: '',
         channelTitle: '',
-        channelUsers: [],
+        // channelUsers: [],
       }
     },
     created() {
-      this.updateUserList(this.currentChannel)
+      // this.updateUserList(this.currentChannel)
+      this.$store.dispatch('updateUserList')
     },
     mounted() {
       this.$eventBus.$on('useModal', res => {
@@ -171,15 +197,6 @@
           s.addClass("nav-collapsed-open"), a.show().slideUp(300, function () {
             $(this).css("display", "")
           }), s.removeClass("open")
-        }
-      },
-      updateUserList: function (currentChannel) {
-        if (currentChannel != null) {
-          this.$http.get('/api/user/channel/' + currentChannel.id)
-            .then(res => {
-              this.channelUsers = res.data
-              this.$store.commit('setChannelUsers', res.data)
-            })
         }
       },
       LSidebarClose: function () {
@@ -280,5 +297,24 @@
   .active-channel {
     background-color: white;
     color: black !important;
+  }
+  .avatar{
+    color: #4c5667;
+    font-weight: 600;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    display: inline-block;
+    background: #ced4da no-repeat center/cover;
+    position: relative;
+    vertical-align: bottom;
+    font-size: .875rem;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
 </style>

@@ -174,12 +174,7 @@
       }
       ,
       callComponent: function (component) {
-        console.log(component)
         this.$store.commit('getSelectComponent', component)
-        console.log('selectcom', this.$store.state.selectComponent == 'main')
-        console.log('selectcom', this.$store.state.selectComponent)
-        console.log('userchannel', this.$store.state.userChannelList[0] == null)
-        console.log('userchannel', this.$store.state.userChannelList[0])
       }
       ,
       LSidebarToggle: function () {

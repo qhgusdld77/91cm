@@ -3,7 +3,12 @@
     <div class="h-inherit" v-cloak @drop.prevent="dropFile" @dragover.prevent>
       <ul class="c-c-wrapper list-unstyled" @scroll="scrollEvt">
         <div v-for="msg in msgArray" :key="msg.id">
-          <MsgBox :msg="msg" :msgPreviewBool="msgPreviewBool" @scrollToEnd="scrollToEnd" @imgLoad="imgLoad"></MsgBox>
+          <MsgBox v-if="msg.sender!=null" :msg="msg" :msgPreviewBool="msgPreviewBool" @scrollToEnd="scrollToEnd" @imgLoad="imgLoad"></MsgBox>
+          <div class=" hori-align">
+            <v-chip v-if="msg.sender==null" class="ma-2" style="font-weight:bold;">
+              {{msg.content}}
+            </v-chip>
+          </div>
         </div>
       </ul>
       <a v-if="msgPreviewBool" @click="clickMsgPreview">
