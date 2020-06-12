@@ -9,13 +9,13 @@
           Screen Share
           <v-icon style="margin-left: 10px;">airplay</v-icon>
         </v-btn>
-        <v-btn color="blue-grey"
-               class="white--text"
-               @click="capture"
-        >
-          Capture
-          <v-icon style="margin-left: 10px;">add_photo_alternate</v-icon>
-        </v-btn>
+<!--        <v-btn color="blue-grey"-->
+<!--               class="white&#45;&#45;text"-->
+<!--               @click="capture"-->
+<!--        >-->
+<!--          Capture-->
+<!--          <v-icon style="margin-left: 10px;">add_photo_alternate</v-icon>-->
+<!--        </v-btn>-->
       </div>
     </v-row>
     <v-row justify="center" align="center" no-gutters style="height: 90%;">
@@ -44,6 +44,9 @@
     components: {
       RTCMultiConnection
     },
+    deactivated() {
+      console.log('deactivated vue-webRTC')
+      },
     computed: {
       // getVideoUsers: function(){
       //   console.log(this.videoList.length)
