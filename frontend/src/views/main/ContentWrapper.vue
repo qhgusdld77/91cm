@@ -121,7 +121,8 @@
         oldScrollHeight: 0,
         wrapperEl: null,
         msgPreviewBool: false,
-        getmsgBool: false,
+        isGetMsgForPreview: false,
+        isGetMsgForImgLoad: false,
         selectedUserEmail: ''
       }
     },
@@ -153,8 +154,11 @@
     methods: {
       imgLoad() {
         this.oldScrollHeight = this.wrapperEl.scrollHeight
-        if (!this.msgPreviewBool && this.isScrollAtEnd(this.wrapperEl)) {
+        if (!this.msgPreviewBool && !this.isGetMsgForImgLoad) {
           this.scrollToEnd(true)
+        }
+        if(this.isGetMsgForImgLoad){
+          this.isGetMsgForImgLoad = false
         }
       },
       inviteToggle: function (e) {
@@ -306,7 +310,8 @@
               this.oldScrollHeight = wrapperEl.scrollHeight
             })
           }
-          this.getmsgBool = true
+          this.isGetMsgForPreview = true
+          this.isGetMsgForImgLoad = true
         })
       },
       scrollToEnd(bool) {
@@ -374,8 +379,8 @@
       },
       msgArray: function () {
         // 스크롤을 최상단으로 올려 메시지를 가져올 때 실행되는 것을 막기 위한 if문
-        if (this.getmsgBool) {
-          this.getmsgBool = false
+        if (this.isGetMsgForPreview) {
+          this.isGetMsgForPreview = false
         } else { //메세지 미리보기(preview) 실행
           if (!this.isScrollAtEnd(this.wrapperEl) && this.msgArray.length > 0) {
             let copymsg = JSON.parse(JSON.stringify(this.msgArray[this.msgArray.length - 1]))
