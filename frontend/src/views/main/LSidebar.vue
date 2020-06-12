@@ -53,13 +53,13 @@
                 color="#bcc8d8"
                 overlap
                 left
-                content="1"
+                :content="channelUsers.length"
               ></v-badge>
             </a>
             <div class="submenu-content">
               <a style="cursor:default;display:flex; padding-left: 15px;" v-for="(user) in channelUsers" :key="user.email" class="menu-item verti-align" >
                 <div v-if="user.online">
-                  <v-badge 
+                  <v-badge
                     bottom
                     color="cyan lighten-1"
                     dot
@@ -67,18 +67,18 @@
                     offset-y="10"
                   >
                     <img class="avatar"  :src="user.picture">
-                  </v-badge> 
+                  </v-badge>
                 </div>
                 <div v-else>
                   <img class="avatar"  :src="user.picture">
                 </div>
-                
+
                 <!-- <v-badge
                   color="pink"
                   dot
                   inline
                 > -->
-                
+
                   <span style="margin-left:15px;">{{ user.name }}</span>
                 <!-- </v-badge> -->
               </a>
