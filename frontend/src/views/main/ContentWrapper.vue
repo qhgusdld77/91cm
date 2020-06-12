@@ -62,17 +62,17 @@
               v-model="progressValue"
               striped
             ></v-progress-linear>
-<!--            <span style="position: absolute;right: 108px;"> {{ stringByteLength }} / 30000Byte</span>-->
+            <!--            <span style="position: absolute;right: 108px;"> {{ stringByteLength }} / 30000Byte</span>-->
           </div>
         </div>
-<!--        일반 채팅 모드 일때 아이콘-->
+        <!--        일반 채팅 모드 일때 아이콘-->
         <v-btn class="mx-2" fab dark large color="cyan" style="margin-bottom: 15px;"
-               v-if="!$store.state.isVideoMode" @click="send">
+               v-if="!$store.state.isVideoMode" @click="send($event)">
           <i class="im im-paperplane"></i>
         </v-btn>
-<!--        화상 채팅 모드 일때 아이콘-->
+        <!--        화상 채팅 모드 일때 아이콘-->
         <v-btn class="mx-2" fab dark small color="cyan" style="margin-bottom: 25px;"
-               v-else @click="send">
+               v-else @click="send($event)">
           <i class="im im-paperplane"></i>
         </v-btn>
       </v-row>
@@ -136,7 +136,7 @@
       })
       this.$eventBus.$on('leaveChannelMsg', () => {
         this.message.content = this.$store.state.currentUser.name + '님이 나가셨습니다.'
-        this.send(null,true)
+        this.send(null, true)
       })
     },
     updated() {
@@ -231,20 +231,22 @@
           this.$alertModal('error', '폴더는 업로드 할 수 없습니다.')
         })
       },
-      send: async function (e,isSysMsg) {
+      send: async function (e, isSysMsg) {
         if (e != null) {
           e.preventDefault()
         }
-        if(isSysMsg){
+        if (this.message.content == '') {
+          return;
+        }
+        if (isSysMsg) {
           this.message.sender = null
-        }else{
+        } else {
           this.message.sender = this.$store.state.currentUser.email
           this.message.user = this.$store.state.currentUser
         }
         this.message.channel_id = this.$store.state.currentChannel.id
         if (CommonClass.byteLimit(this.stringByteLength)) {
           if (this.$store.state.stompClient && this.$store.state.stompClient.connected) {
-            console.log("message sned")
             this.$store.state.stompClient.send("/pub/chat/message", JSON.stringify(this.message), {})
             this.message.content = ''
             this.scrollToEnd(true)
@@ -404,19 +406,19 @@
     }
   }
 
-/* .v-chip{
-  padding: 0 30px;
-} */
-.theme--light.v-chip:hover:before {
+  /* .v-chip{
+    padding: 0 30px;
+  } */
+  .theme--light.v-chip:hover:before {
     opacity: 0;
-}
+  }
 
-.v-chip.v-size--default{
-  min-height: 32px;
-  height: auto;
-}
+  .v-chip.v-size--default {
+    min-height: 32px;
+    height: auto;
+  }
 
-.v-chip{
-  white-space: normal;
-}
+  .v-chip {
+    white-space: normal;
+  }
 </style>
