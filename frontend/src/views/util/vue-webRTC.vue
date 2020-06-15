@@ -173,7 +173,7 @@
               break;
             }
           }
-        }, 1000);
+        }, 2000);
 
         that.$emit('joined-room', stream.streamid);
       };
