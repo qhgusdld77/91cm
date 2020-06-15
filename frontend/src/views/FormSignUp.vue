@@ -10,6 +10,7 @@
              class="img-fluid mb-3 d-none d-md-block">
         <h1>91CM Login</h1>
         <p class="font-italic text-muted mb-0">협업 메신저</p>
+        <a class="d-none d-md-block" href="http://www.freepik.com">Designed by pikisuperstar / Freepik</a>
         <!--        <p class="font-italic text-muted">Snippet By <a href="https://bootstrapious.com" class="text-muted">-->
         <!--          <u>Bootstrapious</u></a>-->
         <!--        </p>-->
@@ -17,81 +18,184 @@
 
       <!-- Registeration Form -->
       <div class="col-md-7 col-lg-6 ml-auto margincustom">
-        <form action="#">
           <div class="row mycustom">
-
+            <input type ="hidden" name="_csrf" :value="csrfToken"/>
             <!-- Email -->
             <div class="input-group col-lg-12 mb-4">
               <div class="input-group-prepend">
                             <span class="input-group-text bg-white px-4 border-md border-right-0">
-                              <i class="im im-user-male"></i>
+                              <v-icon>person</v-icon>
                             </span>
               </div>
-              <input id="firstName" type="text" name="email" placeholder="Id"
-                     class="form-control bg-white border-left-0 border-md">
+              <input id="firstName" type="text" placeholder="Email" @blur="emailDubleCheck"
+                     class="form-control bg-white border-left-0 border-md" v-model="email">
+            </div>
+            <div class="input-group col-lg-12 mb-4">
+              <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <v-icon>person</v-icon>
+                            </span>
+              </div>
+              <input  type="text" placeholder="Name"
+                     class="form-control bg-white border-left-0 border-md" v-model="name">
             </div>
             <!-- Password -->
             <div class="input-group col-lg-12 mb-4">
               <div class="input-group-prepend">
                             <span class="input-group-text bg-white px-4 border-md border-right-0">
-                                <i class="im im-key"></i>
+                               <v-icon>lock</v-icon>
                             </span>
               </div>
-              <input id="password" type="password" name="password" placeholder="Password"
-                     class="form-control bg-white border-left-0 border-md">
+              <input  type="password" placeholder="Password" @blur="checkPassword"
+                     class="form-control bg-white border-left-0 border-md" v-model="password1">
             </div>
+
+            <div class="input-group col-lg-12 mb-4">
+              <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                               <v-icon>lock</v-icon>
+                            </span>
+              </div>
+              <input type="password" placeholder="Password" @blur="checkPassword"
+                     class="form-control bg-white border-left-0 border-md" v-model="password2">
+            </div>
+            <div class="input-group col-lg-12 mb-4">
+              <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                              <v-icon>phone</v-icon>
+                            </span>
+              </div>
+              <input type="text" placeholder="Phone" @keyup="phoneFormatter"
+                     class="form-control bg-white border-left-0 border-md" v-model="phone">
+            </div>
+
+            
 
 
             <!-- Submit Button -->
-            <div class="form-group col-lg-12 mx-auto mb-0">
-              <a href="#" class="btn btn-primary btn-block py-2">
-                <span class="font-weight-bold">로그인</span>
-              </a>
+            <div class="form-group col-lg-12 mx-auto mb-0" >
+              <button class="btn btn-primary btn-block py-2" @click="formSignUp" style="height:auto;">
+                <span class="font-weight-bold" style="color: white;">회원가입</span>
+              </button>
             </div>
-
-            <div class="social-wrapper">
-              <a class="logo-wrapper" href="/oauth2/authorization/github"><img class="social-logo"
-                                                                               src="../assets/images/github_logo.png"></a>
-              <a class="logo-wrapper" href="/oauth2/authorization/google"><img class="social-logo"
-                                                                               src="../assets/images/google_logo.png"></a>
-              <a class="logo-wrapper" href="/oauth2/authorization/naver"><img class="social-logo"
-                                                                              src="../assets/images/naver_logo.png"></a>
-              <!--        동작 에러 인해 주석처리-->
-              <!--        <a href="/oauth2/authorization/kakao"><img class="social-logo" src="../assets/images/kakao_logo.png"></a>-->
-            </div>
-
-            <!-- Already Registered -->
-            <br><br><br>
-            <div class="text-center w-100">
-              <p class="text-muted font-weight-bold">회원가입하기 <a href="#" class="text-primary ml-2">Sign Up</a>
-              </p>
-            </div>
-
 
           </div>
-        </form>
       </div>
     </div>
   </div>
 </template>
-
 <script>
-  // For Demo Purpose [Changing input group text on focus]
-  // $(function () {
-  //   $('input, select').on('focus', function () {
-  //     $(this).parent().find('.input-group-text').css('border-color', '#80bdff');
-  //   });
-  //   $('input, select').on('blur', function () {
-  //     $(this).parent().find('.input-group-text').css('border-color', '#ced4da');
-  //   });
-  // });
+  import router from '../router'
+  import axios from 'axios'
 
   export default {
-    name: "FormSignUp"
+    name: 'Login',
+    data() {
+      return {
+        email: '',
+        password1: '',
+        password2: '',
+        name:'',
+        phone:'',
+        csrfToken: '',
+        doubleCheck: false,
+        passwordCheck: false
+      }
+    },
+    created(){
+      let token = document.cookie.match('(^|;) ?' + 'XSRF-TOKEN' + '=([^;]*)(;|$)')
+      this.csrfToken = token[2]
+    },
+    methods: {
+      checkPassword(){
+          if(this.password2!='' && this.password1!=''){
+            if(this.password1 == this.password2){
+              this.passwordCheck = true
+            }else{
+              this.passwordCheck = false
+            }
+          }
+      },
+      emailDubleCheck(){
+        if(this.emailValidator()){
+          axios.post('/api/user/check',{email: this.email},{
+            headers: {
+                  'Content-Type': 'application/json'
+            }
+          }).then(res=>{
+          if(res.data){
+            this.doubleCheck = true
+            this.$alertModal('alert', '사용가능한 이메일입니다.')
+          }else{
+            this.doubleCheck = false
+            this.$alertModal('error', '중복되는 이메일이 존재합니다.')
+          }
+        })
+        }else{
+          this.$alertModal('error', '올바른 이메일 주소가 아닙니다.')
+        }
+      },
+      formSignUp(){
+
+        let user = {
+          email : this.email,
+          password : this.password1,
+          phone : this.phone,
+          name: this.name
+        }
+        if(this.email == '' || this.password1 == '' || this.password2 == '' 
+                || this.phone == '' || this.name == ''){
+            this.$alertModal('error', '모든 항목을 채워주세요.')  
+            return
+        }
+        let phoneValidator = this.phoneValidator()
+        if(this.doubleCheck && this.passwordCheck && phoneValidator){
+          axios.post('/api/user/formsignup',user).then(res=>{
+          this.email = ''
+          this.password1 = ''
+          this.password2 = ''
+          this.phone = ''
+          this.name = ''
+          this.$router.replace('/')
+        })
+        }else{
+          if(!this.doubleCheck){
+            this.$alertModal('error', '이메일 중복확인을 해주세요.')
+          }else if(!this.passwordCheck){
+            this.$alertModal('error', '비밀번호가 일치하지 않습니다.')
+          }else if(!phoneValidator){
+            this.$alertModal('error', '올바른 번호가 아닙니다.')
+          }
+        }
+      },
+      phoneFormatter: function () {
+        this.phone = this.phone.replace(/[^0-9]/g, "") // 숫자만 추출 되도록하는 정규식
+        this.phone = this.phone.replace(/(^02.{0}|^01.{1}|[0-9]{4})([0-9]+)([0-9]{4})/, "$1-$2-$3");// 휴대폰번호 자동 하이픈 넣어주는 정규식
+      },
+      emailValidator(){
+        let regExpEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
+        return regExpEmail.test(this.email)
+      },
+      phoneValidator(){
+        let regExpPhone = /^\d{3}-\d{3,4}-\d{4}$/
+        return regExpPhone.test(this.phone)
+      }
+    },
+    mounted() {
+    }
   }
 </script>
-
 <style scoped>
+
+  .input-group .input-group-prepend .input-group-text {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    height: inherit;
+    border-color: #ced4da;
+    padding-left: 15px;
+    font-size: 14px;
+  }
+
   .social-logo {
     width: 50px;
     height: 50px;
@@ -124,7 +228,7 @@
     }
 
     .margincustom {
-      margin-top: 0px;
+      margin-top: 80px;
     }
   }
 
@@ -135,7 +239,6 @@
   * ==========================================
   *
   */
-
   .border-md {
     border-width: 2px;
   }
@@ -144,7 +247,6 @@
     background: #405D9D;
     border: none;
   }
-
 
   .btn-facebook:hover, .btn-facebook:focus {
     background: #314879;
@@ -159,7 +261,6 @@
     background: #1799e4;
   }
 
-
   /*
   *
   * ==========================================
@@ -167,7 +268,6 @@
   * ==========================================
   *
   */
-
   .form-control:not(select) {
     padding: 1.5rem 0.5rem;
   }
@@ -186,5 +286,4 @@
     border-color: #ced4da;;
     outline: none;
   }
-
 </style>
