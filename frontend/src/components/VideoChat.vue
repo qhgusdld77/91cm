@@ -2,6 +2,7 @@
   <VueWebRTC
     ref="webrtc"
     :room-id="$store.state.currentChannel.id"
+    :socket-u-r-l="'https://91cm.nineonesoft.com:9001/'"
   ></VueWebRTC>
 </template>
 
