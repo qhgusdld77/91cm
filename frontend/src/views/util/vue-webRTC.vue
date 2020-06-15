@@ -94,7 +94,7 @@
       },
       socketURL: {
         type: String,
-        default: 'https://localhost:9001/'
+        default: 'https://rtcmulticonnection.herokuapp.com:443/'
       },
       cameraHeight: {
         type: [Number, String],
