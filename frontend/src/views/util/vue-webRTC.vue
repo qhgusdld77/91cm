@@ -9,13 +9,13 @@
           Screen Share
           <v-icon style="margin-left: 10px;">airplay</v-icon>
         </v-btn>
-<!--        <v-btn color="blue-grey"-->
-<!--               class="white&#45;&#45;text"-->
-<!--               @click="capture"-->
-<!--        >-->
-<!--          Capture-->
-<!--          <v-icon style="margin-left: 10px;">add_photo_alternate</v-icon>-->
-<!--        </v-btn>-->
+        <!--        <v-btn color="blue-grey"-->
+        <!--               class="white&#45;&#45;text"-->
+        <!--               @click="capture"-->
+        <!--        >-->
+        <!--          Capture-->
+        <!--          <v-icon style="margin-left: 10px;">add_photo_alternate</v-icon>-->
+        <!--        </v-btn>-->
       </div>
     </v-row>
     <v-row justify="center" align="center" no-gutters style="height: 90%;">
@@ -31,7 +31,7 @@
         </v-card>
       </v-col>
     </v-row>
-<!--    <p v-show="false">{{getVideoUsers}}</p>-->
+    <!--    <p v-show="false">{{getVideoUsers}}</p>-->
   </div>
 </template>
 
@@ -44,9 +44,6 @@
     components: {
       RTCMultiConnection
     },
-    deactivated() {
-      console.log('deactivated vue-webRTC')
-      },
     computed: {
       // getVideoUsers: function(){
       //   console.log(this.videoList.length)
@@ -121,15 +118,25 @@
         default: true
       },
     },
-    watch: {
-    },
+    watch: {},
     mounted() {
       let that = this;
       this.rtcmConnection = new RTCMultiConnection();
       this.rtcmConnection.socketURL = this.socketURL;
       this.rtcmConnection.iceServers.push({
-        urls: this.iceServer
+        urls: 'stun:stun.1.google.com:19302'
       });
+      this.rtcmConnection.iceServer.push({
+        url: 'turn:numb.viagenie.ca',
+        credential: 'muazkh',
+        username: 'webrtc@live.com'
+      });
+      this.rtcmConnection.codecs.video = 'H264';
+      this.rtcmConnection.codecs.audio = 'PCMA/U';
+      // this.rtcmConnection.codecs = {
+      //   audio: 'PCMA/U',
+      //   video: 'H264'
+      // };
       this.rtcmConnection.autoCreateMediaElement = false;
       this.rtcmConnection.enableLogs = this.enableLogs;
       this.rtcmConnection.session = {
@@ -140,6 +147,7 @@
         OfferToReceiveAudio: this.enableAudio,
         OfferToReceiveVideo: this.enableVideo
       };
+
       this.rtcmConnection.onstream = function (stream) {
         let found = that.videoList.find(video => {
           return video.id === stream.streamid
@@ -178,6 +186,21 @@
         that.videoList = newList;
         that.$emit('left-room', stream.streamid);
       };
+      this.rtcmConnection.onUserStatusChanged = function (event) {
+        console.log(event.status)
+      }
+      this.rtcmConnection.onPeerStateChanged = function (state) {
+        console.log(state)
+      }
+      // this.rtcmConnection.checkPresence(this.roomId, function (isRoomExist, roomid, error) {
+      //   console.log("checkPresence : ",isRoomExist, roomid, error)
+      //   if (isRoomExist === true){
+      //     that.join()
+      //   }else{
+      //     that.join()
+      //   }
+      // });
+
     },
     methods: {
       onResize() {
@@ -191,7 +214,9 @@
             that.$emit('opened-room', roomid);
           }
           that.rtcmConnection.socket.on('disconnect', function (message) {
-            alert(message)
+            // alert(message)
+            console.log('socket disconnect : '+message)
+            that.join()
           })
         });
 

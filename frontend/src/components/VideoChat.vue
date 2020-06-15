@@ -26,7 +26,6 @@
     },
     mounted() {
       $('.nav-toggle').click()
-
       function a(e, s) {
         e.children(".submenu-content").show().slideUp(200, function () {
           i(this).css("display", ""), i(this).find(".menu-item").removeClass("is-shown"), e.removeClass("open"), s && s()
