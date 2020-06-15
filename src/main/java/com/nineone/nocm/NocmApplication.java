@@ -38,6 +38,10 @@ public class NocmApplication {
         tomcat.addAdditionalTomcatConnectors(createSslConnector());
         return tomcat;
     }
+    
+//    @Bean public RequestContextListener requestContextListener(){
+//        return new RequestContextListener();
+//    } 
 
     private Connector createSslConnector() {
         Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");

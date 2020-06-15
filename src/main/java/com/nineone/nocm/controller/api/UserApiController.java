@@ -76,7 +76,8 @@ public class UserApiController {
             return false;
         }
     }
-
+    
+    
     @PostMapping("/update")
     public boolean userInfoUpdate(@RequestBody User user) {
         if (userService.userinfoUpdate(user)) {
@@ -97,6 +98,20 @@ public class UserApiController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @RequestMapping(value="/formsignup", method=RequestMethod.POST)
+    public boolean formSignUp(@RequestBody User user) {
+    	if(userService.insertUser(user)) {
+    		authoritiesRepository.insertAuthority(Authorities.builder()
+                    .member_email(user.getEmail())
+                    .roles_authority("ROLE_ANON")
+                    .build());
+    		messagingTemplate.convertAndSend("/sub/sync/info", "userList");
+    		return true;
+    	}  else {
+            return false;
+        }
+    }
+    
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     @Transactional
     public boolean signup(@RequestBody User user, Authentication authentication, HttpSession httpsession) {
