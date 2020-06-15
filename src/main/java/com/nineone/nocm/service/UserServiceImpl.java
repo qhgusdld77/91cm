@@ -49,11 +49,6 @@ public class UserServiceImpl implements UserService,UserDetailsService {
     // 추후 Form 로그인 용
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    	HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String password = request.getParameter("password"); // get from request parameter
-        log.info(password+"=======================================");
-        BCryptPasswordEncoder b = new BCryptPasswordEncoder();
-        log.info(b.encode(password)+"=======================================");
     	User user = userRepository.getUserfindByEmail(email);
     	if(user == null) {
     		return null;

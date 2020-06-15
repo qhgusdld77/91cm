@@ -40,8 +40,6 @@ public class WebsocketEventListener {
 		sessions.put(userEmail, headerAccessor.getSessionId());
 		messagingTemplate.convertAndSend("/sub/sync/info", "getChannelUserList");
 		log.info(event.getUser()+"    ... connection");
-		
-		//map쓰는 이유는 삭제할 때 list는 뭔가 오래 걸릴것 같기때문에...
 	}
 //	
 	@EventListener
