@@ -123,18 +123,15 @@
       let that = this;
       this.rtcmConnection = new RTCMultiConnection();
       this.rtcmConnection.socketURL = this.socketURL;
-      this.rtcmConnection.iceProtocols = {
-        udp: true,
-        tcp: true
-      }
+
       this.rtcmConnection.iceServers.push({
-        urls: ['stun:stun4.l.google.com:19302','stun:stun2.l.google.com:19302']
+        urls: 'stun:stun4.l.google.com:19302'
       });
-      this.rtcmConnection.iceServer.push({
-        url: 'turn:numb.viagenie.ca',
-        credential: 'muazkh',
-        username: 'webrtc@live.com'
-      });
+
+      // this.rtcmConnection.iceProtocols = {
+      //   udp: true,
+      //   tcp: true
+      // }
       //this.rtcmConnection.codecs.video = 'H264';
       //this.rtcmConnection.codecs.audio = 'PCMA/U';
       // this.rtcmConnection.codecs = {
