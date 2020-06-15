@@ -58,4 +58,11 @@ public class UserRepositoryImpl implements UserRepository {
 
 
 
+//	@Override
+//	public boolean isNotExistEmail(String email) {
+//		return sqlSession.selectOne(namespace + ".isNotExistEmail", email);
+//	}
+
+
+
 }

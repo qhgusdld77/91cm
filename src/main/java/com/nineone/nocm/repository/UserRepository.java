@@ -14,4 +14,5 @@ public interface UserRepository {
 	User getUserfindById(String email);
     List<User> getAllUserList();
     User getUserfindByEmail(String email);
+//    boolean isNotExistEmail(String email);
 }

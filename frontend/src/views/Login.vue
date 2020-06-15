@@ -18,9 +18,9 @@
 
       <!-- Registeration Form -->
       <div class="col-md-7 col-lg-6 ml-auto margincustom">
-        <form action="#">
+        <form action="/login" method="post" id="loginFrom" >
           <div class="row mycustom">
-
+            <input type ="hidden" name="_csrf" :value="csrfToken"/>
             <!-- Email -->
             <div class="input-group col-lg-12 mb-4">
               <div class="input-group-prepend">
@@ -29,7 +29,7 @@
                                 d="M20.822 18.096c-3.439-.794-6.64-1.49-5.09-4.418 4.72-8.912 1.251-13.678-3.732-13.678-5.082 0-8.464 4.949-3.732 13.678 1.597 2.945-1.725 3.641-5.09 4.418-3.073.71-3.188 2.236-3.178 4.904l.004 1h23.99l.004-.969c.012-2.688-.092-4.222-3.176-4.935z"/></svg>
                             </span>
               </div>
-              <input id="firstName" type="text" name="email" placeholder="Id"
+              <input id="firstName" type="text" name="email" placeholder="Email"
                      class="form-control bg-white border-left-0 border-md" v-model="userid">
             </div>
             <!-- Password -->
@@ -46,10 +46,10 @@
 
 
             <!-- Submit Button -->
-            <div class="form-group col-lg-12 mx-auto mb-0">
-              <a class="btn btn-primary btn-block py-2">
+            <div class="form-group col-lg-12 mx-auto mb-0" >
+              <button class="btn btn-primary btn-block py-2" type="submit">
                 <span class="font-weight-bold" style="color: white;">로그인</span>
-              </a>
+              </button>
             </div>
 
             <div class="social-wrapper">
@@ -66,7 +66,7 @@
             <!-- Already Registered -->
             <br><br><br>
             <div class="text-center w-100">
-              <p class="text-muted font-weight-bold">회원가입하기 <a href="#" class="text-primary ml-2">Sign Up</a>
+              <p class="text-muted font-weight-bold">회원가입하기 <a href="/formSignUp" class="text-primary ml-2">Sign Up</a>
               </p>
             </div>
 
@@ -86,10 +86,18 @@
     data() {
       return {
         userid: '',
-        password: ''
+        password: '',
+        csrfToken: '',
+
       }
     },
-    methods: {},
+    created(){
+      let token = document.cookie.match('(^|;) ?' + 'XSRF-TOKEN' + '=([^;]*)(;|$)')
+      console.log(token[2])
+      this.csrfToken = token[2]
+    },
+    methods: {
+    },
     mounted() {
     }
   }

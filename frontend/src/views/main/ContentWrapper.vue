@@ -153,7 +153,9 @@
     },
     methods: {
       imgLoad() {
+        // 문제 있으면 아래 코드 지우기..
         this.oldScrollHeight = this.wrapperEl.scrollHeight
+        
         if (!this.msgPreviewBool && !this.isGetMsgForImgLoad) {
           this.scrollToEnd(true)
         }

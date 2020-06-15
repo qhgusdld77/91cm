@@ -11,6 +11,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.web.context.request.RequestContextListener;
 
 @EnableAspectJAutoProxy
 @ServletComponentScan
@@ -38,6 +39,10 @@ public class NocmApplication {
         tomcat.addAdditionalTomcatConnectors(createSslConnector());
         return tomcat;
     }
+    
+    @Bean public RequestContextListener requestContextListener(){
+        return new RequestContextListener();
+    } 
 
     private Connector createSslConnector() {
         Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");

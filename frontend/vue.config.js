@@ -31,6 +31,14 @@ module.exports = {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
         }
+      },
+      '/login':{
+        target: 'https://localhost:9191',
+        changeOrigin: true,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
+        }
       }
     }
   },
