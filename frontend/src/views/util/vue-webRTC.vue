@@ -190,6 +190,9 @@
           if (isRoomExist === false && that.rtcmConnection.isInitiator === true) {
             that.$emit('opened-room', roomid);
           }
+          that.rtcmConnection.socket.on('disconnect', function (message) {
+            alert(message)
+          })
         });
 
       },
