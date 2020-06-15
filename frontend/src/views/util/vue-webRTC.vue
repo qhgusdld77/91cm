@@ -118,7 +118,7 @@
       },
       enableLogs: {
         type: Boolean,
-        default: false
+        default: true
       },
     },
     watch: {
