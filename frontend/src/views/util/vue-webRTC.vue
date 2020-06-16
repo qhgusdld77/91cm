@@ -19,17 +19,19 @@
       </div>
     </v-row>
     <v-row justify="center" align="center" no-gutters style="height: 90%;">
-      <v-col :cols="getVideoCols" v-for="(item,index) in videoList" :key="index" style="margin-top: 0px; padding: 5px;">
-        <v-card class="d-inline" flat tile>
-          <v-card
-            v-bind:video="item"
-            v-bind:key="item.id"
-            class="video-item">
-            <video controls autoplay playsinline ref="videos" :muted="item.muted"
-                   :id="item.id" style="max-width:100%;"></video>
+      <draggable v-model="videoList" style="display: flex; flex-wrap: wrap;" @ended="setTimeout">
+        <v-col :cols="getVideoCols" v-for="(item,index) in videoList" :key="item" style="margin-top: 0px; padding: 5px;">
+          <v-card class="d-inline" flat tile>
+            <v-card
+              v-bind:video="item"
+              v-bind:key="item.id"
+              class="video-item">
+              <video controls autoplay playsinline ref="videos" :muted="item.muted"
+                     :id="item.id" style="max-width:100%;"></video>
+            </v-card>
           </v-card>
-        </v-card>
-      </v-col>
+        </v-col>
+      </draggable>
     </v-row>
     <!--    <p v-show="false">{{getVideoUsers}}</p>-->
   </div>
@@ -37,12 +39,14 @@
 
 <script>
   import RTCMultiConnection from 'rtcmulticonnection';
+  import draggable from "vuedraggable";
 
   require('adapterjs');
   export default {
     name: "vue-webRTC",
     components: {
-      RTCMultiConnection
+      RTCMultiConnection,
+      draggable
     },
     computed: {
       // getVideoUsers: function(){
@@ -209,6 +213,14 @@
 
     },
     methods: {
+      setTimeout : function () {
+        for (var i = 0, len = that.$refs.videos.length; i < len; i++) {
+          if (that.$refs.videos[i].id === stream.streamid) {
+            that.$refs.videos[i].srcObject = stream.stream;
+            break;
+          }
+        }
+      },
       onResize() {
         this.windowSize = {x: window.innerWidth, y: window.innerHeight}
         console.log(this.windowSize)
