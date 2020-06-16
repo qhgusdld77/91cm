@@ -41,7 +41,7 @@ create table message(
 id int unsigned  primary key auto_increment not null,
 channel_id int unsigned not null,
 content text,
-sender varchar(100) not null,
+sender varchar(100) DEFAULT NULL,
 send_date datetime not null default CURRENT_TIMESTAMP
 );
 

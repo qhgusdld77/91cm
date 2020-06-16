@@ -69,6 +69,9 @@
     },
     methods: {
       send: function () {
+        if (this.message == ''){
+          return;
+        }
         this.$store.state.stompClient.send('/sub/sync/info', null, {noticeMsg: this.message})
         this.message = ''
       }

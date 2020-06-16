@@ -23,5 +23,6 @@ export default {
   isSmallWidth:false,
   isCreateListActive : false,
   msgArray: [],
-  isVideoMode: false
+  isVideoMode: false,
+  channelModal:false
 }

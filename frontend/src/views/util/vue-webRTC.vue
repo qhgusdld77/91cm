@@ -9,13 +9,13 @@
           Screen Share
           <v-icon style="margin-left: 10px;">airplay</v-icon>
         </v-btn>
-        <v-btn color="blue-grey"
-               class="white--text"
-               @click="capture"
-        >
-          Capture
-          <v-icon style="margin-left: 10px;">add_photo_alternate</v-icon>
-        </v-btn>
+        <!--        <v-btn color="blue-grey"-->
+        <!--               class="white&#45;&#45;text"-->
+        <!--               @click="capture"-->
+        <!--        >-->
+        <!--          Capture-->
+        <!--          <v-icon style="margin-left: 10px;">add_photo_alternate</v-icon>-->
+        <!--        </v-btn>-->
       </div>
     </v-row>
     <v-row justify="center" align="center" no-gutters style="height: 90%;">
@@ -31,6 +31,7 @@
         </v-card>
       </v-col>
     </v-row>
+    <!--    <p v-show="false">{{getVideoUsers}}</p>-->
   </div>
 </template>
 
@@ -44,6 +45,12 @@
       RTCMultiConnection
     },
     computed: {
+      // getVideoUsers: function(){
+      //   console.log(this.videoList.length)
+      //   // RSidebar.vue 의 화상채팅 사용자 수 데이터 넘기는 용
+      //   this.$eventBus.$emit('videoChatUsers',this.videoList.length)
+      //   return this.videoList.length
+      // },
       getVideoCols: function () {
         switch (this.videoList.length) {
           case 1:
@@ -108,7 +115,7 @@
       },
       enableLogs: {
         type: Boolean,
-        default: false
+        default: true
       },
     },
     watch: {},
@@ -116,9 +123,26 @@
       let that = this;
       this.rtcmConnection = new RTCMultiConnection();
       this.rtcmConnection.socketURL = this.socketURL;
+      this.rtcmConnection.iceServers = [];
       this.rtcmConnection.iceServers.push({
-        urls: this.iceServer
+        urls: 'stun:stun4.l.google.com:19302'
       });
+      this.rtcmConnection.iceServers.push({
+        url: 'turn:numb.viagenie.ca',
+        credential: 'muazkh',
+        username: 'webrtc@live.com'
+      });
+
+      // this.rtcmConnection.iceProtocols = {
+      //   udp: true,
+      //   tcp: true
+      // }
+      //this.rtcmConnection.codecs.video = 'H264';
+      //this.rtcmConnection.codecs.audio = 'PCMA/U';
+      // this.rtcmConnection.codecs = {
+      //   audio: 'PCMA/U',
+      //   video: 'H264'
+      // };
       this.rtcmConnection.autoCreateMediaElement = false;
       this.rtcmConnection.enableLogs = this.enableLogs;
       this.rtcmConnection.session = {
@@ -129,6 +153,7 @@
         OfferToReceiveAudio: this.enableAudio,
         OfferToReceiveVideo: this.enableVideo
       };
+
       this.rtcmConnection.onstream = function (stream) {
         let found = that.videoList.find(video => {
           return video.id === stream.streamid
@@ -153,7 +178,7 @@
               break;
             }
           }
-        }, 1000);
+        }, 2000);
 
         that.$emit('joined-room', stream.streamid);
       };
@@ -167,6 +192,21 @@
         that.videoList = newList;
         that.$emit('left-room', stream.streamid);
       };
+      this.rtcmConnection.onUserStatusChanged = function (event) {
+        console.log(event.status)
+      }
+      this.rtcmConnection.onPeerStateChanged = function (state) {
+        console.log(state)
+      }
+      // this.rtcmConnection.checkPresence(this.roomId, function (isRoomExist, roomid, error) {
+      //   console.log("checkPresence : ",isRoomExist, roomid, error)
+      //   if (isRoomExist === true){
+      //     that.join()
+      //   }else{
+      //     that.join()
+      //   }
+      // });
+
     },
     methods: {
       onResize() {
@@ -179,7 +219,13 @@
           if (isRoomExist === false && that.rtcmConnection.isInitiator === true) {
             that.$emit('opened-room', roomid);
           }
+          that.rtcmConnection.socket.on('disconnect', function (message) {
+            // alert(message)
+            console.log('socket disconnect : '+message)
+            that.join()
+          })
         });
+
       },
       leave() {
         this.rtcmConnection.attachStreams.forEach(function (localStream) {

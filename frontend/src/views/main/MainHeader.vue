@@ -51,8 +51,9 @@
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
               <a class="dropdown-item" @click="callComponent('user')"><i class="ik ik-user dropdown-icon"></i>
                 Profile</a>
-              <!--              <a class="dropdown-item" @click="showModal('copyRight-modal')"><i-->
-              <!--                class="ik ik-navigation dropdown-icon"></i> Opensource license</a>-->
+<!--              설정 창 아직 개발줌입으로 if문 false 처리-->
+              <a v-if="false" class="dropdown-item" @click="$router.push('/develop')"><i class="ik ik-settings dropdown-icon"></i>
+                Setting</a>
               <a class="dropdown-item" @click="SignOut"><i class="ik ik-power dropdown-icon"></i> Logout</a>
               <a class="dropdown-item" v-if="getUserRoles" @click="callComponent('admin')"><i
                 class="ik ik-settings dropdown-icon"></i> Permission</a>
@@ -98,7 +99,7 @@
         this.$http.get('/api/invite/list')
           .then(res => {
             this.alarmList = res.data.reverse()
-            console.log(this.alarmList,"invite list")
+            console.log(this.alarmList, "invite list")
           })
           .catch(error => {
           })

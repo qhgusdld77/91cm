@@ -16,7 +16,7 @@ module.exports = {
           'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
         }
       },
-      '/oauth2': {
+      '/oauth2':{
         target: 'https://localhost:9191',
         changeOrigin: true,
         headers: {
@@ -24,7 +24,7 @@ module.exports = {
           'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
         }
       },
-      '/endpoint': {
+      '/endpoint':{
         target: 'https://localhost:9191',
         changeOrigin: true,
         headers: {

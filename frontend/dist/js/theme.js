@@ -1,4 +1,5 @@
 
+import state from '../../src/store/state'
 ! function(e, s, i) {
     "use strict";
 
@@ -94,8 +95,10 @@
         }
 
         var  t = i(".sidebar-content")
-
+        
         var e = i(this).parent(".nav-item");
+
+        if(!state.channelModal){
             if (e.hasClass("has-sub") && e.hasClass("open")){
                 a(e);
             }
@@ -111,6 +114,7 @@
                     }(e), t.data("collapsible")) return !1;
                 // a(e.siblings(".open")), e.siblings(".open").find(".nav-item.open").removeClass("open")
             }
+        }
     });
 
 

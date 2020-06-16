@@ -25,8 +25,8 @@
 
               <div class="info-wrapper cetered-align card-body">
                 <div style="margin: 20px 0px 35px;">
-                  <img v-if="$store.state.currentUser.picture" class="icon-round"
-                       :src="$store.state.currentUser.picture" width="200" height="200">
+                  <img v-if="getCurrentUser.picture" class="icon-round"
+                       :src="getCurrentUser.picture" width="200" height="200">
                   <img v-else class="icon-round" src="../../assets/images/default-user-picture.png" width="200"
                        height="200">
                 </div>
@@ -37,7 +37,7 @@
                       <label for="name">이름</label>
                     </th>
                     <td>
-                      <span>{{$store.state.currentUser.name}}</span>
+                      <span>{{getCurrentUser.name}}</span>
                     </td>
                   </tr>
                   <tr>
@@ -45,7 +45,7 @@
                       <label for="email">이메일</label>
                     </th>
                     <td>
-                      <span>{{$store.state.currentUser.email}}</span>
+                      <span>{{getCurrentUser.email}}</span>
                     </td>
                   </tr>
                   <tr>
@@ -53,7 +53,7 @@
                       <label for="phone">전화번호</label>
                     </th>
                     <td>
-                      <span>{{$store.state.currentUser.phone}}</span>
+                      <span>{{getCurrentUser.phone}}</span>
                     </td>
                   </tr>
                   </tbody>
@@ -70,8 +70,15 @@
 
 <script>
 
+  import {mapGetters} from "vuex";
+
   export default {
     name: 'UserInfo',
+    computed:{
+      ...mapGetters({
+        getCurrentUser: 'getCurrentUser'
+      })
+    },
     created() {
     },
     deactivated() {

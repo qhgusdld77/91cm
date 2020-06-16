@@ -19,12 +19,14 @@
           </div>
         </div>
       </a>
-      <div class="c-i-wrapper">
+      <v-row align="end" justify="center" class="c-i-wrapper">
         <div style="flex-grow:1;" class="myflex-column">
           <div style="position: relative;">
             <div class="mytextarea-wrapper" v-if="!$store.state.isInviteMode && !$store.state.isSearchMode">
               <v-icon class="my-mail" v-bind:class="{'active-m': sendMail}" @click="sendMailToggle">mail</v-icon>
+              <v-icon class="my-search" @click="toggleSearchMode">find_in_page</v-icon>
               <i class="im im-users myfile-upload" style="right: 50px;" @click="inviteToggle"></i>
+
               <label for="file-input" style="display: block;margin-bottom: 0;">
                 <i class="im im-cloud-upload myfile-upload"></i>
               </label>
@@ -65,18 +67,20 @@
               v-model="progressValue"
               striped
             ></v-progress-linear>
-            <span style="position: absolute;right: 108px;"> {{ stringByteLength }} / 30000Byte</span>
+            <!--            <span style="position: absolute;right: 108px;"> {{ stringByteLength }} / 30000Byte</span>-->
           </div>
         </div>
-        <v-btn class="mx-2" fab dark large color="cyan" style="margin-top: 15px;"
-               v-if="!$store.state.isVideoMode" @click="send">
+        <!--        일반 채팅 모드 일때 아이콘-->
+        <v-btn class="mx-2" fab dark large color="cyan" style="margin-bottom: 15px;"
+               v-if="!$store.state.isVideoMode" @click="send($event)">
           <i class="im im-paperplane"></i>
         </v-btn>
-        <v-btn class="mx-2" fab dark small color="cyan" style="margin-top: 20px;"
-               v-else @click="send">
+        <!--        화상 채팅 모드 일때 아이콘-->
+        <v-btn class="mx-2" fab dark small color="cyan" style="margin-bottom: 25px;"
+               v-else @click="send($event)">
           <i class="im im-paperplane"></i>
         </v-btn>
-      </div>
+      </v-row>
     </div>
   </main>
 </template>
@@ -138,7 +142,7 @@
       })
       this.$eventBus.$on('leaveChannelMsg', () => {
         this.message.content = this.$store.state.currentUser.name + '님이 나가셨습니다.'
-        this.send(null,true)
+        this.send(null, true)
       })
     },
     updated() {
@@ -238,13 +242,16 @@
           this.$alertModal('error', '폴더는 업로드 할 수 없습니다.')
         })
       },
-      send: async function (e,isSysMsg) {
+      send: async function (e, isSysMsg) {
         if (e != null) {
           e.preventDefault()
         }
-        if(isSysMsg){
+        if (this.message.content == '') {
+          return;
+        }
+        if (isSysMsg) {
           this.message.sender = null
-        }else{
+        } else {
           this.message.sender = this.$store.state.currentUser.email
           this.message.user = this.$store.state.currentUser
         }
@@ -411,19 +418,19 @@
     }
   }
 
-/* .v-chip{
-  padding: 0 30px;
-} */
-.theme--light.v-chip:hover:before {
+  /* .v-chip{
+    padding: 0 30px;
+  } */
+  .theme--light.v-chip:hover:before {
     opacity: 0;
-}
+  }
 
-.v-chip.v-size--default{
-  min-height: 32px;
-  height: auto;
-}
+  .v-chip.v-size--default {
+    min-height: 32px;
+    height: auto;
+  }
 
-.v-chip{
-  white-space: normal;
-}
+  .v-chip {
+    white-space: normal;
+  }
 </style>

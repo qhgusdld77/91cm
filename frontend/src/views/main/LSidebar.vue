@@ -45,31 +45,42 @@
           <!-- <div class="nav-lavel">Users</div> -->
 
           <div class="nav-item has-sub open">
-            <a href="javascript:void(0)" style="display: flex;align-items: center;"><i class="ik ik-users"></i><span>Users</span>
+            <a href="javascript:void(0)" style="display: flex;align-items: center;">
+              <i class="ik ik-users"></i>
+              <span>Users</span>
+              <v-badge
+                style="margin-left: 105px"
+                color="#bcc8d8"
+                overlap
+                left
+                :content="channelUsers.length"
+              ></v-badge>
             </a>
             <div class="submenu-content">
               <a style="cursor:default;display:flex; padding-left: 15px;" v-for="(user) in channelUsers" :key="user.email" class="menu-item verti-align" >
                 <div v-if="user.online">
-                  <v-badge 
+                  <v-badge
                     bottom
                     color="cyan lighten-1"
                     dot
                     offset-x="10"
                     offset-y="10"
                   >
-                    <img class="avatar"  :src="user.picture">
-                  </v-badge> 
+                    <img v-if="user.picture!=null" class="avatar"  :src="user.picture">
+                    <img v-else class="avatar"  src="../../assets/images/default-user-picture.png">
+                  </v-badge>
                 </div>
                 <div v-else>
-                  <img class="avatar"  :src="user.picture">
+                  <img v-if="user.picture!=null" class="avatar"  :src="user.picture">
+                  <img v-else class="avatar"  src="../../assets/images/default-user-picture.png">
                 </div>
-                
+
                 <!-- <v-badge
                   color="pink"
                   dot
                   inline
                 > -->
-                
+
                   <span style="margin-left:15px;">{{ user.name }}</span>
                 <!-- </v-badge> -->
               </a>
@@ -111,9 +122,6 @@
     watch: {
       currentChannel(newCurrentChannel, oldCurrentChannel) {
         this.$store.dispatch('updateUserList')
-        // this.updateUserList(newCurrentChannel)
-        console.log('oldCompo', this.$store.state.oldComponent)
-        console.log('currentc', this.$store.state.currentChannel)
       },
       syncChannelUser() {
         // this.updateUserList(this.$store.state.currentChannel)
@@ -214,6 +222,7 @@
         this.$store.state.isSearchMode = false
       },
       prepareModal: function (mode) {
+        this.$store.state.channelModal = true
         if (mode == 'create') {
           this.channelmode = '채널 생성'
         } else if (mode == 'edit') {
@@ -229,10 +238,12 @@
         return valid
       },
       resetModal() {
+        this.$store.state.channelModal = false
         this.channelTitle = ''
         this.nameState = null
       },
       handleOk(bvModalEvt) {
+        this.$store.state.channelModal = false
         // Prevent modal from closing
         bvModalEvt.preventDefault()
         // Trigger submit handler
@@ -284,6 +295,10 @@
   }
 </script>
 <style scoped>
+/* >>>는 deep selector  */
+  >>>.v-badge__badge{
+    color: #404E67 !important;
+  }
   .active-channel {
     background-color: white;
     color: black !important;
@@ -308,4 +323,3 @@
     user-select: none;
   }
 </style>
-
