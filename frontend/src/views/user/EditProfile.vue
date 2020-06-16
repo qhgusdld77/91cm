@@ -26,11 +26,11 @@
                 <div style="margin: 20px 0px 35px;">
                   <input type="file" hidden ref="fileInput" @change="attachFile">
                   <div @click="fileInputClick">
-                    <v-img v-if="user.picture" class="icon-round"
+                    <img v-if="user.picture" class="icon-round"
                            :src="user.picture" width="200" height="200">
-                    </v-img>
-                    <v-img v-else class="icon-round" src="../../assets/images/default-user-picture.png" width="200"
-                           height="200"></v-img>
+                    
+                    <img v-else class="icon-round" src="../../assets/images/default-user-picture.png" width="200"
+                           height="200">
                   </div>
                 </div>
                 <table>
@@ -48,7 +48,7 @@
                       <label for="email">이메일</label>
                     </th>
                     <td>
-                      <b-input type="email" name="email" disabled="true" v-model="user.email"></b-input>
+                      <b-input type="email" name="email" :disabled="true" v-model="user.email"></b-input>
                     </td>
                   </tr>
                   <tr>

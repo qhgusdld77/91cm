@@ -35,7 +35,8 @@
           </template>
           <template v-else>
             <v-list-item-avatar>
-              <img :src="data.item.picture">
+              <img v-if="data.item.picture!=null" :src="data.item.picture">
+              <img v-else src="../assets/images/default-user-picture.png">
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title v-html="data.item.name"></v-list-item-title>

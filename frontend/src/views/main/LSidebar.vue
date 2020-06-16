@@ -66,11 +66,13 @@
                     offset-x="10"
                     offset-y="10"
                   >
-                    <img class="avatar"  :src="user.picture">
+                    <img v-if="user.picture!=null" class="avatar"  :src="user.picture">
+                    <img v-else class="avatar"  src="../../assets/images/default-user-picture.png">
                   </v-badge>
                 </div>
                 <div v-else>
-                  <img class="avatar"  :src="user.picture">
+                  <img v-if="user.picture!=null" class="avatar"  :src="user.picture">
+                  <img v-else class="avatar"  src="../../assets/images/default-user-picture.png">
                 </div>
 
                 <!-- <v-badge
@@ -220,6 +222,7 @@
         this.$store.state.isSearchMode = false
       },
       prepareModal: function (mode) {
+        this.$store.state.channelModal = true
         if (mode == 'create') {
           this.channelmode = '채널 생성'
         } else if (mode == 'edit') {
@@ -235,10 +238,12 @@
         return valid
       },
       resetModal() {
+        this.$store.state.channelModal = false
         this.channelTitle = ''
         this.nameState = null
       },
       handleOk(bvModalEvt) {
+        this.$store.state.channelModal = false
         // Prevent modal from closing
         bvModalEvt.preventDefault()
         // Trigger submit handler
