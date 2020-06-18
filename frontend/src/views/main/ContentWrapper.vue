@@ -144,6 +144,10 @@
         this.message.content = this.$store.state.currentUser.name + '님이 나가셨습니다.'
         this.send(null, true)
       })
+      this.$eventBus.$on('forceLeaveChannelMsg', (leaveUserName) => {
+        this.message.content = leaveUserName + '님이 추방되었습니다.'
+        this.send(null, true)
+      })
     },
     updated() {
       this.scrollToEnd()

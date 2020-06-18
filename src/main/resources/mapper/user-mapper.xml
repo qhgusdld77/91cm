@@ -33,10 +33,15 @@
 	<select id="getUserfindByEmail" resultType="com.nineone.nocm.domain.User">
         select * from member where email = #{email}
     </select>
-	
+
     <select id="getAllUserList" resultType="com.nineone.nocm.domain.User">
-        select * from member
+        SELECT *
+          FROM MEMBER MEM
+    INNER JOIN AUTHORITIES AUTH
+            ON AUTH.MEMBER_EMAIL = MEM.EMAIL
+           AND AUTH.ROLES_AUTHORITY != 'ROLE_ROOT'
     </select>
+
     <!-- 
     <select id="isNotExistEmail" resultType="java.lang.Boolean">
     	select not exists (select * from member where email = #{email})

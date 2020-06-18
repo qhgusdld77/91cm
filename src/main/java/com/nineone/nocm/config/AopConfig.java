@@ -37,9 +37,11 @@ public class AopConfig {
     public Object checkUserAdmin(ProceedingJoinPoint joinPoint) throws Throwable{
         User user = (User) joinPoint.getArgs()[0];
         List<String> roles = authoritiesRepository.getUserRoles(user.getEmail());
-        if (roles.stream().anyMatch(role -> role.equals("ROLE_ADMIN"))){
+
+        if(roles.contains("ROLE_ROOT") || roles.contains("ROLE_ADMIN")) {
             return joinPoint.proceed();
-        }else{
+        }
+        else {
             return new ResponseEntity<>("{}",HttpStatus.BAD_REQUEST);
         }
     }

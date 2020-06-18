@@ -15,9 +15,10 @@
     <delete id="deleteAllAuthority" parameterType="java.lang.String">
         delete from authorities where member_email = #{email}
     </delete>
-    <select id="getRoleUserList" resultType="java.util.HashMap">
+    <select id="getRoleUserList" parameterType="java.lang.String" resultType="java.util.HashMap">
         select member.*,roles.authority from member
         join authorities on member.email = authorities.member_email
-        join roles on roles.authority = authorities.roles_authority;
+        join roles on roles.authority = authorities.roles_authority
+        where roles.level > #{level}
     </select>
 </mapper>

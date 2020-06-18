@@ -47,6 +47,7 @@ public class UserApiController {
 
     @RequestMapping("/list")
     public List<User> userList() {
+    	System.out.println("jjw !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return userService.getAllUserList();
     }
 
@@ -63,8 +64,8 @@ public class UserApiController {
     }
 
     @RequestMapping("/admin/userList")
-    public List<HashMap> rolesUserList(@Socialuser User user){
-        return authoritiesRepository.getRoleUserList();
+    public List<HashMap> rolesUserList(@Socialuser User user) {
+        return authoritiesRepository.getRoleUserList(user);
     }
 
 

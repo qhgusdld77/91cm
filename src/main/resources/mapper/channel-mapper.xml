@@ -14,12 +14,28 @@
     <update id="updateChannel">
         update channel set name = #{name} where id = #{id}
     </update>
+
     <delete id="deleteChannel">
-        delete from channel where id = #{channelId}
+    	UPDATE CHANNEL
+    	   SET DELETE_YN = 'Y'
+    	 WHERE ID = #{channelId}
     </delete>
+
     <select id="channelList" resultType="com.nineone.nocm.domain.Channel">
-        select channel.*,joininfo.member_email as login_email from channel join joininfo on channel.id = joininfo.channel_id where joininfo.member_email=#{userEmail} order by channel.name;
+        SELECT CN.ID
+             , CN.NAME
+             , CN.REGISTER_DATE
+             , JI.MEMBER_EMAIL AS LOGIN_EMAIL
+          FROM CHANNEL AS CN
+
+    INNER JOIN JOININFO JI
+            ON JI.CHANNEL_ID = CN.ID
+           AND JI.MEMBER_EMAIL = #{userEmail}
+
+         WHERE CN.DELETE_YN = 'N'
+      ORDER BY CN.NAME
     </select>
+
     <insert id="insertJoinInfo">
     	insert joininfo (channel_id,member_email)
     		values(#{channel_id},#{member_email})
