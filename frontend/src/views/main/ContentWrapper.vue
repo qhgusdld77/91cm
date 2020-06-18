@@ -3,7 +3,8 @@
     <div class="h-inherit" v-cloak @drop.prevent="dropFile" @dragover.prevent>
       <ul class="c-c-wrapper list-unstyled" @scroll="scrollEvt">
         <div v-for="msg in msgArray" :key="msg.id">
-          <MsgBox v-if="msg.sender!=null" :msg="msg" :msgPreviewBool="msgPreviewBool" @scrollToEnd="scrollToEnd" @imgLoad="imgLoad"></MsgBox>
+          <MsgBox v-if="msg.sender!=null" :msg="msg" :msgPreviewBool="msgPreviewBool" @scrollToEnd="scrollToEnd"
+                  @imgLoad="imgLoad"></MsgBox>
           <div class=" hori-align">
             <v-chip v-if="msg.sender==null" class="ma-2" style="font-weight:bold;">
               {{msg.content}}
@@ -159,11 +160,11 @@
       imgLoad() {
         // 문제 있으면 아래 코드 지우기..
         this.oldScrollHeight = this.wrapperEl.scrollHeight
-        
+
         if (!this.msgPreviewBool && !this.isGetMsgForImgLoad) {
           this.scrollToEnd(true)
         }
-        if(this.isGetMsgForImgLoad){
+        if (this.isGetMsgForImgLoad) {
           this.isGetMsgForImgLoad = false
         }
       },

@@ -9,17 +9,10 @@
           Screen Share
           <v-icon style="margin-left: 10px;">airplay</v-icon>
         </v-btn>
-        <!--        <v-btn color="blue-grey"-->
-        <!--               class="white&#45;&#45;text"-->
-        <!--               @click="capture"-->
-        <!--        >-->
-        <!--          Capture-->
-        <!--          <v-icon style="margin-left: 10px;">add_photo_alternate</v-icon>-->
-        <!--        </v-btn>-->
       </div>
     </v-row>
     <v-row justify="center" align="center" no-gutters style="height: 90%;">
-      <draggable v-model="videoList" style="display: flex; flex-wrap: wrap;" @ended="setTimeout">
+      <draggable v-model="videoList" style="display: flex; flex-wrap: wrap; justify-content: center;">
         <v-col :cols="getVideoCols" v-for="(item,index) in videoList" :key="item" style="margin-top: 0px; padding: 5px;">
           <v-card class="d-inline" flat tile>
             <v-card
@@ -33,7 +26,6 @@
         </v-col>
       </draggable>
     </v-row>
-    <!--    <p v-show="false">{{getVideoUsers}}</p>-->
   </div>
 </template>
 
@@ -49,12 +41,6 @@
       draggable
     },
     computed: {
-      // getVideoUsers: function(){
-      //   console.log(this.videoList.length)
-      //   // RSidebar.vue 의 화상채팅 사용자 수 데이터 넘기는 용
-      //   this.$eventBus.$emit('videoChatUsers',this.videoList.length)
-      //   return this.videoList.length
-      // },
       getVideoCols: function () {
         switch (this.videoList.length) {
           case 1:
@@ -213,14 +199,6 @@
 
     },
     methods: {
-      setTimeout : function () {
-        for (var i = 0, len = that.$refs.videos.length; i < len; i++) {
-          if (that.$refs.videos[i].id === stream.streamid) {
-            that.$refs.videos[i].srcObject = stream.stream;
-            break;
-          }
-        }
-      },
       onResize() {
         this.windowSize = {x: window.innerWidth, y: window.innerHeight}
         console.log(this.windowSize)
@@ -244,41 +222,6 @@
           localStream.stop();
         });
         this.videoList = [];
-      },
-      capture() {
-        // let img = this.getCanvas().toDataURL(this.screenshotFormat)
-        // const url = window.URL.createObjectURL(new Blob([img]))
-        // const link = document.createElement('a')
-        // link.href = url
-        // link.setAttribute('download',new Date().toDateString())
-        // document.body.appendChild(link)
-        // link.click()
-        // link.remove()
-        // window.URL.revokeObjectURL(url)
-        return;
-      },
-      getCanvas() {
-        let video = this.getCurrentVideo();
-        if (video !== null && !this.ctx) {
-          let canvas = document.createElement('canvas');
-          canvas.height = video.clientHeight;
-          canvas.width = video.clientWidth;
-          this.canvas = canvas;
-          this.ctx = canvas.getContext('2d');
-        }
-        const {ctx, canvas} = this;
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        return canvas;
-      },
-      getCurrentVideo() {
-        if (this.localVideo === null) {
-          return null;
-        }
-        for (var i = 0, len = this.$refs.videos.length; i < len; i++) {
-          if (this.$refs.videos[i].id === this.localVideo.id)
-            return this.$refs.videos[i];
-        }
-        return null;
       },
       shareScreen() {
         var that = this;
