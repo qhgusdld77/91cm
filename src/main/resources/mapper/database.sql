@@ -109,9 +109,9 @@ foreign key (member_email) references member(email) on delete cascade on update 
 foreign key (roles_authority) references roles(authority) on delete cascade on update cascade
 );
 
-
-insert roles (authority, description) values ('ROLE_ANON', '제한된 사용자');
-insert roles (authority, description) values ('ROLE_USER', '일반 사용자');
+INSERT INTO ROLES (authority, description) values('ROLE_ROOT', '최고관리자');
 insert roles (authority, description) values ('ROLE_ADMIN', '관리자');
+insert roles (authority, description) values ('ROLE_USER', '일반 사용자');
+insert roles (authority, description) values ('ROLE_ANON', '제한된 사용자');
 
 insert authorities (member_email, roles_authority) values ('user이름','ROLE_ADMIN');

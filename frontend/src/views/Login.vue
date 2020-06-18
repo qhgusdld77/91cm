@@ -85,8 +85,12 @@
     name: 'Login',
     data() {
       return {
-        userid: '',
-        password: '',
+        /*
+        userid: 'root',
+        password: 'root',
+        */
+        userid: 'test@c.com',
+        password: 'test',
         csrfToken: '',
 
       }
@@ -187,6 +191,7 @@
   */
   .form-control:not(select) {
     padding: 1.5rem 0.5rem;
+    border-color: #ced4da;
   }
 
   .form-control::placeholder {
@@ -200,7 +205,7 @@
     box-shadow: none;
     color: #495057;
     background-color: #fff;
-    border-color: #ced4da;;
+    border-color: #ced4da;
     outline: none;
   }
 </style>

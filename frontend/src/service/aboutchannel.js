@@ -17,6 +17,7 @@ class AboutChannel{
             }
           })
     }
+
     updateChannelAPI (currentChannel) {
       return axios.post('/api/channel/update', currentChannel,
       {
@@ -24,8 +25,14 @@ class AboutChannel{
       })
     }
 
+    deleteChannelAPI (currentChannel) {
+      return axios.post('/api/channel/delete', currentChannel,
+      {
+        headers: {'Content-Type': 'application/json'}
+      })
+    }
+
     updateLastAccessDate (currentId,oldId) {
-      console.log(oldId)
       return axios.put('/api/channel/update/lastaccessdate',
       {
         oldChannelId: oldId,
@@ -34,7 +41,6 @@ class AboutChannel{
       }
       )
     }
-
 
     updateLastAccessStatus (oldVal,newVal) {
       if(store.state.currentChannel!=null){

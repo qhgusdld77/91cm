@@ -25,6 +25,7 @@
                 <div style="display:flex;">
                   <p>Channel Name</p>
                   <a class="verti-align" style="color: #007bff;" data-mode="edit" @click="useModal('edit')">Edit</a>
+                  <a class="verti-align" style="color: #007bff;" data-mode="edit" @click="useModal('delete')" v-if="isAdmin()">Delete</a>
                 </div>
                 <li class="list-unstyled">{{ $store.state.currentChannel.name }}</li>
               </div>
@@ -129,7 +130,6 @@
       },
       leaveChannle: function () {
         this.$http.post('/api/channel/leave', {
-          // 모두가 나가면 채널 삭제
           email: this.$store.state.currentUser.email,
           channel_id: this.$store.state.currentChannel.id
         }).then(res => {
@@ -151,6 +151,9 @@
         if (mode == 'edit') {
           this.$eventBus.$emit('useModal', mode)
         }
+        else if (mode == 'delete') {
+          this.$eventBus.$emit('useModal', mode)
+        }
       },
       msgBox: async function (content) {
         await this.$bvModal.msgBoxConfirm(content, {
@@ -164,7 +167,11 @@
             this.userSelect = value
             return value
           })
-      }
+      },
+      isAdmin: function() {
+        var loginUserRoles = this.$store.state.currentUser.roles
+        return loginUserRoles.includes('ROLE_ROOT') ||  loginUserRoles.includes('ROLE_ADMIN')
+      },
     }
   }
 </script>

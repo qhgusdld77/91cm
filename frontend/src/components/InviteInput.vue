@@ -81,7 +81,7 @@
               .then(res => {
                 for (let i = 0; i < this.friends.length; i++) {
                   const user = this.userList.find(el => el.email == this.friends[i])
-                  this.message.content += user.name + '님 '
+                  this.message.content += user.name + '님'
                 }
                 this.$http.post('/api/invite/mail', {
                   channel_id: this.$store.state.currentChannel.id,
@@ -103,7 +103,7 @@
                   const alertList = error.response.data.list
                   for (let i = 0; i < alertList.length; i++) {
                     const user = this.userList.find(el => el.email == alertList[i])
-                    alertmsg += user.name + '님 '
+                    alertmsg += user.name + '님'
                   }
                   alertmsg += '은 이미 이 채널에 초대 받았습니다. 확인해주세요.'
                   this.$alertModal('error', alertmsg)

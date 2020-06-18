@@ -1,6 +1,8 @@
 package com.nineone.nocm.repository;
 
 import com.nineone.nocm.domain.Authorities;
+import com.nineone.nocm.domain.User;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -32,7 +34,10 @@ public class UserAuthoritiesRepositoryImpl implements UserAuthoritiesRepository 
     }
 
     @Override
-    public List<HashMap> getRoleUserList() {
-        return sqlSession.selectList(namespace + ".getRoleUserList");
+    public List<HashMap> getRoleUserList(User user) {
+    	List<String> roles = user.getRoles();
+    	String role = roles.get(0);
+    	String level = role.equals("ROLE_ROOT")?"0":"1";
+        return sqlSession.selectList(namespace + ".getRoleUserList", level);
     }
 }

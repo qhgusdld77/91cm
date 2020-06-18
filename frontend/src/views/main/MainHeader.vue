@@ -78,11 +78,8 @@
     },
     computed: {
       getUserRoles: function () {
-        if (this.$store.state.currentUser.roles.includes('ROLE_ADMIN')) {
-          return true;
-        } else {
-          return false;
-        }
+        var role = this.$store.state.currentUser.roles
+        return role.includes('ROLE_ROOT') || role.includes('ROLE_ADMIN');
       },
       getAlarmList: function () {
         while (this.alarmList.length > 5) {
