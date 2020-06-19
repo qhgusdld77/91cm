@@ -247,6 +247,7 @@
         this.$store.state.isSearchMode = false
       },
       prepareModal: function (mode, channel) {
+        this.$store.state.channelModal = true
         this.modalTitle = "채널 " + this.getModeKorStr(mode)
         this.channelMode = mode
         try {

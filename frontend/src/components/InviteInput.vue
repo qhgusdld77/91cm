@@ -76,7 +76,6 @@
       },
       enter: async function (event) {
         let el = document.querySelector(".menuable__content__active.inviteClass")
-        console.log(el)
         if (el == null) {
           if (this.friends.length != 0) {
             await InviteService.invite(this.$store.state.currentUser.email, this.$store.state.currentChannel.id, this.friends)

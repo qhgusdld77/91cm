@@ -27,7 +27,6 @@
               <v-icon class="my-mail" v-bind:class="{'active-m': sendMail}" @click="sendMailToggle">mail</v-icon>
               <v-icon class="my-search" @click="toggleSearchMode">find_in_page</v-icon>
               <i class="im im-users myfile-upload" style="right: 50px;" @click="inviteToggle"></i>
-
               <label for="file-input" style="display: block;margin-bottom: 0;">
                 <i class="im im-cloud-upload myfile-upload"></i>
               </label>
@@ -244,7 +243,7 @@
         }).catch(error => {
           this.isFileUpload = false
           this.progressValue = 0
-          this.$_error( '폴더는 업로드 할 수 없습니다.')
+          this.$_error('폴더는 업로드 할 수 없습니다.')
         })
       },
       send: async function (e, isSysMsg) {

@@ -10,6 +10,7 @@ export default {
         showInput: function () {
           this.$bvModal.show('channelD');
         }
+
       }
     })
     // 단순 알림용
@@ -45,6 +46,11 @@ export default {
       })
     }
     Vue.prototype.$alertModal = async function (types, content, callBackFunc) {
+      const htmlTagLineRegexp = new RegExp(/(<([^>]+)>)(.*?)(<([^>]+)>)/ig);
+      if (content.includes(content)){
+        let h = this.$createElement
+        content = h('p',{domProps:{innerHTML: content}})
+      }
       switch (types) {
         case 'alert':
         case 'error':
