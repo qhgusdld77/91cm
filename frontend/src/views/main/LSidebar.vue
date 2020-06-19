@@ -29,9 +29,9 @@
             </a>
 
             <div class="submenu-content">
-              <div v-for="(channel, index ) in userChannelList" :key="channel.id">
+              <div v-for="(channel, index) in userChannelList" :key="channel.id" v-on:mouseover="fnChannelMouseOver(index)">
                 <a @click="sendSelectChannel(index)" @dblclick="prepareModal('edit', channel)" class="menu-item" style="display: flex;" :class="{ 'active-channel': channel.id == $store.state.currentChannel.id}">
-                  <button @click="prepareModal('delete', channel)" style="margin-left: -15px; display: flex;" v-if="isAdmin()">
+                  <button class="channelDel" :id="'channelDel' + index" @click="prepareModal('delete', channel)" style="margin-left: -15px; display: flex; visibility:hidden">
                     <i class="im im-minus-circle" style="font-size:15px; color:black;"></i>
                   </button>
                   <div>{{ channel.name }}</div>
@@ -184,6 +184,12 @@
 
     },
     methods: {
+      fnChannelMouseOver: function(index) {
+        $(".channelDel").css("visibility", "hidden")
+        if(this.isAdmin()) {
+          $("#channelDel" + index).css("visibility", "visible")
+        }
+      },
       activeCurrentChannel: function () {
         this.$store.state.currentChannel
         return true
@@ -251,6 +257,7 @@
 
         switch(mode) {
           case "create":
+            this.channelTitle = ''
           case "edit":
             this.$bvModal.show('channelCU')
             break
@@ -278,7 +285,7 @@
         if (!this.checkFormValidity()) {
           return
         }
-        this.$refs['modal'].hide()
+        //this.$refs['modal'].hide()
 
         this.$nextTick(() => {
           this.$bvModal.hide('channelCU')
