@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-btn @click="testModal"></v-btn>
+    <button ref="test" v-show="false">teetetet</button>
   </div>
 </template>
 <script>
@@ -23,9 +24,9 @@
         return "알림"
       },
       testModal: async function () {
-        this.$_confirm("test",function(){
-              alert("test")
-        });
+        // this.$_confirm("test",function(){
+        //       alert("test")
+        // });
 
       },
       async hihi(){

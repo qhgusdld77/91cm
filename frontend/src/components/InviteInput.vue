@@ -75,6 +75,7 @@
       },
       enter: async function (event) {
         let el = document.querySelector(".menuable__content__active.inviteClass")
+        console.log(el)
         if (el == null) {
           if (this.friends.length != 0) {
             await InviteService.invite(this.$store.state.currentUser.email, this.$store.state.currentChannel.id, this.friends)
@@ -93,7 +94,7 @@
                   })
                 this.message.content += '을 초대했습니다.'
                 this.$eventBus.$emit('getUserList', true)
-                this.$emit('send',null,true)
+                this.$emit('send', null, true)
                 this.friends = []
                 this.message.content = ''
                 this.$store.state.isInviteMode = !this.$store.state.isInviteMode

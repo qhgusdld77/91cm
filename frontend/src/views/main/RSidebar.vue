@@ -10,7 +10,6 @@
       </div>
       <div class="chat-list">
         <div class="list-group row">
-
           <a class="list-group-item " style="color: #444;" v-b-toggle.channel-info>
             <i class="im im-info"></i>
             <span style="margin-left:20px;">Channel Details</span>
@@ -18,7 +17,6 @@
               <i class="im im-care-down" style="font-size: 15px;"></i>
             </div>
           </a>
-
           <b-collapse id="channel-info">
             <div class="s-coll-style">
               <div>
@@ -37,9 +35,7 @@
               </div>
             </div>
           </b-collapse>
-
           <!-- 화상 채닝 메뉴 시작 -->
-
           <a class="list-group-item" v-b-toggle.video-chat>
             <i class="im im-video-camera"></i>
             <span style="margin-left:20px;">Video Chat</span>
