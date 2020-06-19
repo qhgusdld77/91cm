@@ -94,12 +94,12 @@
                     }
                   })
                 } else {
-                  this.$alertModal('error', '회원가입 실패')
+                  this.$_error('회원가입 실패')
                 }
               })
             } else {
               this.user.email = null
-              this.$alertModal('error', '해당 이메일은 이미 가입되어 있습니다.')
+              this.$_error('해당 이메일은 이미 가입되어 있습니다.')
             }
           }).catch(error => {
           console.log(error)
@@ -114,23 +114,23 @@
         // }
 
         if (email == null || email == '') {
-          this.$alertModal('error', '이메일을 입력해주세요')
+          this.$_error('이메일을 입력해주세요')
           return false
         }
         if (name == null || name == '') {
-          this.$alertModal('error', '이름을 입력해주세요')
+          this.$_error('이름을 입력해주세요')
           return false
         }
         if (name.length > 20) {
-          this.$alertModal('error', '이름이 너무 깁니다.')
+          this.$_error('이름이 너무 깁니다.')
           return false
         }
         if (phone == null || phone == '') {
-          this.$alertModal('error', '핸드폰 번호를 입력해주세요')
+          this.$_error('핸드폰 번호를 입력해주세요')
           return false
         }
         if (!phone.match(phoneRegex)) {
-          this.$alertModal('error', '핸드폰 번호가 형식에 맞지 않습니다')
+          this.$_error( '핸드폰 번호가 형식에 맞지 않습니다')
           return false
         }
         return true

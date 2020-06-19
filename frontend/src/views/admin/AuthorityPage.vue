@@ -102,9 +102,9 @@
           .then(res => {
             this.authUserList[this.editedIndex].authority = this.editedItem.authority
             this.dialog = false
-            this.$alertModal("alert", "권한이 수정되었습니다.")
+            this.$_alert("권한이 수정되었습니다.");
           }).catch(error => {
-          this.$alertModal("error", "권한 수정에 실패했습니다." + "\n" + error)
+          this.$_error("권한 수정에 실패했습니다." + "\n" + error)
           this.dialog = false
         })
       },

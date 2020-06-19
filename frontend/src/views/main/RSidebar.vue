@@ -61,7 +61,6 @@
             </div>
           </b-collapse>
           <!-- 화상 채팅 메뉴 끝 -->
-
           <!-- to do list 메뉴 시작 -->
           <a class="list-group-item" @click="callComponent('todoList')">
             <i class="im im-task-o"></i>
@@ -82,9 +81,11 @@
 
 <script>
   import {mapGetters} from "vuex";
+  import channelMixin from "../../mixins/channelMixin";
 
   export default {
     props: ['modalObj'],
+    mixins: [channelMixin],
     name: 'RSidebar',
     computed: {
       ...mapGetters({
@@ -109,9 +110,6 @@
     },
     methods: {
       toggleVideoMode: function () {
-        if (this.isVideoMode) {
-
-        }
         this.$store.commit('setIsVideoMode', !this.isVideoMode)
         this.callComponent('main', true)
       },
@@ -127,20 +125,6 @@
         if (bool == null) {
           this.$store.commit('setIsVideoMode', false)
         }
-      },
-      leaveChannle: function () {
-        this.$http.post('/api/channel/leave', {
-          email: this.$store.state.currentUser.email,
-          channel_id: this.$store.state.currentChannel.id
-        }).then(res => {
-          // 유저가 나갔음으로 채널 유저 업데이트
-          this.$store.state.stompClient.send('/pub/chat/room/' + this.$store.state.currentChannel.id,
-            JSON.stringify({'message': 'updateChannel', 'error': "null"}))
-          this.$eventBus.$emit('leaveChannelMsg')
-          this.$alertModal('alert redirect', this.$store.state.currentChannel.name + ' 채널에서 나갔습니다.')
-        }).catch(error => {
-          this.$alertModal('error', '나가기에 실패했습니다.')
-        })
       },
       RSidebarClose: function () {
         $('.right-sidebar-toggle')[0].classList.toggle('active');

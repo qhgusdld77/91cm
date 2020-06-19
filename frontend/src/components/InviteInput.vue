@@ -106,15 +106,15 @@
                     alertmsg += user.name + '님'
                   }
                   alertmsg += '은 이미 이 채널에 초대 받았습니다. 확인해주세요.'
-                  this.$alertModal('error', alertmsg)
+                  this.$_error(alertmsg)
                 } else {
-                  this.$alertModal('error', error.response.data.message)
+                  this.$_error(error.response.data.message)
                 }
                 console.error(error.response)
                 this.message.content = ''
               })
           } else {
-            this.$alertModal('alert', '초대할 사용자를 선택해주세요')
+            this.$_alert('초대할 사용자를 선택해주세요')
           }
         }
       },

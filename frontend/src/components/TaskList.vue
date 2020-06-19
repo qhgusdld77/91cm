@@ -260,7 +260,7 @@
       },
       setTaskListName: function () {
         if (this.taskListName == '' || this.taskListName == null) {
-          this.$alertModal('alert', '내용을 입력해주세요.')
+          this.$_alert('내용을 입력해주세요.')
         } else {
           this.taskList.channel_id = this.currentChannel.id
           this.taskList.name = this.taskListName

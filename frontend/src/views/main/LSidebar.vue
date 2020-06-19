@@ -116,11 +116,11 @@
       <p class="my-4"><code>[{{ channelTitle }}]</code>채널을 삭제하시겠습니까?</p>
     </b-modal>
 
-    <b-modal id="channelForceLeave" title="채널 추방" @hidden="resetModal" @ok="handleOkForceLeave">
+    <b-modal id="channelForceLeave" title="채널 추방" @hidden="resetModal" @ok="leaveChannle(userEmail,currentChannel,'forceLeave')">
       <p class="my-4"><code>[{{ userName }}]</code>님을 추방하시겠습니까?</p>
     </b-modal>
 
-    <b-modal id="channelLeave" title="채널 나가기" @hidden="resetModal" @ok="handleOkLeave">
+    <b-modal id="channelLeave" title="채널 나가기" @hidden="resetModal" @ok="leaveChannle(userEmail,currentChannel)">
       <p class="my-4"><code>[{{ channelTitle }}]</code>채널에서 나가시겠습니까?</p>
     </b-modal>
   </div>
@@ -130,9 +130,10 @@
   import AboutChannel from '../../service/aboutchannel'
   import {mapGetters} from "vuex";
   import RSidebarVue from './RSidebar.vue';
-
+  import channelMixin from "../../mixins/channelMixin";
   export default {
     props: ['modalObj'],
+    mixins: [channelMixin],
     watch: {
       currentChannel(newCurrentChannel, oldCurrentChannel) {
         this.$store.dispatch('updateUserList')
@@ -241,13 +242,11 @@
       prepareModal: function (mode, channel) {
         this.modalTitle = "채널 " + this.getModeKorStr(mode)
         this.channelMode = mode
-
         try {
           this.channelTitle = (channel === undefined) ? this.$store.state.currentChannel.name : channel.name
         } catch (e) {
           this.channelTitle = ''
         }
-
         switch (mode) {
           case "create":
           case "edit":
@@ -363,42 +362,6 @@
           this.$bvModal.show('channelForceLeave')
         }
       },
-      handleOkLeave: function () {
-        this.$http.post('/api/channel/leave', {
-          email: this.userEmail,
-          channel_id: this.$store.state.currentChannel.id
-        }).then(res => {
-          // 유저가 나갔음으로 채널 유저 업데이트
-          this.$store.state.stompClient.send('/pub/chat/room/' + this.$store.state.currentChannel.id, JSON.stringify({
-            'message': 'updateChannel',
-            'error': "null"
-          }))
-          this.$eventBus.$emit('leaveChannelMsg')
-          this.$alertModal('alert redirect', this.$store.state.currentChannel.name + ' 채널에서 나갔습니다.')
-        }).catch(error => {
-          this.$alertModal('error', '나가기에 실패했습니다.')
-        })
-      },
-      handleOkForceLeave: function () {
-        this.$http.post('/api/channel/leave', {
-          email: this.userEmail,
-          channel_id: this.$store.state.currentChannel.id
-        }).then(res => {
-          // 유저가 나갔음으로 채널 유저 업데이트
-          this.$store.state.stompClient.send('/pub/chat/room/' + this.$store.state.currentChannel.id, JSON.stringify({
-            'message': 'updateChannel',
-            'error': "null"
-          }))
-          this.$eventBus.$emit('forceLeaveChannelMsg', this.userName)
-          this.$alertModal('alert redirect', this.$store.state.currentChannel.name + ' 채널에서 추방되었습니다.')
-          this.$store.state.stompClient.send("/sub/chat/room/" + this.$store.state.currentChannel.id, JSON.stringify({
-            'message': 'forceLeaveChannel',
-            'error': "null"
-          }))
-        }).catch(error => {
-          this.$alertModal('error', '추방에 실패했습니다.')
-        })
-      }
     }
   }
 </script>

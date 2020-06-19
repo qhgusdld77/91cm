@@ -189,7 +189,7 @@
       sendMailToggle() {
         this.sendMail = !this.sendMail
         if (this.sendMail) {
-          this.$alertModal('alert', '지금부터 보내는 메시지는' + this.$store.state.currentChannel.name + ' 채널 사용자들에게 ' + '메일로 보내집니다.')
+          this.$_alert('지금부터 보내는 메시지는' + this.$store.state.currentChannel.name + ' 채널 사용자들에게 ' + '메일로 보내집니다.')
         }
       },
       toggleSearchMode: function () {
@@ -224,7 +224,7 @@
           fileSize += file.size
         });
         if (fileSize >= maxUploadSize) {
-          this.$alertModal('alert', '한번에 보낼 수 있는 파일 용량은 100MB 입니다.')
+          this.$_alert('한번에 보낼 수 있는 파일 용량은 100MB 입니다.')
           return;
         }
         /////////////////////////////////////
@@ -244,7 +244,7 @@
         }).catch(error => {
           this.isFileUpload = false
           this.progressValue = 0
-          this.$alertModal('error', '폴더는 업로드 할 수 없습니다.')
+          this.$_error( '폴더는 업로드 할 수 없습니다.')
         })
       },
       send: async function (e, isSysMsg) {
