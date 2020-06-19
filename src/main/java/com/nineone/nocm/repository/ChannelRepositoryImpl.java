@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public class ChannelRepositoryImpl implements ChannelRepository{
+    
     @Autowired
     private SqlSessionTemplate sqlSession;
 

@@ -119,7 +119,7 @@
           return;
         }
         if (uploadFiles[0].size >= maxUploadSize) {
-          this.$alertModal('alert', '한번에 보낼 수 있는 파일 용량은 100MB 입니다.')
+          this.$_alert('한번에 보낼 수 있는 파일 용량은 100MB 입니다.')
           return;
         }
         this.imageForm = new FormData();
@@ -173,7 +173,7 @@
               }).then(res => {
                 this.$store.state.currentUser.picture = res.data
               }).catch(error => {
-                this.$alertModal('error', '이미지 파일만 업로드 할 수 있습니다.')
+                this.$_error( '이미지 파일만 업로드 할 수 있습니다.')
               })
               this.$store.state.stompClient.send('/pub/sync/info', null, {})
               this.$store.dispatch('initCurrentUser')
@@ -198,23 +198,23 @@
         //   return false
         // }
         if (email == null || email == '') {
-          this.$alertModal('error', '이메일을 입력해주세요')
+          this.$_error('이메일을 입력해주세요')
           return false
         }
         if (name == null || name == '') {
-          this.$alertModal('error', '이름을 입력해주세요')
+          this.$_error( '이름을 입력해주세요')
           return false
         }
         if (name.length > 20) {
-          this.$alertModal('error', '이름이 너무 깁니다.')
+          this.$_error( '이름이 너무 깁니다.')
           return false
         }
         if (phone == null || phone == '') {
-          this.$alertModal('error', '핸드폰 번호를 입력해주세요')
+          this.$_error('핸드폰 번호를 입력해주세요')
           return false
         }
         if (!phone.match(phoneRegex)) {
-          this.$alertModal('error', '핸드폰 번호가 형식에 맞지 않습니다')
+          this.$_error('핸드폰 번호가 형식에 맞지 않습니다')
           return false
         }
         return true

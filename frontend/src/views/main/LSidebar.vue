@@ -58,7 +58,8 @@
               ></v-badge>
             </a>
             <div class="submenu-content">
-              <a style="cursor:default;display:flex; padding-left: 15px;" v-for="(user) in channelUsers" :key="user.email" class="menu-item verti-align" >
+              <a style="cursor:default;display:flex; padding-left: 15px;" v-for="(user) in channelUsers"
+                 :key="user.email" class="menu-item verti-align">
                 <div v-if="user.online">
                   <v-badge
                     bottom
@@ -67,11 +68,11 @@
                     offset-x="10"
                     offset-y="10"
                   >
-                    <img class="avatar"  :src="user.picture">
+                    <img class="avatar" :src="user.picture">
                   </v-badge>
                 </div>
                 <div v-else>
-                  <img class="avatar"  :src="user.picture">
+                  <img class="avatar" :src="user.picture">
                 </div>
 
                 <!-- <v-badge
@@ -79,12 +80,12 @@
                   dot
                   inline
                 > -->
-                  <span style="margin-left:15px;">{{ user.name }}</span>
-                  <div style="display: flex;justify-content: flex-end;flex-grow: 1;" v-if="isActiveForceLeave(user)">
-                    <button @click="confirmChannelForceLeave(user)" style="margin-left: -15px; display: flex;">
-                      <i class="im im-minus-circle" style="font-size:15px; color:black;"></i>
-                    </button>
-                  </div>
+                <span style="margin-left:15px;">{{ user.name }}</span>
+                <div style="display: flex;justify-content: flex-end;flex-grow: 1;" v-if="isActiveForceLeave(user)">
+                  <button @click="confirmChannelForceLeave(user)" style="margin-left: -15px; display: flex;">
+                    <i class="im im-minus-circle" style="font-size:15px; color:black;"></i>
+                  </button>
+                </div>
                 <!-- </v-badge> -->
               </a>
 
@@ -102,26 +103,23 @@
     </div>
     <b-modal id="channelCU" centered ref="modal" @hidden="resetModal" @ok="handleOk">
       <template #modal-title>{{ modalTitle }}</template>
-      <form ref="channelCreateForm" @submit.stop.prevent="channelForm">
-        <b-form-group label="채널 이름" :state="nameState" label-for="channel-input" invalid-feedback="채널 이름이 필요합니다.">
-          <b-form-input id="channel-input" :state="nameState" v-model="channelTitle" required autofocus autocomplete="off">
-          </b-form-input>
-        </b-form-group>
-      </form>
+      <b-form-group label="채널 이름" :state="nameState" label-for="channel-input" invalid-feedback="채널 이름이 필요합니다.">
+        <b-form-input id="channel-input" :state="nameState" v-model="channelTitle" required autofocus
+                      autocomplete="off">
+        </b-form-input>
+      </b-form-group>
     </b-modal>
 
     <b-modal id="channelD" title="채널 삭제" @hidden="resetModal" @ok="handleOk">
-      <form ref="channelDeleteForm" @submit.stop.prevent="channelForm">
-        <p class="my-4"><code>[{{ channelTitle }}]</code>채널을 삭제하시겠습니까?</p>
-      </form>
+      <p class="my-4"><code>[{{ channelTitle }}]</code>채널을 삭제하시겠습니까?</p>
     </b-modal>
 
-    <b-modal id="channelForceLeave" title="채널 추방" @hidden="resetModal" @ok="handleOkForceLeave">
-        <p class="my-4"><code>[{{ userName }}]</code>님을 추방하시겠습니까?</p>
+    <b-modal id="channelForceLeave" title="채널 추방" @hidden="resetModal" @ok="leaveChannle(userEmail,currentChannel,'forceLeave')">
+      <p class="my-4"><code>[{{ userName }}]</code>님을 추방하시겠습니까?</p>
     </b-modal>
 
-    <b-modal id="channelLeave" title="채널 나가기" @hidden="resetModal" @ok="handleOkLeave">
-        <p class="my-4"><code>[{{ channelTitle }}]</code>채널에서 나가시겠습니까?</p>
+    <b-modal id="channelLeave" title="채널 나가기" @hidden="resetModal" @ok="leaveChannle(userEmail,currentChannel)">
+      <p class="my-4"><code>[{{ channelTitle }}]</code>채널에서 나가시겠습니까?</p>
     </b-modal>
   </div>
 
@@ -130,9 +128,10 @@
   import AboutChannel from '../../service/aboutchannel'
   import {mapGetters} from "vuex";
   import RSidebarVue from './RSidebar.vue';
-
+  import channelMixin from "../../mixins/channelMixin";
   export default {
     props: ['modalObj'],
+    mixins: [channelMixin],
     watch: {
       currentChannel(newCurrentChannel, oldCurrentChannel) {
         this.$store.dispatch('updateUserList')
@@ -247,15 +246,12 @@
       prepareModal: function (mode, channel) {
         this.modalTitle = "채널 " + this.getModeKorStr(mode)
         this.channelMode = mode
-
         try {
-          this.channelTitle = (channel === undefined)?this.$store.state.currentChannel.name:channel.name
-        }
-        catch(e) {
+          this.channelTitle = (channel === undefined) ? this.$store.state.currentChannel.name : channel.name
+        } catch (e) {
           this.channelTitle = ''
         }
-
-        switch(mode) {
+        switch (mode) {
           case "create":
             this.channelTitle = ''
           case "edit":
@@ -266,11 +262,11 @@
         }
       },
       // 채널 생성 부분
-      checkFormValidity: function () {
-        const valid = this.$refs.channelCreateForm.checkValidity()
-        this.nameState = valid
-        return valid
-      },
+      // checkFormValidity: function () {
+      //   const valid = this.$refs.channelCreateForm.checkValidity()
+      //   this.nameState = valid
+      //   return valid
+      // },
       resetModal() {
         this.channelTitle = ''
         this.nameState = null
@@ -282,9 +278,6 @@
         this.channelForm()
       },
       channelForm: function () {
-        if (!this.checkFormValidity()) {
-          return
-        }
         //this.$refs['modal'].hide()
 
         this.$nextTick(() => {
@@ -292,14 +285,12 @@
           this.$bvModal.hide('channelD')
         })
 
-        if(this.channelMode == "create") {
+        if (this.channelMode == "create") {
           this.createChannel()
-        }
-        else if(this.channelMode == "edit") {
+        } else if (this.channelMode == "edit") {
           this.$store.state.currentChannel.name = this.channelTitle
           this.updateChannel()
-        }
-        else if(this.channelMode == "delete") {
+        } else if (this.channelMode == "delete") {
           this.deleteChannel()
         }
       },
@@ -317,47 +308,53 @@
             this.$emit('channelUpdate')
 
           }).catch(error => {
-            console.warn(error)
-          })
+          console.warn(error)
+        })
       },
       updateChannel: function () {
         AboutChannel.updateChannelAPI(this.$store.state.currentChannel)
           .then(res => {
-            this.$store.state.stompClient.send("/sub/chat/room/" + this.$store.state.currentChannel.id, JSON.stringify({'message': 'updateCurrentChannel', 'error': "null"}))
+            this.$store.state.stompClient.send("/sub/chat/room/" + this.$store.state.currentChannel.id, JSON.stringify({
+              'message': 'updateCurrentChannel',
+              'error': "null"
+            }))
           }).catch(error => {
-            console.error(error)
-          })
+          console.error(error)
+        })
       },
       deleteChannel: function () {
         AboutChannel.deleteChannelAPI(this.$store.state.currentChannel)
           .then(res => {
-            this.$store.state.stompClient.send("/sub/chat/room/" + this.$store.state.currentChannel.id, JSON.stringify({'message': 'deleteCurrentChannel', 'error': "null"}))
+            this.$store.state.stompClient.send("/sub/chat/room/" + this.$store.state.currentChannel.id, JSON.stringify({
+              'message': 'deleteCurrentChannel',
+              'error': "null"
+            }))
           }).catch(error => {
-            console.error(error)
-          })
+          console.error(error)
+        })
       },
-      getModeKorStr: function(mode) {
-        if(mode == "create") return "생성"
-        if(mode == "edit") return "수정"
-        if(mode == "delete") return "삭제"
+      getModeKorStr: function (mode) {
+        if (mode == "create") return "생성"
+        if (mode == "edit") return "수정"
+        if (mode == "delete") return "삭제"
       },
-      isAdmin: function() {
+      isAdmin: function () {
         var loginUserRoles = this.$store.state.currentUser.roles
-        return loginUserRoles.includes('ROLE_ROOT') ||  loginUserRoles.includes('ROLE_ADMIN')
+        return loginUserRoles.includes('ROLE_ROOT') || loginUserRoles.includes('ROLE_ADMIN')
       },
-      isMine: function(user) {
+      isMine: function (user) {
         var loginUserEmail = this.$store.state.currentUser.email
         var clicktUserEmail = user.email
         return loginUserEmail == clicktUserEmail
       },
-      isActiveForceLeave: function(user) {
+      isActiveForceLeave: function (user) {
         return this.isAdmin() || this.isMine(user)
       },
       confirmChannelForceLeave: function (user) {
         this.userEmail = user.email
 
         //나가기
-        if(this.isMine(user)) {
+        if (this.isMine(user)) {
           this.channelTitle = this.$store.state.currentChannel.name
           this.$bvModal.show('channelLeave')
         }
@@ -367,46 +364,21 @@
           this.$bvModal.show('channelForceLeave')
         }
       },
-      handleOkLeave: function() {
-        this.$http.post('/api/channel/leave', {
-          email: this.userEmail,
-          channel_id: this.$store.state.currentChannel.id
-        }).then(res => {
-          // 유저가 나갔음으로 채널 유저 업데이트
-          this.$store.state.stompClient.send('/pub/chat/room/' + this.$store.state.currentChannel.id, JSON.stringify({'message': 'updateChannel', 'error': "null"}))
-          this.$eventBus.$emit('leaveChannelMsg')
-          this.$alertModal('alert redirect', this.$store.state.currentChannel.name + ' 채널에서 나갔습니다.')
-        }).catch(error => {
-          this.$alertModal('error', '나가기에 실패했습니다.')
-        })
-      },
-      handleOkForceLeave: function() {
-        this.$http.post('/api/channel/leave', {
-          email: this.userEmail,
-          channel_id: this.$store.state.currentChannel.id
-        }).then(res => {
-          // 유저가 나갔음으로 채널 유저 업데이트
-          this.$store.state.stompClient.send('/pub/chat/room/' + this.$store.state.currentChannel.id, JSON.stringify({'message': 'updateChannel', 'error': "null"}))
-          this.$eventBus.$emit('forceLeaveChannelMsg', this.userName)
-          this.$alertModal('alert redirect', this.$store.state.currentChannel.name + ' 채널에서 추방되었습니다.')
-          this.$store.state.stompClient.send("/sub/chat/room/" + this.$store.state.currentChannel.id, JSON.stringify({'message': 'forceLeaveChannel', 'error': "null"}))
-        }).catch(error => {
-          this.$alertModal('error', '추방에 실패했습니다.')
-        })
-      }
     }
   }
 </script>
 <style scoped>
-/* >>>는 deep selector  */
-  >>>.v-badge__badge{
+  /* >>>는 deep selector  */
+  >>> .v-badge__badge {
     color: #404E67 !important;
   }
+
   .active-channel {
     background-color: white;
     color: black !important;
   }
-  .avatar{
+
+  .avatar {
     color: #4c5667;
     font-weight: 600;
     width: 30px;

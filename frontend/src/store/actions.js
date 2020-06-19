@@ -8,7 +8,7 @@ export default {
         // CommonClass.replaceText(res.data)
         context.commit('setTaskBoard',res.data);
       }).catch(error=>{
-      console.error(error) 
+      console.error(error)
     })
   },
   // 91cm에 가입한 모든 유저 가져오기

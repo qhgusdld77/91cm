@@ -75,6 +75,7 @@
       },
       enter: async function (event) {
         let el = document.querySelector(".menuable__content__active.inviteClass")
+        console.log(el)
         if (el == null) {
           if (this.friends.length != 0) {
             await InviteService.invite(this.$store.state.currentUser.email, this.$store.state.currentChannel.id, this.friends)
@@ -93,7 +94,7 @@
                   })
                 this.message.content += '을 초대했습니다.'
                 this.$eventBus.$emit('getUserList', true)
-                this.$emit('send',null,true)
+                this.$emit('send', null, true)
                 this.friends = []
                 this.message.content = ''
                 this.$store.state.isInviteMode = !this.$store.state.isInviteMode
@@ -106,15 +107,15 @@
                     alertmsg += user.name + '님'
                   }
                   alertmsg += '은 이미 이 채널에 초대 받았습니다. 확인해주세요.'
-                  this.$alertModal('error', alertmsg)
+                  this.$_error(alertmsg)
                 } else {
-                  this.$alertModal('error', error.response.data.message)
+                  this.$_error(error.response.data.message)
                 }
                 console.error(error.response)
                 this.message.content = ''
               })
           } else {
-            this.$alertModal('alert', '초대할 사용자를 선택해주세요')
+            this.$_alert('초대할 사용자를 선택해주세요')
           }
         }
       },
