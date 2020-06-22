@@ -1,7 +1,9 @@
 package com.nineone.nocm.service;
 
 import java.util.List;
+import java.util.Map;
 
+import com.nineone.nocm.repository.CommonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +18,7 @@ public class ChannelServiceImpl implements ChannelService{
 
     @Autowired
     private ChannelRepository channelRepository;
-    
+
     @Autowired
     private MessageRepository messageRepository;
 
@@ -50,6 +52,7 @@ public class ChannelServiceImpl implements ChannelService{
 
     @Override
     public boolean updateChannel(Channel channel) {
+        Map<String, ?> map = (Map<String, ?>) channel;
         return (channelRepository.updateChannel(channel) > 0) ? true : false;
     }
 

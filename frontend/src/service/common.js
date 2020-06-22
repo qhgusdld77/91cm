@@ -27,7 +27,6 @@ class CommonClass {
     }
     content = content.replace('&lt;/p&gt;', '')
     content = content.replace('&lt;p&gt;', '')
-    console.log(content)
     return content
   }
 

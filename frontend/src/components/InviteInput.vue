@@ -82,7 +82,7 @@
               .then(res => {
                 for (let i = 0; i < this.friends.length; i++) {
                   const user = this.userList.find(el => el.email == this.friends[i])
-                  this.message.content += user.name + '님 '
+                  this.message.content += user.name + '님'
                 }
                 this.$http.post('/api/invite/mail', {
                   channel_id: this.$store.state.currentChannel.id,
@@ -94,7 +94,7 @@
                   })
                 this.message.content += '을 초대했습니다.'
                 this.$eventBus.$emit('getUserList', true)
-                this.$emit('send',null,true)
+                this.$emit('send', null, true)
                 this.friends = []
                 this.message.content = ''
                 this.$store.state.isInviteMode = !this.$store.state.isInviteMode
@@ -104,18 +104,18 @@
                   const alertList = error.response.data.list
                   for (let i = 0; i < alertList.length; i++) {
                     const user = this.userList.find(el => el.email == alertList[i])
-                    alertmsg += user.name + '님 '
+                    alertmsg += user.name + '님'
                   }
                   alertmsg += '은 이미 이 채널에 초대 받았습니다. 확인해주세요.'
-                  this.$alertModal('error', alertmsg)
+                  this.$_error(alertmsg)
                 } else {
-                  this.$alertModal('error', error.response.data.message)
+                  this.$_error(error.response.data.message)
                 }
                 console.error(error.response)
                 this.message.content = ''
               })
           } else {
-            this.$alertModal('alert', '초대할 사용자를 선택해주세요')
+            this.$_alert('초대할 사용자를 선택해주세요')
           }
         }
       },

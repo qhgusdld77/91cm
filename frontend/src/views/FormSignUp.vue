@@ -69,7 +69,7 @@
                      class="form-control bg-white border-left-0 border-md" v-model="phone">
             </div>
 
-            
+
 
 
             <!-- Submit Button -->
@@ -125,14 +125,14 @@
           }).then(res=>{
           if(res.data){
             this.doubleCheck = true
-            this.$alertModal('alert', '사용가능한 이메일입니다.')
+            this.$_alert('사용가능한 이메일입니다.')
           }else{
             this.doubleCheck = false
-            this.$alertModal('error', '중복되는 이메일이 존재합니다.')
+            this.$_error( '중복되는 이메일이 존재합니다.')
           }
         })
         }else{
-          this.$alertModal('error', '올바른 이메일 주소가 아닙니다.')
+          this.$_error('올바른 이메일 주소가 아닙니다.')
         }
       },
       formSignUp(){
@@ -143,9 +143,9 @@
           phone : this.phone,
           name: this.name
         }
-        if(this.email == '' || this.password1 == '' || this.password2 == '' 
+        if(this.email == '' || this.password1 == '' || this.password2 == ''
                 || this.phone == '' || this.name == ''){
-            this.$alertModal('error', '모든 항목을 채워주세요.')  
+            this.$_error('모든 항목을 채워주세요.')
             return
         }
         let phoneValidator = this.phoneValidator()
@@ -160,11 +160,11 @@
         })
         }else{
           if(!this.doubleCheck){
-            this.$alertModal('error', '이메일 중복확인을 해주세요.')
+            this.$_error( '이메일 중복확인을 해주세요.')
           }else if(!this.passwordCheck){
-            this.$alertModal('error', '비밀번호가 일치하지 않습니다.')
+            this.$_error( '비밀번호가 일치하지 않습니다.')
           }else if(!phoneValidator){
-            this.$alertModal('error', '올바른 번호가 아닙니다.')
+            this.$_error('올바른 번호가 아닙니다.')
           }
         }
       },

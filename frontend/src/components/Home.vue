@@ -18,12 +18,12 @@
     mounted() {
       if (this.$route.params.msg) {
         if (this.$route.params.msg.show) {
-          this.$alertModal('alert', this.$route.params.msg.message)
+          this.$_alert(this.$route.params.msg.message)
         }
       }
       if (this.$route.query.msg) {
         if (this.$route.query.msg.show) {
-          this.$alertModal('alert', this.$route.query.msg.message)
+          this.$_alert(this.$route.query.msg.message)
         }
       }
     },

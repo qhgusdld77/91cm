@@ -54,7 +54,6 @@
   export default {
     name: "AuthorityPage",
     beforeCreate() {
-      console.log("Authority beforeCreate")
       this.$http.post('/api/user/admin/userList')
         .then(res => {
           this.authUserList = res.data
@@ -66,7 +65,7 @@
     data() {
       return {
         authUserList: [],
-        authorityList: ["ROLE_USER", "ROLE_ADMIN", "ROLE_ANON"],
+        authorityList: ["ROLE_ADMIN", "ROLE_USER", "ROLE_ANON"],
         editedIndex: -1,
         editedItem: {
           number: 0,
@@ -103,17 +102,23 @@
           .then(res => {
             this.authUserList[this.editedIndex].authority = this.editedItem.authority
             this.dialog = false
-            this.$alertModal("alert", "권한이 수정되었습니다.")
+            this.$_alert("권한이 수정되었습니다.");
           }).catch(error => {
-          this.$alertModal("error", "권한 수정에 실패했습니다." + "\n" + error)
+          this.$_error("권한 수정에 실패했습니다." + "\n" + error)
           this.dialog = false
         })
       },
       editItem(item) {
-        console.log(item)
         this.editedIndex = this.authUserList.indexOf(item);
         this.editedItem = Object.assign({}, item);
         this.dialog = true;
+
+        var role = this.$store.state.currentUser.roles
+        if(role.includes('ROLE_ADMIN') && this.authorityList.includes('ROLE_ADMIN')) {
+          console.log(this.authorityList)
+          this.authorityList = this.authorityList.splice(1, 2)
+          console.log(this.authorityList)
+        }
       },
     }
   }

@@ -44,7 +44,6 @@
   </div>
 </template>
 <script>
-
   import LSidebar from '../views/main/LSidebar'
   import RSidebar from '../views/main/RSidebar'
   import MainHeader from '../views/main/MainHeader'
@@ -158,13 +157,10 @@
               let data = JSON.parse(e.body)
               if (data.message == 'updateChannel') {
                 this.$store.state.syncSignal.syncChannelUser = !this.$store.state.syncSignal.syncChannelUser;
-                return;
-              } else if (data.message == 'updateCurrentChannel') {
-                this.$store.dispatch('updateCurrentChannel')
-                return;
+              } else if (data.message == 'updateCurrentChannel' || data.message == 'deleteCurrentChannel') {
+                this.$store.dispatch(data.message)
               } else {
                 this.channelSubscribeCallBack(e);
-                return;
               }
             })
           })
@@ -195,7 +191,11 @@
       channelUpdate() {
         this.$store.state.stompClient.subscribe("/sub/chat/room/" + this.$store.state.currentChannel.id, (e) => {
           let data = JSON.parse(e.body)
-          if (data.message == 'updateChannel') {
+          if (e.headers.noticeMsg != null) {
+            this.noticeMsg = res.headers.noticeMsg
+            this.noticeMsgToggle = true
+          }
+          else if (data.message == 'updateChannel') {
             this.$store.state.syncSignal.syncChannelUser = !this.$store.state.syncSignal.syncChannelUser;
             return;
           } else {

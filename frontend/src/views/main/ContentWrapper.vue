@@ -3,7 +3,8 @@
     <div class="h-inherit" v-cloak @drop.prevent="dropFile" @dragover.prevent>
       <ul class="c-c-wrapper list-unstyled" @scroll="scrollEvt">
         <div v-for="msg in msgArray" :key="msg.id">
-          <MsgBox v-if="msg.sender!=null" :msg="msg" :msgPreviewBool="msgPreviewBool" @scrollToEnd="scrollToEnd" @imgLoad="imgLoad"></MsgBox>
+          <MsgBox v-if="msg.sender!=null" :msg="msg" :msgPreviewBool="msgPreviewBool" @scrollToEnd="scrollToEnd"
+                  @imgLoad="imgLoad"></MsgBox>
           <div class=" hori-align">
             <v-chip v-if="msg.sender==null" class="ma-2" style="font-weight:bold;">
               {{msg.content}}
@@ -26,7 +27,6 @@
               <v-icon class="my-mail" v-bind:class="{'active-m': sendMail}" @click="sendMailToggle">mail</v-icon>
               <v-icon class="my-search" @click="toggleSearchMode">find_in_page</v-icon>
               <i class="im im-users myfile-upload" style="right: 50px;" @click="inviteToggle"></i>
-
               <label for="file-input" style="display: block;margin-bottom: 0;">
                 <i class="im im-cloud-upload myfile-upload"></i>
               </label>
@@ -144,6 +144,10 @@
         this.message.content = this.$store.state.currentUser.name + '님이 나가셨습니다.'
         this.send(null, true)
       })
+      this.$eventBus.$on('forceLeaveChannelMsg', (leaveUserName) => {
+        this.message.content = leaveUserName + '님이 추방되었습니다.'
+        this.send(null, true)
+      })
     },
     updated() {
       this.scrollToEnd()
@@ -159,11 +163,11 @@
       imgLoad() {
         // 문제 있으면 아래 코드 지우기..
         this.oldScrollHeight = this.wrapperEl.scrollHeight
-        
+
         if (!this.msgPreviewBool && !this.isGetMsgForImgLoad) {
           this.scrollToEnd(true)
         }
-        if(this.isGetMsgForImgLoad){
+        if (this.isGetMsgForImgLoad) {
           this.isGetMsgForImgLoad = false
         }
       },
@@ -184,7 +188,7 @@
       sendMailToggle() {
         this.sendMail = !this.sendMail
         if (this.sendMail) {
-          this.$alertModal('alert', '지금부터 보내는 메시지는' + this.$store.state.currentChannel.name + ' 채널 사용자들에게 ' + '메일로 보내집니다.')
+          this.$_alert('지금부터 보내는 메시지는' + this.$store.state.currentChannel.name + ' 채널 사용자들에게 ' + '메일로 보내집니다.')
         }
       },
       toggleSearchMode: function () {
@@ -219,7 +223,7 @@
           fileSize += file.size
         });
         if (fileSize >= maxUploadSize) {
-          this.$alertModal('alert', '한번에 보낼 수 있는 파일 용량은 100MB 입니다.')
+          this.$_alert('한번에 보낼 수 있는 파일 용량은 100MB 입니다.')
           return;
         }
         /////////////////////////////////////
@@ -239,7 +243,7 @@
         }).catch(error => {
           this.isFileUpload = false
           this.progressValue = 0
-          this.$alertModal('error', '폴더는 업로드 할 수 없습니다.')
+          this.$_error('폴더는 업로드 할 수 없습니다.')
         })
       },
       send: async function (e, isSysMsg) {
