@@ -24,8 +24,7 @@
             @click:close="remove(data.item)"
           >
             <v-avatar left>
-              <v-img v-if="data.item.picture!=null" :src="data.item.picture"></v-img>
-              <v-img v-else :src="require('../assets/images/default-user-picture.png')"/>
+              <v-img  :src="data.item.picture"></v-img>
             </v-avatar>
             {{ data.item.name }}
           </v-chip>
@@ -36,8 +35,7 @@
           </template>
           <template v-else>
             <v-list-item-avatar>
-              <img v-if="data.item.picture!=null" :src="data.item.picture">
-              <img v-else src="../assets/images/default-user-picture.png">
+              <img :src="data.item.picture">
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title v-html="data.item.name"></v-list-item-title>

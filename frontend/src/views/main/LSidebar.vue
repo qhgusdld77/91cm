@@ -68,14 +68,11 @@
                     offset-x="10"
                     offset-y="10"
                   >
-                    <img v-if="user.picture!=null" class="avatar"  :src="user.picture">
-                    <img v-else class="avatar"  src="../../assets/images/default-user-picture.png">
+                    <img  class="avatar"  :src="user.picture">
                   </v-badge>
                 </div>
                 <div v-else>
-                  <img v-if="user.picture!=null" class="avatar"  :src="user.picture">
-                  <img v-else class="avatar"  src="../../assets/images/default-user-picture.png">
-
+                  <img  class="avatar"  :src="user.picture">
                 </div>
 
                 <!-- <v-badge
@@ -162,7 +159,6 @@
         channelTitle: '',
         userName: '',
         userEmail: ''
-        // channelUsers: [],
       }
     },
     created() {

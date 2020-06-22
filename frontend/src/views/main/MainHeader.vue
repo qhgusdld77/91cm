@@ -45,8 +45,7 @@
           <div class="dropdown">
             <a class="dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false">
-              <img v-if="$store.state.currentUser.picture" class="avatar" :src="$store.state.currentUser.picture">
-              <img v-else class="avatar" src="../../assets/images/default-user-picture.png">
+              <img class="avatar" :src="$store.state.currentUser.picture">
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
               <a class="dropdown-item" @click="callComponent('user')"><i class="ik ik-user dropdown-icon"></i>

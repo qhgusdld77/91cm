@@ -9,7 +9,16 @@
         update member set name = #{name}, phone = #{phone}, picture = #{picture} where email = #{email}
     </update>
     <select id="thisChannelUserList" parameterType="java.lang.Integer" resultType="com.nineone.nocm.domain.User">
-        select member.* from member join joininfo on member.email = joininfo.member_email where joininfo.channel_id = #{channel_id} order by member.name 
+    	SELECT 
+    		EMAIL
+    		,NAME
+    		,PHONE
+    		,IFNULL(PICTURE,'/img/default-user-picture.36ab16ac.png') PICTURE
+		FROM MEMBER MEM 
+		JOIN JOININFO 
+		ON MEM.EMAIL = JOININFO.MEMBER_EMAIL 
+		WHERE JOININFO.CHANNEL_ID = #{channel_id} 
+		ORDER BY MEM.NAME
     </select>
 
     <insert id="insertUser">
@@ -27,11 +36,24 @@
 <!--    </select>-->
     
     <select id="getUserfindById" parameterType="java.lang.String" resultType="com.nineone.nocm.domain.User">
-        select * from member where email = (select member_email from sns_info where identifier = #{id})
+    	SELECT 
+    		EMAIL
+    		,NAME
+    		,PHONE
+    		,IFNULL(PICTURE,'/img/default-user-picture.36ab16ac.png') PICTURE
+    	FROM MEMBER MEM
+    	WHERE EMAIL = (SELECT MEMBER_EMAIL FROM SNS_INFO WHERE IDENTIFIER = #{id})
     </select>
 	
 	<select id="getUserfindByEmail" resultType="com.nineone.nocm.domain.User">
-        select * from member where email = #{email}
+		SELECT 
+			EMAIL
+			,PASSWORD
+    		,NAME
+    		,PHONE
+    		,IFNULL(PICTURE,'/img/default-user-picture.36ab16ac.png') PICTURE
+    	FROM MEMBER
+    	WHERE EMAIL = #{email}	
     </select>
 
     <select id="getAllUserList" resultType="com.nineone.nocm.domain.User">
@@ -43,13 +65,14 @@
     </select>
     
     <select id="getUserListForInvite" resultType="com.nineone.nocm.domain.User">
-    	select 
-    		email,
-    		name,
-    		phone,
-    		picture 
-    	from member 
-    	where email not in (select member_email from joininfo where channel_id = #{channel_id}) and email = 'root';;
+    	SELECT
+    		EMAIL
+    		,NAME
+    		,PHONE
+    		,IFNULL(PICTURE,'/img/default-user-picture.36ab16ac.png') PICTURE
+		FROM MEMBER
+		WHERE EMAIL NOT IN (SELECT MEMBER_EMAIL FROM JOININFO WHERE CHANNEL_ID = #{channel_id})
+			AND EMAIL != 'root'
     </select>
 
     <!-- 

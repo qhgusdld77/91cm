@@ -26,11 +26,8 @@
                 <div style="margin: 20px 0px 35px;">
                   <input type="file" hidden ref="fileInput" @change="attachFile">
                   <div @click="fileInputClick">
-                    <img v-if="user.picture" class="icon-round"
+                    <img  class="icon-round"
                            :src="user.picture" width="200" height="200">
-                    
-                    <img v-else class="icon-round" src="../../assets/images/default-user-picture.png" width="200"
-                           height="200">
                   </div>
                 </div>
                 <table>
