@@ -61,29 +61,12 @@
               <a style="cursor:default;display:flex; padding-left: 15px;" v-for="(user) in channelUsers"
                  :key="user.email" class="menu-item verti-align">
                 <div v-if="user.online">
-<<<<<<< HEAD
-                  <v-badge
-                    bottom
-                    color="cyan lighten-1"
-                    dot
-                    offset-x="10"
-                    offset-y="10"
-                  >
+                  <v-badge bottom color="cyan lighten-1" dot offset-x="10" offset-y="10">
                     <img  class="avatar"  :src="user.picture">
                   </v-badge>
                 </div>
                 <div v-else>
-                  <img  class="avatar"  :src="user.picture">
-=======
-                  <v-badge bottom color="cyan lighten-1" dot offset-x="10" offset-y="10">
-                    <img v-if="user.picture!=null" class="avatar"  :src="user.picture">
-                    <img v-else class="avatar"  src="../../assets/images/default-user-picture.png">
-                  </v-badge>
-                </div>
-                <div v-else>
-                  <img v-if="user.picture!=null" class="avatar"  :src="user.picture">
-                  <img v-else class="avatar"  src="../../assets/images/default-user-picture.png">
->>>>>>> j-develop
+                  <img class="avatar"  :src="user.picture">
                 </div>
                 <span style="margin-left:15px;">{{ user.name }}</span>
                 <div style="display: flex;justify-content: flex-end;flex-grow: 1;" v-if="isActiveForceLeave(user)">
