@@ -380,7 +380,6 @@
         return this.$store.state.currentChannel
       },
       ...mapGetters({
-        userList: 'getUserList',
         msgArray: 'getMsgArray'
       })
     },

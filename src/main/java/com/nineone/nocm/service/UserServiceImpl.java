@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService,UserDetailsService {
     	}else {
     		CustomUserDetails customUserDetails = new CustomUserDetails();
     		customUserDetails.setUsername(user.getEmail());
-    		log.info(user.getPassword());
+    		log.info(user.getPassword()+"asdasd");
     		customUserDetails.setPassword(user.getPassword());
     		customUserDetails.setAuthorities(getAuthorities(user.getEmail()));
     		customUserDetails.setEnabled(true);
@@ -150,6 +150,11 @@ public class UserServiceImpl implements UserService,UserDetailsService {
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return (userRepository.insertUser(user) > 0) ? true : false;
+	}
+
+	@Override
+	public List<User> getUserListForInvite(int channel_id) {
+		return userRepository.getUserListForInvite(channel_id);
 	} 
 
 }

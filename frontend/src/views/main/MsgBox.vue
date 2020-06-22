@@ -2,8 +2,7 @@
   <li class="list-unstyled chat-message">
     <div class="icon">
       <slot name="m-icon">
-        <img v-if="msg.user.picture" class="icon-round" :src="msg.user.picture" width="40" height="40"/>
-        <img v-else class="icon-round" src="../../assets/images/default-user-picture.png" width="40" height="40">
+        <img  class="icon-round" :src="msg.user.picture" width="40" height="40"/>
       </slot>
     </div>
     <!-- flex에서 벗어나기 위해 감쌈  -->

@@ -24,5 +24,6 @@ export default {
   isCreateListActive : false,
   msgArray: [],
   isVideoMode: false,
-  channelModal:false
+  channelModal:false,
+  inviteUserList:[]
 }

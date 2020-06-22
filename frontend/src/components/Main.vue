@@ -173,6 +173,7 @@
             }
             if (res.body == '"userList"') {
               this.$store.dispatch('userListUpdate')
+              this.$store.dispatch('inviteUserList')
             }
             if(res.body == '"getChannelUserList"') {
               //this.selectChannelList()

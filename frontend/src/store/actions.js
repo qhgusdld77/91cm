@@ -24,6 +24,15 @@ export default {
     })
     */
   },
+  // 채널에 입장하지 않은 모든 유저 가져오기
+  inviteUserList: function (context) {
+    axios.get('/api/user/invite/'+context.state.currentChannel.id)
+      .then(res => {
+        context.commit('setInviteUserList', res.data);
+      }).catch(error => {
+      console.error(error);
+    })
+  },
   updateUserList: function (context) {
     console.log("jjw1123")
     //context.commit('selectChannelList', context.state.currentChannel)

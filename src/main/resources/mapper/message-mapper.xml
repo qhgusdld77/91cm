@@ -28,14 +28,13 @@
     
     <select id="getMessageList" resultMap="messageList">
     
-   		select * from message left join member on member.email = message.sender
+   		select message.*,email,name,phone,ifnull(picture,'/img/default-user-picture.36ab16ac.png') picture from message left join member on member.email = message.sender
 			where channel_id = #{channel_id} 
 			<if test="first.equals(false)">
 				and (send_date <![CDATA[<]]> (select send_date from message where id = #{cursorId}) or 
 				(send_date = (select send_date from message where id = #{cursorId}) and id <![CDATA[<]]> #{cursorId}))  
 			</if>
 				order by send_date desc, id desc limit 30
-				
     </select>
     
     <select id="getMsgCntList" resultType="java.lang.Integer">

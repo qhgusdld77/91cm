@@ -19,5 +19,5 @@ public interface UserService extends UserDetailsService {
 	List<User> getAllUserList();
 	List<User> getCurrentChannelUserList(int channel_id);
 	Collection<GrantedAuthority> getAuthorities(String email);
-
+	List<User> getUserListForInvite(int channel_id);
 }

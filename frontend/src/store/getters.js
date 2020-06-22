@@ -19,5 +19,6 @@ export default {
   getUserList: state => state.userList,
   getMsgArray: state => state.msgArray,
   getIsVideoMode: state => state.isVideoMode,
-  getIsSmallWidth: state => state.isSmallWidth
+  getIsSmallWidth: state => state.isSmallWidth,
+  getInviteUserList: state => state.inviteUserList
 }
