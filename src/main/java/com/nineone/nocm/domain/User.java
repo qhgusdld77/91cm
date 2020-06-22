@@ -41,12 +41,4 @@ public class User{
         return this;
     }
     
-//    public void setPicture(String picture) {
-//    	if(picture == null) {
-//    		this.picture = "@/assets/images/default-user-picture.png";
-//    	}else {
-//    		this.picture = picture;
-//    	}
-//    }
-
 }
