@@ -25,10 +25,8 @@
 
               <div class="info-wrapper cetered-align card-body">
                 <div style="margin: 20px 0px 35px;">
-                  <img v-if="getCurrentUser.picture" class="icon-round"
+                  <img class="icon-round"
                        :src="getCurrentUser.picture" width="200" height="200">
-                  <img v-else class="icon-round" src="../../assets/images/default-user-picture.png" width="200"
-                       height="200">
                 </div>
                 <table>
                   <tbody>

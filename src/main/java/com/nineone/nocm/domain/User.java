@@ -41,11 +41,12 @@ public class User{
         return this;
     }
     
-//    public String setPicture(String picture) {
+//    public void setPicture(String picture) {
 //    	if(picture == null) {
-//    		this.picture = 
+//    		this.picture = "@/assets/images/default-user-picture.png";
+//    	}else {
+//    		this.picture = picture;
 //    	}
-//    	return "";
 //    }
 
 }

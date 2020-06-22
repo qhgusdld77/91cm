@@ -26,6 +26,7 @@ public class CustomAuthenticationSuccessHandler extends  SavedRequestAwareAuthen
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 		User user = userRepository.getUserfindByEmail(request.getParameter("email"));
+		user.setPassword(null);
 		HttpSession session = request.getSession();
 		session.setAttribute("user", user);
 		getRedirectStrategy().sendRedirect(request, response, "/main");

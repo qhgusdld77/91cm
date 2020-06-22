@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService,UserDetailsService {
     	}else {
     		CustomUserDetails customUserDetails = new CustomUserDetails();
     		customUserDetails.setUsername(user.getEmail());
-    		log.info(user.getPassword());
+    		log.info(user.getPassword()+"asdasd");
     		customUserDetails.setPassword(user.getPassword());
     		customUserDetails.setAuthorities(getAuthorities(user.getEmail()));
     		customUserDetails.setEnabled(true);
