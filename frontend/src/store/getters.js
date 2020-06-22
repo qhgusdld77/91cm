@@ -19,5 +19,16 @@ export default {
   getUserList: state => state.userList,
   getMsgArray: state => state.msgArray,
   getIsVideoMode: state => state.isVideoMode,
-  getIsSmallWidth: state => state.isSmallWidth
+  getIsSmallWidth: state => state.isSmallWidth,
+  getInviteUser: state => {
+    let userArray =  JSON.parse(JSON.stringify(state.userList))
+    userArray.forEach((allUser,i,array) => {
+      state.channelUsers.forEach(channelUser=>{
+        if(allUser.email == channelUser.email){
+          array.splice(i, 1);
+        }
+      });
+    });
+    return userArray;
+  }
 }
