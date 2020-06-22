@@ -24,7 +24,8 @@
             @click:close="remove(data.item)"
           >
             <v-avatar left>
-              <v-img :src="data.item.picture"></v-img>
+              <v-img v-if="data.item.picture!=null" :src="data.item.picture"></v-img>
+              <v-img v-else :src="require('../assets/images/default-user-picture.png')"/>
             </v-avatar>
             {{ data.item.name }}
           </v-chip>
