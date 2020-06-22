@@ -3,7 +3,7 @@
     <v-col cols="12">
       <v-autocomplete
         v-model="friends"
-        :items="userList"
+        :items="inviteUser"
         @keydown.enter.exact="enter"
         @keydown.esc.exact="$emit('inviteToggle')"
         filled
@@ -59,6 +59,8 @@
     computed: {
       ...mapGetters({
         userList: 'getUserList',
+        channelUsers: 'getChannelUsers',
+        inviteUser:'getInviteUser'
       })
     },
     data() {
