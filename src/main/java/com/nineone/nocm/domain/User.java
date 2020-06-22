@@ -40,5 +40,12 @@ public class User{
         this.picture = icon;
         return this;
     }
+    
+//    public String setPicture(String picture) {
+//    	if(picture == null) {
+//    		this.picture = 
+//    	}
+//    	return "";
+//    }
 
 }

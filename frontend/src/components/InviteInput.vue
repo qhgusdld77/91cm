@@ -3,7 +3,7 @@
     <v-col cols="12">
       <v-autocomplete
         v-model="friends"
-        :items="inviteUser"
+        :items="inviteUserList"
         @keydown.enter.exact="enter"
         @keydown.esc.exact="$emit('inviteToggle')"
         filled
@@ -61,13 +61,16 @@
       ...mapGetters({
         userList: 'getUserList',
         channelUsers: 'getChannelUsers',
-        inviteUser:'getInviteUser'
+        inviteUserList: 'getInviteUserList',
       })
     },
     data() {
       return {
         friends: [],
       }
+    },
+    async created(){
+      await this.$store.dispatch('inviteUserList')
     },
     mounted() {
       this.friends = []

@@ -48,6 +48,9 @@ export default {
   setIsVideoMode: function(state,payload){
     state.isVideoMode = payload
   },
+  setInviteUserList: function(state,payload){
+    state.inviteUserList = payload
+  }
   
 
 
