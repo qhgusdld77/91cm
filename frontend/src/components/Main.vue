@@ -65,8 +65,10 @@
   import AppsModal from "../views/main/AppsModal"
   import {mapGetters} from "vuex";
   import VideoChat from "./VideoChat";
+  import channelMixin from "../mixins/channelMixin";
 
   export default {
+    mixins: [channelMixin],
     name: 'Main',
     components: {
       'MainHeader': MainHeader,
@@ -129,9 +131,8 @@
     deactivated() {
     },
     async created() {
-      await this.$store.dispatch('userListUpdate')
-      await this.$store.dispatch('channelList') // 설정되는 값은 userChannelList
-      this.$store.commit('setCurrentChannel', this.$store.state.userChannelList[0])
+      this.selectChannelList()//채널목록 조회
+
       const currentChannel = this.$store.state.currentChannel
       if (currentChannel != null) {
         currentChannel.count = 0
@@ -155,6 +156,7 @@
           this.$store.state.userChannelList.forEach(channel => {
             this.$store.state.stompClient.subscribe("/sub/chat/room/" + channel.id, (e) => {
               let data = JSON.parse(e.body)
+              console.log("jww1")
               if (data.message == 'updateChannel') {
                 this.$store.state.syncSignal.syncChannelUser = !this.$store.state.syncSignal.syncChannelUser;
               } else if (data.message == 'updateCurrentChannel' || data.message == 'deleteCurrentChannel') {
@@ -173,8 +175,9 @@
               this.$store.dispatch('userListUpdate')
               this.$store.dispatch('inviteUserList')
             }
-            if(res.body == '"getChannelUserList"'){
-              this.$store.dispatch('updateUserList')
+            if(res.body == '"getChannelUserList"') {
+              //this.selectChannelList()
+              //this.$store.dispatch('selectChannelList')
             }
 
           })

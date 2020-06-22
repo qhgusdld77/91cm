@@ -23,7 +23,7 @@ export default {
         // headerTextVariant: 'light',
       })
         .then(value => {
-          console.log(value)
+
           switch (option) {
             case 'redirect':
               instance.$router.go('/main')
@@ -57,7 +57,6 @@ export default {
           return Vue.msgModalOk(this, this.typeToTitle(types), content);
         case 'confirm':
           let userSelect = await Vue.msgModalConfirm(this, this.typeToTitle(types), content);
-          console.log(userSelect);
           if (userSelect && callBackFunc !== undefined) {
             callBackFunc()
           }
@@ -66,12 +65,11 @@ export default {
       Vue.prototype.$_alert = async function (content) {
         this.$alertModal('alert', content);
       },
-      Vue.prototype.$_confirm = async function (content,callbackFunc) {
-        this.$alertModal('confirm', content,callbackFunc);
+      Vue.prototype.$_confirm = async function (content, callbackFunc) {
+        this.$alertModal('confirm', content, callbackFunc);
       },
       Vue.prototype.$_error = async function (content) {
         this.$alertModal('error', content);
       }
   },
-
 }
