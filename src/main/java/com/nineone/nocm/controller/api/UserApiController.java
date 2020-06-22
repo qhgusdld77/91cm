@@ -147,5 +147,10 @@ public class UserApiController {
     	}
         return userList;
     }
+    
+    @RequestMapping(value="/invite/{channel_id}",method=RequestMethod.GET)
+    public List<User> getInviteUserList(@PathVariable int channel_id){
+    	return userService.getUserListForInvite(channel_id);
+    }
 
 }

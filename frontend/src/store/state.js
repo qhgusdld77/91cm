@@ -25,5 +25,5 @@ export default {
   msgArray: [],
   isVideoMode: false,
   channelModal:false,
-  inviteUser:[]
+  inviteUserList:[]
 }

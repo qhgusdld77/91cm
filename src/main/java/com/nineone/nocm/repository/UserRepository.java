@@ -14,5 +14,6 @@ public interface UserRepository {
 	User getUserfindById(String email);
     List<User> getAllUserList();
     User getUserfindByEmail(String email);
+    List<User> getUserListForInvite(int channel_id);
 //    boolean isNotExistEmail(String email);
 }

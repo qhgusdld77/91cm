@@ -41,6 +41,16 @@
             ON AUTH.MEMBER_EMAIL = MEM.EMAIL
            AND AUTH.ROLES_AUTHORITY != 'ROLE_ROOT'
     </select>
+    
+    <select id="getUserListForInvite" resultType="com.nineone.nocm.domain.User">
+    	select 
+    		email,
+    		name,
+    		phone,
+    		picture 
+    	from member 
+    	where email not in (select member_email from joininfo where channel_id = #{channel_id}) and email = 'root';;
+    </select>
 
     <!-- 
     <select id="isNotExistEmail" resultType="java.lang.Boolean">

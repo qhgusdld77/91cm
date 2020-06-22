@@ -58,6 +58,13 @@ public class UserRepositoryImpl implements UserRepository {
 
 
 
+	@Override
+	public List<User> getUserListForInvite(int channel_id) {
+		return sqlSession.selectList(namespace + ".getUserListForInvite", channel_id);
+	}
+
+
+
 //	@Override
 //	public boolean isNotExistEmail(String email) {
 //		return sqlSession.selectOne(namespace + ".isNotExistEmail", email);

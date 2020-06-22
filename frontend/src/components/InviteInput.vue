@@ -3,7 +3,7 @@
     <v-col cols="12">
       <v-autocomplete
         v-model="friends"
-        :items="inviteUser"
+        :items="inviteUserList"
         @keydown.enter.exact="enter"
         @keydown.esc.exact="$emit('inviteToggle')"
         filled
@@ -24,7 +24,8 @@
             @click:close="remove(data.item)"
           >
             <v-avatar left>
-              <v-img :src="data.item.picture"></v-img>
+              <v-img v-if="data.item.picture!=null" :src="data.item.picture"></v-img>
+              <v-img v-else :src="require('../assets/images/default-user-picture.png')"/>
             </v-avatar>
             {{ data.item.name }}
           </v-chip>
@@ -60,13 +61,16 @@
       ...mapGetters({
         userList: 'getUserList',
         channelUsers: 'getChannelUsers',
-        inviteUser:'getInviteUser'
+        inviteUserList: 'getInviteUserList',
       })
     },
     data() {
       return {
         friends: [],
       }
+    },
+    async created(){
+      await this.$store.dispatch('inviteUserList')
     },
     mounted() {
       this.friends = []
