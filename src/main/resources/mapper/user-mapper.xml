@@ -13,7 +13,7 @@
     		EMAIL
     		,NAME
     		,PHONE
-    		,IFNULL(PICTURE,'/img/default-user-picture.36ab16ac.png') PICTURE
+    		,PICTURE
 		FROM MEMBER MEM 
 		JOIN JOININFO 
 		ON MEM.EMAIL = JOININFO.MEMBER_EMAIL 
@@ -40,7 +40,7 @@
     		EMAIL
     		,NAME
     		,PHONE
-    		,IFNULL(PICTURE,'/img/default-user-picture.36ab16ac.png') PICTURE
+    		,PICTURE
     	FROM MEMBER MEM
     	WHERE EMAIL = (SELECT MEMBER_EMAIL FROM SNS_INFO WHERE IDENTIFIER = #{id})
     </select>
@@ -51,7 +51,7 @@
 			,PASSWORD
     		,NAME
     		,PHONE
-    		,IFNULL(PICTURE,'/img/default-user-picture.36ab16ac.png') PICTURE
+    		,PICTURE
     	FROM MEMBER
     	WHERE EMAIL = #{email}	
     </select>
@@ -69,7 +69,7 @@
     		EMAIL
     		,NAME
     		,PHONE
-    		,IFNULL(PICTURE,'/img/default-user-picture.36ab16ac.png') PICTURE
+    		,PICTURE
 		FROM MEMBER
 		WHERE EMAIL NOT IN (SELECT MEMBER_EMAIL FROM JOININFO WHERE CHANNEL_ID = #{channel_id})
 			AND EMAIL != 'root'

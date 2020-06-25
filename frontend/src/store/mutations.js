@@ -52,6 +52,4 @@ export default {
     state.inviteUserList = payload
   }
   
-
-
 }
