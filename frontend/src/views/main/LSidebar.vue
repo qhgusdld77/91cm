@@ -51,13 +51,11 @@
               <a v-for="(user, index) in channelUsers" :key="user.email" style="cursor:default;display:flex; padding-left: 15px;" class="menu-item verti-align" v-on:mouseover="visibilityChannelUserDelete(index)">
                 <div v-if="user.online">
                   <v-badge bottom color="cyan lighten-1" dot offset-x="10" offset-y="10">
-                    <img v-if="user.picture!=null" class="avatar"  :src="user.picture">
-                    <img v-else class="avatar"  src="../../assets/images/default-user-picture.png">
+                    <img  class="avatar"  :src="user.picture">
                   </v-badge>
                 </div>
                 <div v-else>
-                  <img v-if="user.picture!=null" class="avatar"  :src="user.picture">
-                  <img v-else class="avatar"  src="../../assets/images/default-user-picture.png">
+                  <img  class="avatar"  :src="user.picture">
                 </div>
                 <span style="margin-left:15px;">{{ user.name }}</span>
                 <div style="display: flex;justify-content: flex-end;flex-grow: 1;" v-if="isActiveForceLeave(user)">
