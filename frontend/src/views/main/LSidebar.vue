@@ -101,7 +101,8 @@
 <script>
   import {mapGetters} from "vuex";
   import AboutChannel from '../../service/aboutchannel'
-  import channelMixin from "../../mixins/channelMixin";
+  import channelMixin from "../../mixins/channelMixin"
+
   export default {
     props: ['modalObj'],
     mixins: [channelMixin],

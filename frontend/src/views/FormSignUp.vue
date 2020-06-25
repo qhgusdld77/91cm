@@ -21,16 +21,21 @@
           <div class="row mycustom">
             <input type ="hidden" name="_csrf" :value="csrfToken"/>
             <!-- Email -->
-            <div class="input-group col-lg-12 mb-4">
+            <div class="input-group col-lg-12">
               <div class="input-group-prepend">
                             <span class="input-group-text bg-white px-4 border-md border-right-0">
                               <v-icon>person</v-icon>
                             </span>
               </div>
-              <input id="firstName" type="text" placeholder="Email" @blur="emailDubleCheck"
+              <input id="firstName" type="text" placeholder="Email" style="padding-right: 110px;z-index: 0;"
                      class="form-control bg-white border-left-0 border-md" v-model="email">
+              <div style="position: absolute;right: 25px;top: 30px;">
+                 <v-btn @click="emailDubleCheck">중복확인</v-btn>
+              </div>
             </div>
-            <div class="input-group col-lg-12 mb-4">
+            <div style="color: red;padding-left: 12px;">{{emailAlert}}</div>
+
+            <div class="input-group col-lg-12">
               <div class="input-group-prepend">
                             <span class="input-group-text bg-white px-4 border-md border-right-0">
                               <v-icon>person</v-icon>
@@ -40,7 +45,7 @@
                      class="form-control bg-white border-left-0 border-md" v-model="name">
             </div>
             <!-- Password -->
-            <div class="input-group col-lg-12 mb-4">
+            <div class="input-group col-lg-12">
               <div class="input-group-prepend">
                             <span class="input-group-text bg-white px-4 border-md border-right-0">
                                <v-icon>lock</v-icon>
@@ -50,7 +55,7 @@
                      class="form-control bg-white border-left-0 border-md" v-model="password1">
             </div>
 
-            <div class="input-group col-lg-12 mb-4">
+            <div class="input-group col-lg-12">
               <div class="input-group-prepend">
                             <span class="input-group-text bg-white px-4 border-md border-right-0">
                                <v-icon>lock</v-icon>
@@ -59,15 +64,17 @@
               <input type="password" placeholder="Password" @blur="checkPassword"
                      class="form-control bg-white border-left-0 border-md" v-model="password2">
             </div>
-            <div class="input-group col-lg-12 mb-4">
+            <div style="color: red;padding-left: 12px;">{{pwdAlert}}</div>
+
+            <div class="input-group col-lg-12">
               <div class="input-group-prepend">
                             <span class="input-group-text bg-white px-4 border-md border-right-0">
                               <v-icon>phone</v-icon>
                             </span>
               </div>
-              <input type="text" placeholder="Phone" @keyup="phoneFormatter"
-                     class="form-control bg-white border-left-0 border-md" v-model="phone">
+              <input type="text" placeholder="Phone" @keyup="phoneFormatter" @blur="checkPhone" class="form-control bg-white border-left-0 border-md" v-model="phone">
             </div>
+            <div style="color: red;padding-left: 12px;">{{phoneAlert}}</div>
 
 
 
@@ -99,7 +106,11 @@
         phone:'',
         csrfToken: '',
         doubleCheck: false,
-        passwordCheck: false
+        passwordCheck: false,
+        phoneCheck:false,
+        emailAlert:'',
+        pwdAlert:'',
+        phoneAlert:''
       }
     },
     created(){
@@ -111,10 +122,23 @@
           if(this.password2!='' && this.password1!=''){
             if(this.password1 == this.password2){
               this.passwordCheck = true
+              this.pwdAlert= ''
             }else{
+              this.pwdAlert= '비밀번호가 일치하지 않습니다.'
               this.passwordCheck = false
             }
           }
+      },
+      checkPhone(){
+        if(this.phoneAlert!=''){
+          if(this.phoneValidator()){
+            this.phoneCheck = true
+            this.phoneAlert = ''
+          }else{
+            this.phoneCheck = false
+            this.phoneAlert = '핸드폰 번호가 형식에 맞지 않습니다' 
+          }
+        }        
       },
       emailDubleCheck(){
         if(this.emailValidator()){
@@ -125,14 +149,17 @@
           }).then(res=>{
           if(res.data){
             this.doubleCheck = true
-            this.$_alert('사용가능한 이메일입니다.')
+            this.emailAlert = '사용가능한 이메일입니다.'
+            //this.$_alert('사용가능한 이메일입니다.')
           }else{
             this.doubleCheck = false
-            this.$_error( '중복되는 이메일이 존재합니다.')
+            this.emailAlert = '해당 이메일은 이미 가입되어 있습니다.'
+            //this.$_error( '중복되는 이메일이 존재합니다.')
           }
         })
         }else{
-          this.$_error('올바른 이메일 주소가 아닙니다.')
+          this.emailAlert = '올바른 이메일 주소가 아닙니다.'
+          //this.$_error('올바른 이메일 주소가 아닙니다.')
         }
       },
       formSignUp(){
@@ -148,8 +175,7 @@
             this.$_error('모든 항목을 채워주세요.')
             return
         }
-        let phoneValidator = this.phoneValidator()
-        if(this.doubleCheck && this.passwordCheck && phoneValidator){
+        if(this.doubleCheck && this.passwordCheck && this.phoneCheck){
           axios.post('/api/user/formsignup',user).then(res=>{
           this.email = ''
           this.password1 = ''
@@ -160,11 +186,11 @@
         })
         }else{
           if(!this.doubleCheck){
-            this.$_error( '이메일 중복확인을 해주세요.')
+            this.$_error('이메일 중복확인을 해주세요.')
           }else if(!this.passwordCheck){
             this.$_error( '비밀번호가 일치하지 않습니다.')
-          }else if(!phoneValidator){
-            this.$_error('올바른 번호가 아닙니다.')
+          }else if(!this.phoneCheck){
+            this.$_error('핸드폰 번호가 형식에 맞지 않습니다')
           }
         }
       },
@@ -270,6 +296,7 @@
   */
   .form-control:not(select) {
     padding: 1.5rem 0.5rem;
+    border-color: #ced4da;
   }
 
   .form-control::placeholder {

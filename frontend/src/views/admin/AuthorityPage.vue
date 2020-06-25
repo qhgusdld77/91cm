@@ -22,19 +22,20 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field :disabled="true" v-model="editedIndex" label="Dessert name"></v-text-field>
+                <v-text-field :disabled="true" v-model="editedIndex" label="Num"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
                 <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field :disabled="true" v-model="editedItem.email" label="User email"></v-text-field>
+                <v-text-field :disabled="true" v-model="editedItem.email" label="Email"></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-autocomplete
                   v-model="editedItem.authority"
                   :items="authorityList"
-                  label="Interests"
+                  label="Authority
+                  "
                 ></v-autocomplete>
               </v-col>
             </v-row>
