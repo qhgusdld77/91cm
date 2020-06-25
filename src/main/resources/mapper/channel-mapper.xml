@@ -33,7 +33,9 @@
            AND JI.MEMBER_EMAIL = #{userEmail}
 
          WHERE CN.DELETE_YN = 'N'
-      ORDER BY CN.NAME
+
+      ORDER BY LENGTH(CN.NAME) ASC
+             , CN.NAME ASC
     </select>
 
     <insert id="insertJoinInfo">
