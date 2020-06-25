@@ -145,7 +145,7 @@
           }).then(res => {
             console.log(res.data, 'position')
             if (res.data) this.$store.state.stompClient.send('/sub/todo/' + this.$store.state.currentChannel.id, {}, {typename: 'taskUpdate'})
-            else this.$_alert( '위치 변경에 실패했습니다.')
+            else this.$_error( '위치 변경에 실패했습니다.')
           }).catch(error => {
             console.error(error)
           })

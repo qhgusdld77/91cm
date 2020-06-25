@@ -1540,7 +1540,7 @@ textarea.form-control { padding: 10px 15px; border-radius: 4px; -webkit-border-r
 
 .note-editor.note-frame.card { -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; }
 
-.input-group { margin-bottom: 1.25em; }
+/* .input-group { margin-bottom: 1.25em; } */
 
 .form-control-primary { border-color: #007bff; color: #007bff; }
 .form-control-primary:focus { border-color: #007bff; }
