@@ -52,7 +52,6 @@ public class ChannelServiceImpl implements ChannelService{
 
     @Override
     public boolean updateChannel(Channel channel) {
-        Map<String, ?> map = (Map<String, ?>) channel;
         return (channelRepository.updateChannel(channel) > 0) ? true : false;
     }
 
