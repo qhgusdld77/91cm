@@ -156,11 +156,11 @@
           this.$store.state.userChannelList.forEach(channel => {
             this.$store.state.stompClient.subscribe("/sub/chat/room/" + channel.id, (e) => {
               let data = JSON.parse(e.body)
-              console.log("jww1")
               if (data.message == 'updateChannel') {
                 this.$store.state.syncSignal.syncChannelUser = !this.$store.state.syncSignal.syncChannelUser;
-              } else if (data.message == 'updateCurrentChannel' || data.message == 'deleteCurrentChannel') {
-                this.$store.dispatch(data.message)
+
+              } else if (data.message == 'selectChannelList') {
+                this.selectChannelList()
               } else {
                 this.channelSubscribeCallBack(e);
               }
