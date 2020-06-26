@@ -66,13 +66,16 @@ public class ChannelApiController {
         return channelService.deleteChannel(channel.getId());
     }
 
-    @RequestMapping(value = "/update/lastaccessdate", method = RequestMethod.PUT)
+    @RequestMapping(value = "/update/lastaccessdate")
     public void updateLastAccessDate(@RequestBody Map<String, Object> map) {
+    	joinInfoService.updateLastAccessDate((int) map.get("currentChannelId"), map.get("userEmail").toString());
+    	/*
         if (map.get("oldChannelId") == null) {
             joinInfoService.updateLastAccessDate((int) map.get("currentChannelId"), map.get("userEmail").toString());
         } else {
             joinInfoService.updateLastAccessDate((int) map.get("oldChannelId"), map.get("userEmail").toString());
         }
+        */
     }
 
 }

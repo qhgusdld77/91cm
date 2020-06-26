@@ -5,7 +5,7 @@
         <div class="top-menu d-flex align-items-center" style="flex-grow: 1;">
           <button type="button" class="btn-icon mobile-nav-toggle d-lg-none"><span></span></button>
           <div v-if="$store.state.currentChannel!=null" style="font-weight: bold;font-size: 15px;width: 0;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;flex-grow: 1;">
-            {{ $store.state.currentChannel.name  }}
+            <!-- {{ $store.state.currentChannel.name  }} -->
           </div>
         </div>
         <div class="top-menu d-flex align-items-center">
@@ -54,7 +54,7 @@
               <a v-if="false" class="dropdown-item" @click="$router.push('/develop')"><i class="ik ik-settings dropdown-icon"></i>
                 Setting</a>
               <a class="dropdown-item" @click="SignOut"><i class="ik ik-power dropdown-icon"></i> Logout</a>
-              <a class="dropdown-item" v-if="getUserRoles" @click="callComponent('admin')"><i
+              <a class="dropdown-item" v-if="isAdmin" @click="callComponent('admin')"><i
                 class="ik ik-settings dropdown-icon"></i> Permission</a>
             </div>
           </div>
@@ -67,8 +67,11 @@
 <script>
   import '../../../dist/js/theme.js'
   import AboutChannel from '../../service/aboutchannel'
+  import commonMixin from "../../mixins/commonMixin";
+
 
   export default {
+    mixins: [commonMixin],
     name: 'MainHeader',
     data() {
       return {
@@ -76,10 +79,6 @@
       }
     },
     computed: {
-      getUserRoles: function () {
-        var role = this.$store.state.currentUser.roles
-        return role.includes('ROLE_ROOT') || role.includes('ROLE_ADMIN');
-      },
       getAlarmList: function () {
         while (this.alarmList.length > 5) {
           this.alarmList.pop()
@@ -125,8 +124,7 @@
             // 현재 채널을 변경하는 로직을 구현해야할듯
             this.$store.state.stompClient.send('/pub/chat/message', JSON.stringify(message))
             this.alarmList.splice(index, 1);
-            this.$store.state.stompClient.send('/pub/chat/room/' + alarm.channel_id,
-              JSON.stringify({"message": "updateChannel", "error": "null"}))
+            this.$store.state.stompClient.send('/pub/chat/room/' + alarm.channel_id, JSON.stringify({"message": "updateChannel", "error": "null"}))
             if (this.$store.state.currentChannel != null) {
               await AboutChannel.updateLastAccessDate(this.$store.state.currentChannel.id)
             }
@@ -135,7 +133,7 @@
               const joinChannel = this.$store.state.userChannelList.find(channel => channel.id == alarm.channel_id)
               this.$store.commit('setCurrentChannel', joinChannel)
               console.log('joinChannel', this.$store.state.currentChannel)
-              this.$emit('channelUpdate')
+              this.$emit('channelSubscribe',this.$store.state.currentChannel)
             }).catch(err => console.error(err))
 
           })
@@ -182,9 +180,13 @@
       }
       ,
       getUserNameByEmail: function (email) {
-        return this.$store.state.userList.find(element => {
-          return element.email == email
-        }).name
+        console.log(this.$store.state.userList,'userList')
+        let foundEmail = this.$store.state.userList.find(element => {return element.email == email})
+        if(foundEmail!=null){
+          return foundEmail.name  
+        }else{
+          return null
+        }
       }
     }
     ,

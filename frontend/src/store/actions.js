@@ -14,8 +14,8 @@ export default {
   },
   // 91cm에 가입한 모든 유저 가져오기
   userListUpdate: function (context) {
-    console.log("jjw1122")
-/*
+    //console.log("jjw1122")
+    /*
     axios.get('/api/user/list')
       .then(res => {
         context.commit('getUserList', res.data);
@@ -34,10 +34,10 @@ export default {
     })
   },
   updateUserList: function (context) {
-    console.log("jjw1123")
+    //console.log("jjw1123")
     //context.commit('selectChannelList', context.state.currentChannel)
     //channelMixin.selectChannelList(context.state.currentChannel)
-    console.log("jjw1123")
+
     /*
     let currentChannel = 
     if (currentChannel != null) {
@@ -54,7 +54,7 @@ export default {
   },
   // 현재 유저의 채널 리스트 가져오기
   channelList: async function (context) {
-    console.log("jjw1121")
+    //console.log("jjw1121")
     /*
     await axios.get('/api/channel/list')
       .then(res => {
@@ -81,20 +81,6 @@ export default {
   },
   resetCurrentUser: function (context) {
     context.commit('resetCurrentUser')
-  },
-  updateCurrentChannel: function (context) {
-    axios.post('/api/channel/current',{id: context.state.currentChannel.id})
-      .then(res =>{
-        context.commit('setCurrentChannel',res.data)
-        const channel = context.state.userChannelList
-          .find(channel => channel.id == context.state.currentChannel.id)
-        channel.name = context.state.currentChannel.name
-      })
-  },
-  deleteCurrentChannel: function(context) {
-    console.log("jjjjjjjjjjjjjjjjjjjjjjjjjj")
-    context.dispatch('channelList')
-    //this.$store.state.stompClient.send("/sub/chat/room/" + this.$store.state.currentChannel.id, null ,{noticeMsg : context.state.currentChannel.name + "채널이 삭제되었습니다."})
   },
   forceLeaveChannel: function(context) {
     context.dispatch('channelList')

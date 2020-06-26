@@ -2,9 +2,9 @@
   <div>
     <div class="wrapper">
       <template v-if="connectionCheck">
-        <MainHeader @channelUpdate="channelUpdate"></MainHeader>
+        <MainHeader @channelSubscribe="channelSubscribe"></MainHeader>
         <div class="page-wrap">
-          <LSidebar @channelUpdate="channelUpdate"></LSidebar>
+          <LSidebar></LSidebar>
           <div class="main-content" style="padding-bottom:0;"
                :class="{'disactive-padding': $store.state.selectComponent=='main' }">
             <div :class="{'row': isVideoMode,'no-gutters':isVideoMode}">
@@ -112,8 +112,8 @@
             return 'Calendar'
           case 'admin':
             return 'AdminPage'
-          case 'videoChat':
-            return 'VideoChat'
+          // case 'videoChat':
+          //   return 'VideoChat'
           default:
             return 'ContentWrapper'
         }
@@ -131,6 +131,7 @@
     deactivated() {
     },
     async created() {
+      //await this.$store.dispatch('userListUpdate')
       this.selectChannelList()//채널목록 조회
 
       const currentChannel = this.$store.state.currentChannel
@@ -152,19 +153,10 @@
         // 새로고침 했을때 Main의 로직이 실행되지 않는 환경에서는 문제가 생길 수 있음
         this.$store.state.stompClient = Stomp.over(new SockJS('/endpoint/'))
         // this.$store.state.stompClient.debug = f => f;
+        
         this.$store.state.stompClient.connect(this.$store.state.currentUser, () => {
           this.$store.state.userChannelList.forEach(channel => {
-            this.$store.state.stompClient.subscribe("/sub/chat/room/" + channel.id, (e) => {
-              let data = JSON.parse(e.body)
-              console.log("jww1")
-              if (data.message == 'updateChannel') {
-                this.$store.state.syncSignal.syncChannelUser = !this.$store.state.syncSignal.syncChannelUser;
-              } else if (data.message == 'updateCurrentChannel' || data.message == 'deleteCurrentChannel') {
-                this.$store.dispatch(data.message)
-              } else {
-                this.channelSubscribeCallBack(e);
-              }
-            })
+            this.channelSubscribe(channel)
           })
           this.$store.state.stompClient.subscribe("/sub/sync/info", (res) => {
             if (res.headers.noticeMsg != null) {
@@ -181,10 +173,11 @@
             }
 
           })
-          this.$store.state.stompClient.subscribe("/sub/" + this.$store.state.currentUser.email, (e) => {
-            //메시지 전송 실패시
-            this.channelSubscribeCallBack(e, true)
-          })
+          // 사용하는 곳이 없음.
+          // this.$store.state.stompClient.subscribe("/sub/" + this.$store.state.currentUser.email, (e) => {
+          //   //메시지 전송 실패시
+          //   this.channelSubscribeCallBack(e, true)
+          // })
         }, (e) => {
           console.log('stomp close', this.$store.state.isLogout)
           if (!this.$store.state.isLogout) {
@@ -192,36 +185,28 @@
           }
         })
       },
-      channelUpdate() {
-        this.$store.state.stompClient.subscribe("/sub/chat/room/" + this.$store.state.currentChannel.id, (e) => {
-          let data = JSON.parse(e.body)
-          if (e.headers.noticeMsg != null) {
-            this.noticeMsg = res.headers.noticeMsg
-            this.noticeMsgToggle = true
-          }
-          else if (data.message == 'updateChannel') {
-            this.$store.state.syncSignal.syncChannelUser = !this.$store.state.syncSignal.syncChannelUser;
-            return;
-          } else {
-            this.channelSubscribeCallBack(e);
-            return;
-          }
-        })
-      },
-      channelSubscribeCallBack(e, fail) {
+      channelSubscribeCallBack(e) {
         let data = JSON.parse(e.body)
-        NotificationClass.sendNotification(this.$store.state.isfocus, data)
-        if (data.channel_id == this.$store.state.currentChannel.id && this.enableComponent) {
-          data.content = CommonClass.replacemsg(data.content)
-          if (fail) {
-            data.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + data.content
-          }
-          this.$store.commit('pushMsg', data)
-          if (!this.$store.state.isfocus) {
+        if(data.message === undefined){
+          NotificationClass.sendNotification(this.$store.state.isfocus, data)
+          if (data.channel_id == this.$store.state.currentChannel.id && this.enableComponent) {
+            data.content = CommonClass.replacemsg(data.content)
+            this.$store.commit('pushMsg', data)
+            if (!this.$store.state.isfocus) {
+              this.msgCountUpdate(data.channel_id, true)
+            }
+          } else {
             this.msgCountUpdate(data.channel_id, true)
           }
-        } else {
-          this.msgCountUpdate(data.channel_id, true)
+        }else if(data.message == 'updateChannel'){
+          this.$store.state.syncSignal.syncChannelUser =! this.$store.state.syncSignal.syncChannelUser;
+        } else if (data.message == 'selectChannelList') {
+          this.selectChannelList() 
+        }
+        
+        if (e.headers.noticeMsg != null) {
+          this.noticeMsg = res.headers.noticeMsg
+          this.noticeMsgToggle = true
         }
       },
       msgCountUpdate(id, counting) {
@@ -248,12 +233,11 @@
         // sokect 통신을 위한 컴포넌트 체크
         switch (this.$store.state.selectComponent) {
           case "main":
-          case "videoChat":
+          // case "videoChat":
             return true
           default:
             return false
         }
-
       }
 
     }

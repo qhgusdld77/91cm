@@ -10,7 +10,6 @@ export default {
         showInput: function () {
           this.$bvModal.show('channelD');
         }
-
       }
     })
     // 단순 알림용
@@ -19,11 +18,8 @@ export default {
         okTitle: '확인',
         buttonSize: 'sm',
         title: title,
-        // headerBgVariant: 'info',
-        // headerTextVariant: 'light',
       })
         .then(value => {
-
           switch (option) {
             case 'redirect':
               instance.$router.go('/main')
@@ -45,11 +41,11 @@ export default {
         return value;
       })
     }
-    Vue.prototype.$alertModal = async function (types, content, callBackFunc) {
+    Vue.prototype.$alertModal = async function (types, content, callBackFunc, callBackFuncParam) {
       const htmlTagLineRegexp = new RegExp(/(<([^>]+)>)(.*?)(<([^>]+)>)/ig);
-      if (content.includes(content)){
+      if (content.includes(content)) {
         let h = this.$createElement
-        content = h('p',{domProps:{innerHTML: content}})
+        content = h('p', { domProps: { innerHTML: content } })
       }
       switch (types) {
         case 'alert':
@@ -58,18 +54,18 @@ export default {
         case 'confirm':
           let userSelect = await Vue.msgModalConfirm(this, this.typeToTitle(types), content);
           if (userSelect && callBackFunc !== undefined) {
-            callBackFunc()
+            callBackFunc(callBackFuncParam)
           }
       }
     },
       Vue.prototype.$_alert = async function (content) {
         this.$alertModal('alert', content);
       },
-      Vue.prototype.$_confirm = async function (content, callbackFunc) {
-        this.$alertModal('confirm', content, callbackFunc);
-      },
       Vue.prototype.$_error = async function (content) {
         this.$alertModal('error', content);
+      },
+      Vue.prototype.$_confirm = async function (content, callbackFunc, callBackFuncParam) {
+        this.$alertModal('confirm', content, callbackFunc, callBackFuncParam);
       }
   },
 }

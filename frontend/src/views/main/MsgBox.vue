@@ -45,12 +45,12 @@
     props: ['msg','msgPreviewBool'],
     methods: {
       textbyFilter: function(content) {
-        const tagConentRegexp = new RegExp(/<p>(.*?)<\/p>/g);
+        const tagContentRegexp = new RegExp(/<p(.*?)>(.*?)<\/p>/g);
         const htmlTagRegexp = new RegExp(/(<([^>]+)>)/ig);
         const urlRegexp = new RegExp(/(http(s)?:\/\/|www.)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}([\/a-z0-9-%#?&=\w])+(\.[a-z0-9]{2,4}(\?[\/a-z0-9-%#?&=\w]+)*)*/)
         let result = '';
         if (this.$store.state.searchText == ''){
-          content.match(tagConentRegexp).forEach(contentItem =>{
+          content.match(tagContentRegexp).forEach(contentItem =>{
             if (urlRegexp.test(contentItem)){
               contentItem = contentItem.replace(htmlTagRegexp,'')
               result +=  "<p><a style='color: blue' href='" + contentItem+ "' target='_blank'>" + contentItem + "</a></p>"
