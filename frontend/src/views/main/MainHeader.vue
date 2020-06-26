@@ -5,7 +5,7 @@
         <div class="top-menu d-flex align-items-center" style="flex-grow: 1;">
           <button type="button" class="btn-icon mobile-nav-toggle d-lg-none"><span></span></button>
           <div v-if="$store.state.currentChannel!=null" style="font-weight: bold;font-size: 15px;width: 0;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;flex-grow: 1;">
-            {{ $store.state.currentChannel.name  }}
+            <!-- {{ $store.state.currentChannel.name  }} -->
           </div>
         </div>
         <div class="top-menu d-flex align-items-center">
@@ -67,6 +67,7 @@
 <script>
   import '../../../dist/js/theme.js'
   import AboutChannel from '../../service/aboutchannel'
+
 
   export default {
     name: 'MainHeader',
@@ -134,7 +135,7 @@
               const joinChannel = this.$store.state.userChannelList.find(channel => channel.id == alarm.channel_id)
               this.$store.commit('setCurrentChannel', joinChannel)
               console.log('joinChannel', this.$store.state.currentChannel)
-              this.$emit('channelUpdate')
+              this.$emit('channelSubscribe',this.$store.state.currentChannel)
             }).catch(err => console.error(err))
 
           })
@@ -181,9 +182,13 @@
       }
       ,
       getUserNameByEmail: function (email) {
-        return this.$store.state.userList.find(element => {
-          return element.email == email
-        }).name
+        console.log(this.$store.state.userList,'userList')
+        let foundEmail = this.$store.state.userList.find(element => {return element.email == email})
+        if(foundEmail!=null){
+          return foundEmail.name  
+        }else{
+          return null
+        }
       }
     }
     ,
