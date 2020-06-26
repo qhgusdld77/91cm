@@ -28,7 +28,7 @@
 
             <div class="submenu-content" v-on:mouseleave="hiddenChannelDelete()">
               <div v-for="(channel) in userChannelList" :key="channel.id" v-on:mouseover="visibilityChannelDelete(channel.id)">
-                <a @click="joinChannel(channel)" @dblclick="confirmChannel($event, 'update', channel)" class="menu-item" style="display:flex;" :class="{ 'active-channel': channel.id == $store.state.currentChannel.id}">
+                <a @click="joinChannel(channel)" @dblclick="confirmChannel($event, 'update', channel)" class="menu-item" style="display:flex;" :class="{ 'active-channel': channel.id == currentChannel.id}">
                   <button class="channelDel" :id="'channelDel' + channel.id" @click="confirmChannel($event, 'delete', channel)" style="margin-left:-15px; display:flex; visibility:hidden" v-if="isAdmin()">
                     <i class="im im-minus-circle" style="font-size:15px; color:black;"></i>
                   </button>
@@ -45,7 +45,7 @@
             <a href="javascript:void(0)" style="display: flex;align-items: center;">
               <i class="ik ik-users"></i>
               <span>Users</span>
-              <v-badge style="margin-left: 105px" color="#bcc8d8" overlap left :content="channelUsers.length"></v-badge>
+              <v-badge style="margin-left: 105px" color="#bcc8d8" overlap left :content="channelUsers.length" v-if="channelUsers.length!=0"></v-badge>
             </a>
             <div class="submenu-content" v-on:mouseleave="hiddenChannelUserDelete()">
               <a v-for="(user, index) in channelUsers" :key="user.email" style="cursor:default;display:flex; padding-left: 15px;" class="menu-item verti-align" v-on:mouseover="visibilityChannelUserDelete(index)">
@@ -95,24 +95,10 @@
   export default {
     props: ['modalObj'],
     mixins: [channelMixin],
-    watch: {
-      currentChannel(newCurrentChannel, oldCurrentChannel) {
-        console.log("jjw - currentChannel")
-        //this.selectChannelList()
-        //this.$store.dispatch('selectChannelList')
-      },
-      syncChannelUser() {
-        console.log("jjw - syncChannelUser")
-        // this.updateUserList(this.$store.state.currentChannel)
-        //this.$store.dispatch('selectChannelList')
-        //this.selectChannelList()
-      }
-    },
     computed: {
       ...mapGetters({
         userChannelList: 'getUserChannelList',
         currentChannel: 'getCurrentChannel',
-        syncChannelUser: 'getSyncChannelUser',
         channelUsers: 'getChannelUsers'
       }),
     },
@@ -181,7 +167,7 @@
             this.createChannel(this.channelTitle, this.$store.state.currentUser.email)
           } else if (this.channelMode == "update") {
             this.$store.state.currentChannel.name = this.channelTitle
-            this.updateChannel(this.$store.state.currentChannel)
+            this.updateChannel(this.currentChannel)
           }
         }
       },

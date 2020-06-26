@@ -1,8 +1,9 @@
 import { mapGetters } from "vuex";
-
+import commonMixin from "./commonMixin";
 import CommonClass from '../service/common'
 
 let messageMixin = {
+  mixins: [commonMixin],
   data() {
     return {
       isFileUpload: false,
@@ -59,7 +60,7 @@ let messageMixin = {
 
       this.$store.state.isInviteMode = false
       this.$store.state.isSearchMode = false
-      this.$store.commit('setMsgArray', [])
+      this.commit('setMsgArray', [])
 
       this.cursorPoint.channel_id = this.message.channel_id = channel.id
       this.cursorPoint.first = true
@@ -76,7 +77,6 @@ let messageMixin = {
           'Content-Type': 'application/json'
         }
       }).then(res => {
-        console.log(channel.id, this.channelArr[this.channelArr.length - 1])
         if (channel.id == this.channelArr[this.channelArr.length - 1]) {
           if (res.data.length == 0) {
             this.cursorPoint.empty = true
@@ -89,7 +89,7 @@ let messageMixin = {
             res.data[i].content = CommonClass.replacemsg(res.data[i].content)
           }
 
-          this.$store.commit('setMsgArray', res.data.reverse().concat(this.msgArray))
+          this.commit('setMsgArray', res.data.reverse().concat(this.msgArray))
 
           if (wrapperEl !== undefined) {
             this.$nextTick(() => {
@@ -102,6 +102,14 @@ let messageMixin = {
         }
       })
     },
+    //채널 메시지 전송
+    sendMessage: function() {
+
+    },
+    //채널 메시지 삭제
+    deleteMessge: function() {
+
+    }
   }
 };
 export default messageMixin;

@@ -10,7 +10,6 @@ export default {
         showInput: function () {
           this.$bvModal.show('channelD');
         }
-
       }
     })
     // 단순 알림용
@@ -19,11 +18,8 @@ export default {
         okTitle: '확인',
         buttonSize: 'sm',
         title: title,
-        // headerBgVariant: 'info',
-        // headerTextVariant: 'light',
       })
         .then(value => {
-
           switch (option) {
             case 'redirect':
               instance.$router.go('/main')
@@ -57,8 +53,6 @@ export default {
           return Vue.msgModalOk(this, this.typeToTitle(types), content);
         case 'confirm':
           let userSelect = await Vue.msgModalConfirm(this, this.typeToTitle(types), content);
-          console.log("userSelect", userSelect)
-          console.log("callBackFunc", callBackFunc)
           if (userSelect && callBackFunc !== undefined) {
             callBackFunc(callBackFuncParam)
           }

@@ -11,9 +11,10 @@ let channelMixin = {
     })
   },
   watch: {
-    currentChannel: function (newc, oldc) {
-      //this.joinChannel(newc)
+    /*
+    channelUsers: function (newu, oldu) {
     }
+    */
   },
   methods: {
     channelSubscribe: function(channel){
@@ -57,7 +58,7 @@ let channelMixin = {
     updateChannel: function (channel) {
       let _this = this
       this.post('/api/channel/update', channel, function () {
-        _this.sendSub('selectChannelList')
+        _this.sendSub(' ')
       })
     },
     //채널 삭제
@@ -80,6 +81,8 @@ let channelMixin = {
     },
     //채널 목록 조회
     selectChannelList: function (channel, isJoin = true) {
+      console.log("jjw - selectChannelList")
+      console.log(channel, isJoin)
       this.$http.get('/api/channel/list')
         .then(res => {
           let channelList = res.data
@@ -96,11 +99,13 @@ let channelMixin = {
     },
     //채널 진입
     joinChannel: function (channel) {
-      console.log("jjw")
-      console.log(channel.name)
+      console.log("jjw - joinChannel")
+      console.log(channel)
+
       if (channel !== undefined && channel != null) {
         if (channel.id != this.currentChannel.id) {
           this.commit('setCurrentChannel', channel)//채널 진입
+          this.initChannelUserList()
           this.selectChannelUserList(channel)//채널 사용자 조회
           this.selectMessageList(channel, true)//채널 메시지 조회
           this.hiddenChannelDelete()
@@ -119,6 +124,12 @@ let channelMixin = {
             })
           }
         }
+        else {
+          this.selectChannelUserList(channel)//채널 사용자 조회
+        }
+      }
+      else {
+        this.initChannelUserList()
       }
     },
     //채널 사용자 조회
@@ -129,12 +140,20 @@ let channelMixin = {
           userEmail: this.currentUser.email
         })
           .then(res => {
-            this.commit('setChannelUsers', res.data)
+            this.setChannelUserList(res.data)
           })
       }
       else {
-        this.commit('setChannelUsers', [])
+        this.initChannelUserList()
       }
+    },
+    //채널 사용자 초기화
+    initChannelUserList: function () {
+      this.setChannelUserList([])
+    },
+    //채널 사용자 적용
+    setChannelUserList: function (channelUserList) {
+      this.commit('setChannelUsers', channelUserList)
     },
     //채널 사용자 삭제 아이콘 표시
     visibilityChannelUserDelete: function (index) {
@@ -147,7 +166,7 @@ let channelMixin = {
     },
     //채널 강퇴 및 나가기 Confirm
     confirmChannelForceLeave: function (user) {
-      var content = this.isMine(user)?"<code>[" + this.currentChannel.name + "]</code>채널을 나가시겠습니까?":"<code>[" + user.name + "]</code>님을 추방하시겠습니까?"
+      var content = this.isMine(user) ? "<code>[" + this.currentChannel.name + "]</code> 채널을 나가시겠습니까?" : "<code>[" + user.name + "]</code>님을 추방하시겠습니까?"
       this.$_confirm(content, this.leaveChannle, user);
     },
     //채널 초대
@@ -160,11 +179,11 @@ let channelMixin = {
         email: user.email,
         channel_id: this.currentChannel.id
       }).then(res => {
-        this.sendPub('message')// 유저가 나갔음으로 채널 유저 업데이트
+        this.sendSub('selectChannelList')
         this.$eventBus.$emit('leaveChannelMsg', user)
-        this.$_alert(this.currentChannel + ' 채널에서 ' + (this.isMine(user)?"나갔습니다.":"추방되었습니다."))
+        this.$_alert("<code>[" + this.currentChannel.name + ']</code> 채널에서 ' + (this.isMine(user) ? "나갔습니다." : "추방되었습니다."))
       }).catch(error => {
-        this.$_error((this.isMine(user)?"나가기":"추방") + '에 실패했습니다.')
+        this.$_error((this.isMine(user) ? "나가기" : "추방") + '에 실패했습니다.')
       })
     },
     //채널 모드 한글명 조회
@@ -183,12 +202,6 @@ let channelMixin = {
     },
     sendSub: function (message) {
       this.$store.state.stompClient.send("/sub/chat/room/" + this.currentChannel.id, JSON.stringify({
-        'message': message,
-        'error': "null"
-      }))
-    },
-    sendPub: function (message) {
-      this.$store.state.stompClient.send("/pub/chat/room/" + this.currentChannel.id, JSON.stringify({
         'message': message,
         'error': "null"
       }))

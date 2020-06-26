@@ -1,4 +1,4 @@
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 let commonMixin = {
   computed: {
     ...mapGetters({
@@ -6,10 +6,10 @@ let commonMixin = {
     })
   },
   methods: {
-    commit: function(key, value) {
+    commit: function (key, value) {
       this.$store.commit(key, value)
     },
-    post: function(url, params, callback) {
+    post: function (url, params, callback) {
       this.$http.post(url, params)
         .then(res => {
           callback(res)
@@ -17,7 +17,6 @@ let commonMixin = {
           console.error(error)
         })
     },
-
     isAdmin: function () {
       var loginUserRoles = this.currentUser.roles
       return loginUserRoles.includes('ROLE_ROOT') || loginUserRoles.includes('ROLE_ADMIN')
