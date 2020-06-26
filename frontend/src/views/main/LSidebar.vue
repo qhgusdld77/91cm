@@ -75,16 +75,6 @@
         <b-form-input id="channel-input" v-model="channelTitle" @keyup="confirmChannelExec($event)" required autofocus autocomplete="off"/>
       </b-form-group>
     </b-modal>
-
-<!--
-    <b-modal id="channelForceLeave" title="채널 추방" @hidden="resetModal" @ok="leaveChannle(userEmail,currentChannel,'forceLeave')">
-      <p class="my-4"><code>[{{ userName }}]</code>님을 추방하시겠습니까?</p>
-    </b-modal>
-
-    <b-modal id="channelLeave" title="채널 나가기" @hidden="resetModal" @ok="leaveChannle(userEmail,currentChannel)">
-      <p class="my-4"><code>[{{ channelTitle }}]</code>채널에서 나가시겠습니까?</p>
-    </b-modal>
-    -->
   </div>
 </template>
 <script>
