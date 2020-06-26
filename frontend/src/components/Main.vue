@@ -112,8 +112,8 @@
             return 'Calendar'
           case 'admin':
             return 'AdminPage'
-          case 'videoChat':
-            return 'VideoChat'
+          // case 'videoChat':
+          //   return 'VideoChat'
           default:
             return 'ContentWrapper'
         }
@@ -156,8 +156,7 @@
         
         this.$store.state.stompClient.connect(this.$store.state.currentUser, () => {
           this.$store.state.userChannelList.forEach(channel => {
-
-            this.subscribe("/sub/chat/room/" + channel.id,this.channelSubscribeCallBack)
+            this.channelSubscribe(channel)
           })
           this.$store.state.stompClient.subscribe("/sub/sync/info", (res) => {
             if (res.headers.noticeMsg != null) {
@@ -234,12 +233,11 @@
         // sokect 통신을 위한 컴포넌트 체크
         switch (this.$store.state.selectComponent) {
           case "main":
-          case "videoChat":
+          // case "videoChat":
             return true
           default:
             return false
         }
-
       }
 
     }

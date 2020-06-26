@@ -51,14 +51,10 @@
         let result = '';
         if (this.$store.state.searchText == ''){
           content.match(tagContentRegexp).forEach(contentItem =>{
-            console.log(contentItem,'contentItem1')
-            console.log(content,'content1')
             if (urlRegexp.test(contentItem)){
               contentItem = contentItem.replace(htmlTagRegexp,'')
               result +=  "<p><a style='color: blue' href='" + contentItem+ "' target='_blank'>" + contentItem + "</a></p>"
             }else{
-              console.log(contentItem,'contentItem2')
-              console.log(content,'content2')
               result += contentItem
             }
           });
