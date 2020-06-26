@@ -54,7 +54,7 @@
               <a v-if="false" class="dropdown-item" @click="$router.push('/develop')"><i class="ik ik-settings dropdown-icon"></i>
                 Setting</a>
               <a class="dropdown-item" @click="SignOut"><i class="ik ik-power dropdown-icon"></i> Logout</a>
-              <a class="dropdown-item" v-if="getUserRoles" @click="callComponent('admin')"><i
+              <a class="dropdown-item" v-if="isAdmin" @click="callComponent('admin')"><i
                 class="ik ik-settings dropdown-icon"></i> Permission</a>
             </div>
           </div>
@@ -67,8 +67,10 @@
 <script>
   import '../../../dist/js/theme.js'
   import AboutChannel from '../../service/aboutchannel'
+  import commonMixin from "../../mixins/commonMixin";
 
   export default {
+    mixins: [commonMixin],
     name: 'MainHeader',
     data() {
       return {
@@ -76,10 +78,6 @@
       }
     },
     computed: {
-      getUserRoles: function () {
-        var role = this.$store.state.currentUser.roles
-        return role.includes('ROLE_ROOT') || role.includes('ROLE_ADMIN');
-      },
       getAlarmList: function () {
         while (this.alarmList.length > 5) {
           this.alarmList.pop()
@@ -181,9 +179,12 @@
       }
       ,
       getUserNameByEmail: function (email) {
+        return "[!?]"
+        /*
         return this.$store.state.userList.find(element => {
           return element.email == email
         }).name
+        */
       }
     }
     ,

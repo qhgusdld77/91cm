@@ -52,7 +52,10 @@
 </template>
 
 <script>
+  import commonMixin from "../../mixins/commonMixin";
+
   export default {
+    mixins: [commonMixin],
     name: "AuthorityPage",
     beforeCreate() {
       this.$http.post('/api/user/admin/userList')
@@ -113,18 +116,8 @@
         this.editedIndex = this.authUserList.indexOf(item);
         this.editedItem = Object.assign({}, item);
         this.dialog = true;
-
-        var role = this.$store.state.currentUser.roles
-        if(role.includes('ROLE_ADMIN') && this.authorityList.includes('ROLE_ADMIN')) {
-          console.log(this.authorityList)
-          this.authorityList = this.authorityList.splice(1, 2)
-          console.log(this.authorityList)
-        }
+        if(this.isAdmin()) this.authorityList = this.authorityList.splice(1, 2)
       },
     }
   }
 </script>
-
-<style scoped>
-
-</style>
