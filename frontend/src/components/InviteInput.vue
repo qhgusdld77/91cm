@@ -98,7 +98,7 @@
                   })
                 this.message.content += '을 초대했습니다.'
                 this.$eventBus.$emit('getUserList', true)
-                this.$emit('send', null, true)
+                this.$emit('sendMessage', null, true)
                 this.friends = []
                 this.message.content = ''
                 this.$store.state.isInviteMode = !this.$store.state.isInviteMode

@@ -52,4 +52,10 @@ public class MessageServiceImpl implements MessageService {
         }
         return newMsg;
     }
+
+
+	@Override
+	public boolean updateDeleteYN(int id) {
+		return (messageRepository.updateDeleteYN(id)>0) ? true : false; 
+	}
 }
