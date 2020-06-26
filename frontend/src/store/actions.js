@@ -15,7 +15,7 @@ export default {
   // 91cm에 가입한 모든 유저 가져오기
   userListUpdate: function (context) {
     //console.log("jjw1122")
-/*
+    /*
     axios.get('/api/user/list')
       .then(res => {
         context.commit('getUserList', res.data);

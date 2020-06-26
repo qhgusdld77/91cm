@@ -17,6 +17,11 @@ let channelMixin = {
     */
   },
   methods: {
+    channelSubscribe: function(channel){
+      this.$store.state.stompClient.subscribe("/sub/chat/room/" + channel.id, (e) => {
+        this.channelSubscribeCallBack(e);
+      })
+    },
     //채널 공통 확인
     confirmChannel: function (event, mode, channel) {
       event.stopPropagation()
@@ -45,6 +50,8 @@ let channelMixin = {
         member_email: email
       }, function (res) {
         _this.selectChannelList(res.data)
+        // jny 추가 새로 생성된 채널에 대해 구독하기 위함
+        //_this.channelSubscribe(res.data)
       })
     },
     //채널 수정
