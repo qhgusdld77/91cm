@@ -1,51 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    <mapper namespace="com.nineone.nocm.mapper.message">
-    
-    
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nineone.nocm.mapper.message">
     <resultMap type="com.nineone.nocm.domain.Message" id="messageList">
-    	<result property="id" column="id"/>
-    	<result property="channel_id" column="channel_id"/>
-    	<result property="content" column="content"/>
-    	<result property="sender" column="sender"/>
-    	<result property="send_date" column="send_date"/>
-    	<association property="user"  javaType="com.nineone.nocm.domain.User" >
-    		<result property="name" column="name"/>
+        <result property="id" column="id"/>
+        <result property="channel_id" column="channel_id"/>
+        <result property="content" column="content"/>
+        <result property="sender" column="sender"/>
+        <result property="send_date" column="send_date"/>
+        <association property="user"  javaType="com.nineone.nocm.domain.User">
+            <result property="name" column="name"/>
              <result property="picture" column="picture"/>
         </association>
-		<collection property="files" column="id" javaType="java.util.ArrayList" ofType="com.nineone.nocm.domain.ContentsFile" select="getMessageFiles"></collection>
+        <collection property="files" column="id" javaType="java.util.ArrayList" ofType="com.nineone.nocm.domain.ContentsFile" select="getMessageFiles"></collection>
     </resultMap>
-    
+
     <insert id="insertMessage" useGeneratedKeys="true" keyProperty="id">
-    	insert message (channel_id,content,sender,send_date)
-			values (#{channel_id},#{content},#{sender},#{send_date}) 
+        INSERT MESSAGE ( CHANNEL_ID
+                       , CONTENT
+                       , SENDER
+                       , SEND_DATE
+              ) VALUES ( #{channel_id}
+                       , #{content}
+                       , #{sender}
+                       , #{send_date}
+              ) 
     </insert>
-	<select id="getMessageFiles" resultType="com.nineone.nocm.domain.ContentsFile">
-		select * from file where message_id = #{id}
-	</select>
+
+    <select id="getMessageFiles" resultType="com.nineone.nocm.domain.ContentsFile">
+        SELECT *
+          FROM FILE
+         WHERE MESSAGE_ID = #{id}
+    </select>
     
+    
+    <sql id="messageSql">
+        ( SELECT SEND_DATE
+            FROM MESSAGE
+           WHERE ID = #{cursorId}
+        )
+    </sql>
+
     <select id="getMessageList" resultMap="messageList">
-    
-   		select message.*,email,name,phone,ifnull(picture,'/img/default-user-picture.36ab16ac.png') picture from message left join member on member.email = message.sender
-			where channel_id = #{channel_id} 
-			<if test="first.equals(false)">
-				and (send_date <![CDATA[<]]> (select send_date from message where id = #{cursorId}) or 
-				(send_date = (select send_date from message where id = #{cursorId}) and id <![CDATA[<]]> #{cursorId}))  
-			</if>
-				order by send_date desc, id desc limit 30
+        SELECT MESSAGE.*
+             , EMAIL
+             , NAME
+             , PHONE
+             , IFNULL(PICTURE,'/img/default-user-picture.png') AS PICTURE
+          FROM MESSAGE
+     LEFT JOIN MEMBER
+            ON MEMBER.EMAIL = MESSAGE.SENDER
+         WHERE CHANNEL_ID = #{channel_id} 
+           <if test="first.equals(false)">
+           AND ( SEND_DATE <![CDATA[<]]> <include refid="messageSql"/> OR ( SEND_DATE = <include refid="messageSql"/> AND ID <![CDATA[<]]> #{cursorId} ) )
+           </if>
+      ORDER BY SEND_DATE DESC
+             , ID DESC
+         LIMIT 30
     </select>
-    
+
     <select id="getMsgCntList" resultType="java.lang.Integer">
-    	<foreach collection="list" item="item" index="index">
-    		<if test="index != 0 ">union all</if>
-    		(select count(*) from message 
-    			where 
-    				message.send_date > (select last_access_date from joininfo where channel_id = #{item.id} and  member_email= #{item.login_email} ) 
-    				and channel_id = #{item.id})
-    	</foreach>
+        <foreach collection="list" item="item" index="index">
+            <if test="index != 0 ">UNION ALL</if>
+            ( SELECT COUNT(*)
+                FROM MESSAGE 
+               WHERE MESSAGE.SEND_DATE > ( SELECT LAST_ACCESS_DATE
+                                             FROM JOININFO
+                                            WHERE CHANNEL_ID  = #{item.id}
+                                              AND MEMBER_EMAIL = #{item.login_email}
+                                         )
+                 AND CHANNEL_ID = #{item.id}
+            )
+        </foreach>
     </select>
-    
-    </mapper>
-    
+</mapper>
