@@ -1,5 +1,5 @@
 <template>
-  <li class="list-unstyled chat-message">
+  <li class="list-unstyled chat-message" >
     <div class="icon">
       <slot name="m-icon">
         <img  class="icon-round" :src="msg.user.picture" width="40" height="40"/>

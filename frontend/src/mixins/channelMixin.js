@@ -1,6 +1,8 @@
 import { mapGetters } from "vuex";
 import commonMixin from "./commonMixin";
 import messageMixin from "./messageMixin";
+import NotificationClass from '../service/notification'
+import CommonClass from '../service/common'
 
 let channelMixin = {
   mixins: [commonMixin, messageMixin],
@@ -17,8 +19,59 @@ let channelMixin = {
     */
   },
   methods: {
-    channelSubscribe: function(channel){
-      this.subscribe("/sub/chat/room/" + channel.id,this.channelSubscribeCallBack)
+    channelSubscribeCallBack(e) {
+      let data = JSON.parse(e.body)
+      if(data.message === undefined){
+        NotificationClass.sendNotification(this.$store.state.isfocus, data)
+        if (data.channel_id == this.$store.state.currentChannel.id && this.enableComponent) {
+          data.content = CommonClass.replacemsg(data.content)
+          this.$store.commit('pushMsg', data)
+          if (!this.$store.state.isfocus) {
+            this.msgCountUpdate(data.channel_id, true)
+          }
+        } else {
+          this.msgCountUpdate(data.channel_id, true)
+        }
+      }else if(data.message == 'updateChannel'){
+        this.$store.state.syncSignal.syncChannelUser =! this.$store.state.syncSignal.syncChannelUser;
+      } else if (data.message == 'selectChannelList') {
+        this.selectChannelList() 
+      }
+      
+      if (e.headers.noticeMsg != null) {
+        this.noticeMsg = res.headers.noticeMsg
+        this.noticeMsgToggle = true
+      }
+    },
+    msgCountUpdate(id, counting) {
+      // commit 을 안해도 객체 내부의 내용은 변경이 되는지 확인 필요 확인 후 해당 주석 제거
+      for (let i = 0; i < this.$store.state.userChannelList.length; i++) {
+        if (id == this.$store.state.userChannelList[i].id) {
+          if (counting) {
+            this.msgCounting(i)
+            break
+          } else {
+            this.msgCountReset(i)
+            break
+          }
+        }
+      }
+    },
+    msgCounting(i) {
+      this.$store.state.userChannelList[i].count += 1
+    },
+    msgCountReset(i) {
+      this.$store.state.userChannelList[i].count = 0
+    },
+    enableComponent: function () {
+      // sokect 통신을 위한 컴포넌트 체크
+      switch (this.$store.state.selectComponent) {
+        case "main":
+        // case "videoChat":
+          return true
+        default:
+          return false
+      }
     },
     //채널 공통 확인
     confirmChannel: function (event, mode, channel) {
@@ -48,8 +101,8 @@ let channelMixin = {
         member_email: email
       }, function (res) {
         _this.selectChannelList(res.data)
-        // jny 추가 새로 생성된 채널에 대해 구독하기 위함
-        _this.channelSubscribe(res.data)
+        //jny 추가 새로 생성된 채널에 대해 구독하기 위함
+        _this.subscribe("/sub/chat/room/" + res.data.id, _this.channelSubscribeCallBack)
       })
     },
     //채널 수정
@@ -78,10 +131,10 @@ let channelMixin = {
       $(".channelDel").css("visibility", "hidden")
     },
     //채널 목록 조회
-    selectChannelList: function (channel, isJoin = true) {
+    selectChannelList:  async function (channel,isJoin = true) {
       console.log("jjw - selectChannelList")
       console.log(channel, isJoin)
-      this.$http.get('/api/channel/list')
+      await this.$http.get('/api/channel/list')
         .then(res => {
           let channelList = res.data
           this.commit('setChannelList', channelList)
@@ -98,10 +151,11 @@ let channelMixin = {
     //채널 진입
     joinChannel: function (channel) {
       console.log("jjw - joinChannel")
-      console.log(channel)
-
+      console.log(channel,'joinchannel')
+      console.log(this.currentChannel,'join current channel')
       if (channel !== undefined && channel != null) {
         if (channel.id != this.currentChannel.id) {
+          console.log(channel,'if in ')
           this.commit('setCurrentChannel', channel)//채널 진입
           this.initChannelUserList()
           this.selectChannelUserList(channel)//채널 사용자 조회

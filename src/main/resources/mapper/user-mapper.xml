@@ -1,83 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nineone.nocm.mapper.user">
+    <sql id="memberSql">
+        SELECT MEM.EMAIL
+             , MEM.PASSWORD
+             , MEM.NAME
+             , MEM.PHONE
+             , IFNULL(MEM.PICTURE, '/img/default-user-picture.png') AS PICTURE 
+          FROM MEMBER MEM
+    </sql>
 
-    <mapper namespace="com.nineone.nocm.mapper.user">
-
-    <update id="updateUser">
-        update member set name = #{name}, phone = #{phone}, picture = #{picture} where email = #{email}
-    </update>
     <select id="thisChannelUserList" parameterType="java.lang.Integer" resultType="com.nineone.nocm.domain.User">
-    	SELECT 
-    		EMAIL
-    		,NAME
-    		,PHONE
-    		,PICTURE
-		FROM MEMBER MEM 
-		JOIN JOININFO 
-		ON MEM.EMAIL = JOININFO.MEMBER_EMAIL 
-		WHERE JOININFO.CHANNEL_ID = #{channel_id} 
-		ORDER BY MEM.NAME
+        <include refid="memberSql"/>
+
+    INNER JOIN JOININFO JI 
+            ON JI.MEMBER_EMAIL = MEM.EMAIL
+           AND JI.CHANNEL_ID = #{channel_id}
+
+      ORDER BY MEM.NAME
     </select>
 
-    <insert id="insertUser">
-    	insert member (name,phone,email,picture,password)
-    		values(#{name},#{phone},#{email},#{picture},#{password})
-    </insert>
-    
-    <insert id="insertSNSInfo">
-    	insert sns_info (identifier,member_email)
-    		values(#{identifier},#{email})
-    </insert>
-    
-<!--    <select id="getUserid" resultType="java.lang.String">-->
-<!--    	select userid from member where userid = #{id}-->
-<!--    </select>-->
-    
     <select id="getUserfindById" parameterType="java.lang.String" resultType="com.nineone.nocm.domain.User">
-    	SELECT 
-    		EMAIL
-    		,NAME
-    		,PHONE
-    		,PICTURE
-    	FROM MEMBER MEM
-    	WHERE EMAIL = (SELECT MEMBER_EMAIL FROM SNS_INFO WHERE IDENTIFIER = #{id})
+        <include refid="memberSql"/>
+         WHERE MEM.EMAIL = ( SELECT MEMBER_EMAIL
+                               FROM SNS_INFO
+                              WHERE IDENTIFIER = #{id}
+               )
     </select>
-	
-	<select id="getUserfindByEmail" resultType="com.nineone.nocm.domain.User">
-		SELECT 
-			EMAIL
-			,PASSWORD
-    		,NAME
-    		,PHONE
-    		,PICTURE
-    	FROM MEMBER
-    	WHERE EMAIL = #{email}	
+    
+    <select id="getUserfindByEmail" resultType="com.nineone.nocm.domain.User">
+        <include refid="memberSql"/>
+         WHERE MEM.EMAIL = #{email}
     </select>
 
     <select id="getAllUserList" resultType="com.nineone.nocm.domain.User">
-        SELECT *
-          FROM MEMBER MEM
+        <include refid="memberSql"/>
+
     INNER JOIN AUTHORITIES AUTH
             ON AUTH.MEMBER_EMAIL = MEM.EMAIL
            AND AUTH.ROLES_AUTHORITY != 'ROLE_ROOT'
     </select>
-    
+
     <select id="getUserListForInvite" resultType="com.nineone.nocm.domain.User">
-    	SELECT
-    		EMAIL
-    		,NAME
-    		,PHONE
-    		,PICTURE
-		FROM MEMBER
-		WHERE EMAIL NOT IN (SELECT MEMBER_EMAIL FROM JOININFO WHERE CHANNEL_ID = #{channel_id})
-			AND EMAIL != 'root'
+        <include refid="memberSql"/>
+         WHERE MEM.EMAIL NOT IN ( SELECT MEMBER_EMAIL
+                                    FROM JOININFO
+                                   WHERE CHANNEL_ID = #{channel_id}
+               )
+           AND MEM.EMAIL != 'root'
     </select>
 
-    <!-- 
-    <select id="isNotExistEmail" resultType="java.lang.Boolean">
-    	select not exists (select * from member where email = #{email})
-    </select> -->
+    <insert id="insertUser">
+        INSERT MEMBER ( NAME
+                      , PHONE
+                      , EMAIL
+                      , PICTURE
+                      , PASSWORD
+             ) VALUES ( #{name}
+                      , #{phone}
+                      , #{email}
+                      , #{picture}
+                      , #{password}
+             )
+    </insert>
     
-    </mapper>
+    <insert id="insertSNSInfo">
+        INSERT SNS_INFO ( IDENTIFIER
+                        , MEMBER_EMAIL
+               ) VALUES ( #{identifier}
+                        , #{email}
+               )
+    </insert>
+
+    <update id="updateUser">
+        UPDATE MEMBER SET NAME = #{name}
+                        , PHONE = #{phone}
+                        , PICTURE = #{picture}
+                    WHERE EMAIL = #{email}
+    </update>
+</mapper>

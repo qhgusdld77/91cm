@@ -55,7 +55,7 @@ export default {
   // 현재 유저의 채널 리스트 가져오기
   channelList: async function (context) {
     //console.log("jjw1121")
-    /*
+    
     await axios.get('/api/channel/list')
       .then(res => {
         context.commit('setChannelList', res.data)
@@ -68,7 +68,7 @@ export default {
         }
       }).catch(error => {
       })
-      */
+    
   },
   // 현재 로그인 한 유저 가져오기
   initCurrentUser: async function (context) {

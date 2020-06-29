@@ -2,7 +2,7 @@
   <div>
     <div class="wrapper">
       <template v-if="connectionCheck">
-        <MainHeader @channelSubscribe="channelSubscribe"></MainHeader>
+        <MainHeader></MainHeader>
         <div class="page-wrap">
           <LSidebar></LSidebar>
           <div class="main-content" style="padding-bottom:0;"
@@ -156,7 +156,7 @@
         
         this.$store.state.stompClient.connect(this.$store.state.currentUser, () => {
           this.$store.state.userChannelList.forEach(channel => {
-            this.channelSubscribe(channel)
+            this.subscribe("/sub/chat/room/" + channel.id, this.channelSubscribeCallBack)
           })
           this.$store.state.stompClient.subscribe("/sub/sync/info", (res) => {
             if (res.headers.noticeMsg != null) {
@@ -185,61 +185,6 @@
           }
         })
       },
-      channelSubscribeCallBack(e) {
-        let data = JSON.parse(e.body)
-        if(data.message === undefined){
-          NotificationClass.sendNotification(this.$store.state.isfocus, data)
-          if (data.channel_id == this.$store.state.currentChannel.id && this.enableComponent) {
-            data.content = CommonClass.replacemsg(data.content)
-            this.$store.commit('pushMsg', data)
-            if (!this.$store.state.isfocus) {
-              this.msgCountUpdate(data.channel_id, true)
-            }
-          } else {
-            this.msgCountUpdate(data.channel_id, true)
-          }
-        }else if(data.message == 'updateChannel'){
-          this.$store.state.syncSignal.syncChannelUser =! this.$store.state.syncSignal.syncChannelUser;
-        } else if (data.message == 'selectChannelList') {
-          this.selectChannelList() 
-        }
-        
-        if (e.headers.noticeMsg != null) {
-          this.noticeMsg = res.headers.noticeMsg
-          this.noticeMsgToggle = true
-        }
-      },
-      msgCountUpdate(id, counting) {
-        // commit 을 안해도 객체 내부의 내용은 변경이 되는지 확인 필요 확인 후 해당 주석 제거
-        for (let i = 0; i < this.$store.state.userChannelList.length; i++) {
-          if (id == this.$store.state.userChannelList[i].id) {
-            if (counting) {
-              this.msgCounting(i)
-              break
-            } else {
-              this.msgCountReset(i)
-              break
-            }
-          }
-        }
-      },
-      msgCounting(i) {
-        this.$store.state.userChannelList[i].count += 1
-      },
-      msgCountReset(i) {
-        this.$store.state.userChannelList[i].count = 0
-      },
-      enableComponent: function () {
-        // sokect 통신을 위한 컴포넌트 체크
-        switch (this.$store.state.selectComponent) {
-          case "main":
-          // case "videoChat":
-            return true
-          default:
-            return false
-        }
-      }
-
     }
 
   }

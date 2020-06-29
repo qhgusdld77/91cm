@@ -67,11 +67,11 @@
 <script>
   import '../../../dist/js/theme.js'
   import AboutChannel from '../../service/aboutchannel'
-  import commonMixin from "../../mixins/commonMixin";
+  import channelMixin from "../../mixins/channelMixin";
 
 
   export default {
-    mixins: [commonMixin],
+    mixins: [channelMixin],
     name: 'MainHeader',
     data() {
       return {
@@ -129,11 +129,18 @@
               await AboutChannel.updateLastAccessDate(this.$store.state.currentChannel.id)
             }
             AboutChannel.updateLastAccessDate(alarm.channel_id, null).then(async (res) => {
-              await this.$store.dispatch('channelList')
+              console.log(alarm,'alarm')
+              //await this.$store.dispatch('channelList')
+              await this.selectChannelList(null,false,false)
               const joinChannel = this.$store.state.userChannelList.find(channel => channel.id == alarm.channel_id)
-              this.$store.commit('setCurrentChannel', joinChannel)
-              console.log('joinChannel', this.$store.state.currentChannel)
-              this.$emit('channelSubscribe',this.$store.state.currentChannel)
+
+              this.joinChannel(joinChannel)
+              this.subscribe("/sub/chat/room/" + res.data.id, _this.channelSubscribeCallBack)
+              //this.$store.commit('setCurrentChannel', joinChannel)
+              //console.log('joinChannel', this.$store.state.currentChannel)
+              // this.$emit('channelSubscribe',this.$store.state.currentChannel)
+              //this.subscribe("/sub/chat/room/" + joinChannel.id,this.channelSubscribeCallBack)
+              // this.joinChannel(this.$store.state.currentChannel)
             }).catch(err => console.error(err))
 
           })
