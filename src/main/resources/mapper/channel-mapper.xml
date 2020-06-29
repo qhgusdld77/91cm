@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nineone.nocm.mapper.channel">
     <select id="getChannel" parameterType="java.lang.Integer" resultType="com.nineone.nocm.domain.Channel">
-        select * from channel where id = #{id}
+        SELECT *
+          FROM CHANNEL
+         WHERE DELETE_YN = 'N'
+           AND ID = #{id}
     </select>
+
     <insert id="insertChannel" useGeneratedKeys="true" keyProperty="id">
-    	insert channel (name)
-    		values(#{name})
+        INSERT CHANNEL ( NAME
+              ) VALUES ( #{name}
+              )
     </insert>
+
     <update id="updateChannel">
-        update channel set name = #{name} where id = #{id}
+        UPDATE CHANNEL SET NAME = #{name}
+                     WHERE ID = #{id}
     </update>
 
     <delete id="deleteChannel">
-    	UPDATE CHANNEL
-    	   SET DELETE_YN = 'Y'
-    	 WHERE ID = #{channelId}
+        UPDATE CHANNEL
+           SET DELETE_YN = 'Y'
+         WHERE ID = #{channelId}
     </delete>
 
     <select id="channelList" resultType="com.nineone.nocm.domain.Channel">
@@ -39,13 +43,16 @@
     </select>
 
     <insert id="insertJoinInfo">
-    	insert joininfo (channel_id,member_email)
-    		values(#{channel_id},#{member_email})
+        INSERT JOININFO ( CHANNEL_ID
+                        , MEMBER_EMAIL
+               ) VALUES ( #{channel_id}
+                        , #{member_email}
+               )
     </insert>
+
     <select id="channelListAll" resultType="com.nineone.nocm.domain.Channel">
-        select * from channel;
-    </select>
-    <select id="getCurrentChannel" resultType="com.nineone.nocm.domain.Channel">
-        select * from channel where id = #{id}
+        SELECT *
+          FROM CHANNEL
+         WHERE DELETE_YN = 'N';
     </select>
 </mapper>

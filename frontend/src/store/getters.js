@@ -10,7 +10,8 @@ export default {
     }
   },
   getCurrentUser: state => state.currentUser,
-  getUserChannelList: state => state.userChannelList,
+  getChannel: state => state.channel,
+  getChannelList: state => state.channelList,
   getTaskBoard: state=> state.taskBoard,
   getCurrentChannel: state => state.currentChannel,
   getSyncChannelUser: state => state.syncSignal.syncChannelUser,

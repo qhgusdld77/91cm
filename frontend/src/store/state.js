@@ -6,7 +6,7 @@ export default {
     syncChannelUser: false,
   },
   currentChannel: {},
-  userChannelList: [],
+  channelList: [],
   stompClient: null,
   selectComponent: 'main',
   oldComponent: 'main',

@@ -40,7 +40,8 @@ let messageMixin = {
     ...mapGetters({
       msgArray: 'getMsgArray',
       currentChannel: 'getCurrentChannel',
-      currentUser: 'getCurrentUser'
+      currentUser: 'getCurrentUser',
+      channelList: 'getChannelList'
     })
   },
   watch: {
@@ -51,6 +52,26 @@ let messageMixin = {
     */
   },
   methods: {
+    msgCountUpdate(id, counting) {
+      // commit 을 안해도 객체 내부의 내용은 변경이 되는지 확인 필요 확인 후 해당 주석 제거
+      for (let i = 0; i < this.channelList.length; i++) {
+        if (id == this.channelList[i].id) {
+          if (counting) {
+            this.msgCounting(i)
+            break
+          } else {
+            this.msgCountReset(i)
+            break
+          }
+        }
+      }
+    },
+    msgCounting(i) {
+      this.channelList[i].count += 1
+    },
+    msgCountReset(i) {
+      this.channelList[i].count = 0
+    },
     //채널 메시지 초기화
     initMessageList: function (channel) {
       this.channelArr.push(channel.id)

@@ -14,7 +14,6 @@ export default {
   },
   // 91cm에 가입한 모든 유저 가져오기
   userListUpdate: function (context) {
-    //console.log("jjw1122")
     /*
     axios.get('/api/user/list')
       .then(res => {
@@ -34,7 +33,6 @@ export default {
     })
   },
   updateUserList: function (context) {
-    //console.log("jjw1123")
     //context.commit('selectChannelList', context.state.currentChannel)
     //channelMixin.selectChannelList(context.state.currentChannel)
 
@@ -54,8 +52,7 @@ export default {
   },
   // 현재 유저의 채널 리스트 가져오기
   channelList: async function (context) {
-    //console.log("jjw1121")
-    
+    /*
     await axios.get('/api/channel/list')
       .then(res => {
         context.commit('setChannelList', res.data)
@@ -68,6 +65,7 @@ export default {
         }
       }).catch(error => {
       })
+      */
     
   },
   // 현재 로그인 한 유저 가져오기

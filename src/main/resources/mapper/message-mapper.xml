@@ -78,9 +78,9 @@
         </foreach>
     </select>
     
-    <update id="updateDeleteYN">
+    <delete id="deleteDeleteYN">
     	UPDATE MESSAGE 
     	   SET DELETE_YN = 'Y' 
     	 WHERE ID = #{id}
-    </update>
+    </delete>
 </mapper>

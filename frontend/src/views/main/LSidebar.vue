@@ -27,7 +27,7 @@
             </a>
 
             <div class="submenu-content" v-on:mouseleave="hiddenChannelDelete()">
-              <div v-for="(channel) in userChannelList" :key="channel.id" v-on:mouseover="visibilityChannelDelete(channel.id)">
+              <div v-for="(channel) in channelList" :key="channel.id" v-on:mouseover="visibilityChannelDelete(channel.id)">
                 <a @click="joinChannel(channel)" @dblclick="confirmChannel($event, 'update', channel)" class="menu-item" style="display:flex;" :class="{ 'active-channel': channel.id == currentChannel.id}">
                   <button class="channelDel" :id="'channelDel' + channel.id" @click="confirmChannel($event, 'delete', channel)" style="margin-left:-15px; display:flex; visibility:hidden" v-if="isAdmin()">
                     <i class="im im-minus-circle" style="font-size:15px; color:black;"></i>
@@ -87,7 +87,7 @@
     mixins: [channelMixin],
     computed: {
       ...mapGetters({
-        userChannelList: 'getUserChannelList',
+        channelList: 'getChannelList',
         currentChannel: 'getCurrentChannel',
         channelUsers: 'getChannelUsers'
       }),
@@ -148,16 +148,18 @@
         this.channelTitle = ''
       },
       confirmChannelExec: function (event) {
-        if($.trim(this.channelTitle) != "" && (event === undefined || event.keyCode == 13)) {
-          this.$nextTick(() => {
-            this.$bvModal.hide('channelCU')
-          })
+        if((event.type == "keyup" && event.keyCode == 13) || event.type == "hide") {
+          if($.trim(this.channelTitle) != "") {
+            this.$nextTick(() => {
+              this.$bvModal.hide('channelCU')
+            })
 
-          if (this.channelMode == "create") {
-            this.createChannel(this.channelTitle, this.$store.state.currentUser.email)
-          } else if (this.channelMode == "update") {
-            this.$store.state.currentChannel.name = this.channelTitle
-            this.updateChannel(this.currentChannel)
+            if (this.channelMode == "create") {
+             this.createChannel(this.channelTitle, this.$store.state.currentUser.email)
+            } else if (this.channelMode == "update") {
+              this.$store.state.currentChannel.name = this.channelTitle
+              this.updateChannel(this.currentChannel)
+            }
           }
         }
       },

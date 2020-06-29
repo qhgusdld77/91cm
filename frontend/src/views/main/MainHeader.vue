@@ -5,7 +5,7 @@
         <div class="top-menu d-flex align-items-center" style="flex-grow: 1;">
           <button type="button" class="btn-icon mobile-nav-toggle d-lg-none"><span></span></button>
           <div v-if="$store.state.currentChannel!=null" style="font-weight: bold;font-size: 15px;width: 0;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;flex-grow: 1;">
-            <!-- {{ $store.state.currentChannel.name  }} -->
+            {{ $store.state.currentChannel.name }}
           </div>
         </div>
         <div class="top-menu d-flex align-items-center">
@@ -38,7 +38,7 @@
               </div>
             </div>
           </div>
-          <button v-if="$store.state.userChannelList[0]!=null" type="button" @click="rightSidebarToggle"
+          <button v-if="$store.state.channelList[0]!=null" type="button" @click="rightSidebarToggle"
                   class="nav-link ml-10 right-sidebar-toggle"><i class="ik ik-message-square"></i></button>
           <button type="button" class="nav-link ml-10" id="apps_modal_btn" data-toggle="modal" data-target="#appsModal">
             <i class="ik ik-grid"></i></button>
@@ -69,7 +69,6 @@
   import AboutChannel from '../../service/aboutchannel'
   import channelMixin from "../../mixins/channelMixin";
 
-
   export default {
     mixins: [channelMixin],
     name: 'MainHeader',
@@ -87,7 +86,7 @@
       }
     },
     created() {
-      this.$store.state.stompClient.subscribe("/sub/alarm/" + this.$store.state.currentUser.email, (e) => {
+      this.subscribe("/sub/alarm/" + this.$store.state.currentUser.email, (e) => {
         let invite = JSON.parse(e.body)
         this.alarmList.unshift(invite)
       }),
@@ -132,7 +131,7 @@
               console.log(alarm,'alarm')
               //await this.$store.dispatch('channelList')
               await this.selectChannelList(null,false,false)
-              const joinChannel = this.$store.state.userChannelList.find(channel => channel.id == alarm.channel_id)
+              const joinChannel = this.$store.state.channelList.find(channel => channel.id == alarm.channel_id)
 
               this.joinChannel(joinChannel)
               this.subscribe("/sub/chat/room/" + res.data.id, _this.channelSubscribeCallBack)
