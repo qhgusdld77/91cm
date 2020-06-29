@@ -2,7 +2,7 @@
   <div>
     <div class="wrapper">
       <template v-if="connectionCheck">
-        <MainHeader @channelSubscribe="channelSubscribe"></MainHeader>
+        <MainHeader></MainHeader>
         <div class="page-wrap">
           <LSidebar></LSidebar>
           <div class="main-content" style="padding-bottom:0;"
@@ -111,8 +111,8 @@
             return 'Calendar'
           case 'admin':
             return 'AdminPage'
-          case 'videoChat':
-            return 'VideoChat'
+          // case 'videoChat':
+          //   return 'VideoChat'
           default:
             return 'ContentWrapper'
         }
@@ -152,9 +152,15 @@
         // 새로고침 했을때 Main의 로직이 실행되지 않는 환경에서는 문제가 생길 수 있음
         this.$store.state.stompClient = Stomp.over(new SockJS('/endpoint/'))
         // this.$store.state.stompClient.debug = f => f;
+<<<<<<< HEAD
 
         this.$store.state.stompClient.connect(this.$store.state.currentUser, () => {
           this.$store.state.channelList.forEach(channel => {
+=======
+        
+        this.$store.state.stompClient.connect(this.$store.state.currentUser, () => {
+          this.$store.state.userChannelList.forEach(channel => {
+>>>>>>> design
             this.subscribe("/sub/chat/room/" + channel.id, this.channelSubscribeCallBack)
           })
           this.subscribe("/sub/sync/info", res => {
@@ -179,6 +185,7 @@
           }
         })
       },
+<<<<<<< HEAD
       channelSubscribeCallBack(e) {
         let data = JSON.parse(e.body)
         if(data.message === undefined){
@@ -235,6 +242,8 @@
 
       }
 
+=======
+>>>>>>> design
     }
 
   }

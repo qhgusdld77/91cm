@@ -66,6 +66,7 @@ export default {
       }).catch(error => {
       })
       */
+    
   },
   // 현재 로그인 한 유저 가져오기
   initCurrentUser: async function (context) {

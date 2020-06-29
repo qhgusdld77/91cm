@@ -40,14 +40,14 @@
                 no-resize
                 v-model="message.content"
                 @keydown.ctrl.shift.70="toggleSearchMode"
-                @keydown.enter.exact="send($event)"
+                @keydown.enter.exact="sendMessage($event)"
                 @keyup="byteCheck"
                 @keydown.shift.alt.50='inviteToggle'
               ></b-form-textarea>
             </div>
             <!--  초대 모드 시작 -->
             <div v-if="$store.state.isInviteMode">
-              <InviteInput @send="send" @inviteToggle="inviteToggle" :message="message"></InviteInput>
+              <InviteInput @sendMessage="sendMessage" @inviteToggle="inviteToggle" :message="message"></InviteInput>
             </div>
             <!-- 초대 모드 끝  -->
             <!-- 채팅 검색 모드 시작 -->
@@ -72,12 +72,12 @@
         </div>
         <!--        일반 채팅 모드 일때 아이콘-->
         <v-btn class="mx-2" fab dark large color="cyan" style="margin-bottom: 15px;"
-               v-if="!$store.state.isVideoMode" @click="send($event)">
+               v-if="!$store.state.isVideoMode" @click="sendMessage($event)">
           <i class="im im-paperplane"></i>
         </v-btn>
         <!--        화상 채팅 모드 일때 아이콘-->
         <v-btn class="mx-2" fab dark small color="cyan" style="margin-bottom: 25px;"
-               v-else @click="send($event)">
+               v-else @click="sendMessage($event)">
           <i class="im im-paperplane"></i>
         </v-btn>
       </v-row>
@@ -144,7 +144,7 @@
       })
       this.$eventBus.$on('leaveChannelMsg', (user) => {
         this.message.content = user.name + '님이 ' + (this.isMine(user)?"나가셨습니다.":"추방되었습니다.")
-        this.send(null, true)
+        this.sendMessage(null, true)
       })
     },
     updated() {
@@ -244,49 +244,49 @@
           this.$_error('폴더는 업로드 할 수 없습니다.')
         })
       },
-      send: async function (e, isSysMsg) {
-        if (e != null) {
-          e.preventDefault()
-        }
-        if (this.message.content == '') {
-          return;
-        }
-        if (isSysMsg) {
-          this.message.sender = null
-        } else {
-          this.message.sender = this.$store.state.currentUser.email
-          this.message.user = this.$store.state.currentUser
-        }
-        this.message.channel_id = this.$store.state.currentChannel.id
-        if (CommonClass.byteLimit(this.stringByteLength)) {
-          if (this.$store.state.stompClient && this.$store.state.stompClient.connected) {
-            this.$store.state.stompClient.send("/pub/chat/message", JSON.stringify(this.message), {})
-            this.message.content = ''
-            this.scrollToEnd(true)
-            if (this.sendMail) {
-              this.$store.state.channelUsers.filter(channelUser => channelUser != this.$store.state.currentUser)
-                .forEach(channelUser => {
-                  this.$http.post('/api/message/send/mail', {
-                    channelName: this.$store.state.currentChannel.name,
-                    fromUser: this.$store.state.currentUser.name,
-                    toUser: channelUser.email
-                  })
-                    .then(res => {
-                      this.sendMail = false
-                    })
-                })
-            }
-          } else {
-            this.message.content = CommonClass.replaceErrorMsg(this.message.content)
-            this.message.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + this.message.content
-            let errormsg = JSON.parse(JSON.stringify(this.message))
-            this.$store.commit('pushMsg', errormsg)
-            console.log(errormsg)
-            console.log(this.msgArray)
-            this.message.content = ''
-          }
-        }
-      },
+      // send: async function (e, isSysMsg) {
+      //   if (e != null) {
+      //     e.preventDefault()
+      //   }
+      //   if (this.message.content == '') {
+      //     return;
+      //   }
+      //   if (isSysMsg) {
+      //     this.message.sender = null
+      //   } else {
+      //     this.message.sender = this.$store.state.currentUser.email
+      //     this.message.user = this.$store.state.currentUser
+      //   }
+      //   this.message.channel_id = this.$store.state.currentChannel.id
+      //   if (CommonClass.byteLimit(this.stringByteLength)) {
+      //     if (this.$store.state.stompClient && this.$store.state.stompClient.connected) {
+      //       this.$store.state.stompClient.send("/pub/chat/message", JSON.stringify(this.message), {})
+      //       this.message.content = ''
+      //       this.scrollToEnd(true)
+      //       if (this.sendMail) {
+      //         this.$store.state.channelUsers.filter(channelUser => channelUser != this.$store.state.currentUser)
+      //           .forEach(channelUser => {
+      //             this.$http.post('/api/message/send/mail', {
+      //               channelName: this.$store.state.currentChannel.name,
+      //               fromUser: this.$store.state.currentUser.name,
+      //               toUser: channelUser.email
+      //             })
+      //               .then(res => {
+      //                 this.sendMail = false
+      //               })
+      //           })
+      //       }
+      //     } else {
+      //       this.message.content = CommonClass.replaceErrorMsg(this.message.content)
+      //       this.message.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + this.message.content
+      //       let errormsg = JSON.parse(JSON.stringify(this.message))
+      //       this.$store.commit('pushMsg', errormsg)
+      //       console.log(errormsg)
+      //       console.log(this.msgArray)
+      //       this.message.content = ''
+      //     }
+      //   }
+      // },
       scrollEvt(e) {
         let element = e.target;
         //스크롤이 없을때에도 스크롤 위치가 최상단이기 때문에 스크롤이 있는지 없는지 판단해야한다.

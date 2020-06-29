@@ -41,7 +41,12 @@
     </sql>
 
     <select id="getMessageList" resultMap="messageList">
-        SELECT MESSAGE.*
+        SELECT
+        	   ID
+        	 , CHANNEL_ID
+        	 , SENDER
+        	 , SEND_DATE
+        	 , IF(DELETE_YN = 'Y','<![CDATA[<p>삭제된 메세지입니다.</p>']]>, CONTENT) AS CONTENT
              , EMAIL
              , NAME
              , PHONE
@@ -72,4 +77,10 @@
             )
         </foreach>
     </select>
+    
+    <update id="updateDeleteYN">
+    	UPDATE MESSAGE 
+    	   SET DELETE_YN = 'Y' 
+    	 WHERE ID = #{id}
+    </update>
 </mapper>

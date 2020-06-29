@@ -39,5 +39,10 @@ public class MessageApiController {
 						"\n 91cm로 이동 : http://91cm.nineonesoft.com:9191/");
 		return true;
 	}
+	
+	@RequestMapping(value = "/update/deleteyn", method = RequestMethod.POST)
+	public boolean updateDeleteYN(@RequestBody Message msg) {
+		return messageServie.updateDeleteYN(msg.getId());
+	}
 
 }

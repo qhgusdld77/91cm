@@ -10,4 +10,5 @@ public interface MessageRepository {
 	int insertMessage(Message msg);
 	List<Message> getMessageList(Map<String,Object> map);
 	List<Integer> getMsgCntList(List<Channel> list);
+	int updateDeleteYN(int id);
 }

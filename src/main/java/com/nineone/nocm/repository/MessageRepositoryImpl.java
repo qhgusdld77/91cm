@@ -32,4 +32,13 @@ public class MessageRepositoryImpl implements MessageRepository {
 	public List<Integer> getMsgCntList(List<Channel> list) {
 		return sqlSession.selectList(namespace + ".getMsgCntList", list);
 	}
+<<<<<<< HEAD
+=======
+
+	@Override
+	public int updateDeleteYN(int id) {
+		return sqlSession.update(namespace + ".updateDeleteYN",id);
+	}
+
+>>>>>>> design
 }

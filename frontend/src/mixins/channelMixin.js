@@ -1,6 +1,8 @@
 import { mapGetters } from "vuex";
 import commonMixin from "./commonMixin";
 import messageMixin from "./messageMixin";
+import NotificationClass from '../service/notification'
+import CommonClass from '../service/common'
 
 let channelMixin = {
   mixins: [commonMixin, messageMixin],
@@ -11,6 +13,42 @@ let channelMixin = {
     })
   },
   methods: {
+
+    channelSubscribeCallBack(e) {
+      let data = JSON.parse(e.body)
+      if(data.message === undefined){
+        NotificationClass.sendNotification(this.$store.state.isfocus, data)
+        if (data.channel_id == this.$store.state.currentChannel.id && this.enableComponent) {
+          data.content = CommonClass.replacemsg(data.content)
+          this.$store.commit('pushMsg', data)
+          if (!this.$store.state.isfocus) {
+            this.msgCountUpdate(data.channel_id, true)
+          }
+        } else {
+          this.msgCountUpdate(data.channel_id, true)
+        }
+      }else if(data.message == 'updateChannel'){
+        this.$store.state.syncSignal.syncChannelUser =! this.$store.state.syncSignal.syncChannelUser;
+      } else if (data.message == 'selectChannelList') {
+        this.selectChannelList() 
+      }
+      
+      if (e.headers.noticeMsg != null) {
+        this.noticeMsg = res.headers.noticeMsg
+        this.noticeMsgToggle = true
+      }
+    },
+    enableComponent: function () {
+      // sokect 통신을 위한 컴포넌트 체크
+      switch (this.$store.state.selectComponent) {
+        case "main":
+        // case "videoChat":
+          return true
+        default:
+          return false
+      }
+    },
+
     //채널 공통 확인
     confirmChannel: function (event, mode, channel) {
       event.stopPropagation()
@@ -39,9 +77,8 @@ let channelMixin = {
         member_email: email
       }, function (res) {
         _this.selectChannelList(res.data)
-        _this.subscribe("/sub/chat/room/" + channel.id, (e) => {
-          _this.channelSubscribeCallBack(e);
-        })
+        //jny 추가 새로 생성된 채널에 대해 구독하기 위함
+        _this.subscribe("/sub/chat/room/" + res.data.id, _this.channelSubscribeCallBack)
       })
     },
     //채널 수정
@@ -90,6 +127,7 @@ let channelMixin = {
     joinChannel: function (channel) {
       if (channel !== undefined && channel != null) {
         if (channel.id != this.currentChannel.id) {
+          console.log(channel,'if in ')
           this.commit('setCurrentChannel', channel)//채널 진입
           this.initChannelUserList()
           this.selectChannelUserList(channel)//채널 사용자 조회
