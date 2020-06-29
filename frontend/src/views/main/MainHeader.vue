@@ -131,7 +131,7 @@
               console.log(alarm,'alarm')
               //await this.$store.dispatch('channelList')
               await this.selectChannelList(null,false,false)
-              const joinChannel = this.$store.state.userChannelList.find(channel => channel.id == alarm.channel_id)
+              const joinChannel = this.$store.state.channelList.find(channel => channel.id == alarm.channel_id)
 
               this.joinChannel(joinChannel)
               this.subscribe("/sub/chat/room/" + res.data.id, _this.channelSubscribeCallBack)
