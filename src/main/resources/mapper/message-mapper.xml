@@ -7,7 +7,6 @@
         <result property="content" column="content"/>
         <result property="sender" column="sender"/>
         <result property="send_date" column="send_date"/>
-        <result property="delete_yn" column="delete_yn"/>
         <association property="user"  javaType="com.nineone.nocm.domain.User">
             <result property="name" column="name"/>
              <result property="picture" column="picture"/>
@@ -42,7 +41,12 @@
     </sql>
 
     <select id="getMessageList" resultMap="messageList">
-        SELECT MESSAGE.*
+        SELECT
+        	   ID
+        	 , CHANNEL_ID
+        	 , SENDER
+        	 , SEND_DATE
+        	 , IF(DELETE_YN = 'Y','<![CDATA[<p>삭제된 메세지입니다.</p>']]>, CONTENT) AS CONTENT
              , EMAIL
              , NAME
              , PHONE

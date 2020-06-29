@@ -100,9 +100,9 @@ let channelMixin = {
         name: channelTitle,
         member_email: email
       }, function (res) {
-        _this.selectChannelList(res.data,true)
-        // jny 추가 새로 생성된 채널에 대해 구독하기 위함
-        //_this.subscribe("/sub/chat/room/" + res.data.id, _this.channelSubscribeCallBack)
+        _this.selectChannelList(res.data)
+        //jny 추가 새로 생성된 채널에 대해 구독하기 위함
+        _this.subscribe("/sub/chat/room/" + res.data.id, _this.channelSubscribeCallBack)
       })
     },
     //채널 수정
@@ -131,10 +131,10 @@ let channelMixin = {
       $(".channelDel").css("visibility", "hidden")
     },
     //채널 목록 조회
-    selectChannelList: function (channel, isNewJoin ,isJoin = true) {
+    selectChannelList:  async function (channel,isJoin = true) {
       console.log("jjw - selectChannelList")
       console.log(channel, isJoin)
-      this.$http.get('/api/channel/list')
+      await this.$http.get('/api/channel/list')
         .then(res => {
           let channelList = res.data
           this.commit('setChannelList', channelList)
@@ -144,9 +144,6 @@ let channelMixin = {
             else if (channel === undefined) channel = channelList[0]
             this.joinChannel(channel)
           }
-          if(isNewJoin){
-            this.subscribe("/sub/chat/room/" + channel.id, this.channelSubscribeCallBack)
-          }
         }).catch(error => {
           console.error(error)
         })
@@ -154,8 +151,8 @@ let channelMixin = {
     //채널 진입
     joinChannel: function (channel) {
       console.log("jjw - joinChannel")
-      console.log(channel)
-
+      console.log(channel,'joinchannel')
+      console.log(this.currentChannel,'join current channel')
       if (channel !== undefined && channel != null) {
         if (channel.id != this.currentChannel.id) {
           console.log(channel,'if in ')
