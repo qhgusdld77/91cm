@@ -83,8 +83,6 @@ let messageMixin = {
       this.$store.state.isSearchMode = false
       this.commit('setMsgArray', [])
       this.cursorPoint.channel_id = this.message.channel_id = channel.id
-      console.log(this.message.channel_id,'?AS')
-      console.log(channel.id,'?AS')
       this.cursorPoint.first = true
       this.cursorPoint.cursorId = 0
       this.cursorPoint.empty = false
@@ -95,8 +93,6 @@ let messageMixin = {
       if (isInit){
         this.initMessageList(channel)
       }
-      //this.cursorPoint.channel_id = channel.id
-      console.log(this.cursorPoint.channel_id,'this.cursorPoint.channel_id')
       this.$http.post('/api/message/getmsg', JSON.stringify(this.cursorPoint), {
         headers: {
           'Content-Type': 'application/json'

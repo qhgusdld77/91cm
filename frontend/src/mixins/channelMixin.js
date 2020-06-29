@@ -8,12 +8,12 @@ let channelMixin = {
   mixins: [commonMixin, messageMixin],
   computed: {
     ...mapGetters({
+      channelList: 'getChannelList',
       currentChannel: 'getCurrentChannel',
       currentUser: 'getCurrentUser'
     })
   },
   methods: {
-
     channelSubscribeCallBack(e) {
       let data = JSON.parse(e.body)
       if(data.message === undefined){
@@ -113,7 +113,6 @@ let channelMixin = {
       this.$http.get('/api/channel/list')
         .then(res => {
           let channelList = res.data
-
           this.commit('setChannelList', channelList)
           if (isJoin) {
             if (channelList.length == 0) channel = null
@@ -127,8 +126,11 @@ let channelMixin = {
     //채널 진입
     joinChannel: function (channel) {
       if (channel !== undefined && channel != null) {
+        if(typeof channel == 'string') {
+          channel = this.getChannel(channel)
+        }
+
         if (channel.id != this.currentChannel.id) {
-          console.log(channel,'if in ')
           this.commit('setCurrentChannel', channel)//채널 진입
           this.initChannelUserList()
           this.selectChannelUserList(channel)//채널 사용자 조회
@@ -211,6 +213,17 @@ let channelMixin = {
       }).catch(error => {
         this.$_error((this.isMine(user) ? "나가기" : "추방") + '에 실패했습니다.')
       })
+    },
+    //채널 조회
+    getChannel: function(channelId) {
+      let thisChannel
+      $.each(this.channelList, function(idx, channel) {
+        if(channelId == channel.id) {
+          thisChannel = channel
+          return false
+        }
+      })
+      return thisChannel
     },
     //채널 모드 한글명 조회
     getChannelModeKorStr: function (mode) {
