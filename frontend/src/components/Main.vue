@@ -9,7 +9,7 @@
                :class="{'disactive-padding': $store.state.selectComponent=='main' }">
             <div :class="{'row': isVideoMode,'no-gutters':isVideoMode}">
               <div :class="{'col': isVideoMode,'col-3':isVideoMode}">
-                <NoChannel v-if="$store.state.userChannelList[0]==null && $store.state.selectComponent=='main'"/>
+                <NoChannel v-if="$store.state.channelList[0]==null && $store.state.selectComponent=='main'"/>
                 <keep-alive v-else>
                   <component :is="whichComponent"></component>
                 </keep-alive>
@@ -91,7 +91,6 @@
         noticeMsgToggle: false,
         noticeMsg: '',
         channelTitle: '',
-        channelList: [],
         isRActive: false,
         modalObj: {modalTitle: '', currentChannel: null},
       }
@@ -153,13 +152,12 @@
         // 새로고침 했을때 Main의 로직이 실행되지 않는 환경에서는 문제가 생길 수 있음
         this.$store.state.stompClient = Stomp.over(new SockJS('/endpoint/'))
         // this.$store.state.stompClient.debug = f => f;
-        
-        this.$store.state.stompClient.connect(this.$store.state.currentUser, () => {
-          this.$store.state.userChannelList.forEach(channel => {
 
-            this.subscribe("/sub/chat/room/" + channel.id,this.channelSubscribeCallBack)
+        this.$store.state.stompClient.connect(this.$store.state.currentUser, () => {
+          this.$store.state.channelList.forEach(channel => {
+            this.subscribe("/sub/chat/room/" + channel.id, this.channelSubscribeCallBack)
           })
-          this.$store.state.stompClient.subscribe("/sub/sync/info", (res) => {
+          this.subscribe("/sub/sync/info", res => {
             if (res.headers.noticeMsg != null) {
               this.noticeMsg = res.headers.noticeMsg
               this.noticeMsgToggle = true
@@ -168,11 +166,6 @@
               this.$store.dispatch('userListUpdate')
               this.$store.dispatch('inviteUserList')
             }
-            if(res.body == '"getChannelUserList"') {
-              //this.selectChannelList()
-              //this.$store.dispatch('selectChannelList')
-            }
-
           })
           // 사용하는 곳이 없음.
           // this.$store.state.stompClient.subscribe("/sub/" + this.$store.state.currentUser.email, (e) => {
@@ -212,8 +205,8 @@
       },
       msgCountUpdate(id, counting) {
         // commit 을 안해도 객체 내부의 내용은 변경이 되는지 확인 필요 확인 후 해당 주석 제거
-        for (let i = 0; i < this.$store.state.userChannelList.length; i++) {
-          if (id == this.$store.state.userChannelList[i].id) {
+        for (let i = 0; i < this.$store.state.channelList.length; i++) {
+          if (id == this.$store.state.channelList[i].id) {
             if (counting) {
               this.msgCounting(i)
               break
@@ -225,10 +218,10 @@
         }
       },
       msgCounting(i) {
-        this.$store.state.userChannelList[i].count += 1
+        this.$store.state.channelList[i].count += 1
       },
       msgCountReset(i) {
-        this.$store.state.userChannelList[i].count = 0
+        this.$store.state.channelList[i].count = 0
       },
       enableComponent: function () {
         // sokect 통신을 위한 컴포넌트 체크

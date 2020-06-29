@@ -6,7 +6,7 @@ export default {
     state.currentChannel = payload
   },
   setChannelList: function (state, payload) {
-    state.userChannelList = payload
+    state.channelList = payload
   },
   getSelectComponent: function (state, payload) {
     state.oldComponent = state.selectComponent
@@ -51,5 +51,4 @@ export default {
   setInviteUserList: function(state,payload){
     state.inviteUserList = payload
   }
-  
 }

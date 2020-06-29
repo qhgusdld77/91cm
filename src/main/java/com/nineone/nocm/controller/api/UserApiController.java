@@ -47,10 +47,8 @@ public class UserApiController {
 
     @RequestMapping("/list")
     public List<User> userList() {
-    	System.out.println("jjw !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return userService.getAllUserList();
     }
-
 
     @PostMapping("/admin/auth")
     public ResponseEntity<?> insertUserAuth(@RequestBody Authorities authorities){

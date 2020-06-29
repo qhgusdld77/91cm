@@ -10,18 +10,7 @@ let channelMixin = {
       currentUser: 'getCurrentUser'
     })
   },
-  watch: {
-    /*
-    channelUsers: function (newu, oldu) {
-    }
-    */
-  },
   methods: {
-    channelSubscribe: function(channel){
-      this.$store.state.stompClient.subscribe("/sub/chat/room/" + channel.id, (e) => {
-        this.channelSubscribeCallBack(e);
-      })
-    },
     //채널 공통 확인
     confirmChannel: function (event, mode, channel) {
       event.stopPropagation()
@@ -50,8 +39,9 @@ let channelMixin = {
         member_email: email
       }, function (res) {
         _this.selectChannelList(res.data)
-        // jny 추가 새로 생성된 채널에 대해 구독하기 위함
-        //_this.channelSubscribe(res.data)
+        _this.subscribe("/sub/chat/room/" + channel.id, (e) => {
+          _this.channelSubscribeCallBack(e);
+        })
       })
     },
     //채널 수정
@@ -65,6 +55,7 @@ let channelMixin = {
     deleteChannel: function (channel) {
       this.$http.post('/api/channel/delete', channel)
         .then(res => {
+          channel.unsubscribe()
           this.sendSub('selectChannelList')
         }).catch(error => {
           console.error(error)
@@ -81,13 +72,11 @@ let channelMixin = {
     },
     //채널 목록 조회
     selectChannelList: function (channel, isJoin = true) {
-      console.log("jjw - selectChannelList")
-      console.log(channel, isJoin)
       this.$http.get('/api/channel/list')
         .then(res => {
           let channelList = res.data
-          this.commit('setChannelList', channelList)
 
+          this.commit('setChannelList', channelList)
           if (isJoin) {
             if (channelList.length == 0) channel = null
             else if (channel === undefined) channel = channelList[0]
@@ -99,9 +88,6 @@ let channelMixin = {
     },
     //채널 진입
     joinChannel: function (channel) {
-      console.log("jjw - joinChannel")
-      console.log(channel)
-
       if (channel !== undefined && channel != null) {
         if (channel.id != this.currentChannel.id) {
           this.commit('setCurrentChannel', channel)//채널 진입
@@ -129,6 +115,7 @@ let channelMixin = {
         }
       }
       else {
+        this.commit('setCurrentChannel', null)
         this.initChannelUserList()
       }
     },
@@ -189,7 +176,7 @@ let channelMixin = {
     //채널 모드 한글명 조회
     getChannelModeKorStr: function (mode) {
       if (mode == "create") return "생성"
-      if (mode == "edit") return "수정"
+      if (mode == "update") return "수정"
       if (mode == "delete") return "삭제"
     },
     isMine: function (user) {

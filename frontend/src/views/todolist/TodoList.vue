@@ -46,8 +46,10 @@
   import draggable from 'vuedraggable'
   import Loading from "../main/Loading";
   import {mapGetters} from "vuex";
+  import commonMixin from "../../mixins/commonMixin";
 
   export default {
+    mixins: [commonMixin],
     name: 'Todolist',
     components: {
       Loading,
@@ -88,7 +90,7 @@
       }
     },
     activated() {
-      this.taskSubscribe = this.$store.state.stompClient.subscribe('/sub/todo/' + this.$store.state.currentChannel.id, (res) => {
+      this.taskSubscribe = this.subscribe('/sub/todo/' + this.$store.state.currentChannel.id, (res) => {
         if (res.headers.typename == 'taskUpdate') {
           this.$store.dispatch('updateTaskBoard')
         }

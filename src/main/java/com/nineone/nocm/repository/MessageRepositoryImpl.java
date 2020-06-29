@@ -32,5 +32,4 @@ public class MessageRepositoryImpl implements MessageRepository {
 	public List<Integer> getMsgCntList(List<Channel> list) {
 		return sqlSession.selectList(namespace + ".getMsgCntList", list);
 	}
-
 }
