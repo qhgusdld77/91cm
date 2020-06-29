@@ -83,8 +83,6 @@ let messageMixin = {
       this.$store.state.isSearchMode = false
       this.commit('setMsgArray', [])
       this.cursorPoint.channel_id = this.message.channel_id = channel.id
-      console.log(this.message.channel_id,'?AS')
-      console.log(channel.id,'?AS')
       this.cursorPoint.first = true
       this.cursorPoint.cursorId = 0
       this.cursorPoint.empty = false
@@ -95,25 +93,19 @@ let messageMixin = {
       if (isInit){
         this.initMessageList(channel)
       }
-      //this.cursorPoint.channel_id = channel.id
-      console.log(this.cursorPoint.channel_id,'this.cursorPoint.channel_id')
       this.$http.post('/api/message/getmsg', JSON.stringify(this.cursorPoint), {
         headers: {
           'Content-Type': 'application/json'
         }
       }).then(res => {
-        console.log(res,'selectmsglist')
-        console.log(channel.id,'channel_id')
-        console.log(this.channelArr[this.channelArr.length - 1],'channel_id222')
         if (channel.id == this.channelArr[this.channelArr.length - 1]) {
-          console.log('???????!!!!')
           if (res.data.length == 0) {
             this.cursorPoint.empty = true
           } else {
             this.cursorPoint.first = false
             this.cursorPoint.cursorId = res.data[res.data.length - 1].id
           }
-          console.log(res.data,'res.data')
+
           for (let i = 0; i < res.data.length; i++) { 
             res.data[i].content = CommonClass.replacemsg(res.data[i].content)
             console.log(res.data[i].content,'res.data[i].content')

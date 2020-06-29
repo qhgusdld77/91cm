@@ -3,7 +3,6 @@ package com.nineone.nocm.service;
 import java.util.List;
 
 import com.nineone.nocm.domain.Channel;
-import com.nineone.nocm.domain.JoinInfo;
 
 public interface ChannelService {
 
@@ -14,8 +13,4 @@ public interface ChannelService {
     List<Channel> channelList(String userId);
 
     boolean updateChannel(Channel name);
-
-    List<Channel> channelListAll();
-
-    Channel getCurrentChannel(Channel channel);
 }

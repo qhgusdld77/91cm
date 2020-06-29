@@ -14,7 +14,7 @@ import com.nineone.nocm.repository.ChannelRepository;
 import com.nineone.nocm.repository.MessageRepository;
 
 @Service
-public class ChannelServiceImpl implements ChannelService{
+public class ChannelServiceImpl implements ChannelService {
 
     @Autowired
     private ChannelRepository channelRepository;
@@ -41,6 +41,8 @@ public class ChannelServiceImpl implements ChannelService{
     @Override
     public List<Channel> channelList(String userEmail) {
     	List<Channel> channelList = channelRepository.channelList(userEmail);
+    	
+    	
     	if(channelList.size()>0) {
     		List<Integer> countList = messageRepository.getMsgCntList(channelList);
         	for(int i=0;i<channelList.size();i++) {
@@ -53,15 +55,5 @@ public class ChannelServiceImpl implements ChannelService{
     @Override
     public boolean updateChannel(Channel channel) {
         return (channelRepository.updateChannel(channel) > 0) ? true : false;
-    }
-
-    @Override
-    public List<Channel> channelListAll() {
-        return channelRepository.channelListAll();
-    }
-
-    @Override
-    public Channel getCurrentChannel(Channel channel) {
-        return channelRepository.getCurrentChannel(channel);
     }
 }
