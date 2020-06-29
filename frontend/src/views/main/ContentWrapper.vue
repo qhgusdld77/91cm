@@ -40,7 +40,7 @@
                 no-resize
                 v-model="message.content"
                 @keydown.ctrl.shift.70="toggleSearchMode"
-                @keydown.enter.exact="send($event)"
+                @keydown.enter.exact="sendMessage($event)"
                 @keyup="byteCheck"
                 @keydown.shift.alt.50='inviteToggle'
               ></b-form-textarea>
@@ -227,6 +227,7 @@
         /////////////////////////////////////
         formData.append('channel_id', this.$store.state.currentChannel.id)
         formData.append('sender', this.$store.state.currentUser.email)
+        formData.append('type','file')
         this.isFileUpload = true
         this.$http.post('/api/file/upload', formData,
           {

@@ -102,25 +102,17 @@ let messageMixin = {
           'Content-Type': 'application/json'
         }
       }).then(res => {
-        console.log(res,'selectmsglist')
-        console.log(channel.id,'channel_id')
-        console.log(this.channelArr[this.channelArr.length - 1],'channel_id222')
         if (channel.id == this.channelArr[this.channelArr.length - 1]) {
-          console.log('???????!!!!')
           if (res.data.length == 0) {
             this.cursorPoint.empty = true
           } else {
             this.cursorPoint.first = false
             this.cursorPoint.cursorId = res.data[res.data.length - 1].id
           }
-          console.log(res.data,'res.data')
           for (let i = 0; i < res.data.length; i++) { 
             res.data[i].content = CommonClass.replacemsg(res.data[i].content)
-            console.log(res.data[i].content,'res.data[i].content')
           }
-          console.log(this.msgArray,'msgarr1')
           this.commit('setMsgArray', res.data.reverse().concat(this.msgArray))
-          console.log(this.msgArray,'msgarr')
           if (wrapperEl !== undefined) {
             this.$nextTick(() => {
               wrapperEl.scrollTop = wrapperEl.scrollHeight - this.oldScrollHeight
@@ -141,10 +133,12 @@ let messageMixin = {
         return;
       }
       if (isSysMsg) {
+        this.message.type = 'action'
         this.message.sender = null
       } else {
         this.message.sender = this.$store.state.currentUser.email
         this.message.user = this.$store.state.currentUser
+        this.message.type = 'message'
       }
       this.message.channel_id = this.$store.state.currentChannel.id
       if (CommonClass.byteLimit(this.stringByteLength)) {

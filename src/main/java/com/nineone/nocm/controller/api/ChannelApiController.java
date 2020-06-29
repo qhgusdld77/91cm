@@ -68,7 +68,7 @@ public class ChannelApiController {
 
     @RequestMapping(value = "/update/lastaccessdate")
     public void updateLastAccessDate(@RequestBody Map<String, Object> map) {
-    	//joinInfoService.updateLastAccessDate((int) map.get("currentChannelId"), map.get("userEmail").toString());
+    	joinInfoService.updateLastAccessDate((int) map.get("currentChannelId"), map.get("userEmail").toString());
     	/*
         if (map.get("oldChannelId") == null) {
             joinInfoService.updateLastAccessDate((int) map.get("currentChannelId"), map.get("userEmail").toString());

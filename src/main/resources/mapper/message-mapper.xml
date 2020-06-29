@@ -7,6 +7,7 @@
         <result property="content" column="content"/>
         <result property="sender" column="sender"/>
         <result property="send_date" column="send_date"/>
+        <result property="type" column="type"/>
         <association property="user"  javaType="com.nineone.nocm.domain.User">
             <result property="name" column="name"/>
              <result property="picture" column="picture"/>
@@ -19,10 +20,12 @@
                        , CONTENT
                        , SENDER
                        , SEND_DATE
+                       , TYPE
               ) VALUES ( #{channel_id}
                        , #{content}
                        , #{sender}
                        , #{send_date}
+                       , #{type}
               ) 
     </insert>
 
@@ -51,6 +54,7 @@
              , NAME
              , PHONE
              , IFNULL(PICTURE,'/img/default-user-picture.png') AS PICTURE
+             , TYPE
           FROM MESSAGE
      LEFT JOIN MEMBER
             ON MEMBER.EMAIL = MESSAGE.SENDER

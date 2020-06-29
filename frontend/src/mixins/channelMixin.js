@@ -76,6 +76,7 @@ let channelMixin = {
         name: channelTitle,
         member_email: email
       }, function (res) {
+        _this.commit('setCurrentChannel', res.data) //채널 진입
         _this.selectChannelList(res.data)
         //jny 추가 새로 생성된 채널에 대해 구독하기 위함
         _this.subscribe("/sub/chat/room/" + res.data.id, _this.channelSubscribeCallBack)

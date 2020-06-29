@@ -128,13 +128,16 @@
               await AboutChannel.updateLastAccessDate(this.$store.state.currentChannel.id)
             }
             AboutChannel.updateLastAccessDate(alarm.channel_id, null).then(async (res) => {
+              console.log(res,'ressss')
               console.log(alarm,'alarm')
               //await this.$store.dispatch('channelList')
-              await this.selectChannelList(null,false,false)
+              this.selectChannelList()
+              /*
               const joinChannel = this.$store.state.channelList.find(channel => channel.id == alarm.channel_id)
 
-              this.joinChannel(joinChannel)
-              this.subscribe("/sub/chat/room/" + res.data.id, _this.channelSubscribeCallBack)
+              this.joinChannel(res.data)
+              */
+              this.subscribe("/sub/chat/room/" + alarm.channel_id, this.channelSubscribeCallBack)
               //this.$store.commit('setCurrentChannel', joinChannel)
               //console.log('joinChannel', this.$store.state.currentChannel)
               // this.$emit('channelSubscribe',this.$store.state.currentChannel)
