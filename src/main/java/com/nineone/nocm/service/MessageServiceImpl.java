@@ -55,7 +55,7 @@ public class MessageServiceImpl implements MessageService {
 
 
 	@Override
-	public boolean updateDeleteYN(int id) {
-		return (messageRepository.updateDeleteYN(id)>0) ? true : false; 
+	public boolean deleteDeleteYN(int id) {
+		return (messageRepository.deleteDeleteYN(id)>0) ? true : false; 
 	}
 }
