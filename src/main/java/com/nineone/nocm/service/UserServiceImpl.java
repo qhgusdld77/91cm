@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.nineone.nocm.domain.CustomUserDetails;
 import com.nineone.nocm.domain.User;
@@ -156,5 +153,4 @@ public class UserServiceImpl implements UserService,UserDetailsService {
 	public List<User> getUserListForInvite(int channel_id) {
 		return userRepository.getUserListForInvite(channel_id);
 	} 
-
 }

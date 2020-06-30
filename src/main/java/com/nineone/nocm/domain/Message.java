@@ -3,8 +3,6 @@ package com.nineone.nocm.domain;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,5 +36,4 @@ public class Message {
 		this.files = files;
 		this.delete_yn = delete_yn;
 	}
-
 }

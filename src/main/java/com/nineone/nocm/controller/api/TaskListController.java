@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nineone.nocm.domain.TaskList;
 import com.nineone.nocm.service.TaskListService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @RestController
 @RequestMapping("/api/tasklist")
 public class TaskListController {
@@ -58,7 +55,5 @@ public class TaskListController {
 		} catch (Exception e) {
 			return false;
 		}
-
 	}
-
 }

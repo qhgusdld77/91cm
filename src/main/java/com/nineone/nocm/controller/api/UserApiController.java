@@ -61,7 +61,8 @@ public class UserApiController {
         }
     }
 
-    @RequestMapping("/admin/userList")
+    @SuppressWarnings("rawtypes")
+	@RequestMapping("/admin/userList")
     public List<HashMap> rolesUserList(@Socialuser User user) {
         return authoritiesRepository.getRoleUserList(user);
     }

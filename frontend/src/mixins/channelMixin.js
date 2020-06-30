@@ -13,10 +13,18 @@ let channelMixin = {
       currentUser: 'getCurrentUser'
     })
   },
+  watch: {
+    channelList: function() {
+      console.log("!!!!!!!!!!!!!!!!")
+    }
+  },
   methods: {
+    _makeChannel: function() {
+      
+    },
     channelSubscribeCallBack(e) {
       let data = JSON.parse(e.body)
-      if(data.message === undefined){
+      if(data.message === undefined) {
         NotificationClass.sendNotification(this.$store.state.isfocus, data)
         if (data.channel_id == this.$store.state.currentChannel.id && this.enableComponent) {
           data.content = CommonClass.replacemsg(data.content)
@@ -27,8 +35,15 @@ let channelMixin = {
         } else {
           this.msgCountUpdate(data.channel_id, true)
         }
-      }else if(data.message == 'updateChannel'){
+      }
+      
+      
+      else if(data.message == 'updateChannel'){
+
+
         this.$store.state.syncSignal.syncChannelUser =! this.$store.state.syncSignal.syncChannelUser;
+
+
       } else if (data.message == 'selectChannelList') {
         this.selectChannelList() 
       }
@@ -85,14 +100,25 @@ let channelMixin = {
     updateChannel: function (channel) {
       let _this = this
       this.post('/api/channel/update', channel, function () {
-        _this.sendSub(' ')
+        _this.sendSub('selectChannelList')
       })
     },
     //채널 삭제
     deleteChannel: function (channel) {
-      this.$http.post('/api/channel/delete', channel)
+      this.post('/api/channel/delete', channel)
         .then(res => {
           channel.unsubscribe()
+
+          /*
+
+          channel.send("selectChannelList")
+          channel.subscribe()
+          */
+          //구독
+          //신호전송
+          //구독취소
+          /*
+          */
           this.sendSub('selectChannelList')
         }).catch(error => {
           console.error(error)
@@ -109,7 +135,7 @@ let channelMixin = {
     },
     //채널 목록 조회
     selectChannelList: function (channel, isJoin = true) {
-      this.$http.get('/api/channel/list')
+      this.get('/api/channel/list')
         .then(res => {
           let channelList = res.data
           this.commit('setChannelList', channelList)
@@ -144,7 +170,7 @@ let channelMixin = {
 
           if (channel != null) {
             //마지막 진입일자 갱신
-            this.$http.post('/api/channel/update/lastaccessdate', {
+            this.post('/api/channel/update/lastaccessdate', {
               currentChannelId: channel.id,
               userEmail: this.currentUser.email
             })
@@ -162,7 +188,7 @@ let channelMixin = {
     //채널 사용자 조회
     selectChannelUserList: function (channel) {
       if (channel != null) {
-        this.$http.post('/api/user/channel/' + channel.id, {
+        this.post('/api/user/channel/' + channel.id, {
           currentChannelId: channel.id,
           userEmail: this.currentUser.email
         })
@@ -202,7 +228,7 @@ let channelMixin = {
     },
     //채널 강퇴 및 나가기
     leaveChannle: function (user) {
-      this.$http.post('/api/channel/leave', {
+      this.post('/api/channel/leave', {
         email: user.email,
         channel_id: this.currentChannel.id
       }).then(res => {
@@ -239,6 +265,7 @@ let channelMixin = {
       return this.isAdmin() || this.isMine(user)
     },
     sendSub: function (message) {
+      console.log(">>>>>>>", this.currentChannel.id)
       this.$store.state.stompClient.send("/sub/chat/room/" + this.currentChannel.id, JSON.stringify({
         'message': message,
         'error': "null"

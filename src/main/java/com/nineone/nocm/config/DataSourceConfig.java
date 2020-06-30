@@ -5,8 +5,6 @@ import javax.sql.DataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
@@ -19,9 +17,6 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 public class DataSourceConfig {
-
-	private static final Logger logger = LoggerFactory.getLogger(DataSourceConfig.class);
-	
 	@Bean
 	public HikariConfig hikariConfig() {
 		HikariConfig config = new HikariConfig();

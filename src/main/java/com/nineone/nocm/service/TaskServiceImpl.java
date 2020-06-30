@@ -3,7 +3,6 @@ package com.nineone.nocm.service;
 import java.util.Date;
 import java.util.Map;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -14,9 +13,7 @@ import com.nineone.nocm.repository.TaskRepository;
 import com.nineone.nocm.util.DateUtil;
 
 @Service
-@Slf4j
-public class TaskServiceImpl implements TaskService{
-	
+public class TaskServiceImpl implements TaskService {
 	@Autowired
 	private TaskRepository taskRepository; 
 	
@@ -49,11 +46,11 @@ public class TaskServiceImpl implements TaskService{
 			map.put("isUp", isUp);
 			taskRepository.moveTaskPosition(map);
 			return  (taskRepository.updateTaskPosition(map)> 0)? true : false;
-		}else {
+		}
+		else {
 			taskRepository.moveTaskPositionByDelete(map);
 			taskRepository.moveTaskPositionByinsert(map);
 			return (taskRepository.updateTaskPosition(map) > 0)? true : false;
 		}
-		
 	}
 }

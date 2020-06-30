@@ -14,11 +14,7 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import com.nineone.nocm.domain.User;
 import com.nineone.nocm.repository.UserRepository;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
-public class CustomAuthenticationSuccessHandler extends  SavedRequestAwareAuthenticationSuccessHandler{
-
+public class CustomAuthenticationSuccessHandler extends  SavedRequestAwareAuthenticationSuccessHandler {
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -30,9 +26,5 @@ public class CustomAuthenticationSuccessHandler extends  SavedRequestAwareAuthen
 		HttpSession session = request.getSession();
 		session.setAttribute("user", user);
 		getRedirectStrategy().sendRedirect(request, response, "/main");
-
-		  
 	}
-
-	
 }
