@@ -39,24 +39,11 @@ public class ChannelRepositoryImpl implements ChannelRepository{
 
     @Override
     public List<Channel> channelList(String userEmail) {
-        return sqlSession.selectList(namespace + ".channelList",userEmail);
-    }
-
-    @Override
-    public List<Channel> channelListAll() {
-        return sqlSession.selectList(namespace + ".channelListAll");
+        return sqlSession.selectList(namespace + ".channelList", userEmail);
     }
 
     @Override
 	public int joinInfo(JoinInfo joinInfo) {
 		return sqlSession.insert(namespace + ".insertJoinInfo", joinInfo);
 	}
-
-    @Override
-    public Channel getCurrentChannel(Channel channel) {
-        return sqlSession.selectOne(namespace + ".getCurrentChannel", channel);
-    }
-
-
-
 }

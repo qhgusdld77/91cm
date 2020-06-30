@@ -3,7 +3,7 @@
     <v-col cols="12">
       <v-autocomplete
         v-model="friends"
-        :items="userList"
+        :items="inviteUserList"
         @keydown.enter.exact="enter"
         @keydown.esc.exact="$emit('inviteToggle')"
         filled
@@ -35,8 +35,7 @@
           </template>
           <template v-else>
             <v-list-item-avatar>
-              <img v-if="data.item.picture!=null" :src="data.item.picture">
-              <img v-else src="../assets/images/default-user-picture.png">
+              <img :src="data.item.picture">
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title v-html="data.item.name"></v-list-item-title>
@@ -59,12 +58,17 @@
     computed: {
       ...mapGetters({
         userList: 'getUserList',
+        channelUsers: 'getChannelUsers',
+        inviteUserList: 'getInviteUserList',
       })
     },
     data() {
       return {
         friends: [],
       }
+    },
+    async created(){
+      await this.$store.dispatch('inviteUserList')
     },
     mounted() {
       this.friends = []
@@ -76,30 +80,36 @@
       },
       enter: async function (event) {
         let el = document.querySelector(".menuable__content__active.inviteClass")
+        console.log(el)
         if (el == null) {
           if (this.friends.length != 0) {
             await InviteService.invite(this.$store.state.currentUser.email, this.$store.state.currentChannel.id, this.friends)
               .then(res => {
                 for (let i = 0; i < this.friends.length; i++) {
-                  const user = this.userList.find(el => el.email == this.friends[i])
-                  this.message.content += user.name + '님'
+                  const user = this.inviteUserList.find(el => el.email == this.friends[i])
+                  
+                  if(user!=null){
+                    this.message.content += user.name + '님'
+                  }
                 }
-                this.$http.post('/api/invite/mail', {
-                  channel_id: this.$store.state.currentChannel.id,
-                  sender: this.$store.state.currentUser.email,
-                  recipients: this.friends
-                })
-                  .then(res => {
-                    console.warn(res.data)
-                  })
+                // 임시 주석처리
+                // this.$http.post('/api/invite/mail', {
+                //   channel_id: this.$store.state.currentChannel.id,
+                //   sender: this.$store.state.currentUser.email,
+                //   recipients: this.friends
+                // })
+                //   .then(res => {
+                //     console.warn(res.data)
+                //   })
                 this.message.content += '을 초대했습니다.'
                 this.$eventBus.$emit('getUserList', true)
-                this.$emit('send', null, true)
+                this.$emit('sendMessage', null, true)
                 this.friends = []
                 this.message.content = ''
                 this.$store.state.isInviteMode = !this.$store.state.isInviteMode
               }).catch(error => {
                 let alertmsg = ''
+                console.log(error,'error')
                 if (error.response.data.list != null) {
                   const alertList = error.response.data.list
                   for (let i = 0; i < alertList.length; i++) {

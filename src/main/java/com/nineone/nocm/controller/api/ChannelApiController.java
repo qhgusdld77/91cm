@@ -23,21 +23,11 @@ public class ChannelApiController {
     @Autowired
     private JoinInfoService joinInfoService;
 
-    @PostMapping("/current")
-    public Channel getCurrentChannel(@RequestBody Channel channel) {
-        return channelService.getCurrentChannel(channel);
-    }
-
     @PostMapping("/leave")
     public boolean leaveChannel(@RequestBody Map<String, Object> info) {
         // info에는 해당 유저의 email 값과 채널 id값이 들어 있음 -> key : (email , channel_id)
         // leaveUser(mapper)를   joininfo테이블에 있는 가입 정보 뿐만 아니라 초대 정보까지 지우는 쿼리로 수정함.
         return joinInfoService.leaveUser(info);
-    }
-
-    @GetMapping("/all")
-    public List<Channel> channelListAll() {
-        return channelService.channelListAll();
     }
 
     // 사용자의 채널 리스트를 반환
@@ -66,13 +56,8 @@ public class ChannelApiController {
         return channelService.deleteChannel(channel.getId());
     }
 
-    @RequestMapping(value = "/update/lastaccessdate", method = RequestMethod.PUT)
+    @RequestMapping(value = "/update/lastaccessdate")
     public void updateLastAccessDate(@RequestBody Map<String, Object> map) {
-        if (map.get("oldChannelId") == null) {
-            joinInfoService.updateLastAccessDate((int) map.get("currentChannelId"), map.get("userEmail").toString());
-        } else {
-            joinInfoService.updateLastAccessDate((int) map.get("oldChannelId"), map.get("userEmail").toString());
-        }
+    	joinInfoService.updateLastAccessDate((int) map.get("currentChannelId"), map.get("userEmail").toString());
     }
-
 }

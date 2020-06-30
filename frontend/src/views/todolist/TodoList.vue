@@ -46,8 +46,10 @@
   import draggable from 'vuedraggable'
   import Loading from "../main/Loading";
   import {mapGetters} from "vuex";
+  import commonMixin from "../../mixins/commonMixin";
 
   export default {
+    mixins: [commonMixin],
     name: 'Todolist',
     components: {
       Loading,
@@ -88,7 +90,7 @@
       }
     },
     activated() {
-      this.taskSubscribe = this.$store.state.stompClient.subscribe('/sub/todo/' + this.$store.state.currentChannel.id, (res) => {
+      this.taskSubscribe = this.subscribe('/sub/todo/' + this.$store.state.currentChannel.id, (res) => {
         if (res.headers.typename == 'taskUpdate') {
           this.$store.dispatch('updateTaskBoard')
         }
@@ -145,7 +147,7 @@
           }).then(res => {
             console.log(res.data, 'position')
             if (res.data) this.$store.state.stompClient.send('/sub/todo/' + this.$store.state.currentChannel.id, {}, {typename: 'taskUpdate'})
-            else this.$_alert( '위치 변경에 실패했습니다.')
+            else this.$_error( '위치 변경에 실패했습니다.')
           }).catch(error => {
             console.error(error)
           })

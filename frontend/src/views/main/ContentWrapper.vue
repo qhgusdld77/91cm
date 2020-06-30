@@ -91,7 +91,10 @@
   import {mapGetters} from "vuex";
   import InviteInput from "../../components/InviteInput";
 
+  import channelMixin from "../../mixins/channelMixin";
+
   export default {
+    mixins: [channelMixin],
     name: 'ContentWrapper',
     components: {
       InviteInput,
@@ -121,7 +124,6 @@
           cursorId: 0,
           empty: false
         },
-        firstLoad: true,
         oldScrollHeight: 0,
         wrapperEl: null,
         msgPreviewBool: false,
@@ -140,12 +142,8 @@
         this.wrapperEl = document.querySelector('.c-c-wrapper')
         window.addEventListener('resize', this.widthCheck);
       })
-      this.$eventBus.$on('leaveChannelMsg', () => {
-        this.message.content = this.$store.state.currentUser.name + '님이 나가셨습니다.'
-        this.send(null, true)
-      })
-      this.$eventBus.$on('forceLeaveChannelMsg', (leaveUserName) => {
-        this.message.content = leaveUserName + '님이 추방되었습니다.'
+      this.$eventBus.$on('leaveChannelMsg', (user) => {
+        this.message.content = user.name + '님이 ' + (this.isMine(user)?"나가셨습니다.":"추방되었습니다.")
         this.send(null, true)
       })
     },
@@ -266,7 +264,6 @@
             this.message.content = ''
             this.scrollToEnd(true)
             if (this.sendMail) {
-              // console.log(this.$store.state.channelUsers.filter(channelUser => channelUser != this.$store.state.currentUser))
               this.$store.state.channelUsers.filter(channelUser => channelUser != this.$store.state.currentUser)
                 .forEach(channelUser => {
                   this.$http.post('/api/message/send/mail', {
@@ -284,6 +281,8 @@
             this.message.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + this.message.content
             let errormsg = JSON.parse(JSON.stringify(this.message))
             this.$store.commit('pushMsg', errormsg)
+            console.log(errormsg)
+            console.log(this.msgArray)
             this.message.content = ''
           }
         }
@@ -300,6 +299,7 @@
         }
       },
       getMessage: function (wrapperEl) {
+        return
         this.cursorPoint.channel_id = this.$store.state.currentChannel.id
         this.$http.post('/api/message/getmsg', JSON.stringify(this.cursorPoint), {
           headers: {
@@ -353,9 +353,10 @@
         this.msgPreviewBool = false
       },
       initData() {
+        /*
         this.$store.state.isInviteMode = false
         this.$store.state.isSearchMode = false
-        this.message.channel_id = this.getCurrentChannel.id
+        this.message.channel_id = this.getCurrentChannel().id
         this.message.sender = this.$store.state.currentUser.email
         this.cursorPoint.channel_id = this.$store.state.currentChannel
         this.cursorPoint.first = true
@@ -364,6 +365,7 @@
         this.$store.commit('setMsgArray', [])
         this.firstLoad = true
         this.scrollHeight = 0
+        */
       },
       byteCheck(e) {
         // v-model을 썼음에도 e.target.value를 사용하는 이유는 한글은 바로 바인딩이 안되기때문에 수동적으로 값들을 message.content에 넣기 위함이다.
@@ -376,21 +378,21 @@
       },
     },
     computed: {
-      getCurrentChannel: function () {
-        return this.$store.state.currentChannel
-      },
+      
+    
       ...mapGetters({
-        userList: 'getUserList',
-        msgArray: 'getMsgArray'
+        //msgArray: 'getMsgArray',
+        currentChannel: 'getCurrentChannel'
       })
     },
     watch: {
-      getCurrentChannel: function (newv, oldv) {
-        this.initData()
-        this.getMessage()
-        this.scrollToEnd()
+      currentChannel: function (newv, oldv) {
+        //this.initData()
+        //this.getMessage()
+        //this.scrollToEnd()
       },
       msgArray: function () {
+        console.log(this.msgArray)
         // 스크롤을 최상단으로 올려 메시지를 가져올 때 실행되는 것을 막기 위한 if문
         if (this.isGetMsgForPreview) {
           this.isGetMsgForPreview = false
@@ -403,14 +405,13 @@
           }
         }
       },
+      
       checkbox: function () {
         if (this.checkbox) {
           alert('지금부터 보내는 메시지는 나인원소프트 전체 메일로 보내집니다.')
         }
       }
     },
-
-
   }
 </script>
 

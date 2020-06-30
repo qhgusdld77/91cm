@@ -10,7 +10,8 @@ export default {
     }
   },
   getCurrentUser: state => state.currentUser,
-  getUserChannelList: state => state.userChannelList,
+  getChannel: state => state.channel,
+  getChannelList: state => state.channelList,
   getTaskBoard: state=> state.taskBoard,
   getCurrentChannel: state => state.currentChannel,
   getSyncChannelUser: state => state.syncSignal.syncChannelUser,
@@ -19,5 +20,6 @@ export default {
   getUserList: state => state.userList,
   getMsgArray: state => state.msgArray,
   getIsVideoMode: state => state.isVideoMode,
-  getIsSmallWidth: state => state.isSmallWidth
+  getIsSmallWidth: state => state.isSmallWidth,
+  getInviteUserList: state => state.inviteUserList,
 }

@@ -17,7 +17,7 @@ class AboutChannel{
             }
           })
     }
-
+/*
     updateChannelAPI (currentChannel) {
       return axios.post('/api/channel/update', currentChannel,
       {
@@ -31,7 +31,7 @@ class AboutChannel{
         headers: {'Content-Type': 'application/json'}
       })
     }
-
+*/
     updateLastAccessDate (currentId,oldId) {
       return axios.put('/api/channel/update/lastaccessdate',
       {

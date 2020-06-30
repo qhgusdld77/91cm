@@ -1,5 +1,6 @@
 import axios from "axios";
-import Vue from 'vue'
+/*import Vue from 'vue'*/
+
 export default {
   // 현재 채널의 모든 taskList 가져오기
   updateTaskBoard: function(context){
@@ -13,15 +14,30 @@ export default {
   },
   // 91cm에 가입한 모든 유저 가져오기
   userListUpdate: function (context) {
+    /*
     axios.get('/api/user/list')
       .then(res => {
         context.commit('getUserList', res.data);
       }).catch(error => {
       console.error(error);
     })
+    */
+  },
+  // 채널에 입장하지 않은 모든 유저 가져오기
+  inviteUserList: function (context) {
+    axios.get('/api/user/invite/'+context.state.currentChannel.id)
+      .then(res => {
+        context.commit('setInviteUserList', res.data);
+      }).catch(error => {
+      console.error(error);
+    })
   },
   updateUserList: function (context) {
-    let currentChannel = context.state.currentChannel
+    //context.commit('selectChannelList', context.state.currentChannel)
+    //channelMixin.selectChannelList(context.state.currentChannel)
+
+    /*
+    let currentChannel = 
     if (currentChannel != null) {
       axios.get('/api/user/channel/' + currentChannel.id)
         .then(res => {
@@ -32,9 +48,11 @@ export default {
     else {
       context.commit('setChannelUsers', [])
     }
+    */
   },
   // 현재 유저의 채널 리스트 가져오기
   channelList: async function (context) {
+    /*
     await axios.get('/api/channel/list')
       .then(res => {
         context.commit('setChannelList', res.data)
@@ -47,6 +65,8 @@ export default {
         }
       }).catch(error => {
       })
+      */
+    
   },
   // 현재 로그인 한 유저 가져오기
   initCurrentUser: async function (context) {
@@ -60,21 +80,7 @@ export default {
   resetCurrentUser: function (context) {
     context.commit('resetCurrentUser')
   },
-  updateCurrentChannel: function (context) {
-    axios.post('/api/channel/current',{id: context.state.currentChannel.id})
-      .then(res =>{
-        context.commit('setCurrentChannel',res.data)
-        const channel = context.state.userChannelList
-          .find(channel => channel.id == context.state.currentChannel.id)
-        channel.name = context.state.currentChannel.name
-      })
-  },
-  deleteCurrentChannel: function(context) {
-    context.dispatch('channelList')
-    //this.$store.state.stompClient.send("/sub/chat/room/" + this.$store.state.currentChannel.id, null ,{noticeMsg : context.state.currentChannel.name + "채널이 삭제되었습니다."})
-  },
   forceLeaveChannel: function(context) {
-    console.log("jjw channelList call")
     context.dispatch('channelList')
   }
 }

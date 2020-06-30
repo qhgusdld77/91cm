@@ -1,0 +1,206 @@
+{
+    "common": {
+        "err": {
+            "enterEmail": "이메일을 입력해주세요",
+            "enterName": "이름을 입력해주세요",
+            "longName": "이름이 너무 깁니다.",
+            "enterPhone": "핸드폰 번호를 입력해주세요", 
+            "incorrectPhone": "핸드폰 번호가 형식에 맞지 않습니다",
+            "existingEmail": "해당 이메일은 이미 가입되어 있습니다.",
+            "fileSizeLimit":"한번에 보낼 수 있는 파일 용량은 100MB 입니다.",
+            "folderNotAllowd": "폴더는 업로드 할 수 없습니다."
+        },
+        "msg": {
+            "enterCtn": "내용을 입력해주세요."
+        },
+        "btn": {
+            "save": "저장",
+            "cancel": "취소",
+            "modify": "수정",
+            "ok": "확인",
+            "delete": "삭제",
+		    "leave": "나가기"
+        },
+        "menu": {
+            
+        },
+        "txt":{
+            "label":{
+                "name": "이름",
+                "email": "이메일",
+                "phone": "핸드폰번호"
+            }
+        },
+        "desc": {
+        
+        }
+    },
+    
+    
+    "admin": {
+        "err": {
+            "authModFail": "권한 수정에 실패했습니다."
+        },
+        "msg":{
+            "authModSuccess": "권한이 수정되었습니다."
+        },
+        "txt": {
+            "tab": {
+                "authSetting": "권한설정",
+                "sendMessageToAll": "전체메세지"
+            },
+            "auth": {
+                "title" : "사용자 리스트",
+                "col":{
+                    "num": "번호",    
+                    "name": "이름",
+                    "email": "이메일",
+                    "authority": "권한",
+                    "modify": "수정"
+                }
+            }
+        }
+    },
+    
+    
+    "join": {
+        "oauth": {
+            "err": {
+                "joinFail": "회원가입 실패"
+            },
+            "msg": {
+            
+            },
+            "txt": {
+                "title": "91cm를 사용하기 위해 추가적으로 필요한 정보를 입력해주세요",
+                "emailLabel": "가입할 이메일을 입력해주세요",
+                "nameLabel": "91cm에서 사용할 이름을 입력해주세요",
+                "phoneLabel": "업무에 사용하는 핸드폰 번호를 입력해주세요"
+            },
+            "desc": {
+            }
+        },
+        "form": {
+            "err": {
+                "incorrectEmail": "올바른 이메일 주소가 아닙니다.",
+                "enterAll": "모든 항목을 채워주세요.",
+                "emailCheck": "이메일 중복확인을 해주세요.",
+                "incorrectPwd": "비밀번호가 일치하지 않습니다."
+            },
+            "msg": {
+                "availableEmail": "사용가능한 이메일입니다."
+            },
+            "txt": {
+            
+            }
+        },
+        "btn": {
+            "submit": "등록"
+        }
+    },
+    
+    "login": {
+        "err": {
+            
+        },
+        "msg": {
+            
+        },
+        "btn": {
+            "login": "로그인"
+        }
+    
+    },
+    "channel":{
+        "txt":{
+            "channelNameLabel": "채널 이름",
+            "createTitle":"채널 생성",
+            "updateTitle": "채널 수정"
+        },
+        "meg":{
+            "deleteMsg": "<code>{txt1}</code>채널을 삭제하시겠습니까?",
+            "forceLeaveMsg":"{txt1} 채널에서 추방되었습니다.",
+            "leaveMsg": "{txt1} 채널에서 나갔습니다."
+        },
+        "err":{
+            "forceLeaveFail":"추방에 실패했습니다.",
+            "leaveFail": "나가기에 실패했습니다."
+        }
+    },
+
+    "todolist":{
+        "title": "Taskboard", 
+        "desc":{
+            "enterCtn": "내용을 입력해주세요.",
+            "enterDt": "날짜를 입력해주세요"
+        },
+        "taskList":{	
+            "create":{
+                "label":"리스트 생성"
+            },
+            "update":{
+            
+            },
+            "delete":{
+            
+            }
+        },
+        "task":{
+            "create":{
+                
+            },
+            "menu":{
+                "done":"완료",
+                "revoke": "취소"
+            }
+        },
+        "err":{
+            "posUpdateFail":"위치 변경에 실패했습니다."
+            }
+    
+    },
+    "calendar":{
+        "txt":{
+            "month":"",
+            "year":"",
+            "modal":{
+                "title":"일정 수정",
+                "taskTitle":"일정 이름",
+                "taskCtn": "일정 내용",
+                "desc": {
+                    "EvtTitle": "캘린더 이벤트 제목"
+                }
+            }
+        }
+    },
+    "chat":{
+        "desc":{
+            "chatTextarea": "채팅 메세지를 입력하세요."
+        },
+        "msg":{
+            "sendEmail": "지금부터 보내는 메시지는 {txt1} 채널 사용자들에게 메일로 보내집니다."
+        }
+    },
+    
+    "invite":{
+        "txt":{
+            "userSelectLabel": "선택"
+        },
+        "err":{
+            "existingInvite":"{arr}은 이미 이 채널에 초대받았습니다. 확인해주세요."
+        },
+        "msg":{
+            "selectUser":"초대할 사용자를 선택해주세요"
+        }
+    },
+    
+    "profile":{
+        "txt":{
+            "title":"개인프로필",
+            "updateTitle": "개인 프로필 수정"
+        },
+        "err":{
+            "imagesNotAllowed": "이미지 파일만 업로드 할 수 있습니다."
+        }
+    }
+}

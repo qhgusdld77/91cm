@@ -22,19 +22,20 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field :disabled="true" v-model="editedIndex" label="Dessert name"></v-text-field>
+                <v-text-field :disabled="true" v-model="editedIndex" label="Num"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
                 <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field :disabled="true" v-model="editedItem.email" label="User email"></v-text-field>
+                <v-text-field :disabled="true" v-model="editedItem.email" label="Email"></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-autocomplete
                   v-model="editedItem.authority"
                   :items="authorityList"
-                  label="Interests"
+                  label="Authority
+                  "
                 ></v-autocomplete>
               </v-col>
             </v-row>
@@ -51,7 +52,10 @@
 </template>
 
 <script>
+  import commonMixin from "../../mixins/commonMixin";
+
   export default {
+    mixins: [commonMixin],
     name: "AuthorityPage",
     beforeCreate() {
       this.$http.post('/api/user/admin/userList')
@@ -112,18 +116,8 @@
         this.editedIndex = this.authUserList.indexOf(item);
         this.editedItem = Object.assign({}, item);
         this.dialog = true;
-
-        var role = this.$store.state.currentUser.roles
-        if(role.includes('ROLE_ADMIN') && this.authorityList.includes('ROLE_ADMIN')) {
-          console.log(this.authorityList)
-          this.authorityList = this.authorityList.splice(1, 2)
-          console.log(this.authorityList)
-        }
+        if(this.isAdmin()) this.authorityList = this.authorityList.splice(1, 2)
       },
     }
   }
 </script>
-
-<style scoped>
-
-</style>

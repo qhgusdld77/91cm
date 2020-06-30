@@ -1,49 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nineone.nocm.mapper.channel">
-    <select id="getChannel" parameterType="java.lang.Integer" resultType="com.nineone.nocm.domain.Channel">
-        select * from channel where id = #{id}
+    <select id="getChannel" resultType="com.nineone.nocm.domain.Channel">
+        SELECT *
+          FROM CHANNEL
+         WHERE DELETE_YN = 'N'
+           AND ID = #{id}
     </select>
-    <insert id="insertChannel" useGeneratedKeys="true" keyProperty="id">
-    	insert channel (name)
-    		values(#{name})
-    </insert>
-    <update id="updateChannel">
-        update channel set name = #{name} where id = #{id}
-    </update>
-
-    <delete id="deleteChannel">
-    	UPDATE CHANNEL
-    	   SET DELETE_YN = 'Y'
-    	 WHERE ID = #{channelId}
-    </delete>
 
     <select id="channelList" resultType="com.nineone.nocm.domain.Channel">
         SELECT CN.ID
              , CN.NAME
-             , CN.REGISTER_DATE
-             , JI.MEMBER_EMAIL AS LOGIN_EMAIL
+             , IFNULL(CNT.COUNT, 0) AS COUNT
           FROM CHANNEL AS CN
 
     INNER JOIN JOININFO JI
             ON JI.CHANNEL_ID = CN.ID
            AND JI.MEMBER_EMAIL = #{userEmail}
 
+     LEFT JOIN ( SELECT JI2.CHANNEL_ID
+                      , JI2.MEMBER_EMAIL
+                      , COUNT(*) AS COUNT
+                   FROM JOININFO JI2
+
+             INNER JOIN MESSAGE MSG
+                     ON MSG.CHANNEL_ID = JI2.CHANNEL_ID
+                    AND MSG.SEND_DATE > JI2.LAST_ACCESS_DATE
+
+              GROUP BY JI2.CHANNEL_ID,
+                       JI2.MEMBER_EMAIL
+             ) AS CNT
+            ON CNT.CHANNEL_ID = CN.ID
+           AND CNT.MEMBER_EMAIL = JI.MEMBER_EMAIL
+
          WHERE CN.DELETE_YN = 'N'
-      ORDER BY CN.NAME
+
+      ORDER BY LENGTH(CN.NAME) ASC
+             , CN.NAME ASC
     </select>
 
-    <insert id="insertJoinInfo">
-    	insert joininfo (channel_id,member_email)
-    		values(#{channel_id},#{member_email})
+    <insert id="insertChannel" useGeneratedKeys="true" keyProperty="id">
+        INSERT CHANNEL ( NAME
+              ) VALUES ( #{name}
+              )
     </insert>
-    <select id="channelListAll" resultType="com.nineone.nocm.domain.Channel">
-        select * from channel;
-    </select>
-    <select id="getCurrentChannel" resultType="com.nineone.nocm.domain.Channel">
-        select * from channel where id = #{id}
-    </select>
+
+    <update id="updateChannel">
+        UPDATE CHANNEL SET NAME = #{name}
+                     WHERE ID = #{id}
+    </update>
+
+    <delete id="deleteChannel">
+        UPDATE CHANNEL
+           SET DELETE_YN = 'Y'
+         WHERE ID = #{channelId}
+    </delete>
+
+    <insert id="insertJoinInfo">
+        INSERT JOININFO ( CHANNEL_ID
+                        , MEMBER_EMAIL
+               ) VALUES ( #{channel_id}
+                        , #{member_email}
+               )
+    </insert>
 </mapper>
