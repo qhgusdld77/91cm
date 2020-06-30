@@ -42,7 +42,7 @@ public class MessageApiController {
 	
 	@RequestMapping(value = "/update/deleteyn", method = RequestMethod.POST)
 	public boolean updateDeleteYN(@RequestBody Message msg) {
-		return messageServie.updateDeleteYN(msg.getId());
+		return messageServie.deleteDeleteYN(msg.getId());
 	}
 
 }

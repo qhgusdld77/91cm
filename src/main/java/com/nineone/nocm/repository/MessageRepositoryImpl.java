@@ -35,8 +35,8 @@ public class MessageRepositoryImpl implements MessageRepository {
 
 
 	@Override
-	public int updateDeleteYN(int id) {
-		return sqlSession.update(namespace + ".updateDeleteYN",id);
+	public int deleteDeleteYN(int id) {
+		return sqlSession.update(namespace + ".deleteDeleteYN",id);
 	}
 
 }

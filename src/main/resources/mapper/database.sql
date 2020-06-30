@@ -42,7 +42,9 @@ id int unsigned  primary key auto_increment not null,
 channel_id int unsigned not null,
 content text,
 sender varchar(100) DEFAULT NULL,
-send_date datetime not null default CURRENT_TIMESTAMP
+send_date datetime not null default CURRENT_TIMESTAMP,
+delete_yn varchar(1) DEFAULT NULL,
+message_type varchar(10) default null
 );
 
 create table file(

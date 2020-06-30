@@ -91,6 +91,7 @@ let channelMixin = {
         name: channelTitle,
         member_email: email
       }, function (res) {
+        //_this.commit('setCurrentChannel', res.data) //채널 진입
         _this.selectChannelList(res.data)
         //jny 추가 새로 생성된 채널에 대해 구독하기 위함
         _this.subscribe("/sub/chat/room/" + res.data.id, _this.channelSubscribeCallBack)
@@ -134,14 +135,20 @@ let channelMixin = {
       $(".channelDel").css("visibility", "hidden")
     },
     //채널 목록 조회
+<<<<<<< HEAD
     selectChannelList: function (channel, isJoin = true) {
       this.get('/api/channel/list')
+=======
+    selectChannelList: async function (channel, isJoin = true) {
+      await this.$http.get('/api/channel/list')
+>>>>>>> design
         .then(res => {
           let channelList = res.data
           this.commit('setChannelList', channelList)
           if (isJoin) {
             if (channelList.length == 0) channel = null
             else if (channel === undefined) channel = channelList[0]
+            else if (this.currentChannel==null) this.commit('setCurrentChannel', {id: -1})//채널 진입
             this.joinChannel(channel)
           }
         }).catch(error => {
@@ -151,13 +158,14 @@ let channelMixin = {
     //채널 진입
     joinChannel: function (channel) {
       if (channel !== undefined && channel != null) {
-        if(typeof channel == 'string') {
+        if(typeof channel == 'number') {
           channel = this.getChannel(channel)
         }
-
+        console.log(this.currentChannel.id)
         if (channel.id != this.currentChannel.id) {
           this.commit('setCurrentChannel', channel)//채널 진입
           this.initChannelUserList()
+          console.log(this.currentChannel.id)
           this.selectChannelUserList(channel)//채널 사용자 조회
           this.selectMessageList(channel, true)//채널 메시지 조회
           this.hiddenChannelDelete()
