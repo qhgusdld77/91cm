@@ -33,7 +33,8 @@ public class UserAuthoritiesRepositoryImpl implements UserAuthoritiesRepository 
         return sqlSession.delete(namespace+".deleteAllAuthority",email);
     }
 
-    @Override
+    @SuppressWarnings("rawtypes")
+	@Override
     public List<HashMap> getRoleUserList(User user) {
     	List<String> roles = user.getRoles();
     	String role = roles.get(0);

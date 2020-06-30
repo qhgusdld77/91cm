@@ -10,5 +10,6 @@ public interface UserAuthoritiesRepository {
     List<String> getUserRoles(String email);
     int insertAuthority(Authorities authorities);
     int deleteAllAuthority(String email);
-    List<HashMap> getRoleUserList(User user);
+    @SuppressWarnings("rawtypes")
+	List<HashMap> getRoleUserList(User user);
 }

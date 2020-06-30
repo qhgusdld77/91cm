@@ -1,6 +1,5 @@
 package com.nineone.nocm.domain;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import lombok.Builder;
@@ -15,10 +14,10 @@ public class Channel {
     private int id;
     private String name;
     private Date register_date;
-    private String member_email;  //채널 생성자
+    private String member_email;//채널 생성자
     private String login_email; //현재 로그인 유저
     private int count;
-    
+
     @Builder
     public Channel(int id, String name, Date register_date, String member_email,int count){
         this.id = id;

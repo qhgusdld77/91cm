@@ -1,8 +1,6 @@
 package com.nineone.nocm.config;
 
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -26,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final HttpSession httpSession;
     private final CustomOAuthUserService customOAuthUserService;
     private final UserService userService;
 

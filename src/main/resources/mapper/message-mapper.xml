@@ -66,21 +66,6 @@
              , ID DESC
          LIMIT 30
     </select>
-
-    <select id="getMsgCntList" resultType="java.lang.Integer">
-        <foreach collection="list" item="item" index="index">
-            <if test="index != 0 ">UNION ALL</if>
-            ( SELECT COUNT(*)
-                FROM MESSAGE 
-               WHERE MESSAGE.SEND_DATE > ( SELECT LAST_ACCESS_DATE
-                                             FROM JOININFO
-                                            WHERE CHANNEL_ID  = #{item.id}
-                                              AND MEMBER_EMAIL = #{item.login_email}
-                                         )
-                 AND CHANNEL_ID = #{item.id}
-            )
-        </foreach>
-    </select>
     
     <delete id="deleteDeleteYN">
     	UPDATE MESSAGE 

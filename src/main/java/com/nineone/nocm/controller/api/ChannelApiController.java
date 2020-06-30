@@ -1,18 +1,21 @@
 package com.nineone.nocm.controller.api;
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.nineone.nocm.annotation.Socialuser;
 import com.nineone.nocm.domain.Channel;
 import com.nineone.nocm.domain.User;
 import com.nineone.nocm.service.ChannelService;
 import com.nineone.nocm.service.JoinInfoService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-
-@Slf4j
 @RestController
 @RequestMapping("/api/channel")
 public class ChannelApiController {
