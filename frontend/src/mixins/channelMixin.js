@@ -136,7 +136,7 @@ let channelMixin = {
     },
     //채널 목록 조회
     selectChannelList: function (channel, isJoin = true) {
-      this.get('/api/channel/list')
+      this.$http.get('/api/channel/list')
         .then(res => {
           let channelList = res.data
           this.commit('setChannelList', channelList)
