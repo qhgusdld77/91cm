@@ -40,14 +40,14 @@
                 no-resize
                 v-model="message.content"
                 @keydown.ctrl.shift.70="toggleSearchMode"
-                @keydown.enter.exact="send($event)"
+                @keydown.enter.exact="sendMessage($event)"
                 @keyup="byteCheck"
                 @keydown.shift.alt.50='inviteToggle'
               ></b-form-textarea>
             </div>
             <!--  초대 모드 시작 -->
             <div v-if="$store.state.isInviteMode">
-              <InviteInput @send="send" @inviteToggle="inviteToggle" :message="message"></InviteInput>
+              <InviteInput @sendMessage="sendMessage" @inviteToggle="inviteToggle" :message="message"></InviteInput>
             </div>
             <!-- 초대 모드 끝  -->
             <!-- 채팅 검색 모드 시작 -->
@@ -227,6 +227,7 @@
         /////////////////////////////////////
         formData.append('channel_id', this.$store.state.currentChannel.id)
         formData.append('sender', this.$store.state.currentUser.email)
+        formData.append('type','file')
         this.isFileUpload = true
         this.$http.post('/api/file/upload', formData,
           {

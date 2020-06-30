@@ -83,8 +83,6 @@ let messageMixin = {
       this.$store.state.isSearchMode = false
       this.commit('setMsgArray', [])
       this.cursorPoint.channel_id = this.message.channel_id = channel.id
-      console.log(this.message.channel_id,'?AS')
-      console.log(channel.id,'?AS')
       this.cursorPoint.first = true
       this.cursorPoint.cursorId = 0
       this.cursorPoint.empty = false
@@ -95,32 +93,22 @@ let messageMixin = {
       if (isInit){
         this.initMessageList(channel)
       }
-      //this.cursorPoint.channel_id = channel.id
-      console.log(this.cursorPoint.channel_id,'this.cursorPoint.channel_id')
       this.$http.post('/api/message/getmsg', JSON.stringify(this.cursorPoint), {
         headers: {
           'Content-Type': 'application/json'
         }
       }).then(res => {
-        console.log(res,'selectmsglist')
-        console.log(channel.id,'channel_id')
-        console.log(this.channelArr[this.channelArr.length - 1],'channel_id222')
         if (channel.id == this.channelArr[this.channelArr.length - 1]) {
-          console.log('???????!!!!')
           if (res.data.length == 0) {
             this.cursorPoint.empty = true
           } else {
             this.cursorPoint.first = false
             this.cursorPoint.cursorId = res.data[res.data.length - 1].id
           }
-          console.log(res.data,'res.data')
           for (let i = 0; i < res.data.length; i++) { 
             res.data[i].content = CommonClass.replacemsg(res.data[i].content)
-            console.log(res.data[i].content,'res.data[i].content')
           }
-          console.log(this.msgArray,'msgarr1')
           this.commit('setMsgArray', res.data.reverse().concat(this.msgArray))
-          console.log(this.msgArray,'msgarr')
           if (wrapperEl !== undefined) {
             this.$nextTick(() => {
               wrapperEl.scrollTop = wrapperEl.scrollHeight - this.oldScrollHeight
@@ -141,14 +129,18 @@ let messageMixin = {
         return;
       }
       if (isSysMsg) {
+        this.message.message_type = 'action'
         this.message.sender = null
+        console.log('asdasdsadadsadsa111')
       } else {
         this.message.sender = this.$store.state.currentUser.email
         this.message.user = this.$store.state.currentUser
+        this.message.message_type = 'message'
       }
       this.message.channel_id = this.$store.state.currentChannel.id
       if (CommonClass.byteLimit(this.stringByteLength)) {
         if (this.$store.state.stompClient && this.$store.state.stompClient.connected) {
+          console.log('asdasdsadadsadsa')
           this.$store.state.stompClient.send("/pub/chat/message", JSON.stringify(this.message), {})
           this.message.content = ''
           this.scrollToEnd(true)

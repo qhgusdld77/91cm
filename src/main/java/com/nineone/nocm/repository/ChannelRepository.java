@@ -10,9 +10,6 @@ public interface ChannelRepository {
     int insertChannel(Channel channel);
     int deleteChannel(int channelId);
     int updateChannel(Channel channel);
-    List<Channel> channelList (String userId);
-    List<Channel> channelListAll ();
+    List<Channel> channelList(String userId);
     int joinInfo(JoinInfo joinInfo);
-    Channel getCurrentChannel(Channel channel);
-
 }
