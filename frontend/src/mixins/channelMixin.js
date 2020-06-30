@@ -36,18 +36,13 @@ let channelMixin = {
           this.msgCountUpdate(data.channel_id, true)
         }
       }
-      
-      
-      else if(data.message == 'updateChannel'){
-
-
-        this.$store.state.syncSignal.syncChannelUser =! this.$store.state.syncSignal.syncChannelUser;
-
-
-      } else if (data.message == 'selectChannelList') {
-        this.selectChannelList() 
+      // 채널 사용자 및 채널 실시간 업데이트 처리 코드 -> 현재 사용 안됨
+      // else if(data.message == 'updateChannel'){
+      //   this.$store.state.syncSignal.syncChannelUser =! this.$store.state.syncSignal.syncChannelUser;
+      // }
+      else if (data.message == 'selectChannelList') {
+        this.selectChannelList()
       }
-      
       if (e.headers.noticeMsg != null) {
         this.noticeMsg = res.headers.noticeMsg
         this.noticeMsgToggle = true

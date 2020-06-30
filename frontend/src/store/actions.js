@@ -1,5 +1,4 @@
 import axios from "axios";
-/*import Vue from 'vue'*/
 
 export default {
   // 현재 채널의 모든 taskList 가져오기
@@ -37,7 +36,7 @@ export default {
     //channelMixin.selectChannelList(context.state.currentChannel)
 
     /*
-    let currentChannel = 
+    let currentChannel =
     if (currentChannel != null) {
       axios.get('/api/user/channel/' + currentChannel.id)
         .then(res => {
@@ -66,7 +65,7 @@ export default {
       }).catch(error => {
       })
       */
-    
+
   },
   // 현재 로그인 한 유저 가져오기
   initCurrentUser: async function (context) {

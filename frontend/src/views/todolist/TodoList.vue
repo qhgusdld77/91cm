@@ -112,7 +112,6 @@
     },
     data() {
       return {
-
         taskSubscribe: null,
         connetionCheck: false,
         taskList: [],
