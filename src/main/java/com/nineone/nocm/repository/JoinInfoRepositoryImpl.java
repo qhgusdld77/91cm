@@ -1,17 +1,16 @@
 package com.nineone.nocm.repository;
 
-import com.nineone.nocm.domain.Invite;
-import com.nineone.nocm.domain.JoinInfo;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Map;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Map;
+import com.nineone.nocm.domain.Invite;
+import com.nineone.nocm.domain.JoinInfo;
 
 @Repository
-@Slf4j
 public class JoinInfoRepositoryImpl implements JoinInfoRepository {
 
     @Autowired
@@ -48,6 +47,4 @@ public class JoinInfoRepositoryImpl implements JoinInfoRepository {
 	public int updateLastAccessDate(JoinInfo joinInfo) {
 		return sqlSession.update(namespace + ".updateLastAccessDate",joinInfo);
 	}
-
-
 }

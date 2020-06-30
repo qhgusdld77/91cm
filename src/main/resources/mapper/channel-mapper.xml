@@ -39,6 +39,18 @@
              , CN.NAME ASC
     </select>
 
+    <select id="channelListAll" resultType="com.nineone.nocm.domain.Channel">
+        SELECT CN.ID
+             , CN.NAME
+             , 0 AS COUNT
+          FROM CHANNEL AS CN
+
+         WHERE CN.DELETE_YN = 'N'
+
+      ORDER BY LENGTH(CN.NAME) ASC
+             , CN.NAME ASC
+    </select>
+
     <insert id="insertChannel" useGeneratedKeys="true" keyProperty="id">
         INSERT CHANNEL ( NAME
               ) VALUES ( #{name}

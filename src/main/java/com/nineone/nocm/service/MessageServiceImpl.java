@@ -1,19 +1,17 @@
 package com.nineone.nocm.service;
 
-import com.nineone.nocm.domain.Message;
-import com.nineone.nocm.repository.MessageRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Pattern;
 
-@Slf4j
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.nineone.nocm.domain.Message;
+import com.nineone.nocm.repository.MessageRepository;
+
 @Service
 public class MessageServiceImpl implements MessageService {
 
@@ -24,7 +22,6 @@ public class MessageServiceImpl implements MessageService {
     public int insertMessage(Message msg) {
         return messageRepository.insertMessage(msg);
     }
-
 
     @Override
     public List<Message> getMessageList(Map<String, Object> map) {
@@ -55,7 +52,7 @@ public class MessageServiceImpl implements MessageService {
 
 
 	@Override
-	public boolean updateDeleteYN(int id) {
-		return (messageRepository.updateDeleteYN(id)>0) ? true : false; 
+	public boolean deleteDeleteYN(int id) {
+		return (messageRepository.deleteDeleteYN(id)>0) ? true : false; 
 	}
 }

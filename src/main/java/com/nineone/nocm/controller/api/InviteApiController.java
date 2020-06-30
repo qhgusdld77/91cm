@@ -24,30 +24,28 @@ import com.nineone.nocm.domain.User;
 import com.nineone.nocm.domain.enums.InviteState;
 import com.nineone.nocm.repository.ChannelRepository;
 import com.nineone.nocm.repository.UserRepository;
-import com.nineone.nocm.service.ChannelService;
 import com.nineone.nocm.service.InviteService;
 import com.nineone.nocm.service.JoinInfoService;
 import com.nineone.nocm.util.GoogleMailSender;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @RestController
 @RequestMapping("/api/invite")
 public class InviteApiController {
-
     @Autowired
     private InviteService inviteService;
+
     @Autowired
     private JoinInfoService joinInfoService;
+
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
-    @Autowired
-    private ChannelService channelService;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private GoogleMailSender googleMailSender;
+
     @Autowired
     private ChannelRepository channelRepository;
 

@@ -7,6 +7,7 @@
         <result property="content" column="content"/>
         <result property="sender" column="sender"/>
         <result property="send_date" column="send_date"/>
+        <result property="type" column="type"/>
         <association property="user"  javaType="com.nineone.nocm.domain.User">
             <result property="name" column="name"/>
              <result property="picture" column="picture"/>
@@ -19,10 +20,12 @@
                        , CONTENT
                        , SENDER
                        , SEND_DATE
+                       , MESSAGE_TYPE
               ) VALUES ( #{channel_id}
                        , #{content}
                        , #{sender}
                        , #{send_date}
+                       , #{message_type}
               ) 
     </insert>
 
@@ -51,6 +54,7 @@
              , NAME
              , PHONE
              , IFNULL(PICTURE,'/img/default-user-picture.png') AS PICTURE
+             , MESSAGE_TYPE
           FROM MESSAGE
      LEFT JOIN MEMBER
             ON MEMBER.EMAIL = MESSAGE.SENDER
@@ -62,25 +66,10 @@
              , ID DESC
          LIMIT 30
     </select>
-
-    <select id="getMsgCntList" resultType="java.lang.Integer">
-        <foreach collection="list" item="item" index="index">
-            <if test="index != 0 ">UNION ALL</if>
-            ( SELECT COUNT(*)
-                FROM MESSAGE 
-               WHERE MESSAGE.SEND_DATE > ( SELECT LAST_ACCESS_DATE
-                                             FROM JOININFO
-                                            WHERE CHANNEL_ID  = #{item.id}
-                                              AND MEMBER_EMAIL = #{item.login_email}
-                                         )
-                 AND CHANNEL_ID = #{item.id}
-            )
-        </foreach>
-    </select>
     
-    <update id="updateDeleteYN">
+    <delete id="deleteDeleteYN">
     	UPDATE MESSAGE 
     	   SET DELETE_YN = 'Y' 
     	 WHERE ID = #{id}
-    </update>
+    </delete>
 </mapper>

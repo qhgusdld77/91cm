@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.SerializableString;
 import com.fasterxml.jackson.core.io.CharacterEscapes;
 import com.fasterxml.jackson.core.io.SerializedString;
 
+@SuppressWarnings("serial")
 public class HtmlCharacterEscapes  extends CharacterEscapes {
 
 	private final int[] asciiEscapes;

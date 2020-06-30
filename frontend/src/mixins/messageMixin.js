@@ -105,14 +105,10 @@ let messageMixin = {
             this.cursorPoint.first = false
             this.cursorPoint.cursorId = res.data[res.data.length - 1].id
           }
-
           for (let i = 0; i < res.data.length; i++) { 
             res.data[i].content = CommonClass.replacemsg(res.data[i].content)
-            console.log(res.data[i].content,'res.data[i].content')
           }
-          console.log(this.msgArray,'msgarr1')
           this.commit('setMsgArray', res.data.reverse().concat(this.msgArray))
-          console.log(this.msgArray,'msgarr')
           if (wrapperEl !== undefined) {
             this.$nextTick(() => {
               wrapperEl.scrollTop = wrapperEl.scrollHeight - this.oldScrollHeight
@@ -133,14 +129,18 @@ let messageMixin = {
         return;
       }
       if (isSysMsg) {
+        this.message.message_type = 'action'
         this.message.sender = null
+        console.log('asdasdsadadsadsa111')
       } else {
         this.message.sender = this.$store.state.currentUser.email
         this.message.user = this.$store.state.currentUser
+        this.message.message_type = 'message'
       }
       this.message.channel_id = this.$store.state.currentChannel.id
       if (CommonClass.byteLimit(this.stringByteLength)) {
         if (this.$store.state.stompClient && this.$store.state.stompClient.connected) {
+          console.log('asdasdsadadsadsa')
           this.$store.state.stompClient.send("/pub/chat/message", JSON.stringify(this.message), {})
           this.message.content = ''
           this.scrollToEnd(true)

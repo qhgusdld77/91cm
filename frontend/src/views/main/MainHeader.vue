@@ -120,28 +120,15 @@
         }
         this.$http.post('/api/invite/accept', alarm)
           .then(async (res) => {
+            
             // 현재 채널을 변경하는 로직을 구현해야할듯
             this.$store.state.stompClient.send('/pub/chat/message', JSON.stringify(message))
             this.alarmList.splice(index, 1);
             this.$store.state.stompClient.send('/pub/chat/room/' + alarm.channel_id, JSON.stringify({"message": "updateChannel", "error": "null"}))
-            if (this.$store.state.currentChannel != null) {
-              await AboutChannel.updateLastAccessDate(this.$store.state.currentChannel.id)
-            }
-            AboutChannel.updateLastAccessDate(alarm.channel_id, null).then(async (res) => {
-              console.log(alarm,'alarm')
-              //await this.$store.dispatch('channelList')
-              await this.selectChannelList(null,false,false)
-              const joinChannel = this.$store.state.channelList.find(channel => channel.id == alarm.channel_id)
-
-              this.joinChannel(joinChannel)
-              this.subscribe("/sub/chat/room/" + res.data.id, _this.channelSubscribeCallBack)
-              //this.$store.commit('setCurrentChannel', joinChannel)
-              //console.log('joinChannel', this.$store.state.currentChannel)
-              // this.$emit('channelSubscribe',this.$store.state.currentChannel)
-              //this.subscribe("/sub/chat/room/" + joinChannel.id,this.channelSubscribeCallBack)
-              // this.joinChannel(this.$store.state.currentChannel)
-            }).catch(err => console.error(err))
-
+            await this.selectChannelList(alarm.channel_id)
+            //this.commit('setCurrentChannel', res.data) //채널 진입
+            this.subscribe("/sub/chat/room/" + alarm.channel_id, this.channelSubscribeCallBack)
+            
           })
           .catch(error => {
             console.error(error)

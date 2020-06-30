@@ -14,7 +14,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
-import com.nineone.nocm.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -23,13 +22,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nineone.nocm.domain.ContentsFile;
+import com.nineone.nocm.domain.User;
 import com.nineone.nocm.exception.FileStorageException;
 import com.nineone.nocm.exception.UploadFileNotFoundException;
 import com.nineone.nocm.repository.FileStorage;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class FileStorageService {
 	private final String USER_IMAGE_PATH = "C:/userImage/";
@@ -165,5 +162,4 @@ public class FileStorageService {
 			}
 		}
 	}
-
 }

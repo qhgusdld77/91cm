@@ -15,10 +15,6 @@ import com.nineone.nocm.domain.Message;
 import com.nineone.nocm.service.MessageService;
 import com.nineone.nocm.util.DateUtil;
 
-import lombok.extern.slf4j.Slf4j;
-
-
-@Slf4j
 @Controller
 public class MessageController {
 
@@ -52,5 +48,4 @@ public class MessageController {
 	public void syncMessage(@DestinationVariable String id, @Payload ApiResponse apiResponse)throws Exception{
 		messagingTemplate.convertAndSend("/sub/chat/room/"+id,apiResponse);
 	}
-
 }

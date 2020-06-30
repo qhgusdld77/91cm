@@ -11,5 +11,5 @@ public interface MessageService {
 	List<Message> getMessageList(Map<String, Object> map);
 	String makeStrDate(Date date);
 	String replacemsg(String originContent);
-	boolean updateDeleteYN(int id);
+	boolean deleteDeleteYN(int id);
 }

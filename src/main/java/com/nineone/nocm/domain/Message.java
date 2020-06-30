@@ -3,8 +3,6 @@ package com.nineone.nocm.domain;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,12 +20,11 @@ public class Message {
 	String str_send_date;
 	User user;
 	List<ContentsFile> files;
-	String delete_yn;
-	
+	String message_type;
 
 	@Builder
 	public Message(int id,int channel_id, String content, String sender, Date send_date,
-				   User user, String str_send_date, List<ContentsFile> files,String delete_yn){
+				   User user, String str_send_date, List<ContentsFile> files,String message_type){
 		this.id = id;
 		this.channel_id = channel_id;
 		this.content = content;
@@ -36,7 +33,6 @@ public class Message {
 		this.str_send_date = str_send_date;
 		this.user = user;
 		this.files = files;
-		this.delete_yn = delete_yn;
+		this.message_type = message_type;
 	}
-
 }
