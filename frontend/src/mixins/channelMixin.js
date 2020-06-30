@@ -135,13 +135,8 @@ let channelMixin = {
       $(".channelDel").css("visibility", "hidden")
     },
     //채널 목록 조회
-<<<<<<< HEAD
     selectChannelList: function (channel, isJoin = true) {
       this.get('/api/channel/list')
-=======
-    selectChannelList: async function (channel, isJoin = true) {
-      await this.$http.get('/api/channel/list')
->>>>>>> design
         .then(res => {
           let channelList = res.data
           this.commit('setChannelList', channelList)
