@@ -57,7 +57,6 @@ export default {
           return Vue.msgModalOk(this, this.typeToTitle(types), content);
         case 'confirm':
           let userSelect = await Vue.msgModalConfirm(this, this.typeToTitle(types), content);
-          console.log(userSelect);
           if (userSelect && callBackFunc !== undefined) {
             callBackFunc()
           }
