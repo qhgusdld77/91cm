@@ -129,16 +129,18 @@ let messageMixin = {
         return;
       }
       if (isSysMsg) {
-        this.message.type = 'action'
+        this.message.message_type = 'action'
         this.message.sender = null
+        console.log('asdasdsadadsadsa111')
       } else {
         this.message.sender = this.$store.state.currentUser.email
         this.message.user = this.$store.state.currentUser
-        this.message.type = 'message'
+        this.message.message_type = 'message'
       }
       this.message.channel_id = this.$store.state.currentChannel.id
       if (CommonClass.byteLimit(this.stringByteLength)) {
         if (this.$store.state.stompClient && this.$store.state.stompClient.connected) {
+          console.log('asdasdsadadsadsa')
           this.$store.state.stompClient.send("/pub/chat/message", JSON.stringify(this.message), {})
           this.message.content = ''
           this.scrollToEnd(true)

@@ -47,7 +47,7 @@
             </div>
             <!--  초대 모드 시작 -->
             <div v-if="$store.state.isInviteMode">
-              <InviteInput @send="send" @inviteToggle="inviteToggle" :message="message"></InviteInput>
+              <InviteInput @sendMessage="sendMessage" @inviteToggle="inviteToggle" :message="message"></InviteInput>
             </div>
             <!-- 초대 모드 끝  -->
             <!-- 채팅 검색 모드 시작 -->

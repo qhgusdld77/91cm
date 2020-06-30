@@ -22,11 +22,11 @@ public class Message {
 	String str_send_date;
 	User user;
 	List<ContentsFile> files;
-	String type;
+	String message_type;
 
 	@Builder
 	public Message(int id,int channel_id, String content, String sender, Date send_date,
-				   User user, String str_send_date, List<ContentsFile> files,String type){
+				   User user, String str_send_date, List<ContentsFile> files,String message_type){
 		this.id = id;
 		this.channel_id = channel_id;
 		this.content = content;
@@ -35,7 +35,7 @@ public class Message {
 		this.str_send_date = str_send_date;
 		this.user = user;
 		this.files = files;
-		this.type = type;
+		this.message_type = message_type;
 	}
 
 }

@@ -40,16 +40,16 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public List<Channel> channelList(String userEmail) {
-    	List<Channel> channelList = channelRepository.channelList(userEmail);
-    	
-    	
-    	if(channelList.size()>0) {
-    		List<Integer> countList = messageRepository.getMsgCntList(channelList);
-        	for(int i=0;i<channelList.size();i++) {
-        		channelList.get(i).setCount(countList.get(i));
-        	}
-    	}
-        return channelList;
+//    	List<Channel> channelList = channelRepository.channelList(userEmail);
+//    	
+//    	
+//    	if(channelList.size()>0) {
+//    		List<Integer> countList = messageRepository.getMsgCntList(channelList);
+//        	for(int i=0;i<channelList.size();i++) {
+//        		channelList.get(i).setCount(countList.get(i));
+//        	}
+//    	}
+        return channelRepository.channelList(userEmail);
     }
 
     @Override
