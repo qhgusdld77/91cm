@@ -3,7 +3,6 @@ import commonMixin from "./commonMixin";
 import CommonClass from '../service/common'
 
 let messageMixin = {
-  mixins: [commonMixin],
   data() {
     return {
       isFileUpload: false,
@@ -104,7 +103,7 @@ let messageMixin = {
             this.cursorPoint.first = false
             this.cursorPoint.cursorId = res.data[res.data.length - 1].id
           }
-          for (let i = 0; i < res.data.length; i++) { 
+          for (let i = 0; i < res.data.length; i++) {
             res.data[i].content = CommonClass.replacemsg(res.data[i].content)
           }
           this.commit('setMsgArray', res.data.reverse().concat(this.msgArray))
@@ -171,12 +170,12 @@ let messageMixin = {
 
         //아예 메시지리스트를 새로 가져오는 방법 -> 메세지 찾기하고 있거나 이전 메세지를 조회중일때
         //신호가 간다면 문제 생길 것 같음 모드가 바뀌었을때 메세지arr 변경 못하게 바꾸거나 프론트 단에서 해당 메세지만 변경처리 해줘야 할듯
-        
+
         // if(res){
         //   this.selectMessageList(this.currentChannel,true)
         // }
 
-      }); 
+      });
     }
   }
 };

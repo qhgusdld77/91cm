@@ -70,7 +70,6 @@
   import channelMixin from "../../mixins/channelMixin";
 
   export default {
-    mixins: [channelMixin],
     name: 'MainHeader',
     data() {
       return {
@@ -121,7 +120,7 @@
         }
         this.$http.post('/api/invite/accept', alarm)
           .then(async (res) => {
-            
+
             // 현재 채널을 변경하는 로직을 구현해야할듯
             this.$store.state.stompClient.send('/pub/chat/message', JSON.stringify(message))
             this.alarmList.splice(index, 1);
@@ -129,7 +128,7 @@
             await this.selectChannelList(alarm.channel_id)
             //this.commit('setCurrentChannel', res.data) //채널 진입
             this.subscribe("/sub/chat/room/" + alarm.channel_id, this.channelSubscribeCallBack)
-            
+
           })
           .catch(error => {
             console.error(error)
@@ -177,7 +176,7 @@
         console.log(this.$store.state.userList,'userList')
         let foundEmail = this.$store.state.userList.find(element => {return element.email == email})
         if(foundEmail!=null){
-          return foundEmail.name  
+          return foundEmail.name
         }else{
           return null
         }

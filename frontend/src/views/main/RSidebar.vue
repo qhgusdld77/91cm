@@ -81,7 +81,6 @@
 
   export default {
     props: ['modalObj'],
-    mixins: [channelMixin],
     name: 'RSidebar',
     computed: {
       ...mapGetters({

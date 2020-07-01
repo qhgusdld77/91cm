@@ -84,7 +84,6 @@
 
   export default {
     props: ['modalObj'],
-    mixins: [channelMixin],
     computed: {
       ...mapGetters({
         channelList: 'getChannelList',

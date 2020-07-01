@@ -66,9 +66,9 @@
   import {mapGetters} from "vuex";
   import VideoChat from "./VideoChat";
   import channelMixin from "../mixins/channelMixin";
+  import globalWatch from "../mixins/globalWatch";
 
   export default {
-    mixins: [channelMixin],
     name: 'Main',
     components: {
       'MainHeader': MainHeader,
@@ -153,11 +153,11 @@
 
         this.$store.state.stompClient.connect(this.$store.state.currentUser, () => {
           this.selectChannelList()//채널목록 조회
-          
+
           //  this.$store.state.channelList.forEach(channel => {
           //    this.subscribe("/sub/chat/room/" + channel.id, this.channelSubscribeCallBack)
           //  })
-          
+
           this.subscribe("/sub/sync/info", res => {
             if (res.headers.noticeMsg != null) {
               this.noticeMsg = res.headers.noticeMsg

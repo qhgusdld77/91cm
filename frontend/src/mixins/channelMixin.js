@@ -5,7 +5,6 @@ import NotificationClass from '../service/notification'
 import CommonClass from '../service/common'
 
 let channelMixin = {
-  mixins: [commonMixin, messageMixin],
   computed: {
     ...mapGetters({
       channelList: 'getChannelList',
@@ -14,19 +13,19 @@ let channelMixin = {
     })
   },
   watch: {
-    channelList: function(newChannelList, oldChannelList) {
-      console.log("jjw!!! channelList")
-      //최초
-      if(oldChannelList.length == 0 && newChannelList.length > 0) {
-        $.each(newChannelList, function (index, channel) {
-          channel.subscribe()
-        })
-      }
-      else {
-        //console.log("newChannelList", newChannelList.length)
-        //console.log("oldChannelList", oldChannelList.length)
-      }
-    }
+    // channelList: function(newChannelList, oldChannelList) {
+    //   console.log("jjw!!! channelList")
+    //   //최초
+    //   if(oldChannelList.length == 0 && newChannelList.length > 0) {
+    //     $.each(newChannelList, function (index, channel) {
+    //       channel.subscribe()
+    //     })
+    //   }
+    //   else {
+    //     //console.log("newChannelList", newChannelList.length)
+    //     //console.log("oldChannelList", oldChannelList.length)
+    //   }
+    // }
   },
   methods: {
     _makeChannelFunction: function(channel) {

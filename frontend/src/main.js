@@ -46,12 +46,31 @@ Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
 new Vue({
+  created(){
+
+  },
   vuetify: new Vuetify({
     theme: {disable: true},
     icons: {
       iconfont: "mdi"
     }
   }),
+  watch:{
+    channelList: function(newChannelList, oldChannelList) {
+      console.log("jjw!!! channelList")
+      console.log(this)
+      //최초
+      if(oldChannelList.length == 0 && newChannelList.length > 0) {
+        $.each(newChannelList, function (index, channel) {
+          channel.subscribe()
+        })
+      }
+      else {
+        //console.log("newChannelList", newChannelList.length)
+        //console.log("oldChannelList", oldChannelList.length)
+      }
+    }
+  },
   router,
   store,
   render: h => h(App)

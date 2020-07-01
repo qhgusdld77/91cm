@@ -94,7 +94,6 @@
   import channelMixin from "../../mixins/channelMixin";
 
   export default {
-    mixins: [channelMixin],
     name: 'ContentWrapper',
     components: {
       InviteInput,
@@ -379,8 +378,8 @@
       },
     },
     computed: {
-      
-    
+
+
       ...mapGetters({
         //msgArray: 'getMsgArray',
         currentChannel: 'getCurrentChannel'
@@ -406,7 +405,7 @@
           }
         }
       },
-      
+
       checkbox: function () {
         if (this.checkbox) {
           alert('지금부터 보내는 메시지는 나인원소프트 전체 메일로 보내집니다.')
