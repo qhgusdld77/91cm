@@ -116,6 +116,7 @@
           channel_id: alarm.channel_id,
           sender: null,
           content: this.$store.state.currentUser.name + '님이 채널에 초대되었습니다.',
+          message_type:'action'
           // user: this.$store.state.currentUser
         }
         this.$http.post('/api/invite/accept', alarm)
