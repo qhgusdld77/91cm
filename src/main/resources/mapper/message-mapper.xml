@@ -7,7 +7,7 @@
         <result property="content" column="content"/>
         <result property="sender" column="sender"/>
         <result property="send_date" column="send_date"/>
-        <result property="type" column="type"/>
+        <result property="message_type" column="message_type"/>
         <association property="user"  javaType="com.nineone.nocm.domain.User">
             <result property="name" column="name"/>
              <result property="picture" column="picture"/>
