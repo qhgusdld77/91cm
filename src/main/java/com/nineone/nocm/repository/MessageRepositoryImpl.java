@@ -1,5 +1,6 @@
 package com.nineone.nocm.repository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,4 +40,10 @@ public class MessageRepositoryImpl implements MessageRepository {
 		return sqlSession.update(namespace + ".deleteDeleteYN",id);
 	}
 
+	@Override
+	public int selectTodayMsgCnt(Map<String,Object> map) {		
+		return sqlSession.selectOne(namespace + ".selectTodayMsgCnt", map); 
+	}
+
 }
+

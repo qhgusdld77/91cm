@@ -11,4 +11,5 @@ public interface MessageRepository {
 	List<Message> getMessageList(Map<String,Object> map);
 	List<Integer> getMsgCntList(List<Channel> list);
 	int deleteDeleteYN(int id);
+	int selectTodayMsgCnt(Map<String,Object> map);
 }

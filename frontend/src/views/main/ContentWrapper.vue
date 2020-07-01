@@ -5,10 +5,13 @@
         <div v-for="msg in msgArray" :key="msg.id">
           <MsgBox v-if="msg.message_type=='message'" :msg="msg" :msgPreviewBool="msgPreviewBool" @scrollToEnd="scrollToEnd"
                   @imgLoad="imgLoad"></MsgBox>
-          <div class=" hori-align" >
-            <v-chip v-if="msg.message_type=='action'" class="ma-2" style="font-weight:bold;">
+          <div v-if="msg.message_type=='action'" class="hori-align" >
+            <v-chip class="ma-2" style="font-weight:bold;">
               {{msg.content}}
             </v-chip>
+          </div>
+          <div class="date-divider" v-if="msg.message_type=='date'">
+            <span class="mydate">{{msg.content}}</span>
           </div>
         </div>
       </ul>

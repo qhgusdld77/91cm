@@ -2,6 +2,7 @@ package com.nineone.nocm.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -55,4 +56,13 @@ public class MessageServiceImpl implements MessageService {
 	public boolean deleteDeleteYN(int id) {
 		return (messageRepository.deleteDeleteYN(id)>0) ? true : false; 
 	}
+
+	@Override
+	public boolean isFirstMsgToday(String date, int channel_id) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("date", date);
+		map.put("channel_id", channel_id);
+		return (messageRepository.selectTodayMsgCnt(map) == 0 ) ? true : false;
+	}
+	
 }

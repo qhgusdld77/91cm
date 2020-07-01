@@ -130,8 +130,9 @@
           }
       },
       checkPhone(){
-        if(this.phoneAlert!=''){
+        if(this.phone!=''){
           if(this.phoneValidator()){
+            console.log('?')
             this.phoneCheck = true
             this.phoneAlert = ''
           }else{

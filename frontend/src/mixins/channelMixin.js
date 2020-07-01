@@ -191,7 +191,7 @@ let channelMixin = {
     //채널 사용자 조회
     selectChannelUserList: function (channel) {
       if (channel != null) {
-        this.post('/api/user/channel/' + channel.id, {
+        this.$http.post('/api/user/channel/' + channel.id, {
           currentChannelId: channel.id,
           userEmail: this.currentUser.email
         })

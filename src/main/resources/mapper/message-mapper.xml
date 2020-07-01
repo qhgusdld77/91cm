@@ -72,4 +72,15 @@
     	   SET DELETE_YN = 'Y' 
     	 WHERE ID = #{id}
     </delete>
+    
+    <select id="selectTodayMsgCnt" resultType="int">
+    	SELECT COUNT(*) 
+    	  FROM MESSAGE 
+    	 WHERE ( SELECT SEND_DATE 
+    	           FROM MESSAGE
+    	          WHERE CHANNEL_ID = #{channel_id}
+    	       ORDER BY SEND_DATE DESC 
+    	          LIMIT 1
+    	       ) > STR_TO_DATE(#{date},'%Y년 %m월 %d일') 
+    </select>
 </mapper>

@@ -8,4 +8,6 @@ public class DateUtil {
 		Calendar time = Calendar.getInstance();
 		return time.getTime();
 	}
+	
+	
 }
