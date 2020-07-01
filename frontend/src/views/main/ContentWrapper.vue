@@ -281,8 +281,6 @@
             this.message.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + this.message.content
             let errormsg = JSON.parse(JSON.stringify(this.message))
             this.$store.commit('pushMsg', errormsg)
-            console.log(errormsg)
-            console.log(this.msgArray)
             this.message.content = ''
           }
         }
@@ -392,7 +390,6 @@
         //this.scrollToEnd()
       },
       msgArray: function () {
-        console.log(this.msgArray)
         // 스크롤을 최상단으로 올려 메시지를 가져올 때 실행되는 것을 막기 위한 if문
         if (this.isGetMsgForPreview) {
           this.isGetMsgForPreview = false

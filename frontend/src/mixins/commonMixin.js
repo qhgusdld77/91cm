@@ -1,5 +1,10 @@
 import { mapGetters } from "vuex";
 let commonMixin = {
+  data() {
+    return {
+      subscribeList: []
+    }
+  },
   computed: {
     ...mapGetters({
       currentUser: 'getCurrentUser',
@@ -23,10 +28,13 @@ let commonMixin = {
       return loginUserRoles.includes('ROLE_ROOT') || loginUserRoles.includes('ROLE_ADMIN')
     },
     subscribe: function(url, func) {
-      return this.$store.state.stompClient.subscribe(url, func)
+      if(!this.subscribeList.includes(url)) {
+        this.subscribeList.push(url)
+        return this.$store.state.stompClient.subscribe(url, func)
+      }
+      return null
     },
     send: function(url, message) {
-      console.log("jjw2")
       this.$store.state.stompClient.send(url, JSON.stringify({
         'message': message,
         'error': "null"
