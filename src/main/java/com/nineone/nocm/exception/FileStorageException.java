@@ -1,5 +1,6 @@
 package com.nineone.nocm.exception;
 
+@SuppressWarnings("serial")
 public class FileStorageException extends RuntimeException{
     public FileStorageException(String message){
         super(message);

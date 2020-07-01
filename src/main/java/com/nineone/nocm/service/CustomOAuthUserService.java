@@ -20,20 +20,18 @@ import com.nineone.nocm.oauth.OAuthAttributes;
 import com.nineone.nocm.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class CustomOAuthUserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final HttpSession httpSession;
     private final UserRepository userRepository;
 
-    @Override
+    @SuppressWarnings({"rawtypes", "unchecked"})
+	@Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2UserService delegate = new DefaultOAuth2UserService();
-        OAuth2User oAuth2User = delegate.loadUser(userRequest);
+		OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         String userNameAttributeName = userRequest.getClientRegistration()
@@ -59,13 +57,13 @@ public class CustomOAuthUserService implements OAuth2UserService<OAuth2UserReque
     	User user;
         if(attributes.getEmail()==null) {
         	user = userRepository.getUserfindById(attributes.getId());
-        }else {
+        }
+        else {
         	user = userRepository.getUserfindByEmail(attributes.getEmail());
         }    	
-        if (user == null){
+        if (user == null) {
             user = attributes.toEntity();
         }
         return user;
     }
-    
 }

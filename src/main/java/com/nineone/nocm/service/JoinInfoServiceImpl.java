@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.nineone.nocm.domain.Invite;
 import com.nineone.nocm.domain.JoinInfo;
-import com.nineone.nocm.repository.InviteRepository;
 import com.nineone.nocm.repository.JoinInfoRepository;
 import com.nineone.nocm.util.DateUtil;
 
@@ -18,9 +17,6 @@ public class JoinInfoServiceImpl implements JoinInfoService {
 
     @Autowired
     private JoinInfoRepository joinInfoRepository;
-
-    @Autowired
-    private InviteRepository inviteRepository;
 
     @Override
     @Transactional
@@ -53,6 +49,4 @@ public class JoinInfoServiceImpl implements JoinInfoService {
     			.build();
 		return joinInfoRepository.updateLastAccessDate(joinInfo);
 	}
-
-
 }

@@ -66,25 +66,21 @@
              , ID DESC
          LIMIT 30
     </select>
-
-    <select id="getMsgCntList" resultType="java.lang.Integer">
-        <foreach collection="list" item="item" index="index">
-            <if test="index != 0 ">UNION ALL</if>
-            ( SELECT COUNT(*)
-                FROM MESSAGE 
-               WHERE MESSAGE.SEND_DATE > ( SELECT LAST_ACCESS_DATE
-                                             FROM JOININFO
-                                            WHERE CHANNEL_ID  = #{item.id}
-                                              AND MEMBER_EMAIL = #{item.login_email}
-                                         )
-                 AND CHANNEL_ID = #{item.id}
-            )
-        </foreach>
-    </select>
     
     <delete id="deleteDeleteYN">
     	UPDATE MESSAGE 
     	   SET DELETE_YN = 'Y' 
     	 WHERE ID = #{id}
     </delete>
+    
+    <select id="selectTodayMsgCnt" resultType="int">
+    	SELECT COUNT(*) 
+    	  FROM MESSAGE 
+    	 WHERE ( SELECT SEND_DATE 
+    	           FROM MESSAGE
+    	          WHERE CHANNEL_ID = #{channel_id}
+    	       ORDER BY SEND_DATE DESC 
+    	          LIMIT 1
+    	       ) > STR_TO_DATE(#{date},'%Y년 %m월 %d일') 
+    </select>
 </mapper>

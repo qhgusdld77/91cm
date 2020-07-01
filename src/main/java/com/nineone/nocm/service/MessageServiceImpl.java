@@ -1,19 +1,18 @@
 package com.nineone.nocm.service;
 
-import com.nineone.nocm.domain.Message;
-import com.nineone.nocm.repository.MessageRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Pattern;
 
-@Slf4j
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.nineone.nocm.domain.Message;
+import com.nineone.nocm.repository.MessageRepository;
+
 @Service
 public class MessageServiceImpl implements MessageService {
 
@@ -24,7 +23,6 @@ public class MessageServiceImpl implements MessageService {
     public int insertMessage(Message msg) {
         return messageRepository.insertMessage(msg);
     }
-
 
     @Override
     public List<Message> getMessageList(Map<String, Object> map) {
@@ -58,4 +56,13 @@ public class MessageServiceImpl implements MessageService {
 	public boolean deleteDeleteYN(int id) {
 		return (messageRepository.deleteDeleteYN(id)>0) ? true : false; 
 	}
+
+	@Override
+	public boolean isFirstMsgToday(String date, int channel_id) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("date", date);
+		map.put("channel_id", channel_id);
+		return (messageRepository.selectTodayMsgCnt(map) == 0 ) ? true : false;
+	}
+	
 }

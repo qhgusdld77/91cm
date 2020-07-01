@@ -10,8 +10,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class ChannelRepositoryImpl implements ChannelRepository{
-    
+public class ChannelRepositoryImpl implements ChannelRepository {
+
+	@Autowired
+    private UserAuthoritiesRepository authoritiesRepository;
+
     @Autowired
     private SqlSessionTemplate sqlSession;
 
@@ -19,7 +22,7 @@ public class ChannelRepositoryImpl implements ChannelRepository{
 
     @Override
     public Channel getChannel(int id) {
-        return sqlSession.selectOne(namespace+ ".getChannel",id);
+        return sqlSession.selectOne(namespace+ ".getChannel", id);
     }
 
     @Override
@@ -39,7 +42,9 @@ public class ChannelRepositoryImpl implements ChannelRepository{
 
     @Override
     public List<Channel> channelList(String userEmail) {
-        return sqlSession.selectList(namespace + ".channelList", userEmail);
+    	List<String> roles = authoritiesRepository.getUserRoles(userEmail);
+    	String addQueryId = (roles.contains("ROLE_ROOT") || roles.contains("ROLE_ADMIN"))?"All":"";
+    	return sqlSession.selectList(namespace + ".channelList" + addQueryId, userEmail);
     }
 
     @Override

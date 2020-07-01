@@ -1,16 +1,14 @@
 package com.nineone.nocm.oauth;
 
-import java.util.List;
 import java.util.Map;
 
 import com.nineone.nocm.domain.User;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Getter
+@SuppressWarnings("unchecked")
 public class OAuthAttributes {
     private Map<String, Object> attributes;
     private String nameAttributeKey;
@@ -30,17 +28,10 @@ public class OAuthAttributes {
         this.picture = picture;
     }
 
-    public static OAuthAttributes Of(String registrationId, String userNameAttributeName,
-                                     Map<String, Object> attributes) {
-        if ("naver".equals(registrationId)){
-            return ofNaver("id",attributes);
-        }
-        if ("kakao".equals(registrationId)){
-            return ofKakao(userNameAttributeName,attributes);
-        }
-        if ("github".equals(registrationId)){
-            return OfGithub(userNameAttributeName,attributes);
-        }
+    public static OAuthAttributes Of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
+        if ("naver".equals(registrationId)) return ofNaver("id",attributes);
+        if ("kakao".equals(registrationId)) return ofKakao(userNameAttributeName,attributes);
+        if ("github".equals(registrationId)) return OfGithub(userNameAttributeName,attributes);
         return ofGoogle(userNameAttributeName, attributes);
     }
 
@@ -77,8 +68,7 @@ public class OAuthAttributes {
                 .build();
     }
 
-    private static OAuthAttributes ofNaver(String userNameAttributeName,
-                                           Map<String, Object> attributes) {
+	private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
         return OAuthAttributes.builder()
                 .id((String) response.get("id"))

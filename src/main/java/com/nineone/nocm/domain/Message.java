@@ -3,8 +3,6 @@ package com.nineone.nocm.domain;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Message {
+public class Message implements Cloneable{
 	int id;
 	int channel_id;
 	String content;
@@ -37,5 +35,15 @@ public class Message {
 		this.files = files;
 		this.message_type = message_type;
 	}
-
+	
+	@Override
+	public Message clone() {
+		Message message = null;
+		try {
+			message = (Message) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return message;
+	}
 }

@@ -1,8 +1,7 @@
 package com.nineone.nocm.config;
 
-import com.nineone.nocm.domain.User;
-import com.nineone.nocm.repository.UserAuthoritiesRepository;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -12,9 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import com.nineone.nocm.domain.User;
+import com.nineone.nocm.repository.UserAuthoritiesRepository;
 
-@Slf4j
 @Aspect
 @Component
 public class AopConfig {
@@ -31,8 +30,6 @@ public class AopConfig {
     @Pointcut("execution(* com.nineone.nocm.controller.api.UserApiController.rolesUserList(..))")
     public void roleUserList(){}
 
-
-
     @Around("roleUserList()")
     public Object checkUserAdmin(ProceedingJoinPoint joinPoint) throws Throwable{
         User user = (User) joinPoint.getArgs()[0];
@@ -45,7 +42,6 @@ public class AopConfig {
             return new ResponseEntity<>("{}",HttpStatus.BAD_REQUEST);
         }
     }
-
 
     @Around("userInfo()||getSessionUser()")
     public Object CheckUserRole(ProceedingJoinPoint joinPoint) throws Throwable{
