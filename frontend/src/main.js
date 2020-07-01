@@ -23,12 +23,15 @@ import '../dist/css/theme.css'
 import commonMixin from "./mixins/commonMixin";
 import messageMixin from "./mixins/messageMixin";
 import channelMixin from "./mixins/channelMixin";
-for (let i =0 ; i<1;i++){
+import globalWatch from "./mixins/globalWatch";
+
+for (let i = 0; i < 1; i++) {
   console.log(i);
 }
 Vue.mixin({
-  mixins: [commonMixin, messageMixin,channelMixin],
+  mixins: [commonMixin, messageMixin, channelMixin],
 })
+
 Vue.use(BootstrapVue)
 Date.prototype.addDays = function (days) {
   var date = new Date(this.valueOf());

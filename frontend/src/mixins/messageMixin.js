@@ -36,12 +36,12 @@ let messageMixin = {
     }
   },
   computed: {
-    ...mapGetters({
-      msgArray: 'getMsgArray',
-      currentChannel: 'getCurrentChannel',
-      currentUser: 'getCurrentUser',
-      channelList: 'getChannelList'
-    })
+    // ...mapGetters({
+    //   msgArray: 'getMsgArray',
+    //   currentChannel: 'getCurrentChannel',
+    //   currentUser: 'getCurrentUser',
+    //   channelList: 'getChannelList'
+    // })
   },
   watch: {
     /*
