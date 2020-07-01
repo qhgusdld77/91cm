@@ -43,13 +43,6 @@ let messageMixin = {
     //   channelList: 'getChannelList'
     // })
   },
-  watch: {
-    /*
-    msgArray: function () {
-      console.log("메시지정보가 갱신되었다")
-    },
-    */
-  },
   methods: {
     msgCountUpdate(id, counting) {
       // commit 을 안해도 객체 내부의 내용은 변경이 되는지 확인 필요 확인 후 해당 주석 제거

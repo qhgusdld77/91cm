@@ -20,16 +20,12 @@ import './assets/font/iconmonstr/css/iconmonstr-iconic-font.min.css';
 import 'animate.css'
 import './assets/css/main.css'
 import '../dist/css/theme.css'
-import commonMixin from "./mixins/commonMixin";
-import messageMixin from "./mixins/messageMixin";
-import channelMixin from "./mixins/channelMixin";
-import globalWatch from "./mixins/globalWatch";
+import channelMixin from './mixins/channelMixin'
+import commonMixin from './mixins/commonMixin'
+import messageMixin from './mixins/messageMixin'
 
-for (let i = 0; i < 1; i++) {
-  console.log(i);
-}
 Vue.mixin({
-  mixins: [commonMixin, messageMixin, channelMixin],
+  mixins:[channelMixin,commonMixin,messageMixin]
 })
 
 Vue.use(BootstrapVue)
@@ -49,9 +45,6 @@ Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
 new Vue({
-  created(){
-
-  },
   vuetify: new Vuetify({
     theme: {disable: true},
     icons: {
@@ -59,11 +52,10 @@ new Vue({
     }
   }),
   watch:{
-    channelList: function(newChannelList, oldChannelList) {
-      console.log("jjw!!! channelList")
-      console.log(this)
+    channelList: function (newChannelList, oldChannelList) {
+      console.log("!!!!!!!!!!!!!!!!!!")
       //최초
-      if(oldChannelList.length == 0 && newChannelList.length > 0) {
+      if (oldChannelList.length == 0 && newChannelList.length > 0) {
         $.each(newChannelList, function (index, channel) {
           channel.subscribe()
         })
@@ -72,6 +64,10 @@ new Vue({
         //console.log("newChannelList", newChannelList.length)
         //console.log("oldChannelList", oldChannelList.length)
       }
+    },
+    currentChannel: function (newCurrentChannel, oldCurrentChannel) {
+      oldCurrentChannel = this.getChannel(oldCurrentChannel)
+      oldCurrentChannel.access()
     }
   },
   router,
