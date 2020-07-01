@@ -1,3 +1,15 @@
+.msgorder-two{
+    order: 2
+}
+
+.msgorder-one{
+    order: 1
+}
+
+.msgflex-end{
+    justify-content: flex-end;
+}
+
 .date-divider{
     display: flex;
     align-items: center;
@@ -236,7 +248,7 @@
 }
 
 .chat-message .icon {
-    padding-right: 10px;
+    padding: 0px 10px;
 }
 /*----------------------
 MainContents
