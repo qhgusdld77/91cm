@@ -105,9 +105,9 @@
     created() {
     },
     mounted() {
-      this.$eventBus.$on('useModal', res => {
-        this.prepareModal(res)
-      })
+      // this.$eventBus.$on('useModal', res => {
+      //   this.prepareModal(res)
+      // })
     },
     updated() {
 

@@ -55,12 +55,10 @@ let channelMixin = {
           this.msgCountUpdate(data.channel_id, true)
         }
       }
-      // 채널 사용자 및 채널 실시간 업데이트 처리 코드 -> 현재 사용 안됨
-      // else if(data.message == 'updateChannel'){
-      //   this.$store.state.syncSignal.syncChannelUser =! this.$store.state.syncSignal.syncChannelUser;
-      // }
-      else if (data.message == 'selectChannelList') {
+      else if (data.message === 'selectChannelList') {
         this.selectChannelList()
+      }else if (data.message === 'selectChannelUserList'){
+        this.selectChannelUserList()
       }
       if (e.headers.noticeMsg != null) {
         this.noticeMsg = res.headers.noticeMsg
@@ -138,16 +136,17 @@ let channelMixin = {
       $(".channelDel").css("visibility", "hidden")
     },
     //채널 목록 조회
-    selectChannelList: function (channel, isJoin = true) {
+    selectChannelList: function (channel = this.$store.state.currentChannel, isJoin = true) {
       this.$http.get('/api/channel/list')
         .then(res => {
           let _this = this
           let channelList = res.data
+          console.log(res.data)
           $.each(channelList, function (index, channel) {
             _this._makeChannelFunction(channel)
           })
-
           this.commit('setChannelList', channelList)
+
           if (isJoin) {
             if (channelList.length == 0) channel = null
             else if (channel === undefined) channel = channelList[0]
@@ -190,7 +189,7 @@ let channelMixin = {
       }
     },
     //채널 사용자 조회
-    selectChannelUserList: function (channel) {
+    selectChannelUserList: function (channel= this.$store.state.currentChannel) {
       if (channel != null) {
         this.$http.get('/api/user/channel/' + channel.id, {
           currentChannelId: channel.id,
