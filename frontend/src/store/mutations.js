@@ -6,6 +6,7 @@ export default {
     state.currentChannel = payload
   },
   setChannelList: function (state, payload) {
+    console.log("jjw!!!!  setChannelList setChannelList")
     state.channelList = payload
   },
   getSelectComponent: function (state, payload) {
