@@ -89,7 +89,6 @@ let messageMixin = {
     },
     //채널 메시지 조회
     selectMessageList: function (channel, isInit, wrapperEl) {
-      console.log(channel,'channel')
       if (isInit){
         this.initMessageList(channel)
       }
@@ -131,7 +130,6 @@ let messageMixin = {
       if (isSysMsg) {
         this.message.message_type = 'action'
         this.message.sender = null
-        console.log('asdasdsadadsadsa111')
       } else {
         this.message.sender = this.$store.state.currentUser.email
         this.message.user = this.$store.state.currentUser
@@ -140,7 +138,6 @@ let messageMixin = {
       this.message.channel_id = this.$store.state.currentChannel.id
       if (CommonClass.byteLimit(this.stringByteLength)) {
         if (this.$store.state.stompClient && this.$store.state.stompClient.connected) {
-          console.log('asdasdsadadsadsa')
           this.$store.state.stompClient.send("/pub/chat/message", JSON.stringify(this.message), {})
           this.message.content = ''
           this.scrollToEnd(true)
@@ -162,8 +159,6 @@ let messageMixin = {
           this.message.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + this.message.content
           let errormsg = JSON.parse(JSON.stringify(this.message))
           this.$store.commit('pushMsg', errormsg)
-          console.log(errormsg)
-          console.log(this.msgArray)
           this.message.content = ''
         }
       }

@@ -14,13 +14,35 @@ let channelMixin = {
     })
   },
   watch: {
-    channelList: function() {
-      console.log("!!!!!!!!!!!!!!!!")
+    channelList: function(newChannelList, oldChannelList) {
+      console.log("jjw!!! channelList")
+      //최초
+      if(oldChannelList.length == 0 && newChannelList.length > 0) {
+        $.each(newChannelList, function (index, channel) {
+          channel.subscribe()
+        })
+      }
+      else {
+        //console.log("newChannelList", newChannelList.length)
+        //console.log("oldChannelList", oldChannelList.length)
+      }
     }
   },
   methods: {
-    _makeChannel: function() {
-      
+    _makeChannelFunction: function(channel) {
+      let _this = this
+      let _url = "/sub/chat/room/"
+      if(channel.subscribe === undefined) {
+        channel.subscribe = function() {
+          let result = _this.subscribe(_url + this.id, _this.channelSubscribeCallBack)
+          channel.unsubscribe = result.unsubscribe
+        }
+      }
+      if(channel.send === undefined) {
+        channel.send = function(message) {
+          _this.send(_url + this.id, message)
+        }
+      }
     },
     channelSubscribeCallBack(e) {
       let data = JSON.parse(e.body)
@@ -96,17 +118,14 @@ let channelMixin = {
     updateChannel: function (channel) {
       let _this = this
       this.post('/api/channel/update', channel, function () {
-        _this.sendSub('selectChannelList')
+        channel.send("selectChannelList")
       })
     },
     //채널 삭제
     deleteChannel: function (channel) {
-      this.post('/api/channel/delete', channel)
-        .then(res => {
-          channel.unsubscribe()
-
+      this.post('/api/channel/delete', channel, function () {
+          //channel.unsubscribe()
           /*
-
           channel.send("selectChannelList")
           channel.subscribe()
           */
@@ -115,9 +134,7 @@ let channelMixin = {
           //구독취소
           /*
           */
-          this.sendSub('selectChannelList')
-        }).catch(error => {
-          console.error(error)
+          //this.sendSub('selectChannelList')
         })
     },
     //채널 삭제 아이콘 표시
@@ -131,9 +148,15 @@ let channelMixin = {
     },
     //채널 목록 조회
     selectChannelList: function (channel, isJoin = true) {
-      this.get('/api/channel/list')
+      this.$http.get('/api/channel/list')
         .then(res => {
+          let _this = this
           let channelList = res.data
+          $.each(channelList, function(index, channel) {
+            _this._makeChannelFunction(channel)
+          })
+
+          console.log("jjw!!! setChannelList")
           this.commit('setChannelList', channelList)
           if (isJoin) {
             if (channelList.length == 0) channel = null
@@ -151,11 +174,10 @@ let channelMixin = {
         if(typeof channel == 'number') {
           channel = this.getChannel(channel)
         }
-        console.log(this.currentChannel.id)
+
         if (channel.id != this.currentChannel.id) {
           this.commit('setCurrentChannel', channel)//채널 진입
           this.initChannelUserList()
-          console.log(this.currentChannel.id)
           this.selectChannelUserList(channel)//채널 사용자 조회
           this.selectMessageList(channel, true)//채널 메시지 조회
           this.hiddenChannelDelete()
@@ -186,7 +208,7 @@ let channelMixin = {
     //채널 사용자 조회
     selectChannelUserList: function (channel) {
       if (channel != null) {
-        this.post('/api/user/channel/' + channel.id, {
+        this.$http.get('/api/user/channel/' + channel.id, {
           currentChannelId: channel.id,
           userEmail: this.currentUser.email
         })
@@ -230,7 +252,7 @@ let channelMixin = {
         email: user.email,
         channel_id: this.currentChannel.id
       }).then(res => {
-        this.sendSub('selectChannelList')
+        //this.sendSub('selectChannelList')
         this.$eventBus.$emit('leaveChannelMsg', user)
         this.$_alert("<code>[" + this.currentChannel.name + ']</code> 채널에서 ' + (this.isMine(user) ? "나갔습니다." : "추방되었습니다."))
       }).catch(error => {
@@ -261,13 +283,6 @@ let channelMixin = {
     },
     isActiveForceLeave: function (user) {
       return this.isAdmin() || this.isMine(user)
-    },
-    sendSub: function (message) {
-      console.log(">>>>>>>", this.currentChannel.id)
-      this.$store.state.stompClient.send("/sub/chat/room/" + this.currentChannel.id, JSON.stringify({
-        'message': message,
-        'error': "null"
-      }))
     }
   }
 };

@@ -131,8 +131,6 @@
     },
     async created() {
       //await this.$store.dispatch('userListUpdate')
-      this.selectChannelList()//채널목록 조회
-
       const currentChannel = this.$store.state.currentChannel
       if (currentChannel != null) {
         currentChannel.count = 0
@@ -154,9 +152,12 @@
         // this.$store.state.stompClient.debug = f => f;
 
         this.$store.state.stompClient.connect(this.$store.state.currentUser, () => {
-          this.$store.state.channelList.forEach(channel => {
-            this.subscribe("/sub/chat/room/" + channel.id, this.channelSubscribeCallBack)
-          })
+          this.selectChannelList()//채널목록 조회
+          
+          //  this.$store.state.channelList.forEach(channel => {
+          //    this.subscribe("/sub/chat/room/" + channel.id, this.channelSubscribeCallBack)
+          //  })
+          
           this.subscribe("/sub/sync/info", res => {
             if (res.headers.noticeMsg != null) {
               this.noticeMsg = res.headers.noticeMsg
