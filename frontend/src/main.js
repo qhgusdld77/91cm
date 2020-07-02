@@ -25,7 +25,7 @@ import commonMixin from './mixins/commonMixin'
 import messageMixin from './mixins/messageMixin'
 
 Vue.mixin({
-  mixins:[channelMixin,commonMixin,messageMixin]
+  mixins: [channelMixin, commonMixin, messageMixin]
 })
 
 Vue.use(BootstrapVue)
@@ -51,7 +51,7 @@ new Vue({
       iconfont: "mdi"
     }
   }),
-  watch:{
+  watch: {
     channelList: function (newChannelList, oldChannelList) {
       console.log("!!!!!!!!!!!!!!!!!!")
       //최초
@@ -59,15 +59,16 @@ new Vue({
         $.each(newChannelList, function (index, channel) {
           channel.subscribe()
         })
-      }
-      else {
+      } else {
         //console.log("newChannelList", newChannelList.length)
         //console.log("oldChannelList", oldChannelList.length)
       }
     },
     currentChannel: function (newCurrentChannel, oldCurrentChannel) {
-      oldCurrentChannel = this.getChannel(oldCurrentChannel)
-      oldCurrentChannel.access()
+      if (oldCurrentChannel.id !== undefined) {
+        oldCurrentChannel = this.getChannel(oldCurrentChannel)
+        oldCurrentChannel.access()
+      }
     }
   },
   router,

@@ -7,7 +7,8 @@
         </div> -->
         <span class="text">91CM</span>
       </a>
-      <button type="button" class="nav-toggle"><i data-toggle="expanded" class="ik ik-toggle-right toggle-icon"></i></button>
+      <button type="button" class="nav-toggle"><i data-toggle="expanded" class="ik ik-toggle-right toggle-icon"></i>
+      </button>
       <button id="sidebarClose" class="nav-close"><i class="ik ik-x"></i></button>
     </div>
 
@@ -19,7 +20,8 @@
               <div style="display: flex;align-items: center;">
                 <i class="ik ik-layers"></i><span>Channels</span>
                 <div style="flex-grow: 1;display: flex;justify-content: flex-end;">
-                  <button @click="confirmChannel($event, 'create')" style="margin-right: 5px;display: flex;color: white;">
+                  <button @click="confirmChannel($event, 'create')"
+                          style="margin-right: 5px;display: flex;color: white;">
                     <i class="im im-plus-circle" style="margin-right: 15px;display: flex;"></i>
                   </button>
                 </div>
@@ -27,9 +29,13 @@
             </a>
 
             <div class="submenu-content" v-on:mouseleave="hiddenChannelDelete()">
-              <div v-for="(channel) in channelList" :key="channel.id" v-on:mouseover="visibilityChannelDelete(channel.id)">
-                <a @click="joinChannel(channel)" @dblclick="confirmChannel($event, 'update', channel)" class="menu-item" style="display:flex;" :class="{ 'active-channel': channel.id == currentChannel.id}">
-                  <button class="channelDel" :id="'channelDel' + channel.id" @click="confirmChannel($event, 'delete', channel)" style="margin-left:-15px; display:flex; visibility:hidden" v-if="isAdmin()">
+              <div v-for="(channel) in channelList" :key="channel.id"
+                   v-on:mouseover="visibilityChannelDelete(channel.id)">
+                <a @click="joinChannel(channel)" @dblclick="confirmChannel($event, 'update', channel)" class="menu-item"
+                   style="display:flex;" :class="{ 'active-channel': channel.id == currentChannel.id}">
+                  <button class="channelDel" :id="'channelDel' + channel.id"
+                          @click="confirmChannel($event, 'delete', channel)"
+                          style="margin-left:-15px; display:flex; visibility:hidden" v-if="isAdmin()">
                     <i class="im im-minus-circle" style="font-size:15px; color:black;"></i>
                   </button>
                   <div>{{ channel.name }}</div>
@@ -45,21 +51,25 @@
             <a href="javascript:void(0)" style="display: flex;align-items: center;">
               <i class="ik ik-users"></i>
               <span>Users</span>
-              <v-badge style="margin-left: 105px" color="#bcc8d8" overlap left :content="channelUsers.length" v-if="channelUsers.length!=0"></v-badge>
+              <v-badge style="margin-left: 105px" color="#bcc8d8" overlap left :content="channelUsers.length"
+                       v-if="channelUsers.length!=0"></v-badge>
             </a>
             <div class="submenu-content" v-on:mouseleave="hiddenChannelUserDelete()">
-              <a v-for="(user, index) in channelUsers" :key="user.email" style="cursor:default;display:flex; padding-left: 15px;" class="menu-item verti-align" v-on:mouseover="visibilityChannelUserDelete(index)">
+              <a v-for="(user, index) in channelUsers" :key="user.email"
+                 style="cursor:default;display:flex; padding-left: 15px;" class="menu-item verti-align"
+                 v-on:mouseover="visibilityChannelUserDelete(index)">
                 <div v-if="user.online">
                   <v-badge bottom color="cyan lighten-1" dot offset-x="10" offset-y="10">
-                    <img  class="avatar"  :src="user.picture">
+                    <img class="avatar" :src="user.picture">
                   </v-badge>
                 </div>
                 <div v-else>
-                  <img  class="avatar"  :src="user.picture">
+                  <img class="avatar" :src="user.picture">
                 </div>
                 <span style="margin-left:15px;">{{ user.name }}</span>
                 <div style="display: flex;justify-content: flex-end;flex-grow: 1;" v-if="isActiveForceLeave(user)">
-                  <button class="channelUserDel" :id="'channelUserDel' + index" @click="confirmChannelForceLeave(user)" style="margin-left: -15px; display: flex; visibility:hidden">
+                  <button class="channelUserDel" :id="'channelUserDel' + index" @click="confirmChannelForceLeave(user)"
+                          style="margin-left: -15px; display: flex; visibility:hidden">
                     <i class="im im-minus-circle" style="font-size:15px; color:black;"></i>
                   </button>
                 </div>
@@ -72,7 +82,8 @@
     <b-modal id="channelCU" centered ref="modal" @hidden="resetModal" @ok="confirmChannelExec">
       <template #modal-title>{{ modalTitle }}</template>
       <b-form-group label="채널 이름" label-for="channel-input" invalid-feedback="채널 이름이 필요합니다.">
-        <b-form-input id="channel-input" v-model="channelTitle" @keyup="confirmChannelExec($event)" required autofocus autocomplete="off"/>
+        <b-form-input id="channel-input" v-model="channelTitle" @keydown.enter.exact="confirmChannelExec($event)"
+                      required autofocus autocomplete="off"/>
       </b-form-group>
     </b-modal>
   </div>
@@ -80,9 +91,7 @@
 <script>
   export default {
     props: ['modalObj'],
-    computed: {
-
-    },
+    computed: {},
     name: 'LSidebar',
     data() {
       return {
@@ -124,6 +133,7 @@
             i(this).css("display", ""), i(this).find(".menu-item").removeClass("is-shown"), e.removeClass("open"), s && s()
           })
         }
+
         let l = $(".wrapper")
         if (l.hasClass("nav-collapsed")) {
           l.addClass("menu-collapsed");
@@ -139,18 +149,16 @@
         this.channelTitle = ''
       },
       confirmChannelExec: function (event) {
-        if((event.type == "keyup" && event.keyCode == 13) || event.type == "hide") {
-          if($.trim(this.channelTitle) != "") {
-            this.$nextTick(() => {
-              this.$bvModal.hide('channelCU')
-            })
+        if ($.trim(this.channelTitle) != "") {
+          this.$nextTick(() => {
+            this.$bvModal.hide('channelCU')
+          })
 
-            if (this.channelMode == "create") {
-             this.createChannel(this.channelTitle, this.$store.state.currentUser.email)
-            } else if (this.channelMode == "update") {
-              this.$store.state.currentChannel.name = this.channelTitle
-              this.updateChannel(this.currentChannel)
-            }
+          if (this.channelMode == "create") {
+            this.createChannel(this.channelTitle, this.$store.state.currentUser.email)
+          } else if (this.channelMode == "update") {
+            this.$store.state.currentChannel.name = this.channelTitle
+            this.updateChannel(this.currentChannel)
           }
         }
       },

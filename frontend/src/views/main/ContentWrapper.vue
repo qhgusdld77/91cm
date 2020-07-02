@@ -128,10 +128,10 @@
         // },
         //oldScrollHeight: 0,
         //wrapperEl: null,
-        msgPreviewBool: false,
-        isGetMsgForPreview: false,
-        isGetMsgForImgLoad: false,
-        selectedUserEmail: ''
+        // msgPreviewBool: false,
+        // isGetMsgForPreview: false,
+        // isGetMsgForImgLoad: false,
+        // selectedUserEmail: ''
       }
     },
     created() {
@@ -142,7 +142,7 @@
     },
     mounted() {
       this.$nextTick(() => {
-        this.wrapperEl = document.querySelector('.c-c-wrapper')
+        this.$store.commit('setWrapperEl',document.querySelector('.c-c-wrapper'));
         window.addEventListener('resize', this.widthCheck);
       })
       this.$eventBus.$on('leaveChannelMsg', (user) => {
@@ -163,7 +163,7 @@
     methods: {
       imgLoad() {
         // 문제 있으면 아래 코드 지우기..
-        this.$store.state.oldScrollHeight = this.$store.state.wrapperEl.scrollHeight
+        this.$store.commit('setOldScrollHeight', this.wrapperEl.scrollHeight);
 
         if (!this.msgPreviewBool && !this.isGetMsgForImgLoad) {
           this.scrollToEnd(true)
@@ -197,7 +197,7 @@
         this.$store.state.isInviteMode = false
       },
       widthCheck() {
-        this.$store.state.oldScrollHeight = this.$store.state.wrapperEl.scrollHeight
+        this.$store.commit('setOldScrollHeight', this.wrapperEl.scrollHeight);
       },
       splitData(data) {
         this.message.content = data.split("-")[0]
@@ -261,6 +261,8 @@
           this.message.sender = this.$store.state.currentUser.email
           this.message.user = this.$store.state.currentUser
         }
+        console.log("test")
+        return ;
         this.message.channel_id = this.$store.state.currentChannel.id
         if (CommonClass.byteLimit(this.stringByteLength)) {
           if (this.$store.state.stompClient && this.$store.state.stompClient.connected) {
@@ -323,7 +325,7 @@
           if (wrapperEl != null) {
             this.$nextTick(() => {
               wrapperEl.scrollTop = wrapperEl.scrollHeight - this.oldScrollHeight
-              this.oldScrollHeight = wrapperEl.scrollHeight
+              this.$store.commit('setOldScrollHeight', this.wrapperEl.scrollHeight);
             })
           }
           this.isGetMsgForPreview = true
@@ -333,15 +335,14 @@
       scrollToEnd(bool) {
         this.$nextTick(() => {
           if (this.firstLoad) {
-            
-            this.$store.state.oldScrollHeight = this.wrapperEl.scrollHeight
+            this.$store.commit('setOldScrollHeight', this.wrapperEl.scrollHeight);
           }
           if (this.isScrollAtEnd(this.wrapperEl) || this.$store.state.firstLoad || bool ||
             ((this.oldScrollHeight == this.wrapperEl.clientHeight) && (this.wrapperEl.scrollHeight > this.wrapperEl.clientHeight))) {
 
             this.wrapperEl.scrollTop = this.wrapperEl.scrollHeight
             this.$store.state.firstLoad = false
-            this.oldScrollHeight = this.wrapperEl.scrollHeight
+            this.$store.commit('setOldScrollHeight', this.wrapperEl.scrollHeight);
           }
         })
       },
@@ -381,14 +382,14 @@
         }
       },
     },
-    computed: {
-
-
-      ...mapGetters({
-        //msgArray: 'getMsgArray',
-        currentChannel: 'getCurrentChannel'
-      })
-    },
+    // computed: {
+    //
+    //
+    //   ...mapGetters({
+    //     //msgArray: 'getMsgArray',
+    //     currentChannel: 'getCurrentChannel'
+    //   })
+    // },
     watch: {
       currentChannel: function (newv, oldv) {
         //this.initData()

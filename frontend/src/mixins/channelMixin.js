@@ -1,43 +1,38 @@
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
 import commonMixin from "./commonMixin";
 import messageMixin from "./messageMixin";
 import NotificationClass from '../service/notification'
 import CommonClass from '../service/common'
 
 let channelMixin = {
-  computed: {
-    ...mapGetters({
-      channelList: 'getChannelList',
-      currentChannel: 'getCurrentChannel',
-      currentUser: 'getCurrentUser',
-      selectComponent: 'getSelectComponent'
-    })
-  },
+
   methods: {
     _makeChannelFunction: function (channel) {
-      let _this = this
-      let _url = "/sub/chat/room/"
-      let result = null
-      if (channel.subscribe === undefined) {
-        channel.subscribe = function () {
-          result = _this.subscribe(_url + this.id, _this.channelSubscribeCallBack)
-          channel.unsubscribe = function () {
-            _this.subscribeList.pop(_url + this.id)
-            result.unsubscribe()
+      if (channel.id !== undefined) {
+        let _this = this
+        let _url = "/sub/chat/room/"
+        let result = null
+        if (channel.subscribe === undefined) {
+          channel.subscribe = function () {
+            result = _this.subscribe(_url + this.id, _this.channelSubscribeCallBack)
+            channel.unsubscribe = function () {
+              _this.subscribeList.pop(_url + this.id)
+              result.unsubscribe()
+            }
           }
         }
-      }
-      if (channel.send === undefined) {
-        channel.send = function (message) {
-          _this.send(_url + this.id, message)
+        if (channel.send === undefined) {
+          channel.send = function (message) {
+            _this.send(_url + this.id, message)
+          }
         }
-      }
-      if (channel.access === undefined) {
-        channel.access = function () {
-          _this.post('/api/channel/update/lastaccessdate', {
-            currentChannelId: this.id,
-            userEmail: _this.currentUser.email
-          })
+        if (channel.access === undefined) {
+          channel.access = function () {
+            _this.post('/api/channel/update/lastaccessdate', {
+              currentChannelId: this.id,
+              userEmail: _this.currentUser.email
+            })
+          }
         }
       }
       return channel
@@ -55,12 +50,11 @@ let channelMixin = {
         } else {
           this.msgCountUpdate(data.channel_id, true)
         }
-      }
-      else{
+      } else {
         //메시지가 함수명일때 함수를 call하는 구문
-        try{
+        try {
           this[data.message]();
-        }catch (e) {
+        } catch (e) {
           console.error(e);
         }
       }
@@ -98,19 +92,19 @@ let channelMixin = {
       if (mode === "create" || mode === "update") {
         if (mode === "create") this.channelTitle = ''
         this.$bvModal.show('channelCU')
-      }
-      else if (mode === "delete") {
+      } else if (mode === "delete") {
         this.$_confirm("<code>[" + channel.name + "]</code>채널을 삭제하시겠습니까?", this.deleteChannel, channel);
       }
     },
     //채널 생성
     createChannel: function (channelTitle, email) {
       let _this = this
-      this.$http.post('/api/channel/create', {
+      this.post('/api/channel/create', {
         name: channelTitle,
         member_email: email
       }, function (res) {
         let channel = _this.getChannel(res.data)
+        console.log(channel)
         channel.subscribe()
         _this.selectChannelList(channel)
       })
@@ -143,13 +137,13 @@ let channelMixin = {
       $(".channelDel").css("visibility", "hidden")
     },
     //채널 목록 조회
-    selectChannelList: function (channel = this.$store.state.currentChannel, isJoin = true) {
+    selectChannelList: function (channel, isJoin = true) {
       this.$http.get('/api/channel/list')
         .then(res => {
           let _this = this
           let channelList = res.data
-          console.log(res.data)
           $.each(channelList, function (index, channel) {
+
             _this._makeChannelFunction(channel)
           })
           this.commit('setChannelList', channelList)
@@ -157,19 +151,19 @@ let channelMixin = {
           if (isJoin) {
             if (channelList.length == 0) channel = null
             else if (channel === undefined) channel = channelList[0]
-            else if (this.currentChannel == null) this.commit('setCurrentChannel', { id: -1 })//채널 진입
+            else if (this.currentChannel == null) this.commit('setCurrentChannel', {id: -1})//채널 진입
             this.joinChannel(channel)
           }
         }).catch(error => {
-          console.error(error)
-        })
+        console.error(error)
+      })
     },
     //채널 진입
     joinChannel: function (channel) {
-      this.$store.commit('getSelectComponent','main')
+      console.log(channel)
+      this.$store.commit('getSelectComponent', 'main')
       if (channel !== undefined && channel != null) {
         channel = this.getChannel(channel)
-
         if (channel.id != this.currentChannel.id) {
           this.commit('setCurrentChannel', channel)//채널 진입
           this.initChannelUserList()
@@ -184,24 +178,21 @@ let channelMixin = {
           this.$store.state.isSearchMode = false
 
           if (channel != null) {
+            console.log(1, channel)
             //마지막 진입일자 갱신
-            this.$http.post('/api/channel/update/lastaccessdate', {
-              currentChannelId: channel.id,
-              userEmail: this.currentUser.email
-            })
+
+            channel.access()
           }
-        }
-        else {
+        } else {
           this.selectChannelUserList(channel)//채널 사용자 조회
         }
-      }
-      else {
+      } else {
         this.commit('setCurrentChannel', null)
         this.initChannelUserList()
       }
     },
     //채널 사용자 조회
-    selectChannelUserList: function (channel= this.$store.state.currentChannel) {
+    selectChannelUserList: function (channel = this.$store.state.currentChannel) {
       if (channel != null) {
         this.$http.post('/api/user/channel/' + channel.id, {
           currentChannelId: channel.id,
@@ -210,8 +201,7 @@ let channelMixin = {
           .then(res => {
             this.setChannelUserList(res.data)
           })
-      }
-      else {
+      } else {
         this.initChannelUserList()
       }
     },
@@ -265,8 +255,7 @@ let channelMixin = {
             return false
           }
         })
-      }
-      else {
+      } else {
         thisChannel = this._makeChannelFunction(paramChannel)
       }
       return thisChannel
