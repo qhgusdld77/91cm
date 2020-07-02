@@ -115,15 +115,16 @@
         }
         this.$http.post('/api/invite/accept', alarm)
           .then(async (res) => {
-
             // 현재 채널을 변경하는 로직을 구현해야할듯
             this.$store.state.stompClient.send('/pub/chat/message', JSON.stringify(message))
             this.alarmList.splice(index, 1);
             this.$store.state.stompClient.send('/pub/chat/room/' + alarm.channel_id, JSON.stringify({"message": "updateChannel", "error": "null"}))
-            await this.selectChannelList(alarm.channel_id)
+            console.log(alarm.channel_id)
+            // let channel = this.$store.getters.getChannelList.find(channel => channel.id === alarm.channel_id)
+            await this.selectChannelList(alarm.channel_id) // 채널 id 값이 아니라 channel 객체를 줘야함
             //this.commit('setCurrentChannel', res.data) //채널 진입
-            this.subscribe("/sub/chat/room/" + alarm.channel_id, this.channelSubscribeCallBack)
-
+            await this.subscribe("/sub/chat/room/" + alarm.channel_id, this.channelSubscribeCallBack)
+            this.send("/sub/chat/room/"+alarm.channel_id, 'selectChannelUserList');
           })
           .catch(error => {
             console.error(error)
