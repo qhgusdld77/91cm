@@ -20,15 +20,13 @@ import './assets/font/iconmonstr/css/iconmonstr-iconic-font.min.css';
 import 'animate.css'
 import './assets/css/main.css'
 import '../dist/css/theme.css'
-
 import channelMixin from './mixins/channelMixin'
 import commonMixin from './mixins/commonMixin'
 import messageMixin from './mixins/messageMixin'
 
 Vue.mixin({
-  mixins:[channelMixin,messageMixin,commonMixin]
+  mixins:[channelMixin,commonMixin,messageMixin]
 })
-
 Vue.use(BootstrapVue)
 Date.prototype.addDays = function (days) {
   var date = new Date(this.valueOf());
@@ -36,8 +34,6 @@ Date.prototype.addDays = function (days) {
   return date;
 }
 Vue.use(AlertModal)
-
-
 Vue.use(Vuetify)
 Vue.use(VueSession, {persist: true})
 Vue.prototype.$eventBus = new Vue();
@@ -52,6 +48,34 @@ new Vue({
       iconfont: "mdi"
     }
   }),
+  watch:{
+    channelList: function (newChannelList, oldChannelList) {
+      let newChannelListCnt = newChannelList.length
+      let oldChannelListCnt = oldChannelList.length
+
+      //최초 진입 후 구독
+      if (oldChannelListCnt == 0 && newChannelListCnt > 0) {
+        $.each(newChannelList, function (index, channel) {
+          channel.subscribe()
+        })
+      }
+      //채널 삭제 후 구독 취소
+      else if(newChannelListCnt < oldChannelListCnt) {
+        $.each(oldChannelList, function(index, oldChannel) {
+          let isEquals = newChannelList.find(newChannel => {
+            return newChannel.id == oldChannel.id
+          })
+          if(isEquals === undefined) {
+            oldChannel.unsubscribe()
+          }
+        })
+      }
+    },
+    currentChannel: function (newCurrentChannel, oldCurrentChannel) {
+      oldCurrentChannel = this.getChannel(oldCurrentChannel)
+      oldCurrentChannel.access()
+    }
+  },
   router,
   store,
   render: h => h(App)

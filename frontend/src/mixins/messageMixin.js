@@ -3,7 +3,6 @@ import commonMixin from "./commonMixin";
 import CommonClass from '../service/common'
 
 let messageMixin = {
-  mixins: [commonMixin],
   data() {
     return {
       isFileUpload: false,
@@ -56,13 +55,6 @@ let messageMixin = {
     //     this.$store.commit('setWrapperEl',val)
     //   }
     // }
-  },
-  watch: {
-    /*
-    msgArray: function () {
-      console.log("메시지정보가 갱신되었다")
-    },
-    */
   },
   methods: {
     msgCountUpdate(id, counting) {
@@ -127,7 +119,7 @@ let messageMixin = {
             this.cursorPoint.cursorId = res.data[res.data.length - 1].id
             //this.cursorPoint.cursorId = res.data[res.data.length - 1].id
           }
-          for (let i = 0; i < res.data.length; i++) { 
+          for (let i = 0; i < res.data.length; i++) {
             res.data[i].content = CommonClass.replacemsg(res.data[i].content)
           }
           if (this.wrapperEl !== undefined) {
@@ -187,8 +179,6 @@ let messageMixin = {
           this.message.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + this.message.content
           let errormsg = JSON.parse(JSON.stringify(this.message))
           this.$store.commit('pushMsg', errormsg)
-          console.log(errormsg)
-          console.log(this.msgArray)
           this.message.content = ''
         }
       }
