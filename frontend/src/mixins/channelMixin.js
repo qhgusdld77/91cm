@@ -55,11 +55,19 @@ let channelMixin = {
           this.msgCountUpdate(data.channel_id, true)
         }
       }
-      else if (data.message === 'selectChannelList') {
-        this.selectChannelList()
-      }else if (data.message === 'selectChannelUserList'){
-        this.selectChannelUserList()
+      else{
+        //메시지가 함수명일때 함수를 call하는 구문
+        try{
+          this[data.message]();
+        }catch (e) {
+          console.error(e);
+        }
       }
+      // else if (data.message === 'selectChannelList') {
+      //   this.selectChannelList()
+      // }else if (data.message === 'selectChannelUserList'){
+      //   this.selectChannelUserList()
+      // }
       if (e.headers.noticeMsg != null) {
         this.noticeMsg = res.headers.noticeMsg
         this.noticeMsgToggle = true
@@ -75,11 +83,9 @@ let channelMixin = {
           return false
       }
     },
-
     //채널 공통 확인
     confirmChannel: function (event, mode, channel) {
       event.stopPropagation()
-
       this.modalTitle = "채널 " + this.getChannelModeKorStr(mode)
       this.channelMode = mode
       try {
