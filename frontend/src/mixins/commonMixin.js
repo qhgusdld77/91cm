@@ -12,6 +12,8 @@ let commonMixin = {
       cursorPoint: 'getCursorPoint',
       oldScrollHeight: 'getOldScrollHeight',
       selectComponent: 'getSelectComponent',
+      subscribeList: 'getSubscribeList',
+      channelArr: 'getChannelArr'
     })
   },
   methods: {

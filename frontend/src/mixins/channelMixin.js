@@ -15,21 +15,22 @@ let channelMixin = {
             result = _this.subscribe(_url + this.id, _this.channelSubscribeCallBack)
             channel.unsubscribe = function () {
               _this.subscribeList.pop(_url + this.id)
-            _this.commit('setSubscribeList', _this.subscribeList)
+              _this.commit('setSubscribeList', _this.subscribeList)
               result.unsubscribe()
+            }
           }
-        }
-        if (channel.send === undefined) {
-          channel.send = function (message) {
-            _this.send(_url + this.id, message)
+          if (channel.send === undefined) {
+            channel.send = function (message) {
+              _this.send(_url + this.id, message)
+            }
           }
-        }
-        if (channel.access === undefined) {
-          channel.access = function () {
-            _this.post('/api/channel/update/lastaccessdate', {
-              currentChannelId: this.id,
-              userEmail: _this.currentUser.email
-            })
+          if (channel.access === undefined) {
+            channel.access = function () {
+              _this.post('/api/channel/update/lastaccessdate', {
+                currentChannelId: this.id,
+                userEmail: _this.currentUser.email
+              })
+            }
           }
         }
       }
@@ -116,7 +117,7 @@ let channelMixin = {
     //채널 삭제
     deleteChannel: function (channel) {
       this.post('/api/channel/delete', channel, function () {
-       channel.send("selectChannelList")
+        channel.send("selectChannelList")
       })
     },
     //채널 삭제 아이콘 표시
@@ -235,10 +236,11 @@ let channelMixin = {
     //채널 조회
     getChannel: function (paramChannel) {
       let thisChannel
+      const _this = this
       if (typeof paramChannel == 'string' || typeof paramChannel == 'number') {
         $.each(this.channelList, function (idx, channel) {
           if (paramChannel == channel.id) {
-            thisChannel = this._makeChannelFunction(channel)
+            thisChannel = _this._makeChannelFunction(channel)
             return false
           }
         })

@@ -59,7 +59,7 @@ let messageMixin = {
     initMessageList: function (channel) {
       this.$store.commit('pushChannelArr',channel.id)
       //this.channelArr.push(channel.id)
-      this.$store.commit('setFirstLoad',true) 
+      this.$store.commit('setFirstLoad',true)
       //this.firstLoad = true
       this.scrollHeight = 0
       this.message.sender = this.currentUser.email
@@ -170,15 +170,15 @@ let messageMixin = {
 
         // 아예 메시지리스트를 새로 가져오는 방법 -> 메세지 찾기하고 있거나 이전 메세지를 조회중일때
         // 신호가 간다면 문제 생길 것 같음 모드가 바뀌었을때 메세지arr 변경 못하게 바꾸거나 프론트 단에서 해당 메세지만 변경처리 해줘야 할듯
-        
+
         if(res){
           let index = this.msgArray.findIndex(message => message.id == msg.id)
           if(index !== undefined || index !== null){
-            this.msgArray[index].content = <p>삭제된 메세지입니다.</p>
+            this.msgArray[index].content = "<p>삭제된 메세지입니다.</p>"
           }
           //
         }
-      }); 
+      });
     }
   }
 };

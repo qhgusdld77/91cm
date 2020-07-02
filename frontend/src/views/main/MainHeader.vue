@@ -120,8 +120,8 @@
             this.alarmList.splice(index, 1);
             this.$store.state.stompClient.send('/pub/chat/room/' + alarm.channel_id, JSON.stringify({"message": "updateChannel", "error": "null"}))
             console.log(alarm.channel_id)
-            let channel = this.$store.getters.getChannelList.find(channel => channel.id === alarm.channel_id)
-            await this.selectChannelList(channel) // 채널 id 값이 아니라 channel 객체를 줘야함
+            // let channel = this.$store.getters.getChannelList.find(channel => channel.id === alarm.channel_id)
+            await this.selectChannelList(alarm.channel_id) // 채널 id 값이 아니라 channel 객체를 줘야함
             //this.commit('setCurrentChannel', res.data) //채널 진입
             await this.subscribe("/sub/chat/room/" + alarm.channel_id, this.channelSubscribeCallBack)
             this.send("/sub/chat/room/"+alarm.channel_id, 'selectChannelUserList');

@@ -62,7 +62,6 @@ export default {
   },
   setFirstLoad:function(state,payload){
     state.firstLoad = payload
-  }
   },
   setOldScrollHeight: function (state, payload) {
     state.oldScrollHeight = payload;
