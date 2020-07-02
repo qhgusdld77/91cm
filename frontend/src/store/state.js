@@ -7,6 +7,7 @@ export default {
   },
   currentChannel: {},
   channelList: [],
+  subscribeList: [],
   stompClient: null,
   selectComponent: 'main',
   oldComponent: 'main',

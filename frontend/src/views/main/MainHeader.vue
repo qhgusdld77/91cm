@@ -48,14 +48,10 @@
               <img class="avatar" :src="$store.state.currentUser.picture">
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-              <a class="dropdown-item" @click="callComponent('user')"><i class="ik ik-user dropdown-icon"></i>
-                Profile</a>
-<!--              설정 창 아직 개발줌입으로 if문 false 처리-->
-              <a v-if="false" class="dropdown-item" @click="$router.push('/develop')"><i class="ik ik-settings dropdown-icon"></i>
-                Setting</a>
+              <a class="dropdown-item" @click="callComponent('user')"><i class="ik ik-user dropdown-icon"></i> Profile</a>
+              <a v-if="false" class="dropdown-item" @click="$router.push('/develop')"><i class="ik ik-settings dropdown-icon"></i> Setting</a>
+              <a class="dropdown-item" v-if="isAdmin()" @click="callComponent('admin')"><i class="ik ik-settings dropdown-icon"></i> Permission</a>
               <a class="dropdown-item" @click="SignOut"><i class="ik ik-power dropdown-icon"></i> Logout</a>
-              <a class="dropdown-item" v-if="isAdmin" @click="callComponent('admin')"><i
-                class="ik ik-settings dropdown-icon"></i> Permission</a>
             </div>
           </div>
         </div>
@@ -67,10 +63,8 @@
 <script>
   import '../../../dist/js/theme.js'
   import AboutChannel from '../../service/aboutchannel'
-  import channelMixin from "../../mixins/channelMixin";
 
   export default {
-    mixins: [channelMixin],
     name: 'MainHeader',
     data() {
       return {
@@ -116,11 +110,12 @@
           channel_id: alarm.channel_id,
           sender: null,
           content: this.$store.state.currentUser.name + '님이 채널에 초대되었습니다.',
+          message_type:'action'
           // user: this.$store.state.currentUser
         }
         this.$http.post('/api/invite/accept', alarm)
           .then(async (res) => {
-            
+
             // 현재 채널을 변경하는 로직을 구현해야할듯
             this.$store.state.stompClient.send('/pub/chat/message', JSON.stringify(message))
             this.alarmList.splice(index, 1);
@@ -128,7 +123,7 @@
             await this.selectChannelList(alarm.channel_id)
             //this.commit('setCurrentChannel', res.data) //채널 진입
             this.subscribe("/sub/chat/room/" + alarm.channel_id, this.channelSubscribeCallBack)
-            
+
           })
           .catch(error => {
             console.error(error)
@@ -176,7 +171,7 @@
         console.log(this.$store.state.userList,'userList')
         let foundEmail = this.$store.state.userList.find(element => {return element.email == email})
         if(foundEmail!=null){
-          return foundEmail.name  
+          return foundEmail.name
         }else{
           return null
         }

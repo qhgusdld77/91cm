@@ -55,7 +55,6 @@
   import commonMixin from "../../mixins/commonMixin";
 
   export default {
-    mixins: [commonMixin],
     name: "AuthorityPage",
     beforeCreate() {
       this.$http.post('/api/user/admin/userList')

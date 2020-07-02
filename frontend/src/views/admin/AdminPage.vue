@@ -51,4 +51,7 @@
     height: inherit;
     overflow: auto;
   }
+  .tabColor {
+    background-color: #404E67;
+  }
 </style>

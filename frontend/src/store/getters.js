@@ -14,6 +14,7 @@ export default {
   getChannelList: state => state.channelList,
   getTaskBoard: state=> state.taskBoard,
   getCurrentChannel: state => state.currentChannel,
+  getSubscribeList: state => state.subscribeList,  
   getSyncChannelUser: state => state.syncSignal.syncChannelUser,
   getChannelUsers: state => state.channelUsers,
   getSelectComponent: state => state.selectComponent,

@@ -3,7 +3,8 @@ let commonMixin = {
   computed: {
     ...mapGetters({
       currentUser: 'getCurrentUser',
-      channelList: 'getChannelList'
+      channelList: 'getChannelList',
+      subscribeList: 'getSubscribeList'
     })
   },
   methods: {
@@ -13,27 +14,31 @@ let commonMixin = {
     post: function (url, params, callback) {
       this.$http.post(url, params)
         .then(res => {
-          callback(res)
-        }).catch(error => {
-          console.error(error)
+          if(callback !== undefined) {
+            callback(res)
+          }
         })
     },
     isAdmin: function () {
-      var loginUserRoles = this.currentUser.roles
-      return loginUserRoles.includes('ROLE_ROOT') || loginUserRoles.includes('ROLE_ADMIN')
+      return this.currentUser.roles.includes('ROLE_ADMIN') || this.isRoot()
+    },
+    isRoot: function () {
+      return this.currentUser.roles.includes('ROLE_ROOT')
     },
     subscribe: function(url, func) {
-      let result = this.$store.state.stompClient.subscribe(url, func)
-      if(url.indexOf("/sub/chat/room/") > -1) {
-        let channelId = url.replace("/sub/chat/room/", "")
-        $.each(this.channelList, function(idx, channel) {
-          if(channelId == channel.id) {
-            channel.unsubscribe = result.unsubscribe
-          }
-        })
-        this.commit("setChannelList", this.channelList)
+      if(!this.subscribeList.includes(url)) {
+        this.subscribeList.push(url)
+        this.commit('setSubscribeList', this.subscribeList)
+
+        return this.$store.state.stompClient.subscribe(url, func)
       }
-      return result
+      return null
+    },
+    send: function(url, message) {
+      this.$store.state.stompClient.send(url, JSON.stringify({
+        'message': message,
+        'error': "null"
+      }))
     }
   }
 };

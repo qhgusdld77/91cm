@@ -3,7 +3,6 @@ import commonMixin from "./commonMixin";
 import CommonClass from '../service/common'
 
 let messageMixin = {
-  mixins: [commonMixin],
   data() {
     return {
       isFileUpload: false,
@@ -44,13 +43,6 @@ let messageMixin = {
       channelList: 'getChannelList'
     })
   },
-  watch: {
-    /*
-    msgArray: function () {
-      console.log("메시지정보가 갱신되었다")
-    },
-    */
-  },
   methods: {
     msgCountUpdate(id, counting) {
       // commit 을 안해도 객체 내부의 내용은 변경이 되는지 확인 필요 확인 후 해당 주석 제거
@@ -89,7 +81,6 @@ let messageMixin = {
     },
     //채널 메시지 조회
     selectMessageList: function (channel, isInit, wrapperEl) {
-      console.log(channel,'channel')
       if (isInit){
         this.initMessageList(channel)
       }
@@ -105,7 +96,7 @@ let messageMixin = {
             this.cursorPoint.first = false
             this.cursorPoint.cursorId = res.data[res.data.length - 1].id
           }
-          for (let i = 0; i < res.data.length; i++) { 
+          for (let i = 0; i < res.data.length; i++) {
             res.data[i].content = CommonClass.replacemsg(res.data[i].content)
           }
           this.commit('setMsgArray', res.data.reverse().concat(this.msgArray))
@@ -131,7 +122,6 @@ let messageMixin = {
       if (isSysMsg) {
         this.message.message_type = 'action'
         this.message.sender = null
-        console.log('asdasdsadadsadsa111')
       } else {
         this.message.sender = this.$store.state.currentUser.email
         this.message.user = this.$store.state.currentUser
@@ -140,7 +130,6 @@ let messageMixin = {
       this.message.channel_id = this.$store.state.currentChannel.id
       if (CommonClass.byteLimit(this.stringByteLength)) {
         if (this.$store.state.stompClient && this.$store.state.stompClient.connected) {
-          console.log('asdasdsadadsadsa')
           this.$store.state.stompClient.send("/pub/chat/message", JSON.stringify(this.message), {})
           this.message.content = ''
           this.scrollToEnd(true)
@@ -162,8 +151,6 @@ let messageMixin = {
           this.message.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + this.message.content
           let errormsg = JSON.parse(JSON.stringify(this.message))
           this.$store.commit('pushMsg', errormsg)
-          console.log(errormsg)
-          console.log(this.msgArray)
           this.message.content = ''
         }
       }
@@ -176,12 +163,12 @@ let messageMixin = {
 
         //아예 메시지리스트를 새로 가져오는 방법 -> 메세지 찾기하고 있거나 이전 메세지를 조회중일때
         //신호가 간다면 문제 생길 것 같음 모드가 바뀌었을때 메세지arr 변경 못하게 바꾸거나 프론트 단에서 해당 메세지만 변경처리 해줘야 할듯
-        
+
         // if(res){
         //   this.selectMessageList(this.currentChannel,true)
         // }
 
-      }); 
+      });
     }
   }
 };
