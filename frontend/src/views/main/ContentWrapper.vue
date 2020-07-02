@@ -121,14 +121,14 @@
           user: {}
         },
         // 채널 옮길 때마다 초기화 되어야한다.
-        cursorPoint: {
-          channel_id: 0,
-          first: true,
-          cursorId: 0,
-          empty: false
-        },
-        oldScrollHeight: 0,
-        wrapperEl: null,
+        // cursorPoint: {
+        //   channel_id: 0,
+        //   first: true,
+        //   cursorId: 0,
+        //   empty: false
+        // },
+        //oldScrollHeight: 0,
+        //wrapperEl: null,
         msgPreviewBool: false,
         isGetMsgForPreview: false,
         isGetMsgForImgLoad: false,
@@ -136,9 +136,10 @@
       }
     },
     created() {
-      if (this.$store.state.currentChannel != null) {
-        this.getMessage()
-      }
+      // 사용되지 않는 것 같음
+      // if (this.$store.state.currentChannel != null) {
+      //   this.getMessage()
+      // }
     },
     mounted() {
       this.$nextTick(() => {
@@ -146,8 +147,8 @@
         window.addEventListener('resize', this.widthCheck);
       })
       this.$eventBus.$on('leaveChannelMsg', (user) => {
-        this.message.content = user.name + '님이 ' + (this.isMine(user)?"나가셨습니다.":"추방되었습니다.")
-        this.send(null, true)
+        this.$store.state.message.content = user.name + '님이 ' + (this.isMine(user)?"나가셨습니다.":"추방되었습니다.")
+        this.sendMessage(null, true)
       })
     },
     updated() {
@@ -163,7 +164,7 @@
     methods: {
       imgLoad() {
         // 문제 있으면 아래 코드 지우기..
-        this.oldScrollHeight = this.wrapperEl.scrollHeight
+        this.$store.state.oldScrollHeight = this.$store.state.wrapperEl.scrollHeight
 
         if (!this.msgPreviewBool && !this.isGetMsgForImgLoad) {
           this.scrollToEnd(true)
@@ -197,7 +198,7 @@
         this.$store.state.isInviteMode = false
       },
       widthCheck() {
-        this.oldScrollHeight = this.wrapperEl.scrollHeight
+        this.$store.state.oldScrollHeight = this.$store.state.wrapperEl.scrollHeight
       },
       splitData(data) {
         this.message.content = data.split("-")[0]
@@ -295,8 +296,9 @@
         let element = e.target;
         //스크롤이 없을때에도 스크롤 위치가 최상단이기 때문에 스크롤이 있는지 없는지 판단해야한다.
         if (element.scrollTop <= 0 && element.scrollHeight != element.clientHeight) {
-          if (this.cursorPoint.empty == false) {
-            this.getMessage(element)
+          if (this.$store.state.cursorPoint.empty == false) {
+            this.selectMessageList(this.currentChannel,false)
+            //this.getMessage(element)
           }
         } else if (this.isScrollAtEnd(element)) {
           this.msgPreviewBool = false
@@ -334,13 +336,14 @@
       scrollToEnd(bool) {
         this.$nextTick(() => {
           if (this.firstLoad) {
-            this.oldScrollHeight = this.wrapperEl.scrollHeight
+            
+            this.$store.state.oldScrollHeight = this.wrapperEl.scrollHeight
           }
-          if (this.isScrollAtEnd(this.wrapperEl) || this.firstLoad || bool ||
+          if (this.isScrollAtEnd(this.wrapperEl) || this.$store.state.firstLoad || bool ||
             ((this.oldScrollHeight == this.wrapperEl.clientHeight) && (this.wrapperEl.scrollHeight > this.wrapperEl.clientHeight))) {
 
             this.wrapperEl.scrollTop = this.wrapperEl.scrollHeight
-            this.firstLoad = false
+            this.$store.state.firstLoad = false
             this.oldScrollHeight = this.wrapperEl.scrollHeight
           }
         })
