@@ -22,8 +22,10 @@
               <div>
                 <div style="display:flex;">
                   <p>Channel Name</p>
-                  <a class="verti-align" style="color: #007bff;" data-mode="edit" @click="confirmChannel('update', $store.state.currentChannel)">Edit</a>
-                  <a class="verti-align" style="color: #007bff;" data-mode="edit" @click="confirmChannel('delete', $store.state.currentChannel)" v-if="isAdmin()">Delete</a>
+                  <a class="verti-align" style="color: #007bff;" data-mode="edit"
+                     @click="confirmChannel('update', $store.state.currentChannel)">Edit</a>
+                  <a class="verti-align" style="color: #007bff;" data-mode="edit"
+                     @click="confirmChannel('delete', $store.state.currentChannel)" v-if="isAdmin()">Delete</a>
                 </div>
                 <li class="list-unstyled">{{ $store.state.currentChannel.name }}</li>
               </div>
@@ -76,18 +78,10 @@
 </template>
 
 <script>
-  import {mapGetters} from "vuex";
-  import channelMixin from "../../mixins/channelMixin";
-
   export default {
     props: ['modalObj'],
     name: 'RSidebar',
     computed: {
-      ...mapGetters({
-        channelUsers: 'getChannelUsers',
-        isVideoMode: 'getIsVideoMode',
-
-      })
     },
     data() {
       return {
@@ -129,8 +123,7 @@
       useModal: function (mode) {
         if (mode == 'edit') {
           this.$eventBus.$emit('useModal', mode)
-        }
-        else if (mode == 'delete') {
+        } else if (mode == 'delete') {
           this.$eventBus.$emit('useModal', mode)
         }
       },
@@ -147,9 +140,9 @@
             return value
           })
       },
-      isAdmin: function() {
+      isAdmin: function () {
         var loginUserRoles = this.$store.state.currentUser.roles
-        return loginUserRoles.includes('ROLE_ROOT') ||  loginUserRoles.includes('ROLE_ADMIN')
+        return loginUserRoles.includes('ROLE_ROOT') || loginUserRoles.includes('ROLE_ADMIN')
       },
     }
   }

@@ -26,5 +26,35 @@ export default {
   isVideoMode: false,
   channelModal:false,
   inviteUserList:[],
-  lang:'ko'
+  lang:'ko',
+
+  //
+  isFileUpload: false,
+  progressValue: 0,
+  sendMail: false,
+  tempImg: '',
+  stringByteLength: 0,
+  previewObj: {
+    content: '',
+    username: ''
+  },
+  channelArr: [],
+  message: {
+    channel_id: 0,
+    content: '',
+    sender: '',
+    user: {}
+  },
+  cursorPoint: {
+    channel_id: 0,
+    first: true,
+    cursorId: 0,
+    empty: false
+  },
+  oldScrollHeight: 0,
+  wrapperEl: null,
+  msgPreviewBool: false,
+  isGetMsgForPreview: false,
+  isGetMsgForImgLoad: false,
+  selectedUserEmail: '',
 }

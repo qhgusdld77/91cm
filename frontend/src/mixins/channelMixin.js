@@ -9,7 +9,8 @@ let channelMixin = {
     ...mapGetters({
       channelList: 'getChannelList',
       currentChannel: 'getCurrentChannel',
-      currentUser: 'getCurrentUser'
+      currentUser: 'getCurrentUser',
+      selectComponent: 'getSelectComponent'
     })
   },
   methods: {

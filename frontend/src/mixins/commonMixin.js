@@ -7,6 +7,8 @@ let commonMixin = {
   },
   computed: {
     ...mapGetters({
+      channelUsers: 'getChannelUsers',
+      isVideoMode: 'getIsVideoMode',
       currentUser: 'getCurrentUser',
       channelList: 'getChannelList'
     })

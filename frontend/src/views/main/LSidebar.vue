@@ -78,18 +78,10 @@
   </div>
 </template>
 <script>
-  import {mapGetters} from "vuex";
-  import AboutChannel from '../../service/aboutchannel'
-  import channelMixin from "../../mixins/channelMixin"
-
   export default {
     props: ['modalObj'],
     computed: {
-      ...mapGetters({
-        channelList: 'getChannelList',
-        currentChannel: 'getCurrentChannel',
-        channelUsers: 'getChannelUsers'
-      }),
+
     },
     name: 'LSidebar',
     data() {

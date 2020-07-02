@@ -21,12 +21,13 @@ let messageMixin = {
         sender: '',
         user: {}
       },
-      cursorPoint: {
-        channel_id: 0,
-        first: true,
-        cursorId: 0,
-        empty: false
-      },
+      // 임시 주석 처리 추후에 cursorPoint가 채널 이동시 마다 초기화가 안되면 주석 제거
+      // cursorPoint: {
+      //   channel_id: 0,
+      //   first: true,
+      //   cursorId: 0,
+      //   empty: false
+      // },
       oldScrollHeight: 0,
       wrapperEl: null,
       msgPreviewBool: false,
@@ -40,7 +41,9 @@ let messageMixin = {
       msgArray: 'getMsgArray',
       currentChannel: 'getCurrentChannel',
       currentUser: 'getCurrentUser',
-      channelList: 'getChannelList'
+      channelList: 'getChannelList',
+      wrapperEl:
+
     })
   },
   methods: {
