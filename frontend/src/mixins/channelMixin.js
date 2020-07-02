@@ -85,7 +85,7 @@ let channelMixin = {
       event.stopPropagation()
 
       this.modalTitle = "채널 " + this.getChannelModeKorStr(mode)
-      this.channelMode = mode
+      this.hannelMode = mode
       try {
         this.channelTitle = (channel === undefined) ? this.currentChannel.name : channel.name
       } catch (e) {

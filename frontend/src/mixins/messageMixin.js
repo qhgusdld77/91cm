@@ -196,9 +196,9 @@ let messageMixin = {
         if(res){
           let index = this.msgArray.findIndex(message => message.id == msg.id)
           if(index !== undefined || index !== null){
-            this.msgArray[index].content = <p>삭제된 메세지입니다.</p>
+            this.msgArray[index].content = "<p>삭제된 메세지입니다.</p>"
           }
-          //
+          this.currentChannel.send("deleteMessage|"+msg.id)
         }
       }); 
     }
