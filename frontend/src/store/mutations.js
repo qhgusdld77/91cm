@@ -50,5 +50,8 @@ export default {
   },
   setInviteUserList: function(state,payload){
     state.inviteUserList = payload
-  }
+  },
+  setWrapperEl: function(state,payload){
+    state.wrapperEl = payload
+  } 
 }

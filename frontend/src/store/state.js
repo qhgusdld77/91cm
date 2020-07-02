@@ -28,7 +28,8 @@ export default {
   inviteUserList:[],
   lang:'ko',
 
-  //
+
+  // ===========================================
   isFileUpload: false,
   progressValue: 0,
   sendMail: false,

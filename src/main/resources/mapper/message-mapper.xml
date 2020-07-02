@@ -10,6 +10,8 @@
         <result property="message_type" column="message_type"/>
         <association property="user" javaType="com.nineone.nocm.domain.User">
             <result property="name" column="name"/>
+            <result property="email" column="email"/>
+            <result property="phone" column="phone"/>
              <result property="picture" column="picture"/>
         </association>
         <collection property="files" column="id" javaType="java.util.ArrayList" ofType="com.nineone.nocm.domain.ContentsFile" select="getMessageFiles"></collection>
@@ -72,4 +74,15 @@
     	   SET DELETE_YN = 'Y' 
     	 WHERE ID = #{id}
     </delete>
+    
+    <select id="selectTodayMsgCnt" resultType="int">
+    	SELECT COUNT(*) 
+    	  FROM MESSAGE 
+    	 WHERE ( SELECT SEND_DATE 
+    	           FROM MESSAGE
+    	          WHERE CHANNEL_ID = #{channel_id}
+    	       ORDER BY SEND_DATE DESC 
+    	          LIMIT 1
+    	       ) > STR_TO_DATE(#{date},'%Y년 %m월 %d일') 
+    </select>
 </mapper>

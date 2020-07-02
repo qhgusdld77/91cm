@@ -12,4 +12,6 @@ public interface MessageService {
 	String makeStrDate(Date date);
 	String replacemsg(String originContent);
 	boolean deleteDeleteYN(int id);
+	boolean isFirstMsgToday(String date,int channel_id);
+	
 }

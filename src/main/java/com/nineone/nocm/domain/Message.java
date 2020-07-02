@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Message {
+public class Message implements Cloneable{
 	int id;
 	int channel_id;
 	String content;
@@ -34,5 +34,16 @@ public class Message {
 		this.user = user;
 		this.files = files;
 		this.message_type = message_type;
+	}
+	
+	@Override
+	public Message clone() {
+		Message message = null;
+		try {
+			message = (Message) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return message;
 	}
 }

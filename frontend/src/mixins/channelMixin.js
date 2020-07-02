@@ -106,7 +106,7 @@ let channelMixin = {
     //채널 생성
     createChannel: function (channelTitle, email) {
       let _this = this
-      this.post('/api/channel/create', {
+      this.$http.post('/api/channel/create', {
         name: channelTitle,
         member_email: email
       }, function (res) {
@@ -166,6 +166,7 @@ let channelMixin = {
     },
     //채널 진입
     joinChannel: function (channel) {
+      this.$store.commit('getSelectComponent','main')
       if (channel !== undefined && channel != null) {
         channel = this.getChannel(channel)
 
@@ -183,7 +184,11 @@ let channelMixin = {
           this.$store.state.isSearchMode = false
 
           if (channel != null) {
-            channel.access()
+            //마지막 진입일자 갱신
+            this.$http.post('/api/channel/update/lastaccessdate', {
+              currentChannelId: channel.id,
+              userEmail: this.currentUser.email
+            })
           }
         }
         else {
@@ -198,7 +203,7 @@ let channelMixin = {
     //채널 사용자 조회
     selectChannelUserList: function (channel= this.$store.state.currentChannel) {
       if (channel != null) {
-        this.$http.get('/api/user/channel/' + channel.id, {
+        this.$http.post('/api/user/channel/' + channel.id, {
           currentChannelId: channel.id,
           userEmail: this.currentUser.email
         })
@@ -238,7 +243,7 @@ let channelMixin = {
     },
     //채널 강퇴 및 나가기
     leaveChannle: function (user) {
-      this.post('/api/channel/leave', {
+      this.$http.post('/api/channel/leave', {
         email: user.email,
         channel_id: this.currentChannel.id
       }).then(res => {

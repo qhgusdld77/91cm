@@ -1,24 +1,25 @@
 <template>
-  <li class="list-unstyled chat-message" >
-    <div class="icon">
+<div>
+  <li class="list-unstyled chat-message" :class="{'msgflex-end': isMsgByLoginUser}" >
+    <div class="icon" :class="msgOrder1">
       <slot name="m-icon">
         <img  class="icon-round" :src="msg.user.picture" width="40" height="40"/>
       </slot>
     </div>
     <!-- flex에서 벗어나기 위해 감쌈  -->
-    <div>
-      <div class="verti-align">
+    <div :class="msgOrder2">
+      <div class="verti-align" :class="{'msgflex-end':isMsgByLoginUser}">
         <slot name="m-info">
-          <strong>{{ msg.user.name }}</strong>
-          <span style="font-size: 11px; margin-left:3px; ">{{ msg.str_send_date }}</span>
+          <strong :class="msgOrder1">{{ msg.user.name }}</strong>
+          <span style="font-size: 11px; margin:0px 3px; " :class="msgOrder2">{{ msg.str_send_date }}</span>
         </slot>
       </div>
       <!-- 채팅메세지내용 -->
-      <div class="verti-align">
+      <div class="verti-align" :class="{'msgflex-end':isMsgByLoginUser}">
         <slot name="m-content">
-          <div v-if="msg.files == null || msg.content" v-html="textbyFilter(msg.content)"
+          <div v-if="msg.message_type=='message'" v-html="textbyFilter(msg.content)"
                class="mychat-content"></div>
-          <b-container fluid v-else-if="msg.files.length > 0" class="p-4 bg-white">
+          <b-container fluid v-else-if="msg.message_type=='file'" class="p-4 bg-white">
             <b-row>
               <b-col v-for="(file,index) in msg.files" :key="index">
                 <a @click="fileDownload(file)">
@@ -36,13 +37,43 @@
       <!-- 채팅메시지내용끝 -->
     </div>
   </li>
+
+   
+  </div>
+  
 </template>
 <script>
   import CommonClass from "../../service/common";
+  import {mapGetters} from "vuex";
 
   export default {
     name: 'MsgBox',
     props: ['msg','msgPreviewBool'],
+    data(){
+      return{
+        
+      }
+    },
+    computed:{
+      ...mapGetters({
+        currentUser: 'getCurrentUser'
+      }),
+      isMsgByLoginUser: function(){
+        return this.msg.user.email == this.currentUser.email
+      },
+      msgOrder1:function(){
+        return {
+          'msgorder-one': !this.isMsgByLoginUser,
+          'msgorder-two': this.isMsgByLoginUser
+        }
+      },
+      msgOrder2:function(){
+        return {
+          'msgorder-one': this.isMsgByLoginUser,
+          'msgorder-two': !this.isMsgByLoginUser
+        }
+      },
+    },
     methods: {
       textbyFilter: function(content) {
         const tagContentRegexp = new RegExp(/<p(.*?)>(.*?)<\/p>/g);
