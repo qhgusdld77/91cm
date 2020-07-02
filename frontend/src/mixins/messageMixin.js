@@ -22,14 +22,14 @@ let messageMixin = {
         sender: '',
         user: {}
       },
-      cursorPoint: {
-        channel_id: 0,
-        first: true,
-        cursorId: 0,
-        empty: false
-      },
-      oldScrollHeight: 0,
-      wrapperEl: null,
+      // cursorPoint: {
+      //   channel_id: 0,
+      //   first: true,
+      //   cursorId: 0,
+      //   empty: false
+      // },
+      //oldScrollHeight: 0,
+     // wrapperEl: null,
       msgPreviewBool: false,
       isGetMsgForPreview: false,
       isGetMsgForImgLoad: false,
@@ -41,7 +41,10 @@ let messageMixin = {
       msgArray: 'getMsgArray',
       currentChannel: 'getCurrentChannel',
       currentUser: 'getCurrentUser',
-      channelList: 'getChannelList'
+      channelList: 'getChannelList',
+      wrapperEl: 'getWrapperEl',
+      cursorPoint: 'getCursorPoint',
+      oldScrollHeight: 'getOldScrollHeight'
     })
   },
   watch: {
@@ -82,13 +85,14 @@ let messageMixin = {
       this.$store.state.isInviteMode = false
       this.$store.state.isSearchMode = false
       this.commit('setMsgArray', [])
-      this.cursorPoint.channel_id = this.message.channel_id = channel.id
+      this.message.channel_id = channel.id
+      this.cursorPoint.channel_id = channel.id
       this.cursorPoint.first = true
       this.cursorPoint.cursorId = 0
       this.cursorPoint.empty = false
     },
     //채널 메시지 조회
-    selectMessageList: function (channel, isInit, wrapperEl) {
+    selectMessageList: function (channel, isInit) {
       console.log(channel,'channel')
       if (isInit){
         this.initMessageList(channel)
@@ -100,19 +104,26 @@ let messageMixin = {
       }).then(res => {
         if (channel.id == this.channelArr[this.channelArr.length - 1]) {
           if (res.data.length == 0) {
-            this.cursorPoint.empty = true
+            this.cursorPoint.empty = true 
+            //this.cursorPoint.empty = true
           } else {
             this.cursorPoint.first = false
+            //this.cursorPoint.first = false
+            
             this.cursorPoint.cursorId = res.data[res.data.length - 1].id
+            //this.cursorPoint.cursorId = res.data[res.data.length - 1].id
           }
           for (let i = 0; i < res.data.length; i++) { 
             res.data[i].content = CommonClass.replacemsg(res.data[i].content)
           }
           this.commit('setMsgArray', res.data.reverse().concat(this.msgArray))
-          if (wrapperEl !== undefined) {
+          if (this.wrapperEl !== undefined) {
             this.$nextTick(() => {
-              wrapperEl.scrollTop = wrapperEl.scrollHeight - this.oldScrollHeight
-              this.oldScrollHeight = wrapperEl.scrollHeight
+              if(this.wrapperEl==null){
+                this.$store.commit('setWrapperEl',document.querySelector('.c-c-wrapper'))
+              }
+              this.wrapperEl.scrollTop = this.wrapperEl.scrollHeight - this.oldScrollHeight
+              this.oldScrollHeight = this.wrapperEl.scrollHeight
             })
           }
           this.isGetMsgForPreview = true
@@ -131,7 +142,6 @@ let messageMixin = {
       if (isSysMsg) {
         this.message.message_type = 'action'
         this.message.sender = null
-        console.log('asdasdsadadsadsa111')
       } else {
         this.message.sender = this.$store.state.currentUser.email
         this.message.user = this.$store.state.currentUser
@@ -140,7 +150,6 @@ let messageMixin = {
       this.message.channel_id = this.$store.state.currentChannel.id
       if (CommonClass.byteLimit(this.stringByteLength)) {
         if (this.$store.state.stompClient && this.$store.state.stompClient.connected) {
-          console.log('asdasdsadadsadsa')
           this.$store.state.stompClient.send("/pub/chat/message", JSON.stringify(this.message), {})
           this.message.content = ''
           this.scrollToEnd(true)

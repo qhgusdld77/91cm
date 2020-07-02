@@ -22,4 +22,7 @@ export default {
   getIsVideoMode: state => state.isVideoMode,
   getIsSmallWidth: state => state.isSmallWidth,
   getInviteUserList: state => state.inviteUserList,
+  getWrapperEl: state => state.wrapperEl,
+  getCursorPoint: state => state.cursorPoint,
+  getOldScrollHeight:state => state.oldScrollHeight
 }

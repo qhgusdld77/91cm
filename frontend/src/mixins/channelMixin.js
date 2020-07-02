@@ -10,7 +10,8 @@ let channelMixin = {
     ...mapGetters({
       channelList: 'getChannelList',
       currentChannel: 'getCurrentChannel',
-      currentUser: 'getCurrentUser'
+      currentUser: 'getCurrentUser',
+      selectComponent: 'getSelectComponent'
     })
   },
   watch: {
@@ -152,6 +153,7 @@ let channelMixin = {
     },
     //채널 진입
     joinChannel: function (channel) {
+      this.$store.commit('getSelectComponent','main')
       if (channel !== undefined && channel != null) {
         if(typeof channel == 'number') {
           channel = this.getChannel(channel)
