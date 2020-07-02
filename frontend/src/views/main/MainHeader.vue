@@ -50,7 +50,7 @@
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
               <a class="dropdown-item" @click="callComponent('user')"><i class="ik ik-user dropdown-icon"></i> Profile</a>
               <a v-if="false" class="dropdown-item" @click="$router.push('/develop')"><i class="ik ik-settings dropdown-icon"></i> Setting</a>
-              <a class="dropdown-item" v-if="isAdmin" @click="callComponent('admin')"><iclass="ik ik-settings dropdown-icon"></i> Permission</a>
+              <a class="dropdown-item" v-if="isAdmin()" @click="callComponent('admin')"><i class="ik ik-settings dropdown-icon"></i> Permission</a>
               <a class="dropdown-item" @click="SignOut"><i class="ik ik-power dropdown-icon"></i> Logout</a>
             </div>
           </div>
@@ -63,7 +63,6 @@
 <script>
   import '../../../dist/js/theme.js'
   import AboutChannel from '../../service/aboutchannel'
-  import channelMixin from "../../mixins/channelMixin";
 
   export default {
     name: 'MainHeader',

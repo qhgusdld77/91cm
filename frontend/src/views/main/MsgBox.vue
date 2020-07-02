@@ -1,6 +1,6 @@
 <template>
 <div>
-  <li class="list-unstyled chat-message" :class="{'msgflex-end': isMsgByLoginUser}" >
+  <li class="list-unstyled chat-message" :class="{'msgflex-end': isMsgByLoginUser}" @mouseenter="showMsgOption" @mouseleave="hideMsgOption">
     <div class="icon" :class="msgOrder1">
       <slot name="m-icon">
         <img  class="icon-round" :src="msg.user.picture" width="40" height="40"/>
@@ -12,6 +12,9 @@
         <slot name="m-info">
           <strong :class="msgOrder1">{{ msg.user.name }}</strong>
           <span style="font-size: 11px; margin:0px 3px; " :class="msgOrder2">{{ msg.str_send_date }}</span>
+            <a class="verti-align" :class="{'msgorder-two':!isMsgByLoginUser}" v-show="isMsgOption" @click="deleteMessge(msg)">
+            <v-icon style="font-size:16px;">delete_outline</v-icon>          
+            </a>
         </slot>
       </div>
       <!-- 채팅메세지내용 -->
@@ -51,7 +54,7 @@
     props: ['msg'],
     data(){
       return{
-
+        isMsgOption:false
       }
     },
     computed:{
@@ -73,8 +76,21 @@
           'msgorder-two': !this.isMsgByLoginUser
         }
       },
+      isAdmin:function(){
+        return this.currentUser.roles.includes('ROLE_ADMIN') || this.currentUser.roles.includes('ROLE_ROOT')
+      }
     },
     methods: {
+      showMsgOption:function(){
+        if(this.msg.delete_yn === 'N'){
+          if(this.isMsgByLoginUser || this.isAdmin){
+            this.isMsgOption = true
+          }
+        }
+      },
+      hideMsgOption:function(){
+        this.isMsgOption = false
+      },
       textbyFilter: function(content) {
         const tagContentRegexp = new RegExp(/<p(.*?)>(.*?)<\/p>/g);
         const htmlTagRegexp = new RegExp(/(<([^>]+)>)/ig);

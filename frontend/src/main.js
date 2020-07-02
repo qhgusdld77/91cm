@@ -35,8 +35,6 @@ Date.prototype.addDays = function (days) {
   return date;
 }
 Vue.use(AlertModal)
-
-
 Vue.use(Vuetify)
 Vue.use(VueSession, {persist: true})
 Vue.prototype.$eventBus = new Vue();
@@ -53,15 +51,25 @@ new Vue({
   }),
   watch: {
     channelList: function (newChannelList, oldChannelList) {
-      console.log("!!!!!!!!!!!!!!!!!!")
-      //최초
-      if (oldChannelList.length == 0 && newChannelList.length > 0) {
+      let newChannelListCnt = newChannelList.length
+      let oldChannelListCnt = oldChannelList.length
+
+      //최초 진입 후 구독
+      if (oldChannelListCnt == 0 && newChannelListCnt > 0) {
         $.each(newChannelList, function (index, channel) {
           channel.subscribe()
         })
-      } else {
-        //console.log("newChannelList", newChannelList.length)
-        //console.log("oldChannelList", oldChannelList.length)
+      }
+      //채널 삭제 후 구독 취소
+      else if(newChannelListCnt < oldChannelListCnt) {
+        $.each(oldChannelList, function(index, oldChannel) {
+          let isEquals = newChannelList.find(newChannel => {
+            return newChannel.id == oldChannel.id
+          })
+          if(isEquals === undefined) {
+            oldChannel.unsubscribe()
+          }
+        })
       }
     },
     currentChannel: function (newCurrentChannel, oldCurrentChannel) {

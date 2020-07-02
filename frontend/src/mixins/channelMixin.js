@@ -1,6 +1,4 @@
 import {mapGetters} from "vuex";
-import commonMixin from "./commonMixin";
-import messageMixin from "./messageMixin";
 import NotificationClass from '../service/notification'
 import CommonClass from '../service/common'
 
@@ -17,8 +15,8 @@ let channelMixin = {
             result = _this.subscribe(_url + this.id, _this.channelSubscribeCallBack)
             channel.unsubscribe = function () {
               _this.subscribeList.pop(_url + this.id)
+            _this.commit('setSubscribeList', _this.subscribeList)
               result.unsubscribe()
-            }
           }
         }
         if (channel.send === undefined) {
@@ -117,14 +115,8 @@ let channelMixin = {
     },
     //채널 삭제
     deleteChannel: function (channel) {
-      console.log(this.subscribeList)
       this.post('/api/channel/delete', channel, function () {
-        //channel.unsubscribe()
-        console.log(this.subscribeList)
-        /*
-        channel.send("selectChannelList")
-        channel.send("unsubscribe")
-        */
+       channel.send("selectChannelList")
       })
     },
     //채널 삭제 아이콘 표시
@@ -178,9 +170,6 @@ let channelMixin = {
           this.$store.state.isSearchMode = false
 
           if (channel != null) {
-            console.log(1, channel)
-            //마지막 진입일자 갱신
-
             channel.access()
           }
         } else {
@@ -194,7 +183,7 @@ let channelMixin = {
     //채널 사용자 조회
     selectChannelUserList: function (channel = this.$store.state.currentChannel) {
       if (channel != null) {
-        this.$http.post('/api/user/channel/' + channel.id, {
+        this.$http.get('/api/user/channel/' + channel.id, {
           currentChannelId: channel.id,
           userEmail: this.currentUser.email
         })
@@ -237,7 +226,6 @@ let channelMixin = {
         email: user.email,
         channel_id: this.currentChannel.id
       }).then(res => {
-        //this.sendSub('selectChannelList')
         this.$eventBus.$emit('leaveChannelMsg', user)
         this.$_alert("<code>[" + this.currentChannel.name + ']</code> 채널에서 ' + (this.isMine(user) ? "나갔습니다." : "추방되었습니다."))
       }).catch(error => {
@@ -250,8 +238,7 @@ let channelMixin = {
       if (typeof paramChannel == 'string' || typeof paramChannel == 'number') {
         $.each(this.channelList, function (idx, channel) {
           if (paramChannel == channel.id) {
-            thisChannel = channel
-            //thisChannel = this._makeChannelFunction(channel)
+            thisChannel = this._makeChannelFunction(channel)
             return false
           }
         })

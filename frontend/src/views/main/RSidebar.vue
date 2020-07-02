@@ -140,10 +140,6 @@
             return value
           })
       },
-      isAdmin: function () {
-        var loginUserRoles = this.$store.state.currentUser.roles
-        return loginUserRoles.includes('ROLE_ROOT') || loginUserRoles.includes('ROLE_ADMIN')
-      },
     }
   }
 </script>

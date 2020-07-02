@@ -15,7 +15,7 @@
           </div>
         </div>
       </ul>
-      <a v-if="msgPreviewBool" @click="clickMsgPreview">
+      <a v-if="msgPreviewBool && !isRoot()" @click="clickMsgPreview">
         <div id="c-c-preview" v-bind:class="{active: $store.state.isLActive}">
           <div class="p-wrapper">
             <div>{{ previewObj.username }} : &nbsp;</div>
@@ -23,7 +23,7 @@
           </div>
         </div>
       </a>
-      <v-row align="end" justify="center" class="c-i-wrapper">
+      <v-row align="end" justify="center" class="c-i-wrapper" v-if="!isRoot()">
         <div style="flex-grow:1;" class="myflex-column">
           <div style="position: relative;">
             <div class="mytextarea-wrapper" v-if="!$store.state.isInviteMode && !$store.state.isSearchMode">
@@ -93,8 +93,6 @@
   import SearchInput from './SearchInput'
   import {mapGetters} from "vuex";
   import InviteInput from "../../components/InviteInput";
-
-  import channelMixin from "../../mixins/channelMixin";
 
   export default {
     name: 'ContentWrapper',
@@ -337,11 +335,11 @@
           if (this.firstLoad) {
             this.$store.commit('setOldScrollHeight', this.wrapperEl.scrollHeight);
           }
-          if (this.isScrollAtEnd(this.wrapperEl) || this.$store.state.firstLoad || bool ||
+          if (this.isScrollAtEnd(this.wrapperEl) || this.firstLoad || bool ||
             ((this.oldScrollHeight == this.wrapperEl.clientHeight) && (this.wrapperEl.scrollHeight > this.wrapperEl.clientHeight))) {
 
             this.wrapperEl.scrollTop = this.wrapperEl.scrollHeight
-            this.$store.state.firstLoad = false
+            this.firstLoad = false
             this.$store.commit('setOldScrollHeight', this.wrapperEl.scrollHeight);
           }
         })
@@ -401,12 +399,15 @@
         if (this.isGetMsgForPreview) {
           this.isGetMsgForPreview = false
         } else { //메세지 미리보기(preview) 실행
+          if(this.wrapperEl==null){
+            this.$store.commit('setWrapperEl',document.querySelector('.c-c-wrapper'))
+          }
           if (!this.isScrollAtEnd(this.wrapperEl) && this.msgArray.length > 0) {
             let copymsg = JSON.parse(JSON.stringify(this.msgArray[this.msgArray.length - 1]))
             this.previewObj.content = copymsg.content == null ? "첨부파일" : CommonClass.replacemsgForPreview(copymsg.content)
             this.previewObj.username = this.msgArray[this.msgArray.length - 1].user.name
             this.msgPreviewBool = true
-          }
+          } 
         }
       },
 
