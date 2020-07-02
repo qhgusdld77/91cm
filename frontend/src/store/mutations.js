@@ -53,8 +53,5 @@ export default {
   },
   setWrapperEl: function(state,payload){
     state.wrapperEl = payload
-  },
-  setOldScrollHeight: function (state, payload) {
-    state.oldScrollHeight = payload;
-  }
+  } 
 }

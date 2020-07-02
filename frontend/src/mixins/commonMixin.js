@@ -10,13 +10,7 @@ let commonMixin = {
       channelUsers: 'getChannelUsers',
       isVideoMode: 'getIsVideoMode',
       currentUser: 'getCurrentUser',
-      channelList: 'getChannelList',
-      msgArray: 'getMsgArray',
-      currentChannel: 'getCurrentChannel',
-      wrapperEl: 'getWrapperEl',
-      cursorPoint: 'getCursorPoint',
-      oldScrollHeight: 'getOldScrollHeight',
-      selectComponent: 'getSelectComponent',
+      channelList: 'getChannelList'
     })
   },
   methods: {
