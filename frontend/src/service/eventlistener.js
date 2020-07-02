@@ -7,7 +7,6 @@ class EventListener{
         window.addEventListener('beforeunload', function (event) {
             console.log(store.state.selectComponent, store.state.isfocus)
             if(store.state.selectComponent==='main' && store.state.isfocus) {
-
                 AboutChannel.updateLastAccessDate(store.state.currentChannel.id)   
             }
         })

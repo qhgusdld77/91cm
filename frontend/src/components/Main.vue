@@ -150,7 +150,6 @@
         // 새로고침 했을때 Main의 로직이 실행되지 않는 환경에서는 문제가 생길 수 있음
         this.$store.state.stompClient = Stomp.over(new SockJS('/endpoint/'))
         // this.$store.state.stompClient.debug = f => f;
-
         this.$store.state.stompClient.connect(this.$store.state.currentUser, () => {
           this.selectChannelList()//채널목록 조회
 

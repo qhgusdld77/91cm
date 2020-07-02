@@ -21,10 +21,12 @@ public class Message implements Cloneable{
 	User user;
 	List<ContentsFile> files;
 	String message_type;
+	String delete_yn;
 
 	@Builder
 	public Message(int id,int channel_id, String content, String sender, Date send_date,
-				   User user, String str_send_date, List<ContentsFile> files,String message_type){
+				   User user, String str_send_date, 
+				   List<ContentsFile> files,String message_type,String delete_yn){
 		this.id = id;
 		this.channel_id = channel_id;
 		this.content = content;
@@ -34,6 +36,7 @@ public class Message implements Cloneable{
 		this.user = user;
 		this.files = files;
 		this.message_type = message_type;
+		this.delete_yn= delete_yn;
 	}
 	
 	@Override

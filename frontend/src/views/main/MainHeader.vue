@@ -50,7 +50,7 @@
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
               <a class="dropdown-item" @click="callComponent('user')"><i class="ik ik-user dropdown-icon"></i> Profile</a>
               <a v-if="false" class="dropdown-item" @click="$router.push('/develop')"><i class="ik ik-settings dropdown-icon"></i> Setting</a>
-              <a class="dropdown-item" v-if="isAdmin" @click="callComponent('admin')"><iclass="ik ik-settings dropdown-icon"></i> Permission</a>
+              <a class="dropdown-item" v-if="isAdmin()" @click="callComponent('admin')"><i class="ik ik-settings dropdown-icon"></i> Permission</a>
               <a class="dropdown-item" @click="SignOut"><i class="ik ik-power dropdown-icon"></i> Logout</a>
             </div>
           </div>
@@ -63,7 +63,6 @@
 <script>
   import '../../../dist/js/theme.js'
   import AboutChannel from '../../service/aboutchannel'
-  import channelMixin from "../../mixins/channelMixin";
 
   export default {
     name: 'MainHeader',
@@ -121,8 +120,8 @@
             this.alarmList.splice(index, 1);
             this.$store.state.stompClient.send('/pub/chat/room/' + alarm.channel_id, JSON.stringify({"message": "updateChannel", "error": "null"}))
             console.log(alarm.channel_id)
-            let channel = this.$store.getters.getChannelList.find(channel => channel.id === alarm.channel_id)
-            await this.selectChannelList(channel) // 채널 id 값이 아니라 channel 객체를 줘야함
+            // let channel = this.$store.getters.getChannelList.find(channel => channel.id === alarm.channel_id)
+            await this.selectChannelList(alarm.channel_id) // 채널 id 값이 아니라 channel 객체를 줘야함
             //this.commit('setCurrentChannel', res.data) //채널 진입
             await this.subscribe("/sub/chat/room/" + alarm.channel_id, this.channelSubscribeCallBack)
             this.send("/sub/chat/room/"+alarm.channel_id, 'selectChannelUserList');

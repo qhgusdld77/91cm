@@ -18,7 +18,7 @@
             <a href="javascript:void(0)">
               <div style="display: flex;align-items: center;">
                 <i class="ik ik-layers"></i><span>Channels</span>
-                <div style="flex-grow: 1;display: flex;justify-content: flex-end;">
+                <div style="flex-grow: 1;display: flex;justify-content: flex-end;" v-if="!isRoot()">
                   <button @click="confirmChannel($event, 'create')" style="margin-right: 5px;display: flex;color: white;">
                     <i class="im im-plus-circle" style="margin-right: 15px;display: flex;"></i>
                   </button>
@@ -78,6 +78,7 @@
   </div>
 </template>
 <script>
+  import AboutChannel from '../../service/aboutchannel'
   export default {
     props: ['modalObj'],
     computed: {

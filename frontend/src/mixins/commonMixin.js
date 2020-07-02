@@ -1,16 +1,19 @@
 import { mapGetters } from "vuex";
 let commonMixin = {
-  data() {
-    return {
-      subscribeList: []
-    }
-  },
   computed: {
     ...mapGetters({
       channelUsers: 'getChannelUsers',
       isVideoMode: 'getIsVideoMode',
       currentUser: 'getCurrentUser',
-      channelList: 'getChannelList'
+      channelList: 'getChannelList',
+      msgArray: 'getMsgArray',
+      currentChannel: 'getCurrentChannel',
+      wrapperEl: 'getWrapperEl',
+      cursorPoint: 'getCursorPoint',
+      oldScrollHeight: 'getOldScrollHeight',
+      selectComponent: 'getSelectComponent',
+      subscribeList: 'getSubscribeList',
+      channelArr: 'getChannelArr'
     })
   },
   methods: {
@@ -26,12 +29,16 @@ let commonMixin = {
         })
     },
     isAdmin: function () {
-      var loginUserRoles = this.currentUser.roles
-      return loginUserRoles.includes('ROLE_ROOT') || loginUserRoles.includes('ROLE_ADMIN')
+      return this.currentUser.roles.includes('ROLE_ADMIN') || this.isRoot()
+    },
+    isRoot: function () {
+      return this.currentUser.roles.includes('ROLE_ROOT')
     },
     subscribe: function(url, func) {
       if(!this.subscribeList.includes(url)) {
         this.subscribeList.push(url)
+        this.commit('setSubscribeList', this.subscribeList)
+
         return this.$store.state.stompClient.subscribe(url, func)
       }
       return null
