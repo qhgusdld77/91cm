@@ -21,6 +21,13 @@ import 'animate.css'
 import './assets/css/main.css'
 import '../dist/css/theme.css'
 
+import channelMixin from './mixins/channelMixin'
+import commonMixin from './mixins/commonMixin'
+import messageMixin from './mixins/messageMixin'
+
+Vue.mixin({
+  mixins:[channelMixin,messageMixin,commonMixin]
+})
 
 Vue.use(BootstrapVue)
 Date.prototype.addDays = function (days) {

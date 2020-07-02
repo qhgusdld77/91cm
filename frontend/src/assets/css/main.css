@@ -1,4 +1,7 @@
 .msgorder-two{
+    order: 3
+}
+.msgorder-two{
     order: 2
 }
 
@@ -22,7 +25,6 @@
 }
 .mydate{
     padding : 0px 10px;
-    
 }
 
 .theme--light.v-icon:focus:after {

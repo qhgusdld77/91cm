@@ -58,4 +58,5 @@ export default {
   isGetMsgForPreview: false,
   isGetMsgForImgLoad: false,
   selectedUserEmail: '',
+  firstLoad:true,
 }

@@ -48,7 +48,7 @@ let channelMixin = {
       } else if (data.message == 'selectChannelList') {
         this.selectChannelList() 
       }
-      
+            
       if (e.headers.noticeMsg != null) {
         this.noticeMsg = res.headers.noticeMsg
         this.noticeMsgToggle = true
@@ -88,7 +88,7 @@ let channelMixin = {
     //채널 생성
     createChannel: function (channelTitle, email) {
       let _this = this
-      this.$http.post('/api/channel/create', {
+      this.post('/api/channel/create', {
         name: channelTitle,
         member_email: email
       }, function (res) {
@@ -101,7 +101,7 @@ let channelMixin = {
     //채널 수정
     updateChannel: function (channel) {
       let _this = this
-      this.$http.post('/api/channel/update', channel, function () {
+      this.post('/api/channel/update', channel, function () {
         _this.sendSub('selectChannelList')
       })
     },

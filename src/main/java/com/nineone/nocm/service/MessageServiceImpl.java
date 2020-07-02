@@ -36,7 +36,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public String makeStrDate(Date date) {
-        SimpleDateFormat format = new SimpleDateFormat("hh:mm aa");
+        SimpleDateFormat format = new SimpleDateFormat("aa hh:mm");
         return format.format(date);
     }
 

@@ -53,5 +53,11 @@ export default {
   },
   setWrapperEl: function(state,payload){
     state.wrapperEl = payload
-  } 
+  },
+  pushChannelArr:function(state,payload){
+    state.channelArr.push(payload)
+  },
+  setFirstLoad:function(state,payload){
+    state.firstLoad = payload
+  }
 }

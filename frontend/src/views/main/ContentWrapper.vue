@@ -336,14 +336,13 @@
       scrollToEnd(bool) {
         this.$nextTick(() => {
           if (this.firstLoad) {
-            
             this.$store.state.oldScrollHeight = this.wrapperEl.scrollHeight
           }
-          if (this.isScrollAtEnd(this.wrapperEl) || this.$store.state.firstLoad || bool ||
+          if (this.isScrollAtEnd(this.wrapperEl) || this.firstLoad || bool ||
             ((this.oldScrollHeight == this.wrapperEl.clientHeight) && (this.wrapperEl.scrollHeight > this.wrapperEl.clientHeight))) {
 
             this.wrapperEl.scrollTop = this.wrapperEl.scrollHeight
-            this.$store.state.firstLoad = false
+            this.firstLoad = false
             this.oldScrollHeight = this.wrapperEl.scrollHeight
           }
         })
@@ -404,12 +403,15 @@
         if (this.isGetMsgForPreview) {
           this.isGetMsgForPreview = false
         } else { //메세지 미리보기(preview) 실행
+          if(this.wrapperEl==null){
+            this.$store.commit('setWrapperEl',document.querySelector('.c-c-wrapper'))
+          }
           if (!this.isScrollAtEnd(this.wrapperEl) && this.msgArray.length > 0) {
             let copymsg = JSON.parse(JSON.stringify(this.msgArray[this.msgArray.length - 1]))
             this.previewObj.content = copymsg.content == null ? "첨부파일" : CommonClass.replacemsgForPreview(copymsg.content)
             this.previewObj.username = this.msgArray[this.msgArray.length - 1].user.name
             this.msgPreviewBool = true
-          }
+          } 
         }
       },
       

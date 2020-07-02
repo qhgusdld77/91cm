@@ -24,5 +24,7 @@ export default {
   getInviteUserList: state => state.inviteUserList,
   getWrapperEl: state => state.wrapperEl,
   getCursorPoint: state => state.cursorPoint,
-  getOldScrollHeight:state => state.oldScrollHeight
+  getOldScrollHeight:state => state.oldScrollHeight,
+  getChannelArr:state => state.channelArr,
+  getFirstLoad: state => state.firstLoad,
 }
