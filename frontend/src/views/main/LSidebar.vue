@@ -18,7 +18,7 @@
             <a href="javascript:void(0)">
               <div style="display: flex;align-items: center;">
                 <i class="ik ik-layers"></i><span>Channels</span>
-                <div style="flex-grow: 1;display: flex;justify-content: flex-end;">
+                <div style="flex-grow: 1;display: flex;justify-content: flex-end;" v-if="!isRoot()">
                   <button @click="confirmChannel($event, 'create')" style="margin-right: 5px;display: flex;color: white;">
                     <i class="im im-plus-circle" style="margin-right: 15px;display: flex;"></i>
                   </button>
@@ -80,7 +80,6 @@
 <script>
   import {mapGetters} from "vuex";
   import AboutChannel from '../../service/aboutchannel'
-  import channelMixin from "../../mixins/channelMixin"
 
   export default {
     props: ['modalObj'],

@@ -12,7 +12,7 @@
           </div>
         </div>
       </ul>
-      <a v-if="msgPreviewBool" @click="clickMsgPreview">
+      <a v-if="msgPreviewBool && !isRoot()" @click="clickMsgPreview">
         <div id="c-c-preview" v-bind:class="{active: $store.state.isLActive}">
           <div class="p-wrapper">
             <div>{{ previewObj.username }} : &nbsp;</div>
@@ -20,7 +20,7 @@
           </div>
         </div>
       </a>
-      <v-row align="end" justify="center" class="c-i-wrapper">
+      <v-row align="end" justify="center" class="c-i-wrapper" v-if="!isRoot()">
         <div style="flex-grow:1;" class="myflex-column">
           <div style="position: relative;">
             <div class="mytextarea-wrapper" v-if="!$store.state.isInviteMode && !$store.state.isSearchMode">
@@ -90,8 +90,6 @@
   import SearchInput from './SearchInput'
   import {mapGetters} from "vuex";
   import InviteInput from "../../components/InviteInput";
-
-  import channelMixin from "../../mixins/channelMixin";
 
   export default {
     name: 'ContentWrapper',

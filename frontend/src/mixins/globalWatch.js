@@ -9,7 +9,6 @@ let globalWatch = {
   },
   mounted() {
     this.$watch('getChannelList', (newVal, oldVal) => {
-      console.log("jjw!!! channelList")
       //최초
       if (oldVal.length == 0 && newVal.length > 0) {
         $.each(newVal, function (index, channel) {

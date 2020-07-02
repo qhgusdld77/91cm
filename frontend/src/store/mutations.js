@@ -8,6 +8,9 @@ export default {
   setChannelList: function (state, payload) {
     state.channelList = payload
   },
+  setSubscribeList: function (state, payload) {
+    state.subscribeList = payload
+  },
   getSelectComponent: function (state, payload) {
     state.oldComponent = state.selectComponent
     state.selectComponent = payload

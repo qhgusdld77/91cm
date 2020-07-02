@@ -23,7 +23,7 @@
                 <div style="display:flex;">
                   <p>Channel Name</p>
                   <a class="verti-align" style="color: #007bff;" data-mode="edit" @click="confirmChannel('update', $store.state.currentChannel)">Edit</a>
-                  <a class="verti-align" style="color: #007bff;" data-mode="edit" @click="confirmChannel('delete', $store.state.currentChannel)" v-if="isAdmin()">Delete</a>
+                  <a class="verti-align" style="color: #007bff;" data-mode="edit" @click="confirmChannel('delete', $store.state.currentChannel)" v-if="isAdmi">Delete</a>
                 </div>
                 <li class="list-unstyled">{{ $store.state.currentChannel.name }}</li>
               </div>
@@ -77,7 +77,6 @@
 
 <script>
   import {mapGetters} from "vuex";
-  import channelMixin from "../../mixins/channelMixin";
 
   export default {
     props: ['modalObj'],
@@ -146,10 +145,6 @@
             this.userSelect = value
             return value
           })
-      },
-      isAdmin: function() {
-        var loginUserRoles = this.$store.state.currentUser.roles
-        return loginUserRoles.includes('ROLE_ROOT') ||  loginUserRoles.includes('ROLE_ADMIN')
       },
     }
   }

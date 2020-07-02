@@ -1,6 +1,4 @@
 import { mapGetters } from "vuex";
-import commonMixin from "./commonMixin";
-import messageMixin from "./messageMixin";
 import NotificationClass from '../service/notification'
 import CommonClass from '../service/common'
 
@@ -9,7 +7,8 @@ let channelMixin = {
     ...mapGetters({
       channelList: 'getChannelList',
       currentChannel: 'getCurrentChannel',
-      currentUser: 'getCurrentUser'
+      currentUser: 'getCurrentUser',
+      subscribeList: 'getSubscribeList'
     })
   },
   methods: {
@@ -22,6 +21,7 @@ let channelMixin = {
           result = _this.subscribe(_url + this.id, _this.channelSubscribeCallBack)
           channel.unsubscribe = function () {
             _this.subscribeList.pop(_url + this.id)
+            _this.commit('setSubscribeList', _this.subscribeList)
             result.unsubscribe()
           }
         }
@@ -118,14 +118,8 @@ let channelMixin = {
     },
     //채널 삭제
     deleteChannel: function (channel) {
-      console.log(this.subscribeList)
       this.post('/api/channel/delete', channel, function () {
-        //channel.unsubscribe()
-        console.log(this.subscribeList)
-        /*
-        channel.send("selectChannelList")
-        channel.send("unsubscribe")
-        */
+       channel.send("selectChannelList")
       })
     },
     //채널 삭제 아이콘 표시
@@ -236,7 +230,6 @@ let channelMixin = {
         email: user.email,
         channel_id: this.currentChannel.id
       }).then(res => {
-        //this.sendSub('selectChannelList')
         this.$eventBus.$emit('leaveChannelMsg', user)
         this.$_alert("<code>[" + this.currentChannel.name + ']</code> 채널에서 ' + (this.isMine(user) ? "나갔습니다." : "추방되었습니다."))
       }).catch(error => {
@@ -249,8 +242,7 @@ let channelMixin = {
       if (typeof paramChannel == 'string' || typeof paramChannel == 'number') {
         $.each(this.channelList, function (idx, channel) {
           if (paramChannel == channel.id) {
-            thisChannel = channel
-            //thisChannel = this._makeChannelFunction(channel)
+            thisChannel = this._makeChannelFunction(channel)
             return false
           }
         })
