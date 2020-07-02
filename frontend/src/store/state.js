@@ -7,6 +7,7 @@ export default {
   },
   currentChannel: {},
   channelList: [],
+  subscribeList: [],
   stompClient: null,
   selectComponent: 'main',
   oldComponent: 'main',
@@ -58,4 +59,5 @@ export default {
   isGetMsgForPreview: false,
   isGetMsgForImgLoad: false,
   selectedUserEmail: '',
+  firstLoad:true,
 }

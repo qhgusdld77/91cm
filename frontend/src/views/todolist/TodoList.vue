@@ -49,7 +49,6 @@
   import commonMixin from "../../mixins/commonMixin";
 
   export default {
-    mixins: [commonMixin],
     name: 'Todolist',
     components: {
       Loading,
@@ -112,7 +111,6 @@
     },
     data() {
       return {
-
         taskSubscribe: null,
         connetionCheck: false,
         taskList: [],

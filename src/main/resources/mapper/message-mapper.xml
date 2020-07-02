@@ -8,6 +8,7 @@
         <result property="sender" column="sender"/>
         <result property="send_date" column="send_date"/>
         <result property="message_type" column="message_type"/>
+        <result property="delete_yn" column="delete_yn"/>
         <association property="user"  javaType="com.nineone.nocm.domain.User">
             <result property="name" column="name"/>
             <result property="email" column="email"/>
@@ -52,6 +53,7 @@
         	 , SENDER
         	 , SEND_DATE
         	 , IF(DELETE_YN = 'Y','<![CDATA[<p>삭제된 메세지입니다.</p>']]>, CONTENT) AS CONTENT
+        	 , DELETE_YN
              , EMAIL
              , NAME
              , PHONE

@@ -43,7 +43,7 @@ public class ChannelRepositoryImpl implements ChannelRepository {
     @Override
     public List<Channel> channelList(String userEmail) {
     	List<String> roles = authoritiesRepository.getUserRoles(userEmail);
-    	String addQueryId = (roles.contains("ROLE_ROOT") || roles.contains("ROLE_ADMIN"))?"All":"";
+    	String addQueryId = roles.contains("ROLE_ROOT")?"All":"";
     	return sqlSession.selectList(namespace + ".channelList" + addQueryId, userEmail);
     }
 

@@ -14,6 +14,7 @@ export default {
   getChannelList: state => state.channelList,
   getTaskBoard: state=> state.taskBoard,
   getCurrentChannel: state => state.currentChannel,
+  getSubscribeList: state => state.subscribeList,  
   getSyncChannelUser: state => state.syncSignal.syncChannelUser,
   getChannelUsers: state => state.channelUsers,
   getSelectComponent: state => state.selectComponent,
@@ -24,5 +25,7 @@ export default {
   getInviteUserList: state => state.inviteUserList,
   getWrapperEl: state => state.wrapperEl,
   getCursorPoint: state => state.cursorPoint,
-  getOldScrollHeight:state => state.oldScrollHeight
+  getOldScrollHeight:state => state.oldScrollHeight,
+  getChannelArr:state => state.channelArr,
+  getFirstLoad: state => state.firstLoad,
 }

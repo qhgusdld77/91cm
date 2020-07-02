@@ -15,7 +15,7 @@
           </div>
         </div>
       </ul>
-      <a v-if="msgPreviewBool" @click="clickMsgPreview">
+      <a v-if="msgPreviewBool && !isRoot()" @click="clickMsgPreview">
         <div id="c-c-preview" v-bind:class="{active: $store.state.isLActive}">
           <div class="p-wrapper">
             <div>{{ previewObj.username }} : &nbsp;</div>
@@ -23,7 +23,7 @@
           </div>
         </div>
       </a>
-      <v-row align="end" justify="center" class="c-i-wrapper">
+      <v-row align="end" justify="center" class="c-i-wrapper" v-if="!isRoot()">
         <div style="flex-grow:1;" class="myflex-column">
           <div style="position: relative;">
             <div class="mytextarea-wrapper" v-if="!$store.state.isInviteMode && !$store.state.isSearchMode">
@@ -94,10 +94,7 @@
   import {mapGetters} from "vuex";
   import InviteInput from "../../components/InviteInput";
 
-  import channelMixin from "../../mixins/channelMixin";
-
   export default {
-    mixins: [channelMixin],
     name: 'ContentWrapper',
     components: {
       InviteInput,
@@ -286,8 +283,6 @@
             this.message.content = '<p style="color:red;">메세지 전송에 실패하였습니다.</p>' + this.message.content
             let errormsg = JSON.parse(JSON.stringify(this.message))
             this.$store.commit('pushMsg', errormsg)
-            console.log(errormsg)
-            console.log(this.msgArray)
             this.message.content = ''
           }
         }
@@ -336,14 +331,13 @@
       scrollToEnd(bool) {
         this.$nextTick(() => {
           if (this.firstLoad) {
-            
             this.$store.state.oldScrollHeight = this.wrapperEl.scrollHeight
           }
-          if (this.isScrollAtEnd(this.wrapperEl) || this.$store.state.firstLoad || bool ||
+          if (this.isScrollAtEnd(this.wrapperEl) || this.firstLoad || bool ||
             ((this.oldScrollHeight == this.wrapperEl.clientHeight) && (this.wrapperEl.scrollHeight > this.wrapperEl.clientHeight))) {
 
             this.wrapperEl.scrollTop = this.wrapperEl.scrollHeight
-            this.$store.state.firstLoad = false
+            this.firstLoad = false
             this.oldScrollHeight = this.wrapperEl.scrollHeight
           }
         })
@@ -385,8 +379,8 @@
       },
     },
     computed: {
-      
-    
+
+
       ...mapGetters({
         //msgArray: 'getMsgArray',
         currentChannel: 'getCurrentChannel'
@@ -399,20 +393,22 @@
         //this.scrollToEnd()
       },
       msgArray: function () {
-        console.log(this.msgArray)
         // 스크롤을 최상단으로 올려 메시지를 가져올 때 실행되는 것을 막기 위한 if문
         if (this.isGetMsgForPreview) {
           this.isGetMsgForPreview = false
         } else { //메세지 미리보기(preview) 실행
+          if(this.wrapperEl==null){
+            this.$store.commit('setWrapperEl',document.querySelector('.c-c-wrapper'))
+          }
           if (!this.isScrollAtEnd(this.wrapperEl) && this.msgArray.length > 0) {
             let copymsg = JSON.parse(JSON.stringify(this.msgArray[this.msgArray.length - 1]))
             this.previewObj.content = copymsg.content == null ? "첨부파일" : CommonClass.replacemsgForPreview(copymsg.content)
             this.previewObj.username = this.msgArray[this.msgArray.length - 1].user.name
             this.msgPreviewBool = true
-          }
+          } 
         }
       },
-      
+
       checkbox: function () {
         if (this.checkbox) {
           alert('지금부터 보내는 메시지는 나인원소프트 전체 메일로 보내집니다.')

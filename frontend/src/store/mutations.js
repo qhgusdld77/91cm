@@ -8,6 +8,9 @@ export default {
   setChannelList: function (state, payload) {
     state.channelList = payload
   },
+  setSubscribeList: function (state, payload) {
+    state.subscribeList = payload
+  },
   getSelectComponent: function (state, payload) {
     state.oldComponent = state.selectComponent
     state.selectComponent = payload
@@ -53,5 +56,11 @@ export default {
   },
   setWrapperEl: function(state,payload){
     state.wrapperEl = payload
-  } 
+  },
+  pushChannelArr:function(state,payload){
+    state.channelArr.push(payload)
+  },
+  setFirstLoad:function(state,payload){
+    state.firstLoad = payload
+  }
 }
