@@ -98,7 +98,11 @@ let messageMixin = {
             //this.cursorPoint.cursorId = res.data[res.data.length - 1].id
           }
           for (let i = 0; i < res.data.length; i++) {
-            res.data[i].content = CommonClass.replacemsg(res.data[i].content)
+            if(res.data[i].delete_yn == 'Y'){
+              res.data[i].content = '<p class="deletemsg">삭제된 메세지입니다.</p>'
+            }else{
+              res.data[i].content = CommonClass.replacemsg(res.data[i].content)
+            }
           }
           this.commit('setMsgArray', res.data.reverse().concat(this.msgArray))
           
@@ -113,7 +117,7 @@ let messageMixin = {
               this.$store.commit('setOldScrollHeight', this.wrapperEl.scrollHeight);
             })
           }
-          
+
           this.isGetMsgForPreview = true
           this.isGetMsgForImgLoad = true
         }
@@ -181,7 +185,7 @@ let messageMixin = {
     deleteMsgFromArr: function(id){
       let index = this.msgArray.findIndex(message => message.id == id)
         if(index !== undefined || index !== null){
-          this.msgArray[index].content = "<p>삭제된 메세지입니다.</p>"
+          this.msgArray[index].content = "<p class='deletemsg'>삭제된 메세지입니다.</p>"
         }
     }
   }

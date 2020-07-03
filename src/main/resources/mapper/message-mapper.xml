@@ -52,7 +52,7 @@
         	 , CHANNEL_ID
         	 , SENDER
         	 , SEND_DATE
-        	 , IF(DELETE_YN = 'Y','<![CDATA[<p>삭제된 메세지입니다.</p>']]>, CONTENT) AS CONTENT
+        	 , CONTENT
         	 , DELETE_YN
              , EMAIL
              , NAME

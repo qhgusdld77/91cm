@@ -1,3 +1,8 @@
+.deletemsg{
+    font-weight: bold;
+    color: red;
+}
+
 .msgorder-two{
     order: 3
 }

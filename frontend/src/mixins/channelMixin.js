@@ -227,7 +227,8 @@ let channelMixin = {
     },
     //채널 초대
     inviteChannel: function () {
-
+      // 채널 초대를 하는 로직을 넣는건지
+      // 채널 초대가 온 것을 수락하는 로직을 넣는건지..?
     },
     //채널 강퇴 및 나가기
     leaveChannle: function (user) {
