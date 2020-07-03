@@ -78,17 +78,11 @@
   </div>
 </template>
 <script>
-  import {mapGetters} from "vuex";
   import AboutChannel from '../../service/aboutchannel'
-
   export default {
     props: ['modalObj'],
     computed: {
-      ...mapGetters({
-        channelList: 'getChannelList',
-        currentChannel: 'getCurrentChannel',
-        channelUsers: 'getChannelUsers'
-      }),
+
     },
     name: 'LSidebar',
     data() {
@@ -104,9 +98,9 @@
     created() {
     },
     mounted() {
-      this.$eventBus.$on('useModal', res => {
-        this.prepareModal(res)
-      })
+      // this.$eventBus.$on('useModal', res => {
+      //   this.prepareModal(res)
+      // })
     },
     updated() {
 

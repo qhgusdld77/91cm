@@ -2,9 +2,18 @@ import { mapGetters } from "vuex";
 let commonMixin = {
   computed: {
     ...mapGetters({
+      channelUsers: 'getChannelUsers',
+      isVideoMode: 'getIsVideoMode',
       currentUser: 'getCurrentUser',
       channelList: 'getChannelList',
-      subscribeList: 'getSubscribeList'
+      msgArray: 'getMsgArray',
+      currentChannel: 'getCurrentChannel',
+      wrapperEl: 'getWrapperEl',
+      cursorPoint: 'getCursorPoint',
+      oldScrollHeight: 'getOldScrollHeight',
+      selectComponent: 'getSelectComponent',
+      subscribeList: 'getSubscribeList',
+      channelArr: 'getChannelArr'
     })
   },
   methods: {

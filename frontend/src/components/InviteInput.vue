@@ -67,7 +67,7 @@
         friends: [],
       }
     },
-    async created(){
+    async created() {
       await this.$store.dispatch('inviteUserList')
     },
     mounted() {
@@ -87,8 +87,8 @@
               .then(res => {
                 for (let i = 0; i < this.friends.length; i++) {
                   const user = this.inviteUserList.find(el => el.email == this.friends[i])
-                  
-                  if(user!=null){
+
+                  if (user != null) {
                     this.message.content += user.name + '님'
                   }
                 }
@@ -109,7 +109,7 @@
                 this.$store.state.isInviteMode = !this.$store.state.isInviteMode
               }).catch(error => {
                 let alertmsg = ''
-                console.log(error,'error')
+                console.log(error, 'error')
                 if (error.response.data.list != null) {
                   const alertList = error.response.data.list
                   for (let i = 0; i < alertList.length; i++) {

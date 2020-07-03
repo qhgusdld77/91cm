@@ -27,6 +27,7 @@ import messageMixin from './mixins/messageMixin'
 Vue.mixin({
   mixins:[channelMixin,commonMixin,messageMixin]
 })
+
 Vue.use(BootstrapVue)
 Date.prototype.addDays = function (days) {
   var date = new Date(this.valueOf());

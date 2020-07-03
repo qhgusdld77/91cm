@@ -331,6 +331,7 @@
       scrollToEnd(bool) {
         this.$nextTick(() => {
           if (this.firstLoad) {
+            
             this.$store.state.oldScrollHeight = this.wrapperEl.scrollHeight
           }
           if (this.isScrollAtEnd(this.wrapperEl) || this.firstLoad || bool ||
@@ -338,7 +339,7 @@
 
             this.wrapperEl.scrollTop = this.wrapperEl.scrollHeight
             this.firstLoad = false
-            this.oldScrollHeight = this.wrapperEl.scrollHeight
+            this.$store.commit('setOldScrollHeight', this.wrapperEl.scrollHeight);
           }
         })
       },
