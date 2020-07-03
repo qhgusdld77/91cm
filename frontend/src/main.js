@@ -24,6 +24,8 @@ import channelMixin from './mixins/channelMixin'
 import commonMixin from './mixins/commonMixin'
 import messageMixin from './mixins/messageMixin'
 
+
+Vue.config.performance = true
 Vue.mixin({
   mixins: [channelMixin, commonMixin, messageMixin]
 })

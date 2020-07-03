@@ -132,18 +132,13 @@ let channelMixin = {
     hiddenChannelDelete: function () {
       $(".channelDel").css("visibility", "hidden")
     },
+
     //채널 목록 조회
     selectChannelList: function (channel, isJoin = true) {
       this.$http.get('/api/channel/list')
         .then(res => {
-          let _this = this
           let channelList = res.data
-          $.each(channelList, function (index, channel) {
-
-            _this._makeChannelFunction(channel)
-          })
           this.commit('setChannelList', channelList)
-
           if (isJoin) {
             if (channelList.length == 0) channel = null
             else if (channel === undefined) channel = channelList[0]
@@ -156,8 +151,8 @@ let channelMixin = {
     },
     //채널 진입
     joinChannel: function (channel) {
-      console.log(channel)
-      this.$store.commit('getSelectComponent', 'main')
+      console.log("JoinChannel :")
+      // this.$store.commit('getSelectComponent', 'main')
       if (channel !== undefined && channel != null) {
         channel = this.getChannel(channel)
         if (channel.id != this.currentChannel.id) {

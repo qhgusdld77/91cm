@@ -47,7 +47,6 @@
 </template>
 <script>
   import CommonClass from "../../service/common";
-  import {mapGetters} from "vuex";
 
   export default {
     name: 'MsgBox',
@@ -58,9 +57,6 @@
       }
     },
     computed:{
-      ...mapGetters({
-        currentUser: 'getCurrentUser'
-      }),
       isMsgByLoginUser: function(){
         return this.msg.sender == this.currentUser.email
       },
@@ -82,6 +78,7 @@
     },
     methods: {
       showMsgOption:function(){
+        console.log(this.msg)
         if(this.msg.delete_yn === 'N'){
           if(this.isMsgByLoginUser || this.isAdmin()){
             this.isMsgOption = true

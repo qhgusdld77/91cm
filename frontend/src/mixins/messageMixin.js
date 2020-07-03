@@ -75,7 +75,6 @@ let messageMixin = {
     },
     //채널 메시지 조회
     selectMessageList: function (channel, isInit) {
-      console.log(channel,'channel')
       if (isInit){
         this.initMessageList(channel)
       }
@@ -84,8 +83,6 @@ let messageMixin = {
           'Content-Type': 'application/json'
         }
       }).then(res => {
-        console.log(this.channelArr[this.channelArr.length - 1],'this.channelArr[this.channelArr.length - 1]')
-        console.log(this.channelArr,'this.channelArr')
         if (channel.id == this.channelArr[this.channelArr.length - 1]) {
           if (res.data.length == 0) {
             this.cursorPoint.empty = true

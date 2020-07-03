@@ -31,42 +31,6 @@ export default {
       console.error(error);
     })
   },
-  updateUserList: function (context) {
-    //context.commit('selectChannelList', context.state.currentChannel)
-    //channelMixin.selectChannelList(context.state.currentChannel)
-
-    /*
-    let currentChannel =
-    if (currentChannel != null) {
-      axios.get('/api/user/channel/' + currentChannel.id)
-        .then(res => {
-          this.channelUsers = res.data
-          context.commit('setChannelUsers', res.data)
-        })
-    }
-    else {
-      context.commit('setChannelUsers', [])
-    }
-    */
-  },
-  // 현재 유저의 채널 리스트 가져오기
-  channelList: async function (context) {
-    /*
-    await axios.get('/api/channel/list')
-      .then(res => {
-        context.commit('setChannelList', res.data)
-        if(res.data.length == 0) {
-          context.commit('setCurrentChannel', null)
-          context.dispatch('updateUserList')
-        }
-        else {
-          context.commit('setCurrentChannel', res.data[0])
-        }
-      }).catch(error => {
-      })
-      */
-
-  },
   // 현재 로그인 한 유저 가져오기
   initCurrentUser: async function (context) {
     await axios.get('/api/user/info')
