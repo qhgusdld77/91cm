@@ -346,7 +346,8 @@
         })
       },
       isScrollAtEnd(wrapperEl) {
-        if (Math.floor(wrapperEl.scrollTop + wrapperEl.clientHeight) == this.oldScrollHeight || Math.round(wrapperEl.scrollTop + wrapperEl.clientHeight) == this.oldScrollHeight) {
+        if (Math.floor(wrapperEl.scrollTop + wrapperEl.clientHeight) == this.oldScrollHeight || Math.round(wrapperEl.scrollTop + wrapperEl.clientHeight) == this.oldScrollHeight || Math.floor(wrapperEl.scrollTop + wrapperEl.clientHeight) == wrapperEl.scrollHeight || 
+        Math.round(wrapperEl.scrollTop + wrapperEl.clientHeight) == wrapperEl.scrollHeight) {
           return true
         } else {
           return false
