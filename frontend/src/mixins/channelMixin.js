@@ -60,7 +60,14 @@ let channelMixin = {
       else{
         //메시지가 함수명일때 함수를 call하는 구문
         try{
-          this[data.message]();
+          if(data.message.includes('deleteMsgFromMsgArr')){
+            let splitArr = data.message.split('|')
+            data.message = splitArr[0]
+            this[data.message](splitArr[1]);
+          }else{
+            this[data.message]();
+          }
+          
         }catch (e) {
           console.error(e);
         }

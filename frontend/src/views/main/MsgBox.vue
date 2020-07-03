@@ -76,9 +76,9 @@
           'msgorder-two': !this.isMsgByLoginUser
         }
       },
-      isAdmin:function(){
-        return this.currentUser.roles.includes('ROLE_ADMIN') || this.currentUser.roles.includes('ROLE_ROOT')
-      }
+      // isAdmin:function(){
+      //   return this.currentUser.roles.includes('ROLE_ADMIN') || this.currentUser.roles.includes('ROLE_ROOT')
+      // }
     },
     methods: {
       showMsgOption:function(){

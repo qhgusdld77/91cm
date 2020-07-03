@@ -18,7 +18,7 @@
   import {mapGetters} from "vuex";
 
   export default {
-    props: ['cursorPoint'],
+    // props: ['cursorPoint'],
     name: 'SearchInput',
     data() {
       return {
