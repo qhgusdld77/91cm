@@ -57,11 +57,6 @@ let channelMixin = {
           console.error(e);
         }
       }
-      // else if (data.message === 'selectChannelList') {
-      //   this.selectChannelList()
-      // }else if (data.message === 'selectChannelUserList'){
-      //   this.selectChannelUserList()
-      // }
       if (e.headers.noticeMsg != null) {
         this.noticeMsg = res.headers.noticeMsg
         this.noticeMsgToggle = true

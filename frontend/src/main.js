@@ -73,9 +73,11 @@ new Vue({
       }
     },
     currentChannel: function (newCurrentChannel, oldCurrentChannel) {
-      if (oldCurrentChannel.id !== undefined) {
-        oldCurrentChannel = this.getChannel(oldCurrentChannel)
-        oldCurrentChannel.access()
+      if (oldCurrentChannel !== undefined){
+        if (oldCurrentChannel.id !== undefined) {
+          oldCurrentChannel = this.getChannel(oldCurrentChannel)
+          oldCurrentChannel.access()
+        }
       }
     }
   },
