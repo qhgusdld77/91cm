@@ -339,7 +339,8 @@
             ((this.oldScrollHeight == this.wrapperEl.clientHeight) && (this.wrapperEl.scrollHeight > this.wrapperEl.clientHeight))) {
 
             this.wrapperEl.scrollTop = this.wrapperEl.scrollHeight
-            this.firstLoad = false
+            this.$store.commit('setFirstLoad',false) 
+            //this.firstLoad = false
             this.$store.commit('setOldScrollHeight', this.wrapperEl.scrollHeight);
           }
         })

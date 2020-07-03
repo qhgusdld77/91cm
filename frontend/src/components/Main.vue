@@ -166,7 +166,7 @@
         }, (e) => {
           console.log('stomp close', this.$store.state.isLogout)
           if (!this.$store.state.isLogout) {
-            window.location.href = "/"
+            // window.location.href = "/"
           }
         })
       },

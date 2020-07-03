@@ -3,7 +3,7 @@ import NotificationClass from '../service/notification'
 import CommonClass from '../service/common'
 
 let channelMixin = {
-
+  mixins:[],
   methods: {
     _makeChannelFunction: function (channel) {
       if (channel.id !== undefined) {
@@ -15,25 +15,25 @@ let channelMixin = {
             result = _this.subscribe(_url + this.id, _this.channelSubscribeCallBack)
             channel.unsubscribe = function () {
               _this.subscribeList.pop(_url + this.id)
-              _this.commit('setSubscribeList', _this.subscribeList)
+            _this.commit('setSubscribeList', _this.subscribeList)
               result.unsubscribe()
-            }
-          }
-          if (channel.send === undefined) {
-            channel.send = function (message) {
-              _this.send(_url + this.id, message)
-            }
-          }
-          if (channel.access === undefined) {
-            channel.access = function () {
-              _this.post('/api/channel/update/lastaccessdate', {
-                currentChannelId: this.id,
-                userEmail: _this.currentUser.email
-              })
-            }
           }
         }
+        if (channel.send === undefined) {
+          channel.send = function (message) {
+            _this.send(_url + this.id, message)
+          }
+        }
+        if (channel.access === undefined) {
+          channel.access = function () {
+            _this.post('/api/channel/update/lastaccessdate', {
+              currentChannelId: this.id,
+              userEmail: _this.currentUser.email
+            })
+          } 
+        }
       }
+    }
       return channel
     },
     channelSubscribeCallBack(e) {
@@ -51,8 +51,16 @@ let channelMixin = {
         }
       } else {
         //메시지가 함수명일때 함수를 call하는 구문
+
         try {
-          this[data.message]();
+          if(data.message.includes('deleteMsgFromMsgArr')){
+            let splitArr = data.message.split('|')
+            data.message = splitArr[0]
+            this.deleteMsgFromArr(splitArr[1])
+            //this[data.message](splitArr[1]);
+          }else{
+            this[data.message]();
+          }
         } catch (e) {
           console.error(e);
         }
@@ -112,7 +120,7 @@ let channelMixin = {
     //채널 삭제
     deleteChannel: function (channel) {
       this.post('/api/channel/delete', channel, function () {
-        channel.send("selectChannelList")
+       channel.send("selectChannelList")
       })
     },
     //채널 삭제 아이콘 표시
@@ -139,7 +147,7 @@ let channelMixin = {
           if (isJoin) {
             if (channelList.length == 0) channel = null
             else if (channel === undefined) channel = channelList[0]
-            else if (this.currentChannel == null) this.commit('setCurrentChannel', {id: -1})//채널 진입
+            if (this.currentChannel == null) this.commit('setCurrentChannel', {id: -1})//채널 진입
             this.joinChannel(channel)
           }
         }).catch(error => {
@@ -214,7 +222,8 @@ let channelMixin = {
     },
     //채널 초대
     inviteChannel: function () {
-
+      // 채널 초대를 하는 로직을 넣는건지
+      // 채널 초대가 온 것을 수락하는 로직을 넣는건지..?
     },
     //채널 강퇴 및 나가기
     leaveChannle: function (user) {
@@ -231,11 +240,10 @@ let channelMixin = {
     //채널 조회
     getChannel: function (paramChannel) {
       let thisChannel
-      const _this = this
       if (typeof paramChannel == 'string' || typeof paramChannel == 'number') {
         $.each(this.channelList, function (idx, channel) {
           if (paramChannel == channel.id) {
-            thisChannel = _this._makeChannelFunction(channel)
+            thisChannel = this._makeChannelFunction(channel)
             return false
           }
         })
