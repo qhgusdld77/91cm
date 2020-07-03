@@ -65,6 +65,8 @@
   import AppsModal from "../views/main/AppsModal"
   import {mapGetters} from "vuex";
   import VideoChat from "./VideoChat";
+  import channelMixin from "../mixins/channelMixin";
+  import globalWatch from "../mixins/globalWatch";
 
   export default {
     name: 'Main',
@@ -120,11 +122,16 @@
           return this.$store.state.stompClient.connected
         }
       },
+      ...mapGetters({
+        msgArray: 'getMsgArray',
+        isVideoMode: 'getIsVideoMode'
+      })
     },
     deactivated() {
     },
     async created() {
-      const currentChannel = this.currentChannel
+      //await this.$store.dispatch('userListUpdate')
+      const currentChannel = this.$store.state.currentChannel
       if (currentChannel != null) {
         currentChannel.count = 0
       }
@@ -135,6 +142,8 @@
       EventListener.blurEvt()
       NotificationClass.requestPermission()
       this.$store.commit('setSmallWidth', (window.innerWidth < 600) ? true : false)
+    },
+    updated() {
     },
     methods: {
       connect() {

@@ -1,4 +1,5 @@
 import { mapGetters } from "vuex";
+import commonMixin from "./commonMixin";
 import CommonClass from '../service/common'
 
 let messageMixin = {
@@ -33,6 +34,17 @@ let messageMixin = {
       isGetMsgForImgLoad: false,
       selectedUserEmail: '',
     }
+  },
+  computed: {
+    ...mapGetters({
+      msgArray: 'getMsgArray',
+      currentChannel: 'getCurrentChannel',
+      currentUser: 'getCurrentUser',
+      channelList: 'getChannelList',
+      wrapperEl: 'getWrapperEl',
+      cursorPoint: 'getCursorPoint',
+      oldScrollHeight: 'getOldScrollHeight'
+    })
   },
   methods: {
     msgCountUpdate(id, counting) {
@@ -88,12 +100,12 @@ let messageMixin = {
         console.log(this.channelArr,'this.channelArr')
         if (channel.id == this.channelArr[this.channelArr.length - 1]) {
           if (res.data.length == 0) {
-            this.cursorPoint.empty = true
+            this.cursorPoint.empty = true 
             //this.cursorPoint.empty = true
           } else {
             this.cursorPoint.first = false
             //this.cursorPoint.first = false
-
+            
             this.cursorPoint.cursorId = res.data[res.data.length - 1].id
             //this.cursorPoint.cursorId = res.data[res.data.length - 1].id
           }
@@ -110,7 +122,7 @@ let messageMixin = {
               }
 
               this.wrapperEl.scrollTop = this.wrapperEl.scrollHeight - this.oldScrollHeight
-              this.$store.commit('setOldScrollHeight', this.wrapperEl.scrollHeight);
+              this.oldScrollHeight = this.wrapperEl.scrollHeight
             })
           }
           

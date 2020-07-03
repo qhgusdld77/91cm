@@ -41,9 +41,9 @@
     </div>
   </li>
 
-
+   
   </div>
-
+  
 </template>
 <script>
   import CommonClass from "../../service/common";
@@ -51,7 +51,7 @@
 
   export default {
     name: 'MsgBox',
-    props: ['msg'],
+    props: ['msg','msgPreviewBool'],
     data(){
       return{
         isMsgOption:false

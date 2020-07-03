@@ -25,7 +25,7 @@ import commonMixin from './mixins/commonMixin'
 import messageMixin from './mixins/messageMixin'
 
 Vue.mixin({
-  mixins: [channelMixin, commonMixin, messageMixin]
+  mixins:[channelMixin,commonMixin,messageMixin]
 })
 
 Vue.use(BootstrapVue)
@@ -49,7 +49,7 @@ new Vue({
       iconfont: "mdi"
     }
   }),
-  watch: {
+  watch:{
     channelList: function (newChannelList, oldChannelList) {
       let newChannelListCnt = newChannelList.length
       let oldChannelListCnt = oldChannelList.length
@@ -73,10 +73,8 @@ new Vue({
       }
     },
     currentChannel: function (newCurrentChannel, oldCurrentChannel) {
-      if (oldCurrentChannel.id !== undefined) {
-        oldCurrentChannel = this.getChannel(oldCurrentChannel)
-        oldCurrentChannel.access()
-      }
+      oldCurrentChannel = this.getChannel(oldCurrentChannel)
+      oldCurrentChannel.access()
     }
   },
   router,

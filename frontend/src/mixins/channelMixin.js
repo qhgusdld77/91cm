@@ -3,7 +3,6 @@ import NotificationClass from '../service/notification'
 import CommonClass from '../service/common'
 
 let channelMixin = {
-  mixins:[],
   methods: {
     _makeChannelFunction: function (channel) {
       if (channel.id !== undefined) {
@@ -49,7 +48,8 @@ let channelMixin = {
         } else {
           this.msgCountUpdate(data.channel_id, true)
         }
-      } else {
+      }
+      else{
         //메시지가 함수명일때 함수를 call하는 구문
 
         try {
@@ -89,7 +89,7 @@ let channelMixin = {
     confirmChannel: function (event, mode, channel) {
       event.stopPropagation()
       this.modalTitle = "채널 " + this.getChannelModeKorStr(mode)
-      this.channelMode = mode
+      this.hannelMode = mode
       try {
         this.channelTitle = (channel === undefined) ? this.currentChannel.name : channel.name
       } catch (e) {
@@ -99,19 +99,19 @@ let channelMixin = {
       if (mode === "create" || mode === "update") {
         if (mode === "create") this.channelTitle = ''
         this.$bvModal.show('channelCU')
-      } else if (mode === "delete") {
+      }
+      else if (mode === "delete") {
         this.$_confirm("<code>[" + channel.name + "]</code>채널을 삭제하시겠습니까?", this.deleteChannel, channel);
       }
     },
     //채널 생성
     createChannel: function (channelTitle, email) {
       let _this = this
-      this.post('/api/channel/create', {
+      this.$http.post('/api/channel/create', {
         name: channelTitle,
         member_email: email
       }, function (res) {
         let channel = _this.getChannel(res.data)
-        console.log(channel)
         channel.subscribe()
         _this.selectChannelList(channel)
       })
@@ -138,13 +138,13 @@ let channelMixin = {
       $(".channelDel").css("visibility", "hidden")
     },
     //채널 목록 조회
-    selectChannelList: function (channel, isJoin = true) {
+    selectChannelList: function (channel = this.$store.state.currentChannel, isJoin = true) {
       this.$http.get('/api/channel/list')
         .then(res => {
           let _this = this
           let channelList = res.data
+          console.log(res.data)
           $.each(channelList, function (index, channel) {
-
             _this._makeChannelFunction(channel)
           })
           this.commit('setChannelList', channelList)
@@ -156,15 +156,15 @@ let channelMixin = {
             this.joinChannel(channel)
           }
         }).catch(error => {
-        console.error(error)
-      })
+          console.error(error)
+        })
     },
     //채널 진입
     joinChannel: function (channel) {
-      console.log(channel)
-      this.$store.commit('getSelectComponent', 'main')
+      this.$store.commit('getSelectComponent','main')
       if (channel !== undefined && channel != null) {
         channel = this.getChannel(channel)
+
         if (channel.id != this.currentChannel.id) {
           this.commit('setCurrentChannel', channel)//채널 진입
           this.initChannelUserList()
@@ -181,16 +181,18 @@ let channelMixin = {
           if (channel != null) {
             channel.access()
           }
-        } else {
+        }
+        else {
           this.selectChannelUserList(channel)//채널 사용자 조회
         }
-      } else {
+      }
+      else {
         this.commit('setCurrentChannel', null)
         this.initChannelUserList()
       }
     },
     //채널 사용자 조회
-    selectChannelUserList: function (channel = this.$store.state.currentChannel) {
+    selectChannelUserList: function (channel= this.$store.state.currentChannel) {
       if (channel != null) {
         this.$http.get('/api/user/channel/' + channel.id, {
           currentChannelId: channel.id,
@@ -199,7 +201,8 @@ let channelMixin = {
           .then(res => {
             this.setChannelUserList(res.data)
           })
-      } else {
+      }
+      else {
         this.initChannelUserList()
       }
     },
@@ -251,7 +254,8 @@ let channelMixin = {
             return false
           }
         })
-      } else {
+      }
+      else {
         thisChannel = this._makeChannelFunction(paramChannel)
       }
       return thisChannel
