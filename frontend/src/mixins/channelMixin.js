@@ -3,7 +3,7 @@ import NotificationClass from '../service/notification'
 import CommonClass from '../service/common'
 
 let channelMixin = {
-   
+    
   methods: {
     _makeChannelFunction: function (channel) {
       if (channel.id !== undefined) {
@@ -33,6 +33,7 @@ let channelMixin = {
           }
         }
       }
+    }
       return channel
     },
     channelSubscribeCallBack(e) {
