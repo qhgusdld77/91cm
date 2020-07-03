@@ -56,6 +56,7 @@ public class FileController {
                                         @RequestParam("sender") String sender, @Socialuser User user) {
         Message message = Message.builder().channel_id(channel_id)
                 .sender(sender)
+                .message_type("file")
                 .user(user)
                 .build();
         message.setSend_date(DateUtil.makeDate());

@@ -84,8 +84,6 @@ let messageMixin = {
           'Content-Type': 'application/json'
         }
       }).then(res => {
-        console.log(this.channelArr[this.channelArr.length - 1],'this.channelArr[this.channelArr.length - 1]')
-        console.log(this.channelArr,'this.channelArr')
         if (channel.id == this.channelArr[this.channelArr.length - 1]) {
           if (res.data.length == 0) {
             this.cursorPoint.empty = true
