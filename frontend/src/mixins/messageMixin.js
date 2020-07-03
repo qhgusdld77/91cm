@@ -100,6 +100,8 @@ let messageMixin = {
           for (let i = 0; i < res.data.length; i++) {
             res.data[i].content = CommonClass.replacemsg(res.data[i].content)
           }
+          this.commit('setMsgArray', res.data.reverse().concat(this.msgArray))
+          
           if (this.wrapperEl !== undefined) {
             this.$nextTick(() => {
               //추가됨
@@ -111,7 +113,7 @@ let messageMixin = {
               this.$store.commit('setOldScrollHeight', this.wrapperEl.scrollHeight);
             })
           }
-          this.commit('setMsgArray', res.data.reverse().concat(this.msgArray))
+          
           this.isGetMsgForPreview = true
           this.isGetMsgForImgLoad = true
         }
@@ -160,25 +162,27 @@ let messageMixin = {
           this.message.content = ''
         }
       }
+    },confirmMessage: function(msg){
+      this.$_confirm("메세지를 삭제하시겠습니까?",this.deleteMessage,msg)
     },
     //채널 메시지 삭제
-    deleteMessge: function(msg) {
-      console.log(msg)
-      this.$http.post('/api/message/update/deleteyn', msg).then(res=>{
-        // 해당 메세지 삭제되었습니다로 변경하는 로직, 실시간적으로 변경되는 로직
+    deleteMessage: function(msg) {
+      // 해당 메세지 삭제되었습니다로 변경하는 로직, 실시간적으로 변경되는 로직
         // 프론트에서 서로 메세지만 교체하는 방법,
 
         // 아예 메시지리스트를 새로 가져오는 방법 -> 메세지 찾기하고 있거나 이전 메세지를 조회중일때
         // 신호가 간다면 문제 생길 것 같음 모드가 바뀌었을때 메세지arr 변경 못하게 바꾸거나 프론트 단에서 해당 메세지만 변경처리 해줘야 할듯
-        
+      this.$http.post('/api/message/update/deleteyn', msg).then(res=>{
         if(res){
-          let index = this.msgArray.findIndex(message => message.id == msg.id)
-          if(index !== undefined || index !== null){
-            this.msgArray[index].content = <p>삭제된 메세지입니다.</p>
-          }
-          //
+          this.currentChannel.send("deleteMsgFromMsgArr|"+msg.id)
         }
       }); 
+    },
+    deleteMsgFromArr: function(id){
+      let index = this.msgArray.findIndex(message => message.id == id)
+        if(index !== undefined || index !== null){
+          this.msgArray[index].content = "<p>삭제된 메세지입니다.</p>"
+        }
     }
   }
 };

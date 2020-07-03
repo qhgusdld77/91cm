@@ -3,7 +3,7 @@ import NotificationClass from '../service/notification'
 import CommonClass from '../service/common'
 
 let channelMixin = {
-    
+  mixins:[],
   methods: {
     _makeChannelFunction: function (channel) {
       if (channel.id !== undefined) {
@@ -30,7 +30,7 @@ let channelMixin = {
               currentChannelId: this.id,
               userEmail: _this.currentUser.email
             })
-          }
+          } 
         }
       }
     }
@@ -51,8 +51,16 @@ let channelMixin = {
         }
       } else {
         //메시지가 함수명일때 함수를 call하는 구문
+
         try {
-          this[data.message]();
+          if(data.message.includes('deleteMsgFromMsgArr')){
+            let splitArr = data.message.split('|')
+            data.message = splitArr[0]
+            this.deleteMsgFromArr(splitArr[1])
+            //this[data.message](splitArr[1]);
+          }else{
+            this[data.message]();
+          }
         } catch (e) {
           console.error(e);
         }
@@ -144,7 +152,7 @@ let channelMixin = {
           if (isJoin) {
             if (channelList.length == 0) channel = null
             else if (channel === undefined) channel = channelList[0]
-            else if (this.currentChannel == null) this.commit('setCurrentChannel', {id: -1})//채널 진입
+            if (this.currentChannel == null) this.commit('setCurrentChannel', {id: -1})//채널 진입
             this.joinChannel(channel)
           }
         }).catch(error => {
