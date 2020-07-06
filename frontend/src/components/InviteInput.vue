@@ -58,7 +58,6 @@
     computed: {
       ...mapGetters({
         userList: 'getUserList',
-        channelUsers: 'getChannelUsers',
         inviteUserList: 'getInviteUserList',
       })
     },
