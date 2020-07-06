@@ -119,10 +119,6 @@
           return this.$store.state.stompClient.connected
         }
       },
-      ...mapGetters({
-        msgArray: 'getMsgArray',
-        isVideoMode: 'getIsVideoMode'
-      })
     },
     deactivated() {
     },

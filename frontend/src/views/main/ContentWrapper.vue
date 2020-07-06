@@ -140,7 +140,7 @@
     },
     mounted() {
       this.$nextTick(() => {
-        this.wrapperEl = document.querySelector('.c-c-wrapper')
+        this.$store.commit('setWrapperEl',document.querySelector('.c-c-wrapper'))
         window.addEventListener('resize', this.widthCheck);
       })
       this.$eventBus.$on('leaveChannelMsg', (user) => {
@@ -331,14 +331,14 @@
       scrollToEnd(bool) {
         this.$nextTick(() => {
           if (this.firstLoad) {
-            
+
             this.$store.state.oldScrollHeight = this.wrapperEl.scrollHeight
           }
           if (this.isScrollAtEnd(this.wrapperEl) || this.firstLoad || bool ||
             ((this.oldScrollHeight == this.wrapperEl.clientHeight) && (this.wrapperEl.scrollHeight > this.wrapperEl.clientHeight))) {
 
             this.wrapperEl.scrollTop = this.wrapperEl.scrollHeight
-            this.$store.commit('setFirstLoad',false) 
+            this.$store.commit('setFirstLoad',false)
             //this.firstLoad = false
             this.$store.commit('setOldScrollHeight', this.wrapperEl.scrollHeight);
           }
@@ -407,7 +407,7 @@
             this.previewObj.content = copymsg.content == null ? "첨부파일" : CommonClass.replacemsgForPreview(copymsg.content)
             this.previewObj.username = this.msgArray[this.msgArray.length - 1].user.name
             this.msgPreviewBool = true
-          } 
+          }
         }
       },
 

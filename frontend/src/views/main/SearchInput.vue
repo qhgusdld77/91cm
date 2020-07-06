@@ -18,7 +18,6 @@
   import {mapGetters} from "vuex";
 
   export default {
-    props: ['cursorPoint'],
     name: 'SearchInput',
     data() {
       return {
@@ -32,7 +31,7 @@
     mounted() {
       //자식의 mounted가 먼저 실행되기때문에 따로 요소를 다시한번 가져옴
       this.$nextTick(() => {
-        this.wrapperEl = document.querySelector('.c-c-wrapper')
+        this.$store.commit('setWrapperEl',document.querySelector('.c-c-wrapper'))
       })
       this.$store.watch(() => this.$store.getters.getSearchMode, isSearchMode => {
         if (!isSearchMode) {

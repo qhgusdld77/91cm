@@ -109,7 +109,7 @@ let messageMixin = {
               }
 
               this.wrapperEl.scrollTop = this.wrapperEl.scrollHeight - this.oldScrollHeight
-              this.oldScrollHeight = this.wrapperEl.scrollHeight
+              this.$store.commit('setOldScrollHeight',this.wrapperEl.scrollHeight)
             })
           }
 
