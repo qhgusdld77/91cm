@@ -130,7 +130,7 @@
           return false
         }
         if (!phone.match(phoneRegex)) {
-          this.$_error( '핸드폰 번호가 형식에 맞지 않습니다')
+          this.$_error('핸드폰 번호가 형식에 맞지 않습니다')
           return false
         }
         return true

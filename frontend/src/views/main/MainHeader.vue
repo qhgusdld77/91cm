@@ -121,10 +121,9 @@
             this.$store.state.stompClient.send('/pub/chat/room/' + alarm.channel_id, JSON.stringify({"message": "updateChannel", "error": "null"}))
             console.log(alarm.channel_id)
             let channel = this.$store.getters.getChannelList.find(channel => channel.id === alarm.channel_id)
-            await this.selectChannelList(channel) // 채널 id 값이 아니라 channel 객체를 줘야함
+            await this.selectChannelList(channel)
             //this.commit('setCurrentChannel', res.data) //채널 진입
             await this.subscribe("/sub/chat/room/" + alarm.channel_id, this.channelSubscribeCallBack)
-            
           })
           .catch(error => {
             console.error(error)
