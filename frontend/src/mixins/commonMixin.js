@@ -14,7 +14,8 @@ let commonMixin = {
       selectComponent: 'getSelectComponent',
       subscribeList:'getSubscribeList',
       channelArr:'getChannelArr',
-      firstLoad: 'getFirstLoad'
+      firstLoad: 'getFirstLoad',
+      message: 'getMessage'
     })
   },
   methods: {

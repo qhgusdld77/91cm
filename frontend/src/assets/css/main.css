@@ -1,11 +1,11 @@
+.confirmMsgDel{
+    visibility:hidden;
+}
 .deletemsg{
     font-weight: bold;
     color: red;
 }
 
-.msgorder-two{
-    order: 3
-}
 .msgorder-two{
     order: 2
 }
@@ -114,10 +114,13 @@
     margin-bottom: 0;
 }
 .channel-nowrap,
-#c-c-preview .p-nowrap {
+#c-c-preview .p-nowrap,
+p.file-name
+ {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    width:115px;
 }
 #c-c-preview .p-wrapper {
     display: flex;
@@ -175,6 +178,16 @@
 .mychat-content > p {
     margin:0px;
     display:flex;
+}
+
+.my-message{
+    background-color: #BBDEFB!important;
+}
+.mychat-content {
+    word-break: break-all;
+    background-color: white;
+    padding: 10px 15px;
+    border-radius: 10px;
 }
 
 
