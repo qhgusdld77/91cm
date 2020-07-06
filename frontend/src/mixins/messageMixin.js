@@ -14,12 +14,12 @@ let messageMixin = {
         username: ''
       },
       //channelArr: [],
-      message: {
-        channel_id: 0,
-        content: '',
-        sender: '',
-        user: {}
-      },
+      // message: {
+      //   channel_id: 0,
+      //   content: '',
+      //   sender: '',
+      //   user: {}
+      // },
       // cursorPoint: {
       //   channel_id: 0,
       //   first: true,
@@ -58,12 +58,9 @@ let messageMixin = {
     //채널 메시지 초기화
     initMessageList: function (channel) {
       this.$store.commit('pushChannelArr',channel.id)
-      //this.channelArr.push(channel.id)
       this.$store.commit('setFirstLoad',true) 
-      //this.firstLoad = true
       this.scrollHeight = 0
       this.message.sender = this.currentUser.email
-
       this.$store.state.isInviteMode = false
       this.$store.state.isSearchMode = false
       this.commit('setMsgArray', [])
@@ -164,7 +161,7 @@ let messageMixin = {
           this.message.content = ''
         }
       }
-    },confirmMessage: function(msg){
+    },confirmDelete: function(msg){
       this.$_confirm("메세지를 삭제하시겠습니까?",this.deleteMessage,msg)
     },
     //채널 메시지 삭제
@@ -184,6 +181,7 @@ let messageMixin = {
       let index = this.msgArray.findIndex(message => message.id == id)
         if(index !== undefined || index !== null){
           this.msgArray[index].content = "<p class='deletemsg'>삭제된 메세지입니다.</p>"
+          this.msgArray[index].delete_yn = "Y"
         }
     }
   }
