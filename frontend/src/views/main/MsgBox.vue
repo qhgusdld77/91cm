@@ -12,8 +12,8 @@
         <slot name="m-info">
           <strong :class="msgOrder1">{{ msg.user.name }}</strong>
           <span style="font-size: 11px; margin:0px 3px; " :class="msgOrder2">{{ msg.str_send_date }}</span>
-            <a class="verti-align" :class="{'msgorder-two':!isMsgByLoginUser}" v-show="isMsgOption" @click="confirmMessage(msg)">
-            <v-icon style="font-size:16px;">delete_outline</v-icon>          
+            <a class="verti-align" :class="{'msgorder-two':!isMsgByLoginUser}" v-if="isMsgOption" @click="confirmMessage(msg)">
+            <v-icon style="font-size:16px;">delete_outline</v-icon>
             </a>
         </slot>
       </div>
