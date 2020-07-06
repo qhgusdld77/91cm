@@ -24,6 +24,7 @@ import channelMixin from './mixins/channelMixin'
 import commonMixin from './mixins/commonMixin'
 import messageMixin from './mixins/messageMixin'
 
+
 Vue.mixin({
   mixins:[channelMixin,commonMixin,messageMixin]
 })
@@ -73,8 +74,12 @@ new Vue({
       }
     },
     currentChannel: function (newCurrentChannel, oldCurrentChannel) {
-      oldCurrentChannel = this.getChannel(oldCurrentChannel)
-      oldCurrentChannel.access()
+      if (oldCurrentChannel !== undefined){
+        if (oldCurrentChannel.id !== undefined) {
+          oldCurrentChannel = this.getChannel(oldCurrentChannel)
+          oldCurrentChannel.access()
+        }
+      }
     }
   },
   router,

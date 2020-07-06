@@ -12,8 +12,8 @@
         <slot name="m-info">
           <strong :class="msgOrder1">{{ msg.user.name }}</strong>
           <span style="font-size: 11px; margin:0px 3px; " :class="msgOrder2">{{ msg.str_send_date }}</span>
-            <a class="verti-align" :class="{'msgorder-two':!isMsgByLoginUser}" v-show="isMsgOption" @click="deleteMessge(msg)">
-            <v-icon style="font-size:16px;">delete_outline</v-icon>          
+            <a class="verti-align" :class="{'msgorder-two':!isMsgByLoginUser}" v-if="isMsgOption" @click="confirmMessage(msg)">
+            <v-icon style="font-size:16px;">delete_outline</v-icon>
             </a>
         </slot>
       </div>
@@ -47,7 +47,6 @@
 </template>
 <script>
   import CommonClass from "../../service/common";
-  import {mapGetters} from "vuex";
 
   export default {
     name: 'MsgBox',
@@ -58,11 +57,8 @@
       }
     },
     computed:{
-      ...mapGetters({
-        currentUser: 'getCurrentUser'
-      }),
       isMsgByLoginUser: function(){
-        return this.msg.user.email == this.currentUser.email
+        return this.msg.sender == this.currentUser.email
       },
       msgOrder1:function(){
         return {
@@ -76,14 +72,15 @@
           'msgorder-two': !this.isMsgByLoginUser
         }
       },
-      isAdmin:function(){
-        return this.currentUser.roles.includes('ROLE_ADMIN') || this.currentUser.roles.includes('ROLE_ROOT')
-      }
+      // isAdmin:function(){
+      //   return this.currentUser.roles.includes('ROLE_ADMIN') || this.currentUser.roles.includes('ROLE_ROOT')
+      // }
     },
     methods: {
       showMsgOption:function(){
+        console.log(this.msg)
         if(this.msg.delete_yn === 'N'){
-          if(this.isMsgByLoginUser || this.isAdmin){
+          if(this.isMsgByLoginUser || this.isAdmin()){
             this.isMsgOption = true
           }
         }
