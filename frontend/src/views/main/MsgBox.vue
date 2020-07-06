@@ -24,7 +24,7 @@
                       <b-col v-for="(file,index) in msg.files" :key="index">
                         <a @click="fileDownload(file)">
                           <div class="hori-align">
-                            <v-img :alt="file.original_name" :src="selectImage(file)" @load="$emit('imgLoad')" max-width="100"></v-img>
+                            <b-img :alt="file.original_name" :src="selectImage(file)" @load="$emit('imgLoad')" style="max-width:100px"></b-img>
                           </div>
                           <p class="file-name"><b>{{file.original_name}}</b></p>
                           <p style="margin:0px;">file size : {{(file.file_size / 1024).toLocaleString(undefined,{minimumFractionDigits:2})}}
@@ -64,7 +64,7 @@
               <b-col v-for="(file,index) in msg.files" :key="index">
                 <a @click="fileDownload(file)">
                   <div class="hori-align">
-                    <v-img :alt="file.original_name" :src="selectImage(file)" @load="$emit('imgLoad')" max-width="100"></v-img>
+                    <b-img :alt="file.original_name" :src="selectImage(file)" @load="$emit('imgLoad')" style="max-width:100px"></b-img>
                   </div>
                   <!-- <b-img thumbnail rounded fluid  alt="이미지를 찾을 수 없습니다."
                          style="max-width: 200px" ></b-img> -->

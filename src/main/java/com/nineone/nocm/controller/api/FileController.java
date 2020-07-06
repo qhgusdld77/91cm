@@ -58,6 +58,7 @@ public class FileController {
                 .sender(sender)
                 .message_type("file")
                 .user(user)
+                .delete_yn("N")
                 .build();
         message.setSend_date(DateUtil.makeDate());
         message.setStr_send_date(messageService.makeStrDate(message.getSend_date()));
