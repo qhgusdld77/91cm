@@ -139,26 +139,11 @@
     updated() {
     },
     methods: {
-      initMain: function () {
-        this.$http.get('/api/channel/list')
-          .then(res => {
-            let channelList = res.data
-            channelList.forEach(channel => {
-              this._makeChannelFunction(channel)
-            })
-            this.$store.commit('setChannelList', channelList)
-            let channel
-            if (channelList.length == 0) channel = null
-            else if (channel === undefined) channel = channelList[0]
-            else if (this.currentChannel == null) this.commit('setCurrentChannel', {id: -1})//채널 진입
-            this.joinChannel(channel)
-          })
-      },
       connect: function () {
         // 새로고침 했을때 Main의 로직이 실행되지 않는 환경에서는 문제가 생길 수 있음
         this.$store.state.stompClient = Stomp.over(new SockJS('/endpoint/'))
         this.$store.state.stompClient.connect(this.$store.state.currentUser, () => {
-          this.initMain()
+          this.selectChannelList()
           this.subscribe("/sub/sync/info", res => {
             if (res.headers.noticeMsg != null) {
               this.noticeMsg = res.headers.noticeMsg
@@ -166,7 +151,6 @@
             }
           })
         }, (e) => {
-          console.log('stomp close', this.$store.state.isLogout)
           if (!this.$store.state.isLogout) {
             // window.location.href = "/"
           }

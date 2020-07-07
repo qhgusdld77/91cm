@@ -50,7 +50,7 @@ public class ChannelApiController {
     }
 
     @PostMapping("/update")
-    public boolean updateChannel(@RequestBody Channel channel, @Socialuser User user) {
+    public boolean updateChannel(@RequestBody Channel channel) {
         return channelService.updateChannel(channel);
     }
 

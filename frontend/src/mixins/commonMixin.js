@@ -15,7 +15,7 @@ let commonMixin = {
       selectComponent: 'getSelectComponent',
       subscribeList: 'getSubscribeList',
       channelArr: 'getChannelArr',
-      firstLoad: 'getFirstLoad'
+      firstLoad: 'getFirstLoad',
     })
   },
   methods: {
@@ -23,6 +23,7 @@ let commonMixin = {
       this.$store.commit(key, value)
     },
     post: function (url, params, callback) {
+      console.log(params)
       this.$http.post(url, params)
         .then(res => {
           if (callback !== undefined) {
@@ -44,6 +45,9 @@ let commonMixin = {
         return this.$store.state.stompClient.subscribe(url, func)
       }
       return null
+    },
+    unsubscribe: function (id) {
+      this.$store.state.stompClient.unsubscribe(id)
     },
     send: function (url, message) {
       this.$store.state.stompClient.send(url, JSON.stringify({
