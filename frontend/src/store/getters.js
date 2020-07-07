@@ -28,5 +28,6 @@ export default {
   getOldScrollHeight:state => state.oldScrollHeight,
   getChannelArr:state => state.channelArr,
   getFirstLoad: state => state.firstLoad,
-  getMessage: state => state.message
+  getMessage: state => state.message,
+  getChannelFiles: state => state.channelFiles
 }

@@ -68,5 +68,9 @@ export default {
   },
   setMessage:function (state,payload){
     state.message = payload
+  },
+  setChannelFiles: function(state,payload){
+    state.channelFiles = payload
   }
+
 }

@@ -26,26 +26,13 @@ let channelMixin = {
         if (channel.subscribe === undefined) {
           channel.subscribe = function () {
             result = _this.subscribe(_url + this.id, _this.channelSubscribeCallBack,{id:this.id})
-            // if (_this.unsubscribe === undefined) {
-            //   _this.$store.commit('setUnsubscribe', result.unsubscribe)
-            // }
-
           }
-          // channel.unsubscribe = function () {
-          //   channel.unsubscribe = result.unsubscribe()
-          // }
         }
-
         if (channel.unsubscribe === undefined) {
           channel.unsubscribe = function() {
             _this.unsubscribe(this.id)
           }
         }
-
-        // if (channel.unsubscribe === undefined && _this.$store.unsubscribe !== undefined) {
-        //   console.log("구독 취소 설정")
-        //   channel.unsubscribe = _this.$store.unsubscribe
-        // }
       }
       return channel
     },
@@ -173,6 +160,7 @@ let channelMixin = {
           this.selectChannelUserList(channel)//채널 사용자 조회
           this.selectMessageList(channel, true)//채널 메시지 조회
           this.hiddenChannelDelete()
+          this.$store.dispatch('loadChannelFiles',channel.id)
           if (window.innerWidth < 600) $(".app-sidebar").addClass("hide-sidebar")
           this.commit('getSelectComponent', 'main')
           this.currentChannel.count = 0
@@ -249,7 +237,7 @@ let channelMixin = {
               //   })
               this.message.content += '을 초대했습니다.'
               // 아래 코드 무엇인지
-              this.$eventBus.$emit('getUserList', true)
+              // this.$eventBus.$emit('getUserList', true)
 
               this.$emit('sendMessage', null, true)
               this.friends = []

@@ -83,10 +83,10 @@
               dense>
               <v-col
                 @click="test2"
-                v-for="card in cards"
+                v-for="card in channelFiles"
                 :key="card.title"
                 :cols="card.flex">
-                <v-img :src="card.src" style="cursor: pointer;"></v-img>
+                <v-img :src="selectImage(card)" style="cursor: pointer;"></v-img>
               </v-col>
             </v-row>
           </b-collapse>
@@ -98,6 +98,8 @@
 </template>
 
 <script>
+  import CommonClass from "../../service/common";
+
   export default {
     props: ['modalObj'],
     name: 'RSidebar',
@@ -124,6 +126,9 @@
 
     },
     methods: {
+      selectImage: function (file) {
+        return CommonClass.checkFileType(file)
+      },
       getWidth: function () {
         return $('#RSidebar').width();
       },

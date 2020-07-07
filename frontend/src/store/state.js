@@ -28,6 +28,7 @@ export default {
   channelModal:false,
   inviteUserList:[],
   lang:'ko',
+  channelFiles: [],
 
 
   // ===========================================
