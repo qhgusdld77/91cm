@@ -27,7 +27,6 @@
           </footer>
         </div>
       </template>
-      <!-- v-if="connctionCheck" else -->
       <Loading v-else/>
 
     </div>
@@ -54,7 +53,6 @@
   import UserInfo from "../views/user/UserInfo"
   import EditProfile from "../views/user/EditProfile"
   import ChannelHeader from "../views/main/ChannelHeader"
-  import CommonClass from '../service/common'
   import NoChannel from '../views/main/NoChannel'
   import Loading from '../views/main/Loading'
   import Stomp from "webstomp-client";
@@ -63,8 +61,9 @@
   import Calendar from "../views/calendar/Calendar";
   import AdminPage from "../views/admin/AdminPage"
   import AppsModal from "../views/main/AppsModal"
-  import {mapGetters} from "vuex";
   import VideoChat from "./VideoChat";
+  import channelMixin from "../mixins/channelMixin";
+  import globalWatch from "../mixins/globalWatch";
 
   export default {
     name: 'Main',
@@ -124,7 +123,8 @@
     deactivated() {
     },
     async created() {
-      const currentChannel = this.currentChannel
+      //await this.$store.dispatch('userListUpdate')
+      const currentChannel = this.$store.state.currentChannel
       if (currentChannel != null) {
         currentChannel.count = 0
       }
@@ -136,44 +136,28 @@
       NotificationClass.requestPermission()
       this.$store.commit('setSmallWidth', (window.innerWidth < 600) ? true : false)
     },
+    updated() {
+    },
     methods: {
-      connect() {
+      connect: function () {
         // 새로고침 했을때 Main의 로직이 실행되지 않는 환경에서는 문제가 생길 수 있음
         this.$store.state.stompClient = Stomp.over(new SockJS('/endpoint/'))
-        // this.$store.state.stompClient.debug = f => f;
         this.$store.state.stompClient.connect(this.$store.state.currentUser, () => {
-          this.selectChannelList()//채널목록 조회
-
-          //  this.$store.state.channelList.forEach(channel => {
-          //    this.subscribe("/sub/chat/room/" + channel.id, this.channelSubscribeCallBack)
-          //  })
-
+          this.selectChannelList()
           this.subscribe("/sub/sync/info", res => {
             if (res.headers.noticeMsg != null) {
               this.noticeMsg = res.headers.noticeMsg
               this.noticeMsgToggle = true
             }
-            if (res.body == '"userList"') {
-              this.$store.dispatch('userListUpdate')
-              this.$store.dispatch('inviteUserList')
-            }
           })
-          // 사용하는 곳이 없음.
-          // this.$store.state.stompClient.subscribe("/sub/" + this.$store.state.currentUser.email, (e) => {
-          //   //메시지 전송 실패시
-          //   this.channelSubscribeCallBack(e, true)
-          // })
         }, (e) => {
-          console.log('stomp close', this.$store.state.isLogout)
           if (!this.$store.state.isLogout) {
             // window.location.href = "/"
           }
         })
       },
     }
-
   }
-
 </script>
 <style>
   .disactive-padding {

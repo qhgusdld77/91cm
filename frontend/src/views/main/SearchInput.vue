@@ -15,6 +15,7 @@
   </div>
 </template>
 <script>
+  import {mapGetters} from "vuex";
 
   export default {
     name: 'SearchInput',
@@ -30,7 +31,7 @@
     mounted() {
       //자식의 mounted가 먼저 실행되기때문에 따로 요소를 다시한번 가져옴
       this.$nextTick(() => {
-        this.$store.commit('setWrapperEl',document.querySelector('.c-c-wrapper'));
+        this.$store.commit('setWrapperEl',document.querySelector('.c-c-wrapper'))
       })
       this.$store.watch(() => this.$store.getters.getSearchMode, isSearchMode => {
         if (!isSearchMode) {
@@ -125,5 +126,13 @@
         }
       }
     },
+    computed: {
+      //  getSearchMode () {
+      //    return this.$store.getters.getSearchMode
+      //  }
+      ...mapGetters({
+        msgArray: 'getMsgArray'
+      })
+    }
   }
 </script>

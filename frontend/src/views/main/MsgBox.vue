@@ -88,7 +88,6 @@
 </template>
 <script>
   import CommonClass from "../../service/common";
-  import {mapGetters} from "vuex";
 
   export default {
     name: 'MsgBox',
@@ -99,9 +98,6 @@
       }
     },
     computed:{
-      ...mapGetters({
-        currentUser: 'getCurrentUser'
-      }),
       isMsgByLoginUser: function(){
         return this.msg.sender == this.currentUser.email
       },
@@ -144,7 +140,7 @@
         return CommonClass.checkFileType(file)
       },
       fileDownload: function (file) {
-        this.$http.get(file.path, {
+        this.$http.get("/api/file/download/"+file.server_name, {
           responseType: 'blob'
         })
           .then(res => {

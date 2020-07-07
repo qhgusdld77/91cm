@@ -8,4 +8,8 @@
         insert file(original_name, server_name, path, extension, message_id,file_size)
             values (#{original_name}, #{server_name}, #{path}, #{extension}, #{message_id}, #{file_size})
     </insert>
+    
+    <select id="getFile" resultType="com.nineone.nocm.domain.ContentsFile">
+    	select * from file where server_name = #{server_name}
+    </select>
 </mapper>

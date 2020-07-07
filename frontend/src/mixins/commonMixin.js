@@ -1,4 +1,5 @@
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
+
 let commonMixin = {
   computed: {
     ...mapGetters({
@@ -23,9 +24,10 @@ let commonMixin = {
       this.$store.commit(key, value)
     },
     post: function (url, params, callback) {
+      console.log(params)
       this.$http.post(url, params)
         .then(res => {
-          if(callback !== undefined) {
+          if (callback !== undefined) {
             callback(res)
           }
         })
@@ -36,8 +38,8 @@ let commonMixin = {
     isRoot: function () {
       return this.currentUser.roles.includes('ROLE_ROOT')
     },
-    subscribe: function(url, func) {
-      if(!this.subscribeList.includes(url)) {
+    subscribe: function (url, func) {
+      if (!this.subscribeList.includes(url)) {
         this.subscribeList.push(url)
         this.commit('setSubscribeList', this.subscribeList)
 
@@ -45,7 +47,10 @@ let commonMixin = {
       }
       return null
     },
-    send: function(url, message) {
+    unsubscribe: function (id) {
+      this.$store.state.stompClient.unsubscribe(id)
+    },
+    send: function (url, message) {
       this.$store.state.stompClient.send(url, JSON.stringify({
         'message': message,
         'error': "null"

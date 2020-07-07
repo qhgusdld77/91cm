@@ -2,6 +2,7 @@ package com.nineone.nocm.controller.api;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,9 +69,10 @@ public class FileController {
             ContentsFile contentsFile = ContentsFile.getDefaultInstance(file);
             contentsFile.setSender(sender);
             contentsFile.setMessage_id(message.getId());
-            fileList.add(contentsFile);
-            fileStorageService.storeFile(file, contentsFile);
+            contentsFile.setPath(fileStorageService.storeFile(file, contentsFile));
             fileStorageService.DBStoreFile(contentsFile);
+            
+            fileList.add(contentsFile);
         }
         message.setFiles(fileList);
         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getChannel_id(), message);
@@ -105,6 +107,30 @@ public class FileController {
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString())
                 .body(resource);
-
     }
+    
+//    @GetMapping("/download/thumb/{fileName}")
+//    public ResponseEntity<Resource> downloadThumbFile(@PathVariable(value = "fileName") String fileName) {
+//        // id를 통해서 UUID로 인코딩된 file을 가져오는 로직
+//        Resource resource = fileStorageService.loadFileAsResource(fileName);
+//        return setFileResponseEntity(resource);
+//    }
+    
+//    public ResponseEntity<Resource> setFileResponseEntity(Resource resource){
+//    	String contentType = null;
+//        try {
+//            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+//        } catch (IOException ex) {
+//            log.error("unknown file extension");
+//        }
+//        if (contentType == null) {
+//            contentType = "application/octet-stream";
+//        }
+//        ContentDisposition contentDisposition = ContentDisposition.builder("attachment").filename(resource.getFilename(), StandardCharsets.UTF_8).build();
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.parseMediaType(contentType))
+//                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString())
+//                .body(resource);
+//    }
+    
 }

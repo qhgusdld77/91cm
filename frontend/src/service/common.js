@@ -51,8 +51,10 @@ class CommonClass {
     switch (type) {
       case ('png'):
       case ('jpg'):
+      case ('jpeg'):
       case ('gif'):
-        return file.path
+        //download뒤에 thumb인지 origianl인지 구분 api 만들기
+        return "/api/file/download/thumb" + file.server_name
       case ('zip'):
       case ('7z'):
       case ('tar'):

@@ -54,11 +54,9 @@
 
   export default {
     name: "InviteInput",
-//    props: ['message'],
     computed: {
       ...mapGetters({
         userList: 'getUserList',
-        channelUsers: 'getChannelUsers',
         inviteUserList: 'getInviteUserList',
       })
     },
