@@ -216,7 +216,6 @@
           return;
         }
         let formData = new FormData();
-        // formData에 multi로 파일을 담는 방법에 대해 추후 확인
         ([...uploadFiles]).forEach(file => {
           formData.append("files", file)
           fileSize += file.size
@@ -338,13 +337,13 @@
             ((this.oldScrollHeight == this.wrapperEl.clientHeight) && (this.wrapperEl.scrollHeight > this.wrapperEl.clientHeight))) {
 
             this.wrapperEl.scrollTop = this.wrapperEl.scrollHeight
-            this.$store.commit('setFirstLoad',false) 
+            this.$store.commit('setFirstLoad',false)
             this.$store.commit('setOldScrollHeight', this.wrapperEl.scrollHeight);
           }
         })
       },
       isScrollAtEnd(wrapperEl) {
-        if (Math.floor(wrapperEl.scrollTop + wrapperEl.clientHeight) == this.oldScrollHeight || Math.round(wrapperEl.scrollTop + wrapperEl.clientHeight) == this.oldScrollHeight || Math.floor(wrapperEl.scrollTop + wrapperEl.clientHeight) == wrapperEl.scrollHeight || 
+        if (Math.floor(wrapperEl.scrollTop + wrapperEl.clientHeight) == this.oldScrollHeight || Math.round(wrapperEl.scrollTop + wrapperEl.clientHeight) == this.oldScrollHeight || Math.floor(wrapperEl.scrollTop + wrapperEl.clientHeight) == wrapperEl.scrollHeight ||
         Math.round(wrapperEl.scrollTop + wrapperEl.clientHeight) == wrapperEl.scrollHeight) {
           return true
         } else {

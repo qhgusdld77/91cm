@@ -1,5 +1,5 @@
 <template>
-  <aside class="right-sidebar">
+  <aside class="right-sidebar" id="RSidebar">
     <div class="sidebar-chat" data-plugin="chat-sidebar">
       <div class="sidebar-chat-info" style="margin: 16px 0px;display:flex;">
         <h6>About this Channel</h6>
@@ -58,6 +58,7 @@
               </v-btn>
             </div>
           </b-collapse>
+
           <!-- 화상 채팅 메뉴 끝 -->
           <!-- to do list 메뉴 시작 -->
           <a class="list-group-item" @click="callComponent('todoList')">
@@ -70,6 +71,25 @@
             <i class="im im-calendar"></i>
             <span style="margin-left:20px;">Calendar</span>
           </a>
+          <a class="list-group-item" @click="callComponent('fileDrawer')">
+            <i class="im im-files-o"></i>
+            <span style="margin-left:20px;">Files</span>
+          </a>
+          <b-collapse id="files" visible>
+            <v-row
+              :style="{width: getWidth()+'px', marginLeft: '10px'}"
+              align="center"
+              justify="center"
+              dense>
+              <v-col
+                @click="test2"
+                v-for="card in cards"
+                :key="card.title"
+                :cols="card.flex">
+                <v-img :src="card.src" style="cursor: pointer;"></v-img>
+              </v-col>
+            </v-row>
+          </b-collapse>
           <!-- calender 메뉴 끝 -->
         </div>
       </div>
@@ -81,13 +101,19 @@
   export default {
     props: ['modalObj'],
     name: 'RSidebar',
-    computed: {
-    },
+    computed: {},
     data() {
       return {
         videoChatUsers: 0,
         channelUserSize: 0,
-        userSelect: null
+        userSelect: null,
+        //파일 모음 테스트용 썸네일 이미지 변수
+        cards: [
+          {title: 'develop1', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 4},
+          {title: 'develop2', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 4},
+          {title: 'develop3', src: 'https://www.hanuricampus.com/m/html/images/main/middle01-1.jpg', flex: 4},
+
+        ]
       }
     },
     mounted() {
@@ -98,6 +124,15 @@
 
     },
     methods: {
+      getWidth: function () {
+        return $('#RSidebar').width();
+      },
+      test: function () {
+        alert('test')
+      },
+      test2: function () {
+        alert('test2s')
+      },
       toggleVideoMode: function () {
         this.$store.commit('setIsVideoMode', !this.isVideoMode)
         this.callComponent('main', true)

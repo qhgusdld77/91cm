@@ -64,6 +64,7 @@
   import VideoChat from "./VideoChat";
   import channelMixin from "../mixins/channelMixin";
   import globalWatch from "../mixins/globalWatch";
+  import FileDrawer from "./FileDrawer";
 
   export default {
     name: 'Main',
@@ -81,7 +82,8 @@
       'Calendar': Calendar,
       'AdminPage': AdminPage,
       'AppsModal': AppsModal,
-      'VideoChat': VideoChat
+      'VideoChat': VideoChat,
+      'FileDrawer': FileDrawer
     },
     data() {
       return {
@@ -108,6 +110,8 @@
             return 'Calendar'
           case 'admin':
             return 'AdminPage'
+          case 'fileDrawer':
+            return 'FileDrawer'
           // case 'videoChat':
           //   return 'VideoChat'
           default:
