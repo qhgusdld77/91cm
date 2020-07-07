@@ -29,6 +29,9 @@ import com.nineone.nocm.exception.UploadFileNotFoundException;
 import com.nineone.nocm.repository.FileStorage;
 import com.nineone.nocm.util.DateUtil;
 
+import net.coobird.thumbnailator.Thumbnailator;
+import net.coobird.thumbnailator.Thumbnails;
+
 @Service
 public class FileStorageService {
 	private final String USER_IMAGE_PATH = "C:/userImage/";
@@ -51,7 +54,7 @@ public class FileStorageService {
     
     public Path makeDateDirectories(String parentsDirName) {
     	String dirName = new SimpleDateFormat("yyyyMMdd").format(DateUtil.makeDate());
-    	String srtPath = "C:/"+parentsDirName+dirName;
+    	String srtPath = "C:/Attach/"+parentsDirName+"/"+dirName;
     	Path path = Paths.get(srtPath).toAbsolutePath().normalize();
     	try {
 			Files.createDirectories(path);
@@ -61,11 +64,22 @@ public class FileStorageService {
 		}
     }
     
-    public void makeThumnail() {
+    public void makeThumnail(Path path,MultipartFile file,ContentsFile contentsFile) {
     	
+    	String thumbPath = path.resolve("thumb"+contentsFile.getServer_name()).toString();
+//    	File thumbFile = new File(path.toString(), "thumb" + contentsFile.getServer_name());
+//    	file.transferTo(thumbFile);
+    	
+    	try {
+//    		Thumbnailator.createThumbnail(file.getInputStream(),);
+			Thumbnails.of(file.getInputStream()).scale(0.25).toFile(thumbPath);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
-    public Path checkExtension(ContentsFile contentsFile) {
+    public Path checkExtension(MultipartFile file,ContentsFile contentsFile) {
     	Path path;
     	switch (contentsFile.getExtension()) {
 		case "zip":
@@ -75,8 +89,10 @@ public class FileStorageService {
 			break;
 		case "png":
 		case "jpg":
+		case "JPEG":
 		case "gif":
 			path = makeDateDirectories("image");
+			makeThumnail(path,file,contentsFile);
 			break;
 		case "pdf":
 			path = makeDateDirectories("pdf");
@@ -92,22 +108,22 @@ public class FileStorageService {
     }
     
     public String storeFile(MultipartFile file, ContentsFile contentsFile){
-        String fileName = StringUtils.cleanPath(contentsFile.getServer_name());
+        String fileName = StringUtils.cleanPath(contentsFile.getServer_name()+"."+contentsFile.getExtension());
         
-        //checkExtension(contentsFile);
+        Path path = checkExtension(file,contentsFile);
         
         try{
             if (fileName.contains("..")){
                 throw new FileStorageException("Sorry! Filename contains invalid path sequenced "+ fileName);
             }
-            Path targetLocation = this.fileStorageLocation.resolve(fileName);
-            //System.out.println(targetLocation+"-----------------------");
+            Path targetLocation = path.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            return fileName;
+            return path.toString();
         }catch (IOException ex){
             throw new FileStorageException("Could not store file "+ fileName + ", please try again",ex);
         }
     }
+    
     public String storeFile(MultipartFile file, User user){
 		String fileName = StringUtils.cleanPath("u-"+getUUID());
 		Path filePath = null;
@@ -128,6 +144,7 @@ public class FileStorageService {
 			throw new FileStorageException("Could not store file "+ fileName + ", please try again",ex);
 		}
 	}
+    
     public Resource loadFileAsResource(String fileName){
         try{
         	Path filePath = null;
@@ -136,7 +153,9 @@ public class FileStorageService {
         		UserImageStorageLocation = Paths.get(USER_IMAGE_PATH).toAbsolutePath().normalize();
         		filePath = UserImageStorageLocation.resolve(fileName).normalize();
         	}else {
-        		filePath = this.fileStorageLocation.resolve(fileName).normalize();
+        		ContentsFile file = fileStorage.getFile(fileName.replace("thumb", ""));
+        		Path path = Paths.get(file.getPath()).toAbsolutePath().normalize();
+        		filePath = path.resolve(fileName+"."+file.getExtension()).normalize();
         	}
             Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists()){
@@ -148,15 +167,18 @@ public class FileStorageService {
             throw new UploadFileNotFoundException("File not found : "+fileName, ex);
         }
     }
+    
     public void DBStoreFile(ContentsFile file){
         fileStorage.saveFile(file);
     }
+    
 	public void deleteOldUserPicture(String fileName) throws RuntimeException{
 		File file = new File(USER_IMAGE_PATH+fileName);
 		if (file.exists()){
 			file.delete();
 		}
 	}
+	
     public String getUUID(){
         return UUID.randomUUID().toString().replaceAll("-","");
     }

@@ -140,7 +140,7 @@
         return CommonClass.checkFileType(file)
       },
       fileDownload: function (file) {
-        this.$http.get(file.path, {
+        this.$http.get("/api/file/download/"+file.server_name, {
           responseType: 'blob'
         })
           .then(res => {

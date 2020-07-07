@@ -11,9 +11,14 @@ public class FileStorage {
     @Autowired
     private SqlSessionTemplate sqlSession;
 
-    private String nmaespace = "com.nineone.nocm.mapper.file";
+    private String namespace = "com.nineone.nocm.mapper.file";
 
     public int saveFile(ContentsFile file){
-        return sqlSession.insert(nmaespace + ".saveFile",file);
+        return sqlSession.insert(namespace + ".saveFile",file);
     }
+    
+    public ContentsFile getFile(String server_name) {
+    	return sqlSession.selectOne(namespace + ".getFile", server_name);
+    }
+    
 }
