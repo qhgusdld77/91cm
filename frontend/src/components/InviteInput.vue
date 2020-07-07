@@ -4,7 +4,7 @@
       <v-autocomplete
         v-model="friends"
         :items="inviteUserList"
-        @keydown.enter.exact="enter"
+        @keydown.enter.exact="inviteChannel"
         @keydown.esc.exact="$emit('inviteToggle')"
         filled
         autofocus
@@ -77,8 +77,8 @@
         if (index >= 0) this.friends.splice(index, 1);
       },
       enter: async function (event) {
+        return
         let el = document.querySelector(".menuable__content__active.inviteClass")
-        console.log(el)
         if (el == null) {
           if (this.friends.length != 0) {
             await InviteService.invite(this.$store.state.currentUser.email, this.$store.state.currentChannel.id, this.friends)
@@ -100,6 +100,7 @@
                 //     console.warn(res.data)
                 //   })
                 this.message.content += '을 초대했습니다.'
+                //?
                 this.$eventBus.$emit('getUserList', true)
                 this.$emit('sendMessage', null, true)
                 this.friends = []

@@ -1,5 +1,6 @@
 import NotificationClass from '../service/notification'
 import CommonClass from '../service/common'
+import InviteService from '../service/inviteService'
 
 let channelMixin = {
   methods: {
@@ -224,9 +225,96 @@ let channelMixin = {
       this.$_confirm(content, this.leaveChannle, user);
     },
     //채널 초대
-    inviteChannel: function () {
-      // 채널 초대를 하는 로직을 넣는건지
-      // 채널 초대가 온 것을 수락하는 로직을 넣는건지..?
+    inviteChannel: async function (event) {
+      let el = document.querySelector(".menuable__content__active.inviteClass")
+      if (el == null) {
+        if (this.friends.length != 0) {
+          await InviteService.invite(this.currentUser.email, this.currentChannel.id, this.friends)
+            .then(res => {
+              for (let i = 0; i < this.friends.length; i++) {
+                const user = this.inviteUserList.find(el => el.email == this.friends[i])
+
+                if (user != null) {
+                  this.message.content += user.name + '님'
+                }
+              }
+              // 임시 주석처리
+              // this.$http.post('/api/invite/mail', {
+              //   channel_id: this.$store.state.currentChannel.id,
+              //   sender: this.$store.state.currentUser.email,
+              //   recipients: this.friends
+              // })
+              //   .then(res => {
+              //     console.warn(res.data)
+              //   })
+              this.message.content += '을 초대했습니다.'
+              // 아래 코드 무엇인지
+              this.$eventBus.$emit('getUserList', true)
+
+              this.$emit('sendMessage', null, true)
+              this.friends = []
+              this.message.content = ''
+              this.$store.state.isInviteMode = !this.$store.state.isInviteMode
+            }).catch(error => {
+              let alertmsg = ''
+              console.log(error, 'error')
+              if (error.response.data.list != null) {
+                const alertList = error.response.data.list
+                for (let i = 0; i < alertList.length; i++) {
+                  const user = this.userList.find(el => el.email == alertList[i])
+                  alertmsg += user.name + '님'
+                }
+                alertmsg += '은 이미 이 채널에 초대 받았습니다. 확인해주세요.'
+                this.$_error(alertmsg)
+              } else {
+                this.$_error(error.response.data.message)
+              }
+              console.error(error.response)
+              this.message.content = ''
+            })
+        } else {
+          this.$_alert('초대할 사용자를 선택해주세요')
+        }
+      }
+    },
+    inviteAccept: function(alarm,index){
+      const message = {
+        channel_id: alarm.channel_id,
+        sender: null,
+        content: this.$store.state.currentUser.name + '님이 채널에 초대되었습니다.',
+        message_type:'action'
+        // user: this.$store.state.currentUser
+      }
+      this.$http.post('/api/invite/accept', alarm)
+        .then(async (res) => {
+          //현재 채널을 변경하는 로직을 구현해야할듯
+          this.$store.state.stompClient.send('/pub/chat/message', JSON.stringify(message))
+          this.alarmList.splice(index, 1);
+          this.$store.state.stompClient.send('/pub/chat/room/' + alarm.channel_id, JSON.stringify({"message": "updateChannel", "error": "null"}))
+          await this.selectChannelList(alarm.channel_id) // 채널 id 값이 아니라 channel 객체를 줘야함
+          await this.subscribe("/sub/chat/room/" + alarm.channel_id, this.channelSubscribeCallBack)
+          this.send("/sub/chat/room/" + alarm.channel_id, 'selectChannelUserList')
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    inviteRefuse: function (alarm, index) {
+      // 초대가 거절됐다는 메시지를 채널에 보내는 로직을 구현해야함
+      this.$http.post('/api/invite/refuse', alarm)
+        .then(res => {
+          const message = {
+            channel_id: alarm.channel_id,
+            sender: null,
+            content: this.$store.state.currentUser.name + '님이 채널 초대를 거부하셨습니다.',
+            message_type:'action'
+          }
+          this.alarmList.splice(index, 1);
+          this.$store.state.stompClient.send('/pub/chat/message', JSON.stringify(message))
+        })
+        .catch(error => {
+          console.error(error)
+        })
     },
     //채널 강퇴 및 나가기
     leaveChannle: function (user) {

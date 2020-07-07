@@ -111,12 +111,12 @@
           content: '',
           username: ''
         },
-        message: {
-          channel_id: 0,
-          content: '',
-          sender: '',
-          user: {}
-        },
+        // message: {
+        //   channel_id: 0,
+        //   content: '',
+        //   sender: '',
+        //   user: {}
+        // },
         // 채널 옮길 때마다 초기화 되어야한다.
         // cursorPoint: {
         //   channel_id: 0,
@@ -338,14 +338,14 @@
             ((this.oldScrollHeight == this.wrapperEl.clientHeight) && (this.wrapperEl.scrollHeight > this.wrapperEl.clientHeight))) {
 
             this.wrapperEl.scrollTop = this.wrapperEl.scrollHeight
-            this.$store.commit('setFirstLoad',false)
-            //this.firstLoad = false
+            this.$store.commit('setFirstLoad',false) 
             this.$store.commit('setOldScrollHeight', this.wrapperEl.scrollHeight);
           }
         })
       },
       isScrollAtEnd(wrapperEl) {
-        if (Math.floor(wrapperEl.scrollTop + wrapperEl.clientHeight) == this.oldScrollHeight || Math.round(wrapperEl.scrollTop + wrapperEl.clientHeight) == this.oldScrollHeight) {
+        if (Math.floor(wrapperEl.scrollTop + wrapperEl.clientHeight) == this.oldScrollHeight || Math.round(wrapperEl.scrollTop + wrapperEl.clientHeight) == this.oldScrollHeight || Math.floor(wrapperEl.scrollTop + wrapperEl.clientHeight) == wrapperEl.scrollHeight || 
+        Math.round(wrapperEl.scrollTop + wrapperEl.clientHeight) == wrapperEl.scrollHeight) {
           return true
         } else {
           return false
@@ -380,20 +380,7 @@
         }
       },
     },
-    computed: {
-
-
-      ...mapGetters({
-        //msgArray: 'getMsgArray',
-        currentChannel: 'getCurrentChannel'
-      })
-    },
     watch: {
-      currentChannel: function (newv, oldv) {
-        //this.initData()
-        //this.getMessage()
-        //this.scrollToEnd()
-      },
       msgArray: function () {
         // 스크롤을 최상단으로 올려 메시지를 가져올 때 실행되는 것을 막기 위한 if문
         if (this.isGetMsgForPreview) {
@@ -410,12 +397,6 @@
           }
         }
       },
-
-      checkbox: function () {
-        if (this.checkbox) {
-          alert('지금부터 보내는 메시지는 나인원소프트 전체 메일로 보내집니다.')
-        }
-      }
     },
   }
 </script>
@@ -428,9 +409,6 @@
     }
   }
 
-  /* .v-chip{
-    padding: 0 30px;
-  } */
   .theme--light.v-chip:hover:before {
     opacity: 0;
   }

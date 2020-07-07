@@ -65,5 +65,8 @@ export default {
   },
   setOldScrollHeight: function (state, payload) {
     state.oldScrollHeight = payload;
+  },
+  setMessage:function (state,payload){
+    state.message = payload
   }
 }

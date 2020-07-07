@@ -105,49 +105,53 @@
       //   console.log('click')
       //   this.$bvModal.show(modalId)
       // },
-      inviteAccept: function (alarm, index) {
-        const message = {
-          channel_id: alarm.channel_id,
-          sender: null,
-          content: this.$store.state.currentUser.name + '님이 채널에 초대되었습니다.',
-          message_type:'action'
-          // user: this.$store.state.currentUser
-        }
-        this.$http.post('/api/invite/accept', alarm)
-          .then(async (res) => {
-            //현재 채널을 변경하는 로직을 구현해야할듯
-            this.$store.state.stompClient.send('/pub/chat/message', JSON.stringify(message))
-            this.alarmList.splice(index, 1);
-            this.$store.state.stompClient.send('/pub/chat/room/' + alarm.channel_id, JSON.stringify({"message": "updateChannel", "error": "null"}))
-            await this.selectChannelList(alarm.channel_id)
-            await this.subscribe("/sub/chat/room/" + alarm.channel_id, this.channelSubscribeCallBack)
-            this.send("/sub/chat/room/" + alarm.channel_id, 'selectChannelUserList')
-          })
-          .catch(error => {
-            console.error(error)
-          })
-      }
-      ,
-      // 거절 과 수락은 하나의 api로 해서 신호를 하나 줘서 분기 시키는게 더 좋을 듯
-      inviteRefuse: function (alarm, index) {
-        // 초대가 거절됐다는 메시지를 채널에 보내는 로직을 구현해야함
-        this.$http.post('/api/invite/refuse', alarm)
-          .then(res => {
+      // inviteAccept: function (alarm, index) {
+      //   const message = {
+      //     channel_id: alarm.channel_id,
+      //     sender: null,
+      //     content: this.$store.state.currentUser.name + '님이 채널에 초대되었습니다.',
+      //     message_type:'action'
+      //     // user: this.$store.state.currentUser
+      //   }
+      //   this.$http.post('/api/invite/accept', alarm)
+      //     .then(async (res) => {
+      //       //현재 채널을 변경하는 로직을 구현해야할듯
+      //       this.$store.state.stompClient.send('/pub/chat/message', JSON.stringify(message))
+      //       this.alarmList.splice(index, 1);
+      //       this.$store.state.stompClient.send('/pub/chat/room/' + alarm.channel_id, JSON.stringify({"message": "updateChannel", "error": "null"}))
+      //       console.log(alarm.channel_id)
+      //       let channel = this.$store.getters.getChannelList.find(channel => channel.id === alarm.channel_id)
+      //       await this.selectChannelList(channel) // 채널 id 값이 아니라 channel 객체를 줘야함
+      //       //this.commit('setCurrentChannel', res.data) //채널 진입
+      //       await this.subscribe("/sub/chat/room/" + alarm.channel_id, this.channelSubscribeCallBack)
+            
+      //     })
+      //     .catch(error => {
+      //       console.error(error)
+      //     })
+      // }
+      // ,
+      // // 거절 과 수락은 하나의 api로 해서 신호를 하나 줘서 분기 시키는게 더 좋을 듯
+      // inviteRefuse: function (alarm, index) {
+        
+      //   // 초대가 거절됐다는 메시지를 채널에 보내는 로직을 구현해야함
+      //   this.$http.post('/api/invite/refuse', alarm)
+      //     .then(res => {
 
-            const message = {
-              channel_id: alarm.channel_id,
-              sender: null,
-              content: this.$store.state.currentUser.name + '님이 채널 초대를 거부하셨습니다.',
-            }
-            this.alarmList.splice(index, 1);
+      //       const message = {
+      //         channel_id: alarm.channel_id,
+      //         sender: null,
+      //         content: this.$store.state.currentUser.name + '님이 채널 초대를 거부하셨습니다.',
+      //       }
+      //       this.alarmList.splice(index, 1);
 
-            this.$store.state.stompClient.send('/pub/chat/message', JSON.stringify(message))
-          })
-          .catch(error => {
-            console.error(error)
-          })
-      }
-      ,
+      //       this.$store.state.stompClient.send('/pub/chat/message', JSON.stringify(message))
+      //     })
+      //     .catch(error => {
+      //       console.error(error)
+      //     })
+      // }
+      // ,
       callComponent: function (component) {
         this.$store.commit('getSelectComponent', component)
       }

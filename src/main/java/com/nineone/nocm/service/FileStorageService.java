@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import com.nineone.nocm.domain.User;
 import com.nineone.nocm.exception.FileStorageException;
 import com.nineone.nocm.exception.UploadFileNotFoundException;
 import com.nineone.nocm.repository.FileStorage;
+import com.nineone.nocm.util.DateUtil;
 
 @Service
 public class FileStorageService {
@@ -43,16 +45,63 @@ public class FileStorageService {
         try{
             Files.createDirectories(this.fileStorageLocation);
         }catch (Exception ex){
-            throw new FileStorageException("could not create the directory",ex);
+        	throw new FileStorageException("could not create the directory",ex);
         }
     }
+    
+    public Path makeDateDirectories(String parentsDirName) {
+    	String dirName = new SimpleDateFormat("yyyyMMdd").format(DateUtil.makeDate());
+    	String srtPath = "C:/"+parentsDirName+dirName;
+    	Path path = Paths.get(srtPath).toAbsolutePath().normalize();
+    	try {
+			Files.createDirectories(path);
+			return path;
+		} catch (Exception ex) {
+			throw new FileStorageException("could not create the directory",ex);
+		}
+    }
+    
+    public void makeThumnail() {
+    	
+    }
+    
+    public Path checkExtension(ContentsFile contentsFile) {
+    	Path path;
+    	switch (contentsFile.getExtension()) {
+		case "zip":
+		case "7z" :
+		case "tar":
+			path = makeDateDirectories("zip");
+			break;
+		case "png":
+		case "jpg":
+		case "gif":
+			path = makeDateDirectories("image");
+			break;
+		case "pdf":
+			path = makeDateDirectories("pdf");
+			break;
+		case "txt":
+			path = makeDateDirectories("txt");
+			break;
+		default:
+			path = makeDateDirectories("else");
+			break;
+		}
+    	return path;
+    }
+    
     public String storeFile(MultipartFile file, ContentsFile contentsFile){
         String fileName = StringUtils.cleanPath(contentsFile.getServer_name());
+        
+        //checkExtension(contentsFile);
+        
         try{
             if (fileName.contains("..")){
                 throw new FileStorageException("Sorry! Filename contains invalid path sequenced "+ fileName);
             }
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
+            //System.out.println(targetLocation+"-----------------------");
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             return fileName;
         }catch (IOException ex){

@@ -1,45 +1,86 @@
 <template>
 <div>
-  <li class="list-unstyled chat-message" :class="{'msgflex-end': isMsgByLoginUser}" @mouseenter="showMsgOption" @mouseleave="hideMsgOption">
-    <div class="icon" :class="msgOrder1">
+  <li class="list-unstyled chat-message" v-if="!isMsgByLoginUser">
+    <div class="icon" >
       <slot name="m-icon">
         <img  class="icon-round" :src="msg.user.picture" width="40" height="40"/>
       </slot>
     </div>
     <!-- flex에서 벗어나기 위해 감쌈  -->
-    <div :class="msgOrder2">
-      <div class="verti-align" :class="{'msgflex-end':isMsgByLoginUser}">
+    <div >
+      <div class="verti-align">
         <slot name="m-info">
-          <strong :class="msgOrder1">{{ msg.user.name }}</strong>
-          <span style="font-size: 11px; margin:0px 3px; " :class="msgOrder2">{{ msg.str_send_date }}</span>
-            <a class="verti-align" :class="{'msgorder-two':!isMsgByLoginUser}" v-if="isMsgOption" @click="confirmMessage(msg)">
-            <v-icon style="font-size:16px;">delete_outline</v-icon>
-            </a>
+          <strong>{{ msg.user.name }}</strong>
         </slot>
       </div>
       <!-- 채팅메세지내용 -->
-      <div class="verti-align" :class="{'msgflex-end':isMsgByLoginUser}">
+      <div style="display:flex;">
         <slot name="m-content">
-          <div v-if="msg.message_type=='message'" v-html="textbyFilter(msg.content)"
+          <div v-if="checkMsgType" v-html="textbyFilter(msg.content)"
                class="mychat-content"></div>
-          <b-container fluid v-else-if="msg.message_type=='file'" class="p-4 bg-white">
-            <b-row>
-              <b-col v-for="(file,index) in msg.files" :key="index">
-                <a @click="fileDownload(file)">
-                  <b-img thumbnail rounded fluid :src="selectImage(file)" alt="이미지를 찾을 수 없습니다."
-                         style="max-width: 200px" @load="$emit('imgLoad')"></b-img>
-                  <p><b>{{file.original_name}}</b></p>
-                  <p>file size : {{(file.file_size / 1024).toLocaleString(undefined,{minimumFractionDigits:2})}}
-                    kb</p>
-                </a>
-              </b-col>
-            </b-row>
-          </b-container>
+               <div style="display:flex;align-items: flex-end;">
+                  <div v-if="checkFileType" class="mychat-content">
+                    <b-row>
+                      <b-col v-for="(file,index) in msg.files" :key="index">
+                        <a @click="fileDownload(file)">
+                          <div class="hori-align">
+                            <b-img :alt="file.original_name" :src="selectImage(file)" @load="$emit('imgLoad')" style="max-width:100px"></b-img>
+                          </div>
+                          <p class="file-name"><b>{{file.original_name}}</b></p>
+                          <p style="margin:0px;">file size : {{(file.file_size / 1024).toLocaleString(undefined,{minimumFractionDigits:2})}}
+                            kb</p>
+                        </a>
+                      </b-col>
+                    </b-row>
+                  </div>
+                  <span style="font-size: 11px; margin:0px 3px; width:53px; ">{{ msg.str_send_date }}</span>
+                  <a class="verti-align" v-if="isMsgOption" @click="confirmDelete(msg)">
+                    <v-icon style="font-size:16px;">delete_outline</v-icon>          
+                  </a>
+               </div>
+         
         </slot>
       </div>
       <!-- 채팅메시지내용끝 -->
     </div>
   </li>
+
+  <li class="list-unstyled chat-message msgflex-end" v-else >
+    <!-- flex에서 벗어나기 위해 감쌈  -->
+    <div @mouseover="showMsgOption(msg.id)" @mouseleave="hideMsgOption(msg.id)">
+      <!-- 채팅메세지내용 -->
+      <div style="display:flex;">
+        <slot name="m-content">
+          <div style="display:flex;align-items: flex-end;">
+            <a class="verti-align confirmMsgDel" :id="'confirmMsgDel' + msg.id" @click="confirmDelete(msg)">
+              <v-icon style="font-size:16px;">delete_outline</v-icon>          
+            </a>
+            <span style="font-size: 11px; margin:0px 3px; width:53px; ">{{ msg.str_send_date }}</span>
+          </div>
+          <div v-if="checkMsgType" v-html="textbyFilter(msg.content)"
+               class="my-message mychat-content"></div>
+          <div v-if="checkFileType" class="my-message mychat-content">
+            <b-row>
+              <b-col v-for="(file,index) in msg.files" :key="index">
+                <a @click="fileDownload(file)">
+                  <div class="hori-align">
+                    <b-img :alt="file.original_name" :src="selectImage(file)" @load="$emit('imgLoad')" style="max-width:100px"></b-img>
+                  </div>
+                  <!-- <b-img thumbnail rounded fluid  alt="이미지를 찾을 수 없습니다."
+                         style="max-width: 200px" ></b-img> -->
+                  <p class="file-name"><b>{{file.original_name}}</b></p>
+                  <p style="margin:0px;">file size : {{(file.file_size / 1024).toLocaleString(undefined,{minimumFractionDigits:2})}}
+                    kb</p>
+                </a>
+              </b-col>
+            </b-row>
+          </div>
+        </slot>
+      </div>
+      <!-- 채팅메시지내용끝 -->
+    </div>
+  </li>
+
 
 
   </div>
@@ -60,33 +101,22 @@
       isMsgByLoginUser: function(){
         return this.msg.sender == this.currentUser.email
       },
-      msgOrder1:function(){
-        return {
-          'msgorder-one': !this.isMsgByLoginUser,
-          'msgorder-two': this.isMsgByLoginUser
-        }
+      checkMsgType:function(){
+        return this.msg.message_type=='message' || this.msg.delete_yn=='Y'
       },
-      msgOrder2:function(){
-        return {
-          'msgorder-one': this.isMsgByLoginUser,
-          'msgorder-two': !this.isMsgByLoginUser
-        }
+      checkFileType:function(){
+        return this.msg.message_type=='file'&& this.msg.delete_yn=='N'
       },
-      // isAdmin:function(){
-      //   return this.currentUser.roles.includes('ROLE_ADMIN') || this.currentUser.roles.includes('ROLE_ROOT')
-      // }
     },
     methods: {
-      showMsgOption:function(){
-        console.log(this.msg)
-        if(this.msg.delete_yn === 'N'){
-          if(this.isMsgByLoginUser || this.isAdmin()){
-            this.isMsgOption = true
-          }
+      showMsgOption:function(msgId) {
+        if(this.msg.delete_yn === 'N' && (this.isMsgByLoginUser || this.isAdmin())){
+          this.hideMsgOption()
+          $("#confirmMsgDel"+msgId).css("visibility", "visible")
         }
       },
-      hideMsgOption:function(){
-        this.isMsgOption = false
+      hideMsgOption:function(msgId){
+        $(".confirmMsgDel").css("visibility", "hidden")
       },
       textbyFilter: function(content) {
         const tagContentRegexp = new RegExp(/<p(.*?)>(.*?)<\/p>/g);
