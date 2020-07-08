@@ -1,17 +1,26 @@
 <template>
-  <div style="position: relative;" v-if="$store.state.isSearchMode">
-    <i style="position:absolute;left: 15px;top: calc(50% - 12px);" class="im im-magnifier"></i>
-    <template v-if="searchResultList!=null">
-      <a @click="up"><i style="position: absolute; right: 50px; top: calc(50% - 12px);" class="im im-angle-up"></i></a>
-      <a @click="down"><i style="position: absolute; right: 15px; top: calc(50% - 12px);" class="im im-angle-down"></i></a>
-    </template>
-    <b-form-input
-      @keydown.esc.exact="toggleSearchMode"
-      @keydown.enter.exact="search"
-      placeholder="Search..."
-      style="height: 80px;padding-left: 50px; padding-right: 90px;"
-      autofocus
-    ></b-form-input>
+  <div style="width: 100%;display: flex;">
+    <div style="position: relative;flex-grow:1;">
+      <i style="position:absolute;left: 15px;top: calc(50% - 12px);" class="im im-magnifier"></i>
+      <template v-if="searchResultList!=null">
+        <a @click="up"><i style="position: absolute; right: 50px; top: calc(50% - 12px);" class="im im-angle-up"></i></a>
+        <a @click="down"><i style="position: absolute; right: 15px; top: calc(50% - 12px);" class="im im-angle-down"></i></a>
+      </template>
+      <b-form-input
+        @keydown.esc.exact="toggleSearchMode"
+        @keydown.enter.exact="search"
+        placeholder="Search..."
+        style="height: 80px;padding-left: 50px; padding-right: 90px;"
+        autofocus
+        v-model="model"
+      ></b-form-input>
+    </div>
+    <div class="verti-align">
+      <v-btn class="mx-2" fab dark large color="cyan" 
+                  v-if="$store.state.isSearchMode"  @click="search">
+        <i class="im im-paperplane"></i>
+      </v-btn>
+    </div>
   </div>
 </template>
 <script>
@@ -25,7 +34,8 @@
         offset: 0,
         index: 0,
         oldlength: 0,
-        isGetMsgByUp: false
+        isGetMsgByUp: false,
+        model:''
       }
     },
     mounted() {
@@ -46,15 +56,21 @@
       search(e) {
         this.index = 0
         this.oldlength = 0
-        e.preventDefault()
-        if (e.target.value == '') {
-          alert('검색어를 입력해주세요.')
-        } else {
-          this.$store.commit('setSearchText', e.target.value)
-          this.$nextTick(() => {
-            this.searchStart()
-          })
+        let val ='' 
+        if(e.type=='keydown'){
+          e.preventDefault()
+          val = e.target.value
+        }else{
+          val = this.model
         }
+        if (val == '') {
+            alert('검색어를 입력해주세요.')
+          } else {
+            this.$store.commit('setSearchText', val)
+            this.$nextTick(() => {
+              this.searchStart()
+            })
+          }
       },
       toggleSearchMode(e) {
         // searchText값이 바뀌면 contentWrapper에 있는 필터가 실행되는데 (msgarray가 바뀌어도 실행됨)
@@ -82,7 +98,7 @@
         if (this.cursorPoint.empty == false) {
           this.oldlength = this.searchResultList.length;
           this.isGetMsgByUp = true
-          this.$emit('getMessage')
+          this.$emit('selectMessageList')
         } else {
           if (by == null) {
             alert('검색 결과가 없습니다.')

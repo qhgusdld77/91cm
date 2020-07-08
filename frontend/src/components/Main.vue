@@ -61,7 +61,6 @@
   import AdminPage from "../views/admin/AdminPage"
   import VideoChat from "./VideoChat";
   import channelMixin from "../mixins/channelMixin";
-  import globalWatch from "../mixins/globalWatch";
 
   export default {
     name: 'Main',

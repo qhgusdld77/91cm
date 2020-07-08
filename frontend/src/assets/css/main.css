@@ -93,6 +93,8 @@
     border-radius: .25rem;
     background-color: #fff;
     padding-bottom: 30px;
+    width:100%;
+    position: relative;
 }
 .mytextarea{
     position: relative;
@@ -414,6 +416,9 @@ a:focus {
 .myflex-column {
     display: flex;
     flex-direction: column;
+}
+.myflex-grow{
+    flex-grow: 1;
 }
 
 /* ---------------------------------------------------
