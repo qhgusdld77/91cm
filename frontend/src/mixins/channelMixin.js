@@ -58,6 +58,8 @@ let channelMixin = {
           this.$store.commit('pushMsg', data)
           if (!this.$store.state.isfocus) {
             this.msgCountUpdate(data.channel_id, true)
+          }else{
+            this.currentChannel.access()
           }
         } else {
           this.msgCountUpdate(data.channel_id, true)
