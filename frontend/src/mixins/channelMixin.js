@@ -325,6 +325,7 @@ let channelMixin = {
         this.$eventBus.$emit('leaveChannelMsg', user)
         // 나가기 및 퇴장 유저 채널 리스트 리로드
         this.selectChannelList()
+        this.send("/sub/chat/room/" + this.currentChannel.id, 'selectChannelUserList')
         this.$_alert("<code>[" + this.currentChannel.name + ']</code> 채널에서 ' + (this.isMine(user) ? "나갔습니다." : "추방되었습니다."))
       }).catch(error => {
         this.$_error((this.isMine(user) ? "나가기" : "추방") + '에 실패했습니다.')
