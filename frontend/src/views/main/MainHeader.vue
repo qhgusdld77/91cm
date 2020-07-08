@@ -97,6 +97,7 @@
       rightSidebarToggle: function (e) {
         $('.right-sidebar-toggle')[0].classList.toggle('active');
         $('.wrapper').toggleClass('right-sidebar-expand');
+        $('.main-content').addClass('rsidebar-padding-right')
         return false;
       },
       // showModal: function(modalId){

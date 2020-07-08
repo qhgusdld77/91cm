@@ -3,7 +3,7 @@
     <div class="sidebar-chat" data-plugin="chat-sidebar">
       <div class="sidebar-chat-info" style="margin: 16px 0px;display:flex;">
         <h6>About this Channel</h6>
-        <li @click="rightSidebarToggle" class="list-unstyled"
+        <li @click="RSidebarClose" class="list-unstyled"
             style="flex-grow: 1;display: flex;justify-content: flex-end;align-items: center;font-size: 20px;margin-bottom: 8px;">
           <i class="ik ik-x close-card" style="cursor: pointer;"></i>
         </li>
@@ -91,6 +91,7 @@
       RSidebarClose: function () {
         $('.right-sidebar-toggle')[0].classList.toggle('active');
         $('.wrapper').removeClass('right-sidebar-expand');
+        $('.main-content').removeClass('rsidebar-padding-right')
         // this.$store.state.isRActive = false
       },
       useModal: function (mode) {
