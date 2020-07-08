@@ -23,9 +23,9 @@
           </div>
         </div>
       </a>
-      <v-row align="end" justify="center" class="c-i-wrapper" v-if="!isRoot()">
-        <div style="flex-grow:1;" class="myflex-column">
-          <div style="position: relative;">
+      <v-row align="center" justify="center" class="c-i-wrapper" v-if="!isRoot()">
+        <div class="myflex-column myflex-grow">
+          <div style="position: relative;display: flex;">
             <div class="mytextarea-wrapper" v-if="!$store.state.isInviteMode && !$store.state.isSearchMode">
               <v-icon class="my-mail" v-bind:class="{'active-m': sendMail}" @click="sendMailToggle">mail</v-icon>
               <v-icon class="my-search" @click="toggleSearchMode">find_in_page</v-icon>
@@ -49,17 +49,22 @@
               ></b-form-textarea>
             </div>
             <!--  초대 모드 시작 -->
-            <div v-if="$store.state.isInviteMode">
-              <InviteInput @sendMessage="sendMessage" @inviteToggle="inviteToggle" :message="message"></InviteInput>
-            </div>
+            <InviteInput @sendMessage="sendMessage" @inviteToggle="inviteToggle"  v-if="$store.state.isInviteMode"></InviteInput>
             <!-- 초대 모드 끝  -->
             <!-- 채팅 검색 모드 시작 -->
             <SearchInput
+              v-if="$store.state.isSearchMode"
               :cursorPoint="cursorPoint"
               :wrapperEl="wrapperEl"
               @getMessage="getMessage">
             </SearchInput>
             <!-- 채팅 검색 모드 끝 -->
+            <div class="verti-align">
+                <v-btn class="mx-2" fab dark large color="cyan" style="margin-bottom: 15px;"
+                  v-if="!$store.state.isInviteMode && !$store.state.isSearchMode"  @click="sendMessage($event)">
+                  <i class="im im-paperplane"></i>
+                </v-btn>
+            </div>
           </div>
           <div style="display: flex;flex-grow: 1;">
             <!-- 파일 업로드 progress bar -->
@@ -73,16 +78,15 @@
             <!--            <span style="position: absolute;right: 108px;"> {{ stringByteLength }} / 30000Byte</span>-->
           </div>
         </div>
+
         <!--        일반 채팅 모드 일때 아이콘-->
-        <v-btn class="mx-2" fab dark large color="cyan" style="margin-bottom: 15px;"
-               v-if="!$store.state.isVideoMode" @click="send($event)">
-          <i class="im im-paperplane"></i>
-        </v-btn>
+       
         <!--        화상 채팅 모드 일때 아이콘-->
-        <v-btn class="mx-2" fab dark small color="cyan" style="margin-bottom: 25px;"
-               v-else @click="send($event)">
+        <!-- <v-btn class="mx-2" fab dark small color="cyan" style="margin-bottom: 25px;"
+               v-else @click="sendMessage($event)">
           <i class="im im-paperplane"></i>
-        </v-btn>
+        </v-btn> -->
+       
       </v-row>
     </div>
   </main>
