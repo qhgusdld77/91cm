@@ -30,7 +30,7 @@
                 <li class="list-unstyled">{{ $store.state.currentChannel.name }}</li>
               </div>
               <div style="display:flex; justify-content:flex-start;">
-                <v-btn color="blue-grey" class="white--text" @click="leaveChannle">
+                <v-btn color="blue-grey" class="white--text" @click="confirmChannelForceLeave(currentUser)">
                   나가기
                   <v-icon right dark>exit_to_app</v-icon>
                 </v-btn>

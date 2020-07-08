@@ -178,6 +178,7 @@ p.file-name
 .mychat-content > p {
     margin:0px;
     display:flex;
+    height: 21px;
 }
 
 .my-message{

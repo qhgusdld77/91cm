@@ -248,8 +248,6 @@ let channelMixin = {
               //     console.warn(res.data)
               //   })
               this.message.content += '을 초대했습니다.'
-              // 아래 코드 무엇인지
-              this.$eventBus.$emit('getUserList', true)
 
               this.$emit('sendMessage', null, true)
               this.friends = []

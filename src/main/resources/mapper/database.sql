@@ -24,7 +24,8 @@ foreign key (member_email) references member(email) on delete cascade on update 
 create table channel(
 id int unsigned  primary key auto_increment not null,
 name varchar(100) not null,
-register_date datetime not null default CURRENT_TIMESTAMP
+register_date datetime not null default CURRENT_TIMESTAMP,
+delete_yn varchar(1) DEFAULT 'N'
 );
 
 create table joininfo(
