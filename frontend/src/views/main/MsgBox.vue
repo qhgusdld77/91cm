@@ -1,13 +1,14 @@
 <template>
 <div>
   <li class="list-unstyled chat-message" v-if="!isMsgByLoginUser">
+    <div class="myflex" @mouseover="showMsgOption(msg.id)" @mouseleave="hideMsgOption(msg.id)"> 
     <div class="icon" >
       <slot name="m-icon">
         <img  class="icon-round" :src="msg.user.picture" width="40" height="40"/>
       </slot>
     </div>
     <!-- flex에서 벗어나기 위해 감쌈  -->
-    <div >
+    <div>
       <div class="verti-align">
         <slot name="m-info">
           <strong>{{ msg.user.name }}</strong>
@@ -34,7 +35,7 @@
                     </b-row>
                   </div>
                   <span style="font-size: 11px; margin:0px 3px; width:53px; ">{{ msg.str_send_date }}</span>
-                  <a class="verti-align" v-if="isMsgOption" @click="confirmDelete(msg)">
+                  <a class="verti-align confirmMsgDel" :id="'confirmMsgDel' + msg.id" @click="confirmDelete(msg)">
                     <v-icon style="font-size:16px;">delete_outline</v-icon>          
                   </a>
                </div>
@@ -42,6 +43,7 @@
         </slot>
       </div>
       <!-- 채팅메시지내용끝 -->
+    </div>
     </div>
   </li>
 
@@ -110,6 +112,7 @@
     },
     methods: {
       showMsgOption:function(msgId) {
+        console.log('??')
         if(this.msg.delete_yn === 'N' && (this.isMsgByLoginUser || this.isAdmin())){
           this.hideMsgOption()
           $("#confirmMsgDel"+msgId).css("visibility", "visible")

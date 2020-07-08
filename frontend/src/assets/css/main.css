@@ -17,6 +17,9 @@
     order: 1
 }
 
+.myflex{
+    display:flex;
+}
 .msgflex-end{
     justify-content: flex-end;
 }

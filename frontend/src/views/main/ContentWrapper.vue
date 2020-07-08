@@ -56,7 +56,7 @@
               v-if="$store.state.isSearchMode"
               :cursorPoint="cursorPoint"
               :wrapperEl="wrapperEl"
-              @getMessage="getMessage">
+              @selectMessageList="selectMessageList">
             </SearchInput>
             <!-- 채팅 검색 모드 끝 -->
             <div class="verti-align">
