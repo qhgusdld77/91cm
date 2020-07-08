@@ -7,8 +7,7 @@ export default {
     axios.post('/api/file/get/files',{
       channel_id: payload
     }).then(res => {
-      console.log("loadChannelFiles >>>",res.data)
-      context.commit('setChannelFiles',res.data)
+      context.commit('setChannelFiles',res.data.reverse())
     })
   },
 

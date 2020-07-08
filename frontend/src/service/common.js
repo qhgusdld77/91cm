@@ -45,7 +45,7 @@ class CommonClass {
     }
   }
 
-  checkFileType(file) {
+  checkFileType(file, option='thumb') {
     let type = file.extension
     type = type.toLowerCase().trim()
     switch (type) {
@@ -53,6 +53,9 @@ class CommonClass {
       case ('jpg'):
       case ('jpeg'):
       case ('gif'):
+        if (option == 'origin'){
+          return "/api/file/download/"+ file.server_name
+        }
         //download뒤에 thumb인지 origianl인지 구분 api 만들기
         return "/api/file/download/thumb" + file.server_name
       case ('zip'):

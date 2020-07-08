@@ -13,10 +13,16 @@ import Calendar from "../views/calendar/Calendar";
 import DevelopView from "../views/util/DevelopView";
 import VideoChat from "../components/VideoChat";
 import CopyRight from "../views/util/CopyRight";
+import FileDrawer from "../components/FileDrawer";
 
 Vue.use(VueRouter)
 
 const routes = [
+  {// 테스트 후에 삭제
+    path: '/test',
+    name: 'FileDrawer',
+    component: FileDrawer
+  },
   {
     path: '/license',
     name: 'CopyRight',

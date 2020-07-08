@@ -1,6 +1,6 @@
 <template>
-  <aside class="right-sidebar" id="RSidebar">
-    <div class="sidebar-chat" data-plugin="chat-sidebar">
+  <aside class="right-sidebar">
+    <div class="sidebar-chat" data-plugin="chat-sidebar" >
       <div class="sidebar-chat-info" style="margin: 16px 0px;display:flex;">
         <h6>About this Channel</h6>
         <li @click="rightSidebarToggle" class="list-unstyled"
@@ -76,17 +76,16 @@
             <span style="margin-left:20px;">Files</span>
           </a>
           <b-collapse id="files" visible>
+            <!--파일이 3개보다 작을때 테스트 필요 -->
             <v-row
-              :style="{width: getWidth()+'px', marginLeft: '10px'}"
-              align="center"
-              justify="center"
+              style="width: 320px"
               dense>
               <v-col
                 @click="test2"
-                v-for="card in channelFiles"
-                :key="card.title"
-                :cols="card.flex">
-                <v-img :src="selectImage(card)" style="cursor: pointer;"></v-img>
+                v-for="n in 3"
+                :key="channelFiles[n-1].id"
+                :cols="4">
+                <v-img :src="selectImage(channelFiles[n-1])" style="cursor: pointer;" contain></v-img>
               </v-col>
             </v-row>
           </b-collapse>
@@ -109,13 +108,6 @@
         videoChatUsers: 0,
         channelUserSize: 0,
         userSelect: null,
-        //파일 모음 테스트용 썸네일 이미지 변수
-        cards: [
-          {title: 'develop1', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 4},
-          {title: 'develop2', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 4},
-          {title: 'develop3', src: 'https://www.hanuricampus.com/m/html/images/main/middle01-1.jpg', flex: 4},
-
-        ]
       }
     },
     mounted() {
@@ -123,14 +115,10 @@
       // this.$eventBus.$on('videoChatUsers', res=>{
       //   this.videoChatUsers = res
       // })
-
     },
     methods: {
       selectImage: function (file) {
         return CommonClass.checkFileType(file)
-      },
-      getWidth: function () {
-        return $('#RSidebar').width();
       },
       test: function () {
         alert('test')
