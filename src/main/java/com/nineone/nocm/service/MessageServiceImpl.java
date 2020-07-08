@@ -49,6 +49,7 @@ public class MessageServiceImpl implements MessageService {
             newMsg += "<p>" + origin + "</p>";
         }
         newMsg = newMsg.replace(" ", "&nbsp;");
+//    	newMsg = originContent.replace(" ", "&nbsp;");
         return newMsg;
     }
 
