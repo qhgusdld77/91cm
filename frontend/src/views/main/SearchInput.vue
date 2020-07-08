@@ -98,7 +98,7 @@
         if (this.cursorPoint.empty == false) {
           this.oldlength = this.searchResultList.length;
           this.isGetMsgByUp = true
-          this.$emit('selectMessageList')
+          this.$emit('selectMessageList',this.currentChannel)
         } else {
           if (by == null) {
             alert('검색 결과가 없습니다.')
