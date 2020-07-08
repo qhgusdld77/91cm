@@ -40,8 +40,6 @@
           </div>
           <button v-if="$store.state.channelList[0]!=null" type="button" @click="rightSidebarToggle"
                   class="nav-link ml-10 right-sidebar-toggle"><i class="ik ik-message-square"></i></button>
-          <button type="button" class="nav-link ml-10" id="apps_modal_btn" data-toggle="modal" data-target="#appsModal">
-            <i class="ik ik-grid"></i></button>
           <div class="dropdown">
             <a class="dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false">

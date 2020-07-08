@@ -89,6 +89,7 @@
 </template>
 
 <script>
+// 안쓰는 vue 파일
   export default {
     name: 'AppsModal',
     data() {
