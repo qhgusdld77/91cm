@@ -112,7 +112,6 @@
     },
     methods: {
       showMsgOption:function(msgId) {
-        console.log('??')
         if(this.msg.delete_yn === 'N' && (this.isMsgByLoginUser || this.isAdmin())){
           this.hideMsgOption()
           $("#confirmMsgDel"+msgId).css("visibility", "visible")
