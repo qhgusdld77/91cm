@@ -60,7 +60,7 @@
             </SearchInput>
             <!-- 채팅 검색 모드 끝 -->
             <div class="verti-align">
-                <v-btn class="mx-2" fab dark large color="cyan" style="margin-bottom: 15px;"
+                <v-btn class="mx-2" fab dark large color="cyan"
                   v-if="!$store.state.isInviteMode && !$store.state.isSearchMode"  @click="sendMessage($event)">
                   <i class="im im-paperplane"></i>
                 </v-btn>

@@ -49,7 +49,7 @@
       </v-col>
     </v-row>
     <div class="verti-align">
-      <v-btn class="mx-2" fab dark large color="cyan" style="margin-bottom: 15px;"
+      <v-btn class="mx-2" fab dark large color="cyan" 
                 v-if="$store.state.isInviteMode"  @click="inviteChannel($event)">
             <i class="im im-paperplane"></i>
       </v-btn>

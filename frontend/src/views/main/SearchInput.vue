@@ -16,7 +16,7 @@
       ></b-form-input>
     </div>
     <div class="verti-align">
-      <v-btn class="mx-2" fab dark large color="cyan" style="margin-bottom: 15px;"
+      <v-btn class="mx-2" fab dark large color="cyan" 
                   v-if="$store.state.isSearchMode"  @click="search">
         <i class="im im-paperplane"></i>
       </v-btn>
