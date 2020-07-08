@@ -71,6 +71,7 @@ let channelMixin = {
             let splitArr = data.message.split('|')
             console.log("~~>", splitArr)
             this[splitArr[0]](splitArr[1]);
+
           } else {
             this[data.message]();
           }

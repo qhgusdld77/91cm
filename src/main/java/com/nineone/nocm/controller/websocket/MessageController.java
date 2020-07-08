@@ -30,7 +30,7 @@ public class MessageController {
 	public void message(Message message)throws ParseException {
 		message.setSend_date(DateUtil.makeDate());
 		message.setStr_send_date(messageService.makeStrDate(message.getSend_date()));
-		
+		message.setDelete_yn("N");
 		String formatDate = new SimpleDateFormat("yyyy년 MM월 dd일 E요일").format(message.getSend_date());
 		if(messageService.isFirstMsgToday(formatDate, message.getChannel_id())) {
 			Message dateMessage = message.clone();
