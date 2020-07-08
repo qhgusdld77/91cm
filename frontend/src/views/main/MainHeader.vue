@@ -16,6 +16,7 @@
             <div class="dropdown-menu dropdown-menu-right notification-dropdown" aria-labelledby="notiDropdown">
               <h4 class="header">Notifications</h4>
               <div class="notifications-wrap">
+                <div v-if="getAlarmList.length==0" class="media nuj hori-align"><span class="heading-font-family media-heading">알림이 없습니다.</span></div>
                 <div v-for="(alarm,index) in getAlarmList" :key="index">
                   <a class="media" style="cursor: default;">
                     <span class="media-body">
