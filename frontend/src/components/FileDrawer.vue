@@ -56,23 +56,25 @@
       dark
       z-index="10000"
     >
-        <v-container fluid :style="{height: windowHeight+'px'}">
-          <v-row align="start">
-            <v-col cols="4">
-              <v-btn icon @click="dialogShow=false"><i class="im im-x-mark"></i></v-btn>
-            </v-col>
-            <v-col cols="4">
-              <v-btn icon @click="alert('test')"><i class="im im-info"></i></v-btn>
-            </v-col>
-            <v-col cols="4">
-              <v-btn icon @click="fileDownload(selectFile)"><i class="im im-download"></i></v-btn>
-            </v-col>
-          </v-row>
+        <v-container fluid class="fullScreen">
+
           <v-row justify="center" align="center">
-            <v-col cols="5">
-              <v-img v-if="selectFile!=undefined" :src="selectImage(selectFile)"
-                     min-width="500px"
+
+            <v-col cols="6">
+              <v-row align="end" style="height: 15vh;">
+                <div style="float:left">
+                  <v-btn icon @click="alert('test')"><i class="im im-info"></i></v-btn>
+                  <v-btn icon @click="fileDownload(selectFile)"><i class="im im-download"></i></v-btn>
+                </div>
+                <div style="float:right">
+                  <v-btn icon @click="dialogShow=false"><i class="im im-x-mark"></i></v-btn>
+                </div>
+
+
+              </v-row>
+              <v-img v-if="selectFile!=undefined" :src="selectImage(selectFile)" contain
                      max-width="1000px"
+                     max-height="500px"
               ></v-img>
             </v-col>
           </v-row>
@@ -173,12 +175,20 @@
 </script>
 
 <style scoped>
-  .v-overlay{
-    align-items: normal;
-    justify-items: normal;
-  }
-  .v-overlay__content{
-    width: 100%;
+  .fullScreen{
     height: 100%;
+    width: 100%;
   }
+  >>>.v-overlay__content{
+    height: 100%;
+    width: 100%;
+  }
+  /*.v-overlay{*/
+  /*  align-items: normal;*/
+  /*  justify-items: normal;*/
+  /*}*/
+  /*.v-overlay__content{*/
+  /*  width: 100%;*/
+  /*  height: 100%;*/
+  /*}*/
 </style>
