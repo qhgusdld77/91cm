@@ -55,11 +55,13 @@
       dark
       z-index="10000"
     >
-      <div>
-        <div>
+      <div class="row">
+        <v-col cols="1" align-self="center" style="margin-top: 10px">
+          <v-icon large>keyboard_arrow_left</v-icon>
+        </v-col>
+        <v-col cols="10">
           <div class="myflex">
             <div style="display:inline-block">
-              <v-btn icon @click="dialog=true"><i class="im im-info"></i></v-btn>
               <v-btn icon @click="fileDownload(selectFile)"><i class="im im-download"></i></v-btn>
             </div>
             <div class="myflex-grow-end">
@@ -69,43 +71,12 @@
           <v-img v-if="selectFile!=undefined" :src="selectImage(selectFile,'origin')" contain
                  max-height="60vh" max-width="45vw"
           ></v-img>
-        </div>
+        </v-col>
+        <v-col cols="1" align-self="center" style="margin-top: 10px">
+          <v-icon large >keyboard_arrow_right</v-icon>
+        </v-col>
       </div>
     </v-overlay>
-    <v-dialog
-      v-model="dialog"
-      dark
-      max-width="290"
-      style="z-index: 100001"
-    >
-      <v-card>
-        <v-card-title class="headline">Use Google's location service?</v-card-title>
-
-        <v-card-text>
-          Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn
-            color="green darken-1"
-            text
-            @click="dialog = false"
-          >
-            Disagree
-          </v-btn>
-
-          <v-btn
-            color="green darken-1"
-            text
-            @click="dialog = false"
-          >
-            Agree
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 <script>
@@ -123,35 +94,33 @@
         windowWidth: window.innerWidth
       }
     },
-    created() {
-      window.addEventListener("resize", this.windowResizeEvent);
-    },
-    destroyed() {
-      window.removeEventListener("resize", this.windowResizeEvent);
-    },
-    mounted() {
-      let date = this.setDateFormat(this.channelFiles[0].send_date)
-      let array = []
-
-      this.channelFiles.forEach(file => {
-        if (this.setDateFormat(file.send_date) == date) {
-          array.push(file)
-        } else {
-          this.rows.push(array)
-          array = []
-          date = this.setDateFormat(file.send_date)
-          array.push(file)
-        }
-      })
-      if (array.length != 0) {
-        this.rows.push(array)
+    watch:{
+      channelFiles: function () {
+        this.initFiles()
       }
     },
+    mounted() {
+      this.initFiles()
+    },
     methods: {
-      windowResizeEvent: function () {
-        console.log(this.windowHeight)
-        this.windowHeight = window.innerHeight
-        this.windowWidth = window.innerWidth
+      initFiles: function(){
+        this.rows = []
+        let date = this.setDateFormat(this.channelFiles[0].send_date)
+        let array = []
+
+        this.channelFiles.forEach(file => {
+          if (this.setDateFormat(file.send_date) == date) {
+            array.push(file)
+          } else {
+            this.rows.push(array)
+            array = []
+            date = this.setDateFormat(file.send_date)
+            array.push(file)
+          }
+        })
+        if (array.length != 0) {
+          this.rows.push(array)
+        }
       },
       formatBytes: function (bytes, decimals = 2) {
         if (bytes === 0) return '0 Bytes';
