@@ -23,11 +23,12 @@ import '../dist/css/theme.css'
 import channelMixin from './mixins/channelMixin'
 import commonMixin from './mixins/commonMixin'
 import messageMixin from './mixins/messageMixin'
-
+import moment from "moment";
 
 Vue.mixin({
   mixins: [channelMixin, commonMixin, messageMixin]
 })
+
 
 Vue.use(BootstrapVue)
 Date.prototype.addDays = function (days) {
@@ -35,12 +36,13 @@ Date.prototype.addDays = function (days) {
   date.setDate(date.getDate() + days);
   return date;
 }
+Vue.use(moment)
 Vue.use(AlertModal)
 Vue.use(Vuetify)
 Vue.use(VueSession, {persist: true})
 Vue.prototype.$eventBus = new Vue();
 Vue.prototype.$http = axios
-
+Vue.prototype.$moment = moment
 Vue.config.productionTip = false
 
 new Vue({

@@ -1,6 +1,6 @@
 <template>
   <aside class="right-sidebar">
-    <div class="sidebar-chat" data-plugin="chat-sidebar">
+    <div class="sidebar-chat" data-plugin="chat-sidebar" >
       <div class="sidebar-chat-info" style="margin: 16px 0px;display:flex;">
         <h6>About this Channel</h6>
         <li @click="RSidebarClose" class="list-unstyled"
@@ -31,6 +31,7 @@
               </v-btn>
             </div>
           </b-collapse>
+
           <!-- 화상 채팅 메뉴 끝 -->
           <!-- to do list 메뉴 시작 -->
           <a class="list-group-item" @click="callComponent('todoList')">
@@ -43,6 +44,26 @@
             <i class="im im-calendar"></i>
             <span style="margin-left:20px;">Calendar</span>
           </a>
+          <a class="list-group-item" @click="callComponent('fileDrawer')">
+            <i class="im im-files-o"></i>
+            <span style="margin-left:20px;">Files</span>
+          </a>
+          <b-collapse id="files" visible>
+            <!--파일이 3개보다 작을때 테스트 필요 -->
+            <v-row
+              style="width: 320px"
+              justify="center"
+              align="center"
+              dense>
+              <v-col
+                @click="test2"
+                v-for="n in 3"
+                :key="channelFiles[n-1].id"
+                :cols="4">
+                <v-img :src="selectImage(channelFiles[n-1])" style="cursor: pointer;" contain></v-img>
+              </v-col>
+            </v-row>
+          </b-collapse>
           <!-- calender 메뉴 끝 -->
         </div>
       </div>
@@ -51,16 +72,17 @@
 </template>
 
 <script>
+  import CommonClass from "../../service/common";
+
   export default {
     props: ['modalObj'],
     name: 'RSidebar',
-    computed: {
-    },
+    computed: {},
     data() {
       return {
         videoChatUsers: 0,
         channelUserSize: 0,
-        userSelect: null
+        userSelect: null,
       }
     },
     mounted() {
@@ -68,9 +90,17 @@
       // this.$eventBus.$on('videoChatUsers', res=>{
       //   this.videoChatUsers = res
       // })
-
     },
     methods: {
+      selectImage: function (file) {
+        return CommonClass.checkFileType(file)
+      },
+      test: function () {
+        alert('test')
+      },
+      test2: function () {
+        alert('test2s')
+      },
       toggleVideoMode: function () {
         this.$store.commit('setIsVideoMode', !this.isVideoMode)
         this.callComponent('main', true)

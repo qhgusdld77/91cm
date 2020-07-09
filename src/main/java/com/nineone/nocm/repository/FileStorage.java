@@ -5,6 +5,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class FileStorage {
 
@@ -16,9 +18,13 @@ public class FileStorage {
     public int saveFile(ContentsFile file){
         return sqlSession.insert(namespace + ".saveFile",file);
     }
-    
+
     public ContentsFile getFile(String server_name) {
     	return sqlSession.selectOne(namespace + ".getFile", server_name);
     }
-    
+
+    public List<ContentsFile> getChannelFileList(int channel_id){
+        return sqlSession.selectList(namespace+".getChannelFileList",channel_id);
+    }
+
 }

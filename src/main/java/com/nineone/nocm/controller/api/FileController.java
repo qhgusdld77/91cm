@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,12 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nineone.nocm.annotation.Socialuser;
@@ -71,7 +67,7 @@ public class FileController {
             contentsFile.setMessage_id(message.getId());
             contentsFile.setPath(fileStorageService.storeFile(file, contentsFile));
             fileStorageService.DBStoreFile(contentsFile);
-            
+
             fileList.add(contentsFile);
         }
         message.setFiles(fileList);
@@ -108,5 +104,12 @@ public class FileController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString())
                 .body(resource);
     }
-    
+
+    @PostMapping("/get/files")
+    public List<ContentsFile> getChannelFileList(@RequestBody Map<String,Integer> map){
+        int channel_id = map.get("channel_id");
+        List<ContentsFile> list = fileStorageService.getChannelFileList(channel_id);
+        return list;
+    }
+
 }

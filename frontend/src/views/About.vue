@@ -1,15 +1,11 @@
 <template>
-  <div>
-    <v-btn
-  </div>
+
 </template>
 <script>
-
   export default {
     name: 'About',
     created() {
     },
-    components: {},
     computed: {},
     data() {
       return {
