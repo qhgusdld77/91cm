@@ -56,29 +56,26 @@
       dark
       z-index="10000"
     >
-        <v-container fluid class="fullScreen">
+          <div>
 
-          <v-row justify="center" align="center">
-
-            <v-col cols="6">
-              <v-row align="end" style="height: 15vh;">
-                <div style="float:left">
+            <div>
+              <div class="myflex">
+                <div style="display:inline-block" >
                   <v-btn icon @click="alert('test')"><i class="im im-info"></i></v-btn>
                   <v-btn icon @click="fileDownload(selectFile)"><i class="im im-download"></i></v-btn>
                 </div>
-                <div style="float:right">
+                <div class="myflex-grow-end">
                   <v-btn icon @click="dialogShow=false"><i class="im im-x-mark"></i></v-btn>
                 </div>
 
 
-              </v-row>
+              </div>
               <v-img v-if="selectFile!=undefined" :src="selectImage(selectFile)" contain
-                     max-width="1000px"
-                     max-height="500px"
+             
               ></v-img>
-            </v-col>
-          </v-row>
-        </v-container>
+            </div>
+          </div>
+      
     </v-overlay>
   </div>
 </template>
@@ -179,10 +176,7 @@
     height: 100%;
     width: 100%;
   }
-  >>>.v-overlay__content{
-    height: 100%;
-    width: 100%;
-  }
+ 
   /*.v-overlay{*/
   /*  align-items: normal;*/
   /*  justify-items: normal;*/
