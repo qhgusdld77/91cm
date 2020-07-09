@@ -14,14 +14,15 @@ import DevelopView from "../views/util/DevelopView";
 import VideoChat from "../components/VideoChat";
 import CopyRight from "../views/util/CopyRight";
 import FileDrawer from "../components/FileDrawer";
+import ContentViewer from "../components/ContentViewer";
 
 Vue.use(VueRouter)
 
 const routes = [
   {// 테스트 후에 삭제
     path: '/test',
-    name: 'FileDrawer',
-    component: FileDrawer
+    name: 'ContentViewer',
+    component: ContentViewer
   },
   {
     path: '/license',

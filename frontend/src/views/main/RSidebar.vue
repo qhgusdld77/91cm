@@ -79,6 +79,8 @@
             <!--파일이 3개보다 작을때 테스트 필요 -->
             <v-row
               style="width: 320px"
+              justify="center"
+              align="center"
               dense>
               <v-col
                 @click="test2"

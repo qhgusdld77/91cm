@@ -40,14 +40,15 @@
                 </template>
               </v-img>
               <v-card-title @click="fileDownload(file)" style="cursor: pointer">
-                <i class="im im-download" style="font-size: medium"> {{file.original_name}}</i>
-                <p style="">{{formatBytes(file.file_size)}}</p>
+                  <i class="im im-download" style="font-size: medium"> {{file.original_name}}</i>
               </v-card-title>
+              <v-card-subtitle>
+                <p>{{formatBytes(file.file_size)}}</p>
+              </v-card-subtitle>
             </v-card>
           </v-col>
         </v-row>
       </div>
-
     </v-container>
     <v-overlay
       :value="dialogShow"
@@ -55,27 +56,27 @@
       dark
       z-index="10000"
     >
-      <v-container fluid>
-        <v-row >
-          <v-col align="left">
-            <v-btn icon @click="dialogShow=false"><i class="im im-x-mark"></i></v-btn>
-          </v-col>
-          <v-col align="right">
-            <v-btn icon @click="alert('test')"><i class="im im-info"></i></v-btn>
-          </v-col>
-          <v-col align="right">
-            <v-btn icon @click="fileDownload(selectFile)"><i class="im im-download"></i></v-btn>
-          </v-col>
-        </v-row>
-        <v-row justify="center" align="center">
-          <v-col cols="5">
-            <v-img v-if="selectFile!=undefined" :src="selectImage(selectFile)"
-                   min-width="500px"
-                   max-width="1000px"
-            ></v-img>
-          </v-col>
-        </v-row>
-      </v-container>
+        <v-container fluid :style="{height: windowHeight+'px'}">
+          <v-row align="start">
+            <v-col cols="4">
+              <v-btn icon @click="dialogShow=false"><i class="im im-x-mark"></i></v-btn>
+            </v-col>
+            <v-col cols="4">
+              <v-btn icon @click="alert('test')"><i class="im im-info"></i></v-btn>
+            </v-col>
+            <v-col cols="4">
+              <v-btn icon @click="fileDownload(selectFile)"><i class="im im-download"></i></v-btn>
+            </v-col>
+          </v-row>
+          <v-row justify="center" align="center">
+            <v-col cols="5">
+              <v-img v-if="selectFile!=undefined" :src="selectImage(selectFile)"
+                     min-width="500px"
+                     max-width="1000px"
+              ></v-img>
+            </v-col>
+          </v-row>
+        </v-container>
     </v-overlay>
   </div>
 </template>
@@ -89,7 +90,15 @@
         rows: [],
         dialogShow: false,
         selectFile: undefined,
+        windowHeight: window.innerHeight,
+        windowWidth: window.innerWidth
       }
+    },
+    created() {
+      window.addEventListener("resize", this.windowResizeEvent);
+    },
+    destroyed() {
+      window.removeEventListener("resize", this.windowResizeEvent);
     },
     mounted() {
       let date = this.setDateFormat(this.channelFiles[0].send_date)
@@ -110,6 +119,11 @@
       }
     },
     methods: {
+      windowResizeEvent: function(){
+        console.log(this.windowHeight)
+        this.windowHeight = window.innerHeight
+        this.windowWidth = window.innerWidth
+      },
       formatBytes: function (bytes, decimals = 2) {
         if (bytes === 0) return '0 Bytes';
 
@@ -159,5 +173,12 @@
 </script>
 
 <style scoped>
-
+  .v-overlay{
+    align-items: normal;
+    justify-items: normal;
+  }
+  .v-overlay__content{
+    width: 100%;
+    height: 100%;
+  }
 </style>
