@@ -48,9 +48,9 @@
             <i class="im im-files-o"></i>
             <span style="margin-left:20px;">Files</span>
           </a>
-          <b-collapse id="files" visible>
+          <!-- <b-collapse id="files" visible> -->
             <!--파일이 3개보다 작을때 테스트 필요 -->
-            <v-row
+            <!-- <v-row
               style="width: 320px"
               justify="center"
               align="center"
@@ -63,7 +63,7 @@
                 <v-img :src="selectImage(channelFiles[n-1])" style="cursor: pointer;" contain></v-img>
               </v-col>
             </v-row>
-          </b-collapse>
+          </b-collapse> -->
           <!-- calender 메뉴 끝 -->
         </div>
       </div>

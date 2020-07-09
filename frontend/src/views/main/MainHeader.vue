@@ -98,7 +98,11 @@
       rightSidebarToggle: function (e) {
         $('.right-sidebar-toggle')[0].classList.toggle('active');
         $('.wrapper').toggleClass('right-sidebar-expand');
-        $('.main-content').addClass('rsidebar-padding-right')
+        if($('.main-content').hasClass('rsidebar-padding-right')){
+          $('.main-content').removeClass('rsidebar-padding-right')
+        }else{
+          $('.main-content').addClass('rsidebar-padding-right')
+        }
         return false;
       },
       // showModal: function(modalId){

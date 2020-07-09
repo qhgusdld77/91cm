@@ -56,27 +56,26 @@
       dark
       z-index="10000"
     >
-        <v-container fluid :style="{height: windowHeight+'px'}">
-          <v-row align="start">
-            <v-col cols="4">
-              <v-btn icon @click="dialogShow=false"><i class="im im-x-mark"></i></v-btn>
-            </v-col>
-            <v-col cols="4">
-              <v-btn icon @click="alert('test')"><i class="im im-info"></i></v-btn>
-            </v-col>
-            <v-col cols="4">
-              <v-btn icon @click="fileDownload(selectFile)"><i class="im im-download"></i></v-btn>
-            </v-col>
-          </v-row>
-          <v-row justify="center" align="center">
-            <v-col cols="5">
-              <v-img v-if="selectFile!=undefined" :src="selectImage(selectFile)"
-                     min-width="500px"
-                     max-width="1000px"
+          <div>
+
+            <div>
+              <div class="myflex">
+                <div style="display:inline-block" >
+                  <v-btn icon @click="alert('test')"><i class="im im-info"></i></v-btn>
+                  <v-btn icon @click="fileDownload(selectFile)"><i class="im im-download"></i></v-btn>
+                </div>
+                <div class="myflex-grow-end">
+                  <v-btn icon @click="dialogShow=false"><i class="im im-x-mark"></i></v-btn>
+                </div>
+
+
+              </div>
+              <v-img v-if="selectFile!=undefined" :src="selectImage(selectFile)" contain
+             
               ></v-img>
-            </v-col>
-          </v-row>
-        </v-container>
+            </div>
+          </div>
+      
     </v-overlay>
   </div>
 </template>
@@ -173,12 +172,17 @@
 </script>
 
 <style scoped>
-  .v-overlay{
-    align-items: normal;
-    justify-items: normal;
-  }
-  .v-overlay__content{
-    width: 100%;
+  .fullScreen{
     height: 100%;
+    width: 100%;
   }
+ 
+  /*.v-overlay{*/
+  /*  align-items: normal;*/
+  /*  justify-items: normal;*/
+  /*}*/
+  /*.v-overlay__content{*/
+  /*  width: 100%;*/
+  /*  height: 100%;*/
+  /*}*/
 </style>
