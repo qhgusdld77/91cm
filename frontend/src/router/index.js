@@ -19,11 +19,6 @@ import ContentViewer from "../components/ContentViewer";
 Vue.use(VueRouter)
 
 const routes = [
-  {// 테스트 후에 삭제
-    path: '/test',
-    name: 'ContentViewer',
-    component: ContentViewer
-  },
   {
     path: '/license',
     name: 'CopyRight',
