@@ -56,8 +56,9 @@
       z-index="10000"
     >
       <div class="row">
+        <!--        파일 리스트를 넘어가는 index에 대한 처리 필요 -->
         <v-col cols="1" align-self="center" style="margin-top: 10px">
-          <v-icon large>keyboard_arrow_left</v-icon>
+          <v-icon large @click="selectFile=channelFiles[--index]">keyboard_arrow_left</v-icon>
         </v-col>
         <v-col cols="10">
           <div class="myflex">
@@ -68,12 +69,22 @@
               <v-btn icon @click="dialogShow=false"><i class="im im-x-mark"></i></v-btn>
             </div>
           </div>
-          <v-img v-if="selectFile!=undefined" :src="selectImage(selectFile,'origin')" contain
+          <v-img v-if="selectFile!=undefined && selectFile.extension != 'pdf'" :src="selectImage(selectFile,'origin')"
+                 contain
                  max-height="60vh" max-width="45vw"
           ></v-img>
+          <div style="overflow:scroll; width:350px; height:200px;" v-else>
+            <pdf
+              v-for="page in pages"
+              :key="page"
+              :src="pdfSrc"
+              :page="page"
+              style="width: 100%">
+            </pdf>
+          </div>
         </v-col>
         <v-col cols="1" align-self="center" style="margin-top: 10px">
-          <v-icon large >keyboard_arrow_right</v-icon>
+          <v-icon large @click="selectFile=channelFiles[++index]">keyboard_arrow_right</v-icon>
         </v-col>
       </div>
     </v-overlay>
@@ -81,11 +92,17 @@
 </template>
 <script>
   import CommonClass from "../service/common";
-
+  import pdf from 'vue-pdf'
   export default {
     name: "FileDrawer",
+    components:{
+      pdf
+    },
     data() {
       return {
+        pdfSrc: undefined,
+        pages: undefined,
+        index: 0,
         dialog: false,
         rows: [],
         dialogShow: false,
@@ -94,16 +111,17 @@
         windowWidth: window.innerWidth
       }
     },
-    watch:{
+    watch: {
       channelFiles: function () {
         this.initFiles()
       }
     },
     mounted() {
       this.initFiles()
+
     },
     methods: {
-      initFiles: function(){
+      initFiles: function () {
         this.rows = []
         let date = this.setDateFormat(this.channelFiles[0].send_date)
         let array = []
@@ -134,6 +152,13 @@
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
       },
       fileSelect: function (file) {
+        if (file.extension == 'pdf'){
+          this.pdfSrc = pdf.createLoadingTask('/api/file/download/'+file.server_name)
+          this.pdfSrc.promise.then(pdf =>{
+            this.pages = pdf.numPages;
+          });
+        }
+        this.index = this.channelFiles.findIndex((f) => f.id == file.id)
         this.selectFile = file
         this.dialogShow = true
       },
