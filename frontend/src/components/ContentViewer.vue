@@ -14,7 +14,7 @@
 
 <script>
   import pdf from 'vue-pdf'
-  // let loadingTask = pdf.createLoadingTask('/api/file/download/489ecdfabfb94d7c9ef7a49774393d82');
+  // let loadingTask = pdf.createLoadingTask('/api/file/download/ffa90b27581f4c2a9bc38f26f4e9160b');
   export default {
     name: "ContentViewer",
     components:{

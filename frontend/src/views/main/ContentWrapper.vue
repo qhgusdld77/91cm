@@ -80,13 +80,13 @@
         </div>
 
         <!--        일반 채팅 모드 일때 아이콘-->
-       
+
         <!--        화상 채팅 모드 일때 아이콘-->
         <!-- <v-btn class="mx-2" fab dark small color="cyan" style="margin-bottom: 25px;"
                v-else @click="sendMessage($event)">
           <i class="im im-paperplane"></i>
         </v-btn> -->
-       
+
       </v-row>
     </div>
   </main>
@@ -243,6 +243,8 @@
             }
           }).then(res => {
           this.isFileUpload = false
+          this.$store.dispatch('loadChannelFiles',this.currentChannel.id)
+          this.currentChannel.send('loadChannelFiles|'+this.currentChannel.id)
         }).catch(error => {
           this.isFileUpload = false
           this.progressValue = 0

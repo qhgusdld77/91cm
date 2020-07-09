@@ -27,7 +27,6 @@
                 style="cursor: zoom-in"
                 contain
                 @click="fileSelect(file)"
-
               >
                 <template v-slot:placeholder>
                   <v-row
@@ -40,7 +39,7 @@
                 </template>
               </v-img>
               <v-card-title @click="fileDownload(file)" style="cursor: pointer">
-                  <i class="im im-download" style="font-size: medium"> {{file.original_name}}</i>
+                <i class="im im-download" style="font-size: medium"> {{file.original_name}}</i>
               </v-card-title>
               <v-card-subtitle>
                 <p>{{formatBytes(file.file_size)}}</p>
@@ -56,27 +55,57 @@
       dark
       z-index="10000"
     >
-          <div>
-
-            <div>
-              <div class="myflex">
-                <div style="display:inline-block" >
-                  <v-btn icon @click="alert('test')"><i class="im im-info"></i></v-btn>
-                  <v-btn icon @click="fileDownload(selectFile)"><i class="im im-download"></i></v-btn>
-                </div>
-                <div class="myflex-grow-end">
-                  <v-btn icon @click="dialogShow=false"><i class="im im-x-mark"></i></v-btn>
-                </div>
-
-
-              </div>
-              <v-img v-if="selectFile!=undefined" :src="selectImage(selectFile)" contain
-             
-              ></v-img>
+      <div>
+        <div>
+          <div class="myflex">
+            <div style="display:inline-block">
+              <v-btn icon @click="dialog=true"><i class="im im-info"></i></v-btn>
+              <v-btn icon @click="fileDownload(selectFile)"><i class="im im-download"></i></v-btn>
+            </div>
+            <div class="myflex-grow-end">
+              <v-btn icon @click="dialogShow=false"><i class="im im-x-mark"></i></v-btn>
             </div>
           </div>
-      
+          <v-img v-if="selectFile!=undefined" :src="selectImage(selectFile,'origin')" contain
+                 max-height="60vh" max-width="45vw"
+          ></v-img>
+        </div>
+      </div>
     </v-overlay>
+    <v-dialog
+      v-model="dialog"
+      dark
+      max-width="290"
+      style="z-index: 100001"
+    >
+      <v-card>
+        <v-card-title class="headline">Use Google's location service?</v-card-title>
+
+        <v-card-text>
+          Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialog = false"
+          >
+            Disagree
+          </v-btn>
+
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialog = false"
+          >
+            Agree
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
@@ -86,6 +115,7 @@
     name: "FileDrawer",
     data() {
       return {
+        dialog: false,
         rows: [],
         dialogShow: false,
         selectFile: undefined,
@@ -118,7 +148,7 @@
       }
     },
     methods: {
-      windowResizeEvent: function(){
+      windowResizeEvent: function () {
         console.log(this.windowHeight)
         this.windowHeight = window.innerHeight
         this.windowWidth = window.innerWidth
@@ -141,8 +171,8 @@
       callComponent: function (componentName) {
         this.$store.commit('getSelectComponent', componentName)
       },
-      selectImage: function (file) {
-        return CommonClass.checkFileType(file, 'origin')
+      selectImage: function (file, option) {
+        return CommonClass.checkFileType(file, option)
       },
       setDateFormat(date, option = 'default') {
         switch (option) {
@@ -172,11 +202,11 @@
 </script>
 
 <style scoped>
-  .fullScreen{
-    height: 100%;
-    width: 100%;
-  }
- 
+  /*.{*/
+  /*  height: 100%;*/
+  /*  width: 100%;*/
+  /*}*/
+
   /*.v-overlay{*/
   /*  align-items: normal;*/
   /*  justify-items: normal;*/
