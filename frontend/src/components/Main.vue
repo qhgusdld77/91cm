@@ -61,6 +61,7 @@
   import AdminPage from "../views/admin/AdminPage"
   import VideoChat from "./VideoChat";
   import channelMixin from "../mixins/channelMixin";
+  import FileDrawer from "./FileDrawer";
 
   export default {
     name: 'Main',
@@ -77,7 +78,8 @@
       'TodoList': TodoList,
       'Calendar': Calendar,
       'AdminPage': AdminPage,
-      'VideoChat': VideoChat
+      'VideoChat': VideoChat,
+      'FileDrawer': FileDrawer
     },
     data() {
       return {
@@ -104,6 +106,8 @@
             return 'Calendar'
           case 'admin':
             return 'AdminPage'
+          case 'fileDrawer':
+            return 'FileDrawer'
           // case 'videoChat':
           //   return 'VideoChat'
           default:

@@ -19,21 +19,21 @@ public class ContentsFile {
     private String server_name;
     private String path;
     private String extension;
-    private Date datetime;
+    private Date send_date;
     private int message_id;
     private String sender;
     private int file_size;
     private String uri;
-    
+
     @Builder
     public ContentsFile(int id, String original_name, String server_name, String path,
-    		String extension, Date datetime, int message_id, String sender, int file_size,String uri) {
+                        String extension, Date send_date, int message_id, String sender, int file_size, String uri) {
         this.id = id;
         this.original_name = original_name;
         this.server_name = server_name;
         this.path = path;
         this.extension = extension;
-        this.datetime = datetime;
+        this.send_date = send_date;
         this.message_id = message_id;
         this.sender = sender;
         this.file_size = file_size;
@@ -44,7 +44,7 @@ public class ContentsFile {
         String fileName = UUID.randomUUID().toString().replaceAll("-","");
         String fileSize = String.valueOf(file.getSize());
         String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
-        fileExtension = fileExtension.equals("jpg") ? "JPEG" : fileExtension; 
+        fileExtension = fileExtension.equals("jpg") ? "JPEG" : fileExtension;
         return ContentsFile.builder()
                 .original_name(file.getOriginalFilename())
                 .server_name(fileName)

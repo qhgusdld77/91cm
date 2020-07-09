@@ -2,6 +2,15 @@ import axios from "axios";
 
 export default {
   // 현재 채널의 모든 taskList 가져오기
+
+  loadChannelFiles: function(context,payload){
+    axios.post('/api/file/get/files',{
+      channel_id: payload
+    }).then(res => {
+      context.commit('setChannelFiles',res.data.reverse())
+    })
+  },
+
   updateTaskBoard: function(context){
     axios.get('/api/tasklist/get/'+context.state.currentChannel.id)
       .then(res => {

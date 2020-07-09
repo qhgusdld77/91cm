@@ -21,7 +21,7 @@
             <b-form-input
               @keydown.enter.exact="editTaskListName"
               @keydown.esc="editToggle"
-              v-model="taskList.name"
+              v-model="editTaskListNameVal"
               autofocus></b-form-input>
             <li class="list-unstyled" @click="editToggle"><i class="ik ik-x close-card" style="cursor: pointer;"></i>
             </li>
@@ -156,6 +156,7 @@
         taskListName: '',
         create: false,
         edit: false,
+        editTaskListNameVal:''
       }
     },
     methods: {
@@ -219,14 +220,19 @@
           })
       },
       editToggle: function () {
+        this.editTaskListNameVal = JSON.parse(JSON.stringify(this.taskList.name))
         this.edit = !this.edit
       },
       editTaskListName: function () {
+        console.log('?1')
         this.$http.post('/api/tasklist/update/name', {
           id: this.taskList.id,
-          name: this.taskList.name
+          name: this.editTaskListNameVal
         }).then(res => {
+          this.taskList.name = JSON.parse(JSON.stringify(this.editTaskListNameVal))
+          this.editTaskListNameVal = ''
           this.$store.state.stompClient.send('/sub/todo/' + this.currentChannel.id, {}, {typename: 'taskUpdate'})
+          this.$store.commit('setCreateListActive', false)
           this.editToggle()
         }).catch(error => {
           console.error(error)
@@ -259,6 +265,7 @@
         this.editSelector = index
       },
       setTaskListName: function () {
+        console.log('??!!')
         if (this.taskListName == '' || this.taskListName == null) {
           this.$_alert('내용을 입력해주세요.')
         } else {

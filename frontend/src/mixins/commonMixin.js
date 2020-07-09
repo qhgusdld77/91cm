@@ -16,7 +16,8 @@ let commonMixin = {
       subscribeList:'getSubscribeList',
       channelArr:'getChannelArr',
       firstLoad: 'getFirstLoad',
-      message: 'getMessage'
+      message: 'getMessage',
+      channelFiles: 'getChannelFiles'
     })
   },
   methods: {

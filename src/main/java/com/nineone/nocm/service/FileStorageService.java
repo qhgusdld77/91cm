@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,9 @@ public class FileStorageService {
         	throw new FileStorageException("could not create the directory",ex);
         }
     }
-    
+	public List<ContentsFile> getChannelFileList(int channel_id){
+    	return fileStorage.getChannelFileList(channel_id);
+	}
     public Path makeDateDirectories(String parentsDirName) {
     	String dirName = new SimpleDateFormat("yyyyMMdd").format(DateUtil.makeDate());
     	String srtPath = "C:/Attach/"+parentsDirName+"/"+dirName;
@@ -63,13 +66,13 @@ public class FileStorageService {
 			throw new FileStorageException("could not create the directory",ex);
 		}
     }
-    
+
     public void makeThumnail(Path path,MultipartFile file,ContentsFile contentsFile) {
-    	
+
     	String thumbPath = path.resolve("thumb"+contentsFile.getServer_name()).toString();
 //    	File thumbFile = new File(path.toString(), "thumb" + contentsFile.getServer_name());
 //    	file.transferTo(thumbFile);
-    	
+
     	try {
 //    		Thumbnailator.createThumbnail(file.getInputStream(),);
 			Thumbnails.of(file.getInputStream()).scale(0.25).toFile(thumbPath);
@@ -78,7 +81,7 @@ public class FileStorageService {
 			e.printStackTrace();
 		}
     }
-    
+
     public Path checkExtension(MultipartFile file,ContentsFile contentsFile) {
     	Path path;
     	switch (contentsFile.getExtension()) {
@@ -106,12 +109,12 @@ public class FileStorageService {
 		}
     	return path;
     }
-    
+
     public String storeFile(MultipartFile file, ContentsFile contentsFile){
         String fileName = StringUtils.cleanPath(contentsFile.getServer_name()+"."+contentsFile.getExtension());
-        
+
         Path path = checkExtension(file,contentsFile);
-        
+
         try{
             if (fileName.contains("..")){
                 throw new FileStorageException("Sorry! Filename contains invalid path sequenced "+ fileName);
@@ -123,7 +126,8 @@ public class FileStorageService {
             throw new FileStorageException("Could not store file "+ fileName + ", please try again",ex);
         }
     }
-    
+
+
     public String storeFile(MultipartFile file, User user){
 		String fileName = StringUtils.cleanPath("u-"+getUUID());
 		Path filePath = null;
@@ -144,7 +148,7 @@ public class FileStorageService {
 			throw new FileStorageException("Could not store file "+ fileName + ", please try again",ex);
 		}
 	}
-    
+
     public Resource loadFileAsResource(String fileName){
         try{
         	Path filePath = null;
@@ -167,18 +171,18 @@ public class FileStorageService {
             throw new UploadFileNotFoundException("File not found : "+fileName, ex);
         }
     }
-    
+
     public void DBStoreFile(ContentsFile file){
         fileStorage.saveFile(file);
     }
-    
+
 	public void deleteOldUserPicture(String fileName) throws RuntimeException{
 		File file = new File(USER_IMAGE_PATH+fileName);
 		if (file.exists()){
 			file.delete();
 		}
 	}
-	
+
     public String getUUID(){
         return UUID.randomUUID().toString().replaceAll("-","");
     }
