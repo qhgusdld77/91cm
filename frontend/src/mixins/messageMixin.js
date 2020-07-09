@@ -164,7 +164,7 @@ let messageMixin = {
       // 신호가 간다면 문제 생길 것 같음 모드가 바뀌었을때 메세지arr 변경 못하게 바꾸거나 프론트 단에서 해당 메세지만 변경처리 해줘야 할듯
       this.$http.post('/api/message/update/deleteyn', msg).then(res => {
         if (res) {
-          this.currentChannel.send("deleteMsgFromMsgArr|" + msg.id)
+          this.currentChannel.send("deleteMsgFromArr|" + msg.id)
         }
       });
     },

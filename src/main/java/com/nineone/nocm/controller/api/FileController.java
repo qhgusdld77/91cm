@@ -104,35 +104,12 @@ public class FileController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString())
                 .body(resource);
     }
+
     @PostMapping("/get/files")
     public List<ContentsFile> getChannelFileList(@RequestBody Map<String,Integer> map){
         int channel_id = map.get("channel_id");
         List<ContentsFile> list = fileStorageService.getChannelFileList(channel_id);
         return list;
     }
-
-//    @GetMapping("/download/thumb/{fileName}")
-//    public ResponseEntity<Resource> downloadThumbFile(@PathVariable(value = "fileName") String fileName) {
-//        // id를 통해서 UUID로 인코딩된 file을 가져오는 로직
-//        Resource resource = fileStorageService.loadFileAsResource(fileName);
-//        return setFileResponseEntity(resource);
-//    }
-
-//    public ResponseEntity<Resource> setFileResponseEntity(Resource resource){
-//    	String contentType = null;
-//        try {
-//            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-//        } catch (IOException ex) {
-//            log.error("unknown file extension");
-//        }
-//        if (contentType == null) {
-//            contentType = "application/octet-stream";
-//        }
-//        ContentDisposition contentDisposition = ContentDisposition.builder("attachment").filename(resource.getFilename(), StandardCharsets.UTF_8).build();
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.parseMediaType(contentType))
-//                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString())
-//                .body(resource);
-//    }
 
 }

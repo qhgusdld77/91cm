@@ -45,6 +45,8 @@ let channelMixin = {
           this.$store.commit('pushMsg', data)
           if (!this.$store.state.isfocus) {
             this.msgCountUpdate(data.channel_id, true)
+          }else{
+            this.currentChannel.access()
           }
         } else {
           this.msgCountUpdate(data.channel_id, true)
@@ -56,6 +58,7 @@ let channelMixin = {
             let splitArr = data.message.split('|')
             console.log("~~>", splitArr)
             this[splitArr[0]](splitArr[1]);
+
           } else {
             this[data.message]();
           }
@@ -236,9 +239,6 @@ let channelMixin = {
               //     console.warn(res.data)
               //   })
               this.message.content += '을 초대했습니다.'
-              // 아래 코드 무엇인지
-              // this.$eventBus.$emit('getUserList', true)
-
               this.$emit('sendMessage', null, true)
               this.friends = []
               this.message.content = ''
@@ -313,6 +313,7 @@ let channelMixin = {
         this.$eventBus.$emit('leaveChannelMsg', user)
         // 나가기 및 퇴장 유저 채널 리스트 리로드
         this.selectChannelList()
+        this.send("/sub/chat/room/" + this.currentChannel.id, 'selectChannelUserList')
         this.$_alert("<code>[" + this.currentChannel.name + ']</code> 채널에서 ' + (this.isMine(user) ? "나갔습니다." : "추방되었습니다."))
       }).catch(error => {
         this.$_error((this.isMine(user) ? "나가기" : "추방") + '에 실패했습니다.')

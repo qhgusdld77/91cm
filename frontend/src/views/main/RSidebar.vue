@@ -3,40 +3,13 @@
     <div class="sidebar-chat" data-plugin="chat-sidebar" >
       <div class="sidebar-chat-info" style="margin: 16px 0px;display:flex;">
         <h6>About this Channel</h6>
-        <li @click="rightSidebarToggle" class="list-unstyled"
+        <li @click="RSidebarClose" class="list-unstyled"
             style="flex-grow: 1;display: flex;justify-content: flex-end;align-items: center;font-size: 20px;margin-bottom: 8px;">
           <i class="ik ik-x close-card" style="cursor: pointer;"></i>
         </li>
       </div>
       <div class="chat-list">
-        <div class="list-group row">
-          <a class="list-group-item " style="color: #444;" v-b-toggle.channel-info>
-            <i class="im im-info"></i>
-            <span style="margin-left:20px;">Channel Details</span>
-            <div style="display: flex; flex-grow: 1; justify-content: flex-end;">
-              <i class="im im-care-down" style="font-size: 15px;"></i>
-            </div>
-          </a>
-          <b-collapse id="channel-info">
-            <div class="s-coll-style">
-              <div>
-                <div style="display:flex;">
-                  <p>Channel Name</p>
-                  <a class="verti-align" style="color: #007bff;" data-mode="edit"
-                     @click="confirmChannel('update', $store.state.currentChannel)">Edit</a>
-                  <a class="verti-align" style="color: #007bff;" data-mode="edit"
-                     @click="confirmChannel('delete', $store.state.currentChannel)" v-if="isAdmin()">Delete</a>
-                </div>
-                <li class="list-unstyled">{{ $store.state.currentChannel.name }}</li>
-              </div>
-              <div style="display:flex; justify-content:flex-start;">
-                <v-btn color="blue-grey" class="white--text" @click="leaveChannle">
-                  나가기
-                  <v-icon right dark>exit_to_app</v-icon>
-                </v-btn>
-              </div>
-            </div>
-          </b-collapse>
+        <div class="list-group row">        
           <!-- 화상 채닝 메뉴 시작 -->
           <a class="list-group-item" v-b-toggle.video-chat>
             <i class="im im-video-camera"></i>
@@ -148,6 +121,7 @@
       RSidebarClose: function () {
         $('.right-sidebar-toggle')[0].classList.toggle('active');
         $('.wrapper').removeClass('right-sidebar-expand');
+        $('.main-content').removeClass('rsidebar-padding-right')
         // this.$store.state.isRActive = false
       },
       useModal: function (mode) {

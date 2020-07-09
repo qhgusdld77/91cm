@@ -30,7 +30,6 @@
       <Loading v-else/>
 
     </div>
-    <AppsModal></AppsModal>
     <!-- 전체 공지용 스낵바 modal -->
     <v-snackbar v-model="noticeMsgToggle" :timeout='5000' :top="true"
                 style="margin-top: 8vh; font-size: medium;"
@@ -60,10 +59,8 @@
   import TodoList from '../views/todolist/TodoList'
   import Calendar from "../views/calendar/Calendar";
   import AdminPage from "../views/admin/AdminPage"
-  import AppsModal from "../views/main/AppsModal"
   import VideoChat from "./VideoChat";
   import channelMixin from "../mixins/channelMixin";
-  import globalWatch from "../mixins/globalWatch";
   import FileDrawer from "./FileDrawer";
 
   export default {
@@ -81,7 +78,6 @@
       'TodoList': TodoList,
       'Calendar': Calendar,
       'AdminPage': AdminPage,
-      'AppsModal': AppsModal,
       'VideoChat': VideoChat,
       'FileDrawer': FileDrawer
     },

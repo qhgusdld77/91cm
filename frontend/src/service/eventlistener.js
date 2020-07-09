@@ -18,6 +18,7 @@ class EventListener {
       if (!store.state.isLogout) {
         store.commit('setFocus', true)
         if (store.state.currentChannel != null && store.state.selectComponent == 'main') {
+          instance.currentChannel.access()
           instance.msgCountUpdate(store.state.currentChannel.id, false)
         }
       }

@@ -1,3 +1,6 @@
+.rsidebar-padding-right{
+ padding-right: 320px !important;
+}
 .confirmMsgDel{
     visibility:hidden;
 }
@@ -14,6 +17,9 @@
     order: 1
 }
 
+.myflex{
+    display:flex;
+}
 .msgflex-end{
     justify-content: flex-end;
 }
@@ -90,6 +96,8 @@
     border-radius: .25rem;
     background-color: #fff;
     padding-bottom: 30px;
+    width:100%;
+    position: relative;
 }
 .mytextarea{
     position: relative;
@@ -178,6 +186,7 @@ p.file-name
 .mychat-content > p {
     margin:0px;
     display:flex;
+    height: 21px;
 }
 
 .my-message{
@@ -410,6 +419,9 @@ a:focus {
 .myflex-column {
     display: flex;
     flex-direction: column;
+}
+.myflex-grow{
+    flex-grow: 1;
 }
 
 /* ---------------------------------------------------

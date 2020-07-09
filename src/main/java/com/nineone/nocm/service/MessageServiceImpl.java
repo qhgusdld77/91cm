@@ -48,6 +48,8 @@ public class MessageServiceImpl implements MessageService {
         for (String origin : arr) {
             newMsg += "<p>" + origin + "</p>";
         }
+        newMsg = newMsg.replace(" ", "&nbsp;");
+//    	newMsg = originContent.replace(" ", "&nbsp;");
         return newMsg;
     }
 
