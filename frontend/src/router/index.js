@@ -84,7 +84,7 @@ const routes = [
   // 테스트용 path 테스트 후에 삭제
   {
     path: '/test',
-    component: Calendar
+    component: ContentViewer
   },
   {
     path: '/todo',

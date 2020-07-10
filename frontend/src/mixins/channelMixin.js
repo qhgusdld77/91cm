@@ -360,6 +360,9 @@ let channelMixin = {
     },
     isActiveForceLeave: function (user) {
       return this.isAdmin() || this.isMine(user)
+    },
+    loadChannelFiles: function (channel_id) {
+      this.$store.dispatch('loadChannelFiles',channel_id)
     }
   }
 };
