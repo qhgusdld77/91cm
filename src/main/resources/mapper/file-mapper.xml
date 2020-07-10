@@ -14,9 +14,9 @@
     </select>
 
     <select id="getChannelFileList" resultType="com.nineone.nocm.domain.ContentsFile">
-        SELECT * FROM FILE
-        JOIN MESSAGE
-        ON FILE.MESSAGE_ID = MESSAGE.ID
-        WHERE MESSAGE.CHANNEL_ID = #{CHANNEL_ID}
+        SELECT * FROM FILE F
+        JOIN MESSAGE M
+        ON F.MESSAGE_ID = M.ID
+        WHERE M.CHANNEL_ID = #{CHANNEL_ID} AND M.DELETE_YN = 'N'
     </select>
 </mapper>

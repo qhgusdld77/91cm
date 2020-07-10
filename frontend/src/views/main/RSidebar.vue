@@ -51,15 +51,22 @@
           <b-collapse id="files" visible v-if="channelFiles.length != 0">
             <!--파일이 3개보다 작을때 테스트 필요 -->
             <v-row
-              style="width: 320px"
+              style="width: 320px;padding: 0 1.07143em 1em 1.07143em; margin: 0px;"
               justify="left"
               align="center"
-              dense>
+              dense
+              >
               <v-col
                 @click="test2"
                 v-for="file in getChannelFiles"
-                :cols="4">
-                <v-img :src="selectImage(file)" style="cursor: pointer;" contain></v-img>
+                :cols="4" :key="file.id"
+                >
+                <div style="height: 100px; background-color: #E0E0E0;" class="cetered-align">
+                  <v-img :src="selectImage(file,'tiles')" style="cursor: pointer;"  
+                  :height="selectImage(file).includes('/api/file/download')? none : 25"
+                  :width="selectImage(file).includes('/api/file/download')? none : 25"
+                   contain></v-img>
+                </div>
               </v-col>
             </v-row>
           </b-collapse>
@@ -95,8 +102,8 @@
       // })
     },
     methods: {
-      selectImage: function (file) {
-        return CommonClass.checkFileType(file)
+      selectImage: function (file, option) {
+        return CommonClass.checkFileType(file,option)
       },
       test: function () {
         alert('test')

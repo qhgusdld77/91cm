@@ -156,6 +156,7 @@ let channelMixin = {
     },
     //채널 진입
     joinChannel: function (channel) {
+      this.commit('getSelectComponent', 'main')
       if (channel !== undefined && channel != null) {
         if (channel.id != this.currentChannel.id) {
           this.commit('setCurrentChannel', channel)//채널 진입
@@ -165,7 +166,6 @@ let channelMixin = {
           this.hiddenChannelDelete()
           this.$store.dispatch('loadChannelFiles',channel.id)
           if (window.innerWidth < 600) $(".app-sidebar").addClass("hide-sidebar")
-          this.commit('getSelectComponent', 'main')
           this.currentChannel.count = 0
           this.$store.state.isSearchMode = false
           if (channel != null) {
