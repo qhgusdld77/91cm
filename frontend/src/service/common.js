@@ -61,9 +61,18 @@ class CommonClass {
       case ('zip'):
       case ('7z'):
       case ('tar'):
-        return require('@/assets/images/fileIcon/zip_icon.png')
+        if(option == 'tiles'){
+          return require('@/assets/images/fileIcon/zip-new.png')
+        }else{
+          return require('@/assets/images/fileIcon/zip_icon.png')
+        }
       case 'pdf':
-        return require('@/assets/images/fileIcon/pdf_icon.png')
+        if(option == 'tiles'){
+          return require('@/assets/images/fileIcon/pdf-new.png')
+        }else{
+          return require('@/assets/images/fileIcon/pdf_icon.png')
+        }
+        
       case 'txt':
         return require('@/assets/images/fileIcon/txt_icon.png')
       default:
