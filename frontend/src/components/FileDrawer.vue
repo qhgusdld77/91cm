@@ -72,7 +72,7 @@
                  max-height="60vh" max-width="45vw"
           ></v-img>
         </v-col>
-        <v-col cols="1" align-self="center" style="margin-top: 10px">
+        <v-col cols="1" align-self="center" style="margin-top: 10px" >
           <v-icon large >keyboard_arrow_right</v-icon>
         </v-col>
       </div>
