@@ -13,33 +13,63 @@
             v-for="file in row"
             :key="file.id"
             class="d-flex child-flex"
-            cols="4"
-            lg="2"
-            md="2"
-            sm="3"
+            cols="6"
+            xl="2"
+            lg="3"
+            md="3"
+            sm="4"
           >
             <v-card flat class="mx-auto" tile>
-              <v-img
-                :src="selectImage(file)"
-                :lazy-src="`https://picsum.photos/10/6?image=50`"
-                aspect-ratio="1"
-                class="grey lighten-2"
-                style="cursor: zoom-in"
-                contain
-                @click="fileSelect(file)"
-              >
-                <template v-slot:placeholder>
-                  <v-row
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                  >
-                    <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                  </v-row>
-                </template>
-              </v-img>
-              <v-card-title @click="fileDownload(file)" style="cursor: pointer">
-                <i class="im im-download" style="font-size: medium"> {{file.original_name}}</i>
+              <div style="height:150px; background-color: #E0E0E0;"  @click="fileSelect(file)" class="cetered-align">
+                <v-img v-if="selectImage(file).includes('/api/file/download')"
+                  :src="selectImage(file)"
+                  :lazy-src="`https://picsum.photos/10/6?image=50`"
+                  aspect-ratio="1"
+                  class="grey lighten-2"
+                  style="cursor: zoom-in"
+                  contain
+                  height="150"
+                >
+                  <template v-slot:placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                    >
+                      <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
+                <div v-else>
+                  <v-img 
+                  :src="selectImage(file,'tiles')"
+                  :lazy-src="`https://picsum.photos/10/6?image=50`"
+                  aspect-ratio="1"
+                  class="grey lighten-2"
+                  style="cursor: zoom-in"
+                  contain
+                  height="55"
+                  width="55"
+                >
+                  <template v-slot:placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                    >
+                      <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
+                </div>
+              </div>
+
+
+              <v-card-title style="display: inline-block;width: 100%;">
+                <a @click="fileDownload(file)" style="font-size:medium;" class="cetered-align">
+                  <i class="im im-download" style="font-size: 18px;margin-right: 5px;"/>
+                  <span style="width: 100%;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{file.original_name}}</span>
+                </a>
               </v-card-title>
               <v-card-subtitle>
                 <p>{{formatBytes(file.file_size)}}</p>
