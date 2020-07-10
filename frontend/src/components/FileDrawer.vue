@@ -159,23 +159,20 @@
       document.addEventListener('keydown', this.clickEvent)
     },
     deactivated() {
-      console.log('test')
       document.removeEventListener('keydown', this.clickEvent)
     },
     methods: {
       clickEvent: function (e) {
-        if (this.dialogShow===true){
+        if (this.dialogShow === true) {
           if (e.code === "ArrowRight") {
             this.changeFile(++this.index)
-          }
-          else if (e.code === "ArrowLeft"){
+          } else if (e.code === "ArrowLeft") {
             this.changeFile(--this.index)
-          }
-          else if (e.code === "Escape"){
+          } else if (e.code === "Escape") {
             this.overlayHide()
           }
-        }else if (this.dialogShow === false){
-          if (e.code === "Escape"){
+        } else if (this.dialogShow === false) {
+          if (e.code === "Escape") {
             this.callComponent('main')
           }
         }
@@ -184,10 +181,14 @@
         this.dialogShow = false
         this.showFile = false
       },
-      test: function () {
-        alert('laod')
-      },
       changeFile: function (index) {
+        if (index < 0) {
+          this.index = 0
+          return
+        } else if (index >= this.channelFiles.length) {
+          this.index = this.channelFiles.length - 1
+          return;
+        }
         this.showFile = false
         if (this.channelFiles[index].extension === 'pdf') {
           this.loadPdfFile(this.channelFiles[index])
@@ -229,7 +230,6 @@
         this.dialogShow = true
       },
       loadPdfFile(file) {
-        this.showFile = false
         this.pdfSrc = pdf.createLoadingTask('/api/file/download/' + file.server_name)
         this.pdfSrc.promise.then(pdf => {
           this.pages = pdf.numPages;
@@ -270,17 +270,5 @@
 </script>
 
 <style scoped>
-  /*.{*/
-  /*  height: 100%;*/
-  /*  width: 100%;*/
-  /*}*/
-
-  /*.v-overlay{*/
-  /*  align-items: normal;*/
-  /*  justify-items: normal;*/
-  /*}*/
-  /*.v-overlay__content{*/
-  /*  width: 100%;*/
-  /*  height: 100%;*/
-  /*}*/
+  
 </style>
