@@ -150,16 +150,37 @@
     watch: {
       channelFiles: function () {
         this.initFiles()
-      },
-      loadedRatio: function () {
-        console.log(this.loadedRatio)
       }
     },
     mounted() {
       this.initFiles()
     },
+    activated() {
+      document.addEventListener('keydown', this.clickEvent)
+    },
+    deactivated() {
+      console.log('test')
+      document.removeEventListener('keydown', this.clickEvent)
+    },
     methods: {
-      overlayHide: function(){
+      clickEvent: function (e) {
+        if (this.dialogShow===true){
+          if (e.code === "ArrowRight") {
+            this.changeFile(++this.index)
+          }
+          else if (e.code === "ArrowLeft"){
+            this.changeFile(--this.index)
+          }
+          else if (e.code === "Escape"){
+            this.overlayHide()
+          }
+        }else if (this.dialogShow === false){
+          if (e.code === "Escape"){
+            this.callComponent('main')
+          }
+        }
+      },
+      overlayHide: function () {
         this.dialogShow = false
         this.showFile = false
       },
@@ -211,7 +232,6 @@
         this.showFile = false
         this.pdfSrc = pdf.createLoadingTask('/api/file/download/' + file.server_name)
         this.pdfSrc.promise.then(pdf => {
-          debugger
           this.pages = pdf.numPages;
           this.showFile = true
         });

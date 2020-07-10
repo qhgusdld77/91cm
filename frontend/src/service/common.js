@@ -47,7 +47,6 @@ class CommonClass {
 
   checkFileType(file, option='thumb') {
     let type = file.extension
-    console.log(option)
     type = type.toLowerCase().trim()
     switch (type) {
       case ('png'):
@@ -73,7 +72,7 @@ class CommonClass {
         }else{
           return require('@/assets/images/fileIcon/pdf_icon.png')
         }
-        
+
       case 'txt':
         return require('@/assets/images/fileIcon/txt_icon.png')
       default:
