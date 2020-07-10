@@ -44,7 +44,7 @@
             <i class="im im-calendar"></i>
             <span style="margin-left:20px;">Calendar</span>
           </a>
-          <a class="list-group-item" @click="callComponent('fileDrawer')">
+          <a v-if="channelFiles.length != 0" class="list-group-item" @click="callComponent('fileDrawer')">
             <i class="im im-files-o"></i>
             <span style="margin-left:20px;">Files</span>
           </a>
@@ -59,7 +59,7 @@
                 @click="test2"
                 v-for="file in getChannelFiles"
                 :cols="4">
-                <v-img :src="selectImage(file)" style="cursor: pointer;" contain></v-img>
+                <v-img :src="selectImage(file,'tiles')" style="cursor: pointer;" contain></v-img>
               </v-col>
             </v-row>
           </b-collapse>
@@ -95,8 +95,8 @@
       // })
     },
     methods: {
-      selectImage: function (file) {
-        return CommonClass.checkFileType(file)
+      selectImage: function (file,option) {
+        return CommonClass.checkFileType(file,option)
       },
       test: function () {
         alert('test')

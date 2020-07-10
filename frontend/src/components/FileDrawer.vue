@@ -20,15 +20,14 @@
             sm="4"
           >
             <v-card flat class="mx-auto" tile>
-              <div style="height:150px; background-color: #E0E0E0;"  @click="fileSelect(file)" class="cetered-align">
+              <div style="height:150px; background-color: #E0E0E0;" @click="fileSelect(file)" class="cetered-align">
                 <v-img v-if="selectImage(file).includes('/api/file/download')"
-                  :src="selectImage(file)"
-                  :lazy-src="`https://picsum.photos/10/6?image=50`"
-                  aspect-ratio="1"
-                  class="grey lighten-2"
-                  style="cursor: zoom-in"
-                  contain
-                  height="150"
+                       :src="selectImage(file)"
+                       aspect-ratio="1"
+                       class="grey lighten-2"
+                       style="cursor: zoom-in"
+                       contain
+                       height="150"
                 >
                   <template v-slot:placeholder>
                     <v-row
@@ -41,30 +40,28 @@
                   </template>
                 </v-img>
                 <div v-else>
-                  <v-img 
-                  :src="selectImage(file,'tiles')"
-                  :lazy-src="`https://picsum.photos/10/6?image=50`"
-                  aspect-ratio="1"
-                  class="grey lighten-2"
-                  style="cursor: zoom-in"
-                  contain
-                  height="55"
-                  width="55"
-                >
-                  <template v-slot:placeholder>
-                    <v-row
-                      class="fill-height ma-0"
-                      align="center"
-                      justify="center"
-                    >
-                      <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                    </v-row>
-                  </template>
-                </v-img>
+                  <v-img
+                    :src="selectImage(file,'tiles')"
+                    :lazy-src="`https://picsum.photos/10/6?image=50`"
+                    aspect-ratio="1"
+                    class="grey lighten-2"
+                    style="cursor: zoom-in"
+                    contain
+                    height="55"
+                    width="55"
+                  >
+                    <template v-slot:placeholder>
+                      <v-row
+                        class="fill-height ma-0"
+                        align="center"
+                        justify="center"
+                      >
+                        <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                      </v-row>
+                    </template>
+                  </v-img>
                 </div>
               </div>
-
-
               <v-card-title style="display: inline-block;width: 100%;">
                 <a @click="fileDownload(file)" style="font-size:medium;" class="cetered-align">
                   <i class="im im-download" style="font-size: 18px;margin-right: 5px;"/>
@@ -85,9 +82,9 @@
       dark
       z-index="10000"
     >
-<!--      <v-progress-circular indeterminate size="64" v-if="!showFile"></v-progress-circular>-->
-      <div class="row">
-        <v-col cols="1" align-self="center" style="margin-top: 10px">
+      <v-progress-circular indeterminate size="64" v-show="!showFile"></v-progress-circular>
+      <v-row justify="center" v-show="showFile">
+        <v-col cols="1" align-self="center" style="margin-top: 10px" v-if="index > 0">
           <v-icon large @click="changeFile(--index)">keyboard_arrow_left</v-icon>
         </v-col>
         <v-col cols="10">
@@ -97,15 +94,15 @@
               <!--              <v-btn icon ><i class="im im-printer"></i></v-btn>-->
             </div>
             <div class="myflex-grow-end">
-              <v-btn icon @click="dialogShow=false"><i class="im im-x-mark"></i></v-btn>
+              <v-btn icon @click="overlayHide"><i class="im im-x-mark"></i></v-btn>
             </div>
           </div>
-
           <v-img v-if="selectFile!=undefined && selectFile.extension !== 'pdf'"
                  :src="selectImage(selectFile,'origin')"
-                 lazy-src="https://picsum.photos/10/6?image=50"
                  contain
                  max-height="60vh" max-width="45vw"
+                 eager
+                 @load="showFile = true"
           ></v-img>
           <div style="overflow:scroll; max-width: 45vw; height:80vh;" v-else>
             <pdf
@@ -119,10 +116,10 @@
             </pdf>
           </div>
         </v-col>
-        <v-col cols="1" align-self="center" style="margin-top: 10px">
+        <v-col cols="1" align-self="center" style="margin-top: 10px" v-if="index < channelFiles.length-1">
           <v-icon large @click="changeFile(++index)">keyboard_arrow_right</v-icon>
         </v-col>
-      </div>
+      </v-row>
     </v-overlay>
 
   </div>
@@ -162,21 +159,15 @@
       this.initFiles()
     },
     methods: {
+      overlayHide: function(){
+        this.dialogShow = false
+        this.showFile = false
+      },
       test: function () {
         alert('laod')
       },
       changeFile: function (index) {
-        console.log('changeFile, ', index)
-        if (index < 0) {
-          this.index = 0
-          this.$_error('가장 최신 파일 입니다.')
-          return;
-        }
-        if (index >= this.channelFiles.length) {
-          this.index = this.channelFiles.length - 1
-          this.$_error('더 이상 파일이 없습니다.');
-          return;
-        }
+        this.showFile = false
         if (this.channelFiles[index].extension === 'pdf') {
           this.loadPdfFile(this.channelFiles[index])
         }
@@ -220,6 +211,7 @@
         this.showFile = false
         this.pdfSrc = pdf.createLoadingTask('/api/file/download/' + file.server_name)
         this.pdfSrc.promise.then(pdf => {
+          debugger
           this.pages = pdf.numPages;
           this.showFile = true
         });
