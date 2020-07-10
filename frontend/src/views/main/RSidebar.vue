@@ -9,7 +9,7 @@
         </li>
       </div>
       <div class="chat-list">
-        <div class="list-group row">        
+        <div class="list-group row">
           <!-- 화상 채닝 메뉴 시작 -->
           <a class="list-group-item" v-b-toggle.video-chat>
             <i class="im im-video-camera"></i>
@@ -48,22 +48,21 @@
             <i class="im im-files-o"></i>
             <span style="margin-left:20px;">Files</span>
           </a>
-          <!-- <b-collapse id="files" visible> -->
+          <b-collapse id="files" visible v-if="channelFiles.length != 0">
             <!--파일이 3개보다 작을때 테스트 필요 -->
-            <!-- <v-row
+            <v-row
               style="width: 320px"
-              justify="center"
+              justify="left"
               align="center"
               dense>
               <v-col
                 @click="test2"
-                v-for="n in 3"
-                :key="channelFiles[n-1].id"
+                v-for="file in getChannelFiles"
                 :cols="4">
-                <v-img :src="selectImage(channelFiles[n-1])" style="cursor: pointer;" contain></v-img>
+                <v-img :src="selectImage(file)" style="cursor: pointer;" contain></v-img>
               </v-col>
             </v-row>
-          </b-collapse> -->
+          </b-collapse>
           <!-- calender 메뉴 끝 -->
         </div>
       </div>
@@ -77,7 +76,11 @@
   export default {
     props: ['modalObj'],
     name: 'RSidebar',
-    computed: {},
+    computed: {
+      getChannelFiles: function () {
+        return this.channelFiles.slice(0,3)
+      }
+    },
     data() {
       return {
         videoChatUsers: 0,
