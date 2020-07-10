@@ -85,28 +85,34 @@
       dark
       z-index="10000"
     >
+<!--      <v-progress-circular indeterminate size="64" v-if="!showFile"></v-progress-circular>-->
       <div class="row">
-        <!--        파일 리스트를 넘어가는 index에 대한 처리 필요 -->
         <v-col cols="1" align-self="center" style="margin-top: 10px">
-          <v-icon large @click="selectFile=channelFiles[--index]">keyboard_arrow_left</v-icon>
+          <v-icon large @click="changeFile(--index)">keyboard_arrow_left</v-icon>
         </v-col>
         <v-col cols="10">
           <div class="myflex">
             <div style="display:inline-block">
               <v-btn icon @click="fileDownload(selectFile)"><i class="im im-download"></i></v-btn>
+              <!--              <v-btn icon ><i class="im im-printer"></i></v-btn>-->
             </div>
             <div class="myflex-grow-end">
               <v-btn icon @click="dialogShow=false"><i class="im im-x-mark"></i></v-btn>
             </div>
           </div>
-          <v-img v-if="selectFile!=undefined && selectFile.extension != 'pdf'" :src="selectImage(selectFile,'origin')"
+
+          <v-img v-if="selectFile!=undefined && selectFile.extension !== 'pdf'"
+                 :src="selectImage(selectFile,'origin')"
+                 lazy-src="https://picsum.photos/10/6?image=50"
                  contain
                  max-height="60vh" max-width="45vw"
           ></v-img>
-          <div style="overflow:scroll; width:350px; height:200px;" v-else>
+          <div style="overflow:scroll; max-width: 45vw; height:80vh;" v-else>
             <pdf
               v-for="page in pages"
               :key="page"
+              :rotate="rotate"
+              @progress="loadedRatio = $event"
               :src="pdfSrc"
               :page="page"
               style="width: 100%">
@@ -114,48 +120,72 @@
           </div>
         </v-col>
         <v-col cols="1" align-self="center" style="margin-top: 10px">
-          <v-icon large @click="selectFile=channelFiles[++index]">keyboard_arrow_right</v-icon>
+          <v-icon large @click="changeFile(++index)">keyboard_arrow_right</v-icon>
         </v-col>
       </div>
     </v-overlay>
+
   </div>
 </template>
 <script>
   import CommonClass from "../service/common";
   import pdf from 'vue-pdf'
+
   export default {
     name: "FileDrawer",
-    components:{
+    components: {
       pdf
     },
     data() {
       return {
+        showFile: false,
+        rotate: 0,
+        loadedRatio: 0,
         pdfSrc: undefined,
         pages: undefined,
-        index: 0,
+        index: -1,
         dialog: false,
         rows: [],
         dialogShow: false,
         selectFile: undefined,
-        windowHeight: window.innerHeight,
-        windowWidth: window.innerWidth
       }
     },
     watch: {
       channelFiles: function () {
         this.initFiles()
+      },
+      loadedRatio: function () {
+        console.log(this.loadedRatio)
       }
     },
     mounted() {
       this.initFiles()
-
     },
     methods: {
+      test: function () {
+        alert('laod')
+      },
+      changeFile: function (index) {
+        console.log('changeFile, ', index)
+        if (index < 0) {
+          this.index = 0
+          this.$_error('가장 최신 파일 입니다.')
+          return;
+        }
+        if (index >= this.channelFiles.length) {
+          this.index = this.channelFiles.length - 1
+          this.$_error('더 이상 파일이 없습니다.');
+          return;
+        }
+        if (this.channelFiles[index].extension === 'pdf') {
+          this.loadPdfFile(this.channelFiles[index])
+        }
+        this.selectFile = this.channelFiles[index];
+      },
       initFiles: function () {
         this.rows = []
         let date = this.setDateFormat(this.channelFiles[0].send_date)
         let array = []
-
         this.channelFiles.forEach(file => {
           if (this.setDateFormat(file.send_date) == date) {
             array.push(file)
@@ -172,25 +202,27 @@
       },
       formatBytes: function (bytes, decimals = 2) {
         if (bytes === 0) return '0 Bytes';
-
         const k = 1024;
         const dm = decimals < 0 ? 0 : decimals;
         const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-
         const i = Math.floor(Math.log(bytes) / Math.log(k));
-
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
       },
       fileSelect: function (file) {
-        if (file.extension == 'pdf'){
-          this.pdfSrc = pdf.createLoadingTask('/api/file/download/'+file.server_name)
-          this.pdfSrc.promise.then(pdf =>{
-            this.pages = pdf.numPages;
-          });
+        if (file.extension == 'pdf') {
+          this.loadPdfFile(file)
         }
         this.index = this.channelFiles.findIndex((f) => f.id == file.id)
         this.selectFile = file
         this.dialogShow = true
+      },
+      loadPdfFile(file) {
+        this.showFile = false
+        this.pdfSrc = pdf.createLoadingTask('/api/file/download/' + file.server_name)
+        this.pdfSrc.promise.then(pdf => {
+          this.pages = pdf.numPages;
+          this.showFile = true
+        });
       },
       callComponent: function (componentName) {
         this.$store.commit('getSelectComponent', componentName)
