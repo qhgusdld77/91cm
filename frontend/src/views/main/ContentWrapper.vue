@@ -3,9 +3,10 @@
     <div class="h-inherit" v-cloak @drop.prevent="dropFile" @dragover.prevent>
       <ul class="c-c-wrapper list-unstyled" @scroll="scrollEvt">
         <div v-for="msg in msgArray" :key="msg.id">
-          <MsgBox v-if="msg.message_type=='message'|| msg.message_type=='file'" :msg="msg" :msgPreviewBool="msgPreviewBool" @scrollToEnd="scrollToEnd"
+          <MsgBox v-if="msg.message_type=='message'|| msg.message_type=='file'" :msg="msg"
+                  :msgPreviewBool="msgPreviewBool" @scrollToEnd="scrollToEnd"
                   @imgLoad="imgLoad"></MsgBox>
-          <div v-if="msg.message_type=='action'" class="hori-align" >
+          <div v-if="msg.message_type=='action'" class="hori-align">
             <v-chip class="ma-2" style="font-weight:bold;">
               {{msg.content}}
             </v-chip>
@@ -49,7 +50,8 @@
               ></b-form-textarea>
             </div>
             <!--  초대 모드 시작 -->
-            <InviteInput @sendMessage="sendMessage" @inviteToggle="inviteToggle"  v-if="$store.state.isInviteMode"></InviteInput>
+            <InviteInput @sendMessage="sendMessage" @inviteToggle="inviteToggle"
+                         v-if="$store.state.isInviteMode"></InviteInput>
             <!-- 초대 모드 끝  -->
             <!-- 채팅 검색 모드 시작 -->
             <SearchInput
@@ -60,10 +62,10 @@
             </SearchInput>
             <!-- 채팅 검색 모드 끝 -->
             <div class="verti-align">
-                <v-btn class="mx-2" fab dark large color="cyan"
-                  v-if="!$store.state.isInviteMode && !$store.state.isSearchMode"  @click="sendMessage($event)">
-                  <i class="im im-paperplane"></i>
-                </v-btn>
+              <v-btn class="mx-2" fab dark large color="cyan"
+                     v-if="!$store.state.isInviteMode && !$store.state.isSearchMode" @click="sendMessage($event)">
+                <i class="im im-paperplane"></i>
+              </v-btn>
             </div>
           </div>
           <div style="display: flex;flex-grow: 1;">
@@ -78,15 +80,12 @@
             <!--            <span style="position: absolute;right: 108px;"> {{ stringByteLength }} / 30000Byte</span>-->
           </div>
         </div>
-
         <!--        일반 채팅 모드 일때 아이콘-->
-
         <!--        화상 채팅 모드 일때 아이콘-->
         <!-- <v-btn class="mx-2" fab dark small color="cyan" style="margin-bottom: 25px;"
                v-else @click="sendMessage($event)">
           <i class="im im-paperplane"></i>
         </v-btn> -->
-
       </v-row>
     </div>
   </main>
@@ -95,7 +94,6 @@
   import MsgBox from './MsgBox'
   import CommonClass from '../../service/common'
   import SearchInput from './SearchInput'
-  import {mapGetters} from "vuex";
   import InviteInput from "../../components/InviteInput";
 
   export default {
@@ -121,16 +119,13 @@
         selectedUserEmail: ''
       }
     },
-    created() {
-
-    },
     mounted() {
       this.$nextTick(() => {
-        this.$store.commit('setWrapperEl',document.querySelector('.c-c-wrapper'))
+        this.$store.commit('setWrapperEl', document.querySelector('.c-c-wrapper'))
         window.addEventListener('resize', this.widthCheck);
       })
       this.$eventBus.$on('leaveChannelMsg', (user) => {
-        this.$store.state.message.content = user.name + '님이 ' + (this.isMine(user)?"나가셨습니다.":"추방되었습니다.")
+        this.$store.state.message.content = user.name + '님이 ' + (this.isMine(user) ? "나가셨습니다." : "추방되었습니다.")
         this.sendMessage(null, true)
       })
     },
@@ -148,7 +143,6 @@
       imgLoad() {
         // 문제 있으면 아래 코드 지우기..
         this.$store.state.oldScrollHeight = this.$store.state.wrapperEl.scrollHeight
-
         if (!this.msgPreviewBool && !this.isGetMsgForImgLoad) {
           this.scrollToEnd(true)
         }
@@ -183,10 +177,6 @@
       widthCheck() {
         this.$store.state.oldScrollHeight = this.$store.state.wrapperEl.scrollHeight
       },
-      // splitData(data) {
-      //   this.message.content = data.split("-")[0]
-      //   this.selectedUserEmail = data.split("-")[1]
-      // },
       dropFile: function (e) {
         this.addFile(e.dataTransfer.files)
       },
@@ -194,7 +184,7 @@
         this.addFile(e.target.files)
         this.$refs.fileInput.value = null
       },
-      uploadFile(formData){
+      uploadFile(formData) {
         this.isFileUpload = true
         this.$http.post('/api/file/upload', formData,
           {
@@ -206,8 +196,8 @@
             }
           }).then(res => {
           this.isFileUpload = false
-          this.$store.dispatch('loadChannelFiles',this.currentChannel.id)
-          this.currentChannel.send('loadChannelFiles|'+this.currentChannel.id)
+          this.$store.dispatch('loadChannelFiles', this.currentChannel.id)
+          this.currentChannel.send('loadChannelFiles|' + this.currentChannel.id)
         }).catch(error => {
           this.isFileUpload = false
           this.progressValue = 0
@@ -223,7 +213,7 @@
         let fileSize = 0;
         let formData = new FormData();
         ([...uploadFiles]).forEach(file => {
-          if (file.size <= 0){
+          if (file.size <= 0) {
             this.$_alert('0byte인 파일은 업로드 할 수 없습니다.')
             return
           }
@@ -233,12 +223,12 @@
         if (fileSize >= maxUploadSize) {
           this.$_alert('한번에 보낼 수 있는 파일 용량은 100MB 입니다.')
           return;
-        }else if (fileSize <= 0){
+        } else if (fileSize <= 0) {
           return;
         }
         formData.append('channel_id', this.$store.state.currentChannel.id)
         formData.append('sender', this.$store.state.currentUser.email)
-        formData.append('type','file')
+        formData.append('type', 'file')
 
         this.uploadFile(formData)
 
@@ -289,42 +279,43 @@
         //스크롤이 없을때에도 스크롤 위치가 최상단이기 때문에 스크롤이 있는지 없는지 판단해야한다.
         if (element.scrollTop <= 0 && element.scrollHeight != element.clientHeight) {
           if (this.$store.state.cursorPoint.empty == false) {
-            this.selectMessageList(this.currentChannel,false)
+            this.selectMessageList(this.currentChannel, false)
             //this.getMessage(element)
           }
         } else if (this.isScrollAtEnd(element)) {
           this.msgPreviewBool = false
         }
       },
-      getMessage: function (wrapperEl) {
-        return
-        this.cursorPoint.channel_id = this.$store.state.currentChannel.id
-        this.$http.post('/api/message/getmsg', JSON.stringify(this.cursorPoint), {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }).then(res => {
-          if (res.data.length == 0) {
-            this.cursorPoint.empty = true
-          } else {
-            this.cursorPoint.first = false
-            this.cursorPoint.cursorId = res.data[res.data.length - 1].id
-          }
-          for (let i = 0; i < res.data.length; i++) {
-
-            res.data[i].content = CommonClass.replacemsg(res.data[i].content)
-          }
-          this.$store.commit('setMsgArray', res.data.reverse().concat(this.msgArray))
-          if (wrapperEl != null) {
-            this.$nextTick(() => {
-              wrapperEl.scrollTop = wrapperEl.scrollHeight - this.oldScrollHeight
-              this.oldScrollHeight = wrapperEl.scrollHeight
-            })
-          }
-          this.isGetMsgForPreview = true
-          this.isGetMsgForImgLoad = true
-        })
-      },
+      // 사용안하는지 확인후 삭제
+      // getMessage: function (wrapperEl) {
+      //   return
+      //   this.cursorPoint.channel_id = this.$store.state.currentChannel.id
+      //   this.$http.post('/api/message/getmsg', JSON.stringify(this.cursorPoint), {
+      //     headers: {
+      //       'Content-Type': 'application/json'
+      //     }
+      //   }).then(res => {
+      //     if (res.data.length == 0) {
+      //       this.cursorPoint.empty = true
+      //     } else {
+      //       this.cursorPoint.first = false
+      //       this.cursorPoint.cursorId = res.data[res.data.length - 1].id
+      //     }
+      //     for (let i = 0; i < res.data.length; i++) {
+      //
+      //       res.data[i].content = CommonClass.replacemsg(res.data[i].content)
+      //     }
+      //     this.$store.commit('setMsgArray', res.data.reverse().concat(this.msgArray))
+      //     if (wrapperEl != null) {
+      //       this.$nextTick(() => {
+      //         wrapperEl.scrollTop = wrapperEl.scrollHeight - this.oldScrollHeight
+      //         this.oldScrollHeight = wrapperEl.scrollHeight
+      //       })
+      //     }
+      //     this.isGetMsgForPreview = true
+      //     this.isGetMsgForImgLoad = true
+      //   })
+      // },
       scrollToEnd(bool) {
         this.$nextTick(() => {
           if (this.firstLoad) {
@@ -335,14 +326,14 @@
             ((this.oldScrollHeight == this.wrapperEl.clientHeight) && (this.wrapperEl.scrollHeight > this.wrapperEl.clientHeight))) {
 
             this.wrapperEl.scrollTop = this.wrapperEl.scrollHeight
-            this.$store.commit('setFirstLoad',false)
+            this.$store.commit('setFirstLoad', false)
             this.$store.commit('setOldScrollHeight', this.wrapperEl.scrollHeight);
           }
         })
       },
       isScrollAtEnd(wrapperEl) {
         if (Math.floor(wrapperEl.scrollTop + wrapperEl.clientHeight) == this.oldScrollHeight || Math.round(wrapperEl.scrollTop + wrapperEl.clientHeight) == this.oldScrollHeight || Math.floor(wrapperEl.scrollTop + wrapperEl.clientHeight) == wrapperEl.scrollHeight ||
-        Math.round(wrapperEl.scrollTop + wrapperEl.clientHeight) == wrapperEl.scrollHeight) {
+          Math.round(wrapperEl.scrollTop + wrapperEl.clientHeight) == wrapperEl.scrollHeight) {
           return true
         } else {
           return false
@@ -351,21 +342,6 @@
       clickMsgPreview() {
         this.scrollToEnd(true)
         this.msgPreviewBool = false
-      },
-      initData() {
-        /*
-        this.$store.state.isInviteMode = false
-        this.$store.state.isSearchMode = false
-        this.message.channel_id = this.getCurrentChannel().id
-        this.message.sender = this.$store.state.currentUser.email
-        this.cursorPoint.channel_id = this.$store.state.currentChannel
-        this.cursorPoint.first = true
-        this.cursorPoint.cursorId = 0
-        this.cursorPoint.empty = false
-        this.$store.commit('setMsgArray', [])
-        this.firstLoad = true
-        this.scrollHeight = 0
-        */
       },
       byteCheck(e) {
         // v-model을 썼음에도 e.target.value를 사용하는 이유는 한글은 바로 바인딩이 안되기때문에 수동적으로 값들을 message.content에 넣기 위함이다.
@@ -383,8 +359,8 @@
         if (this.isGetMsgForPreview) {
           this.isGetMsgForPreview = false
         } else { //메세지 미리보기(preview) 실행
-          if(this.wrapperEl==null){
-            this.$store.commit('setWrapperEl',document.querySelector('.c-c-wrapper'))
+          if (this.wrapperEl == null) {
+            this.$store.commit('setWrapperEl', document.querySelector('.c-c-wrapper'))
           }
           if (!this.isScrollAtEnd(this.wrapperEl) && this.msgArray.length > 0) {
             let copymsg = JSON.parse(JSON.stringify(this.msgArray[this.msgArray.length - 1]))

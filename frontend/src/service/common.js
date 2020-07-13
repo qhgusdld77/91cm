@@ -1,4 +1,3 @@
-import store from '../store'
 class CommonClass {
   replacemsg(originContent) {
     if (originContent == null){
@@ -7,7 +6,6 @@ class CommonClass {
     let content = ''
     content = originContent.replace(/&lt;p&gt;/gim, '<p>')
     content = content.replace(/&lt;\/p&gt;/gim, '</p>')
-
     return content
   }
 
