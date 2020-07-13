@@ -27,12 +27,12 @@ public class CustomOAuthUserService implements OAuth2UserService<OAuth2UserReque
     private final HttpSession httpSession;
     private final UserRepository userRepository;
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+//    @SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2UserService delegate = new DefaultOAuth2UserService();
 		OAuth2User oAuth2User = delegate.loadUser(userRequest);
-
+        
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         String userNameAttributeName = userRequest.getClientRegistration()
                 .getProviderDetails()
@@ -60,7 +60,7 @@ public class CustomOAuthUserService implements OAuth2UserService<OAuth2UserReque
         }
         else {
         	user = userRepository.getUserfindByEmail(attributes.getEmail());
-        }    	
+        }
         if (user == null) {
             user = attributes.toEntity();
         }
