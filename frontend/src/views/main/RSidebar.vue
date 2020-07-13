@@ -52,7 +52,6 @@
             <!--파일이 3개보다 작을때 테스트 필요 -->
             <v-row
               style="width: 320px;padding: 0 1.07143em 1em 1.07143em; margin: 0px;"
-              justify="left"
               align="center"
               dense
               >
@@ -62,7 +61,7 @@
                 :cols="4" :key="file.id"
                 >
                 <div style="height: 100px; background-color: #E0E0E0;" class="cetered-align">
-                  <v-img :src="selectImage(file,'tiles')" style="cursor: pointer;"  
+                  <v-img :src="selectImage(file,'tiles')" style="cursor: pointer;"
                   :height="selectImage(file).includes('/api/file/download')? none : 25"
                   :width="selectImage(file).includes('/api/file/download')? none : 25"
                    contain></v-img>

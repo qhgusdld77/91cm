@@ -95,6 +95,7 @@
         AboutChannel.updateLastAccessStatus(this.$store.state.oldComponent, this.$store.state.selectComponent)
         switch (this.$store.state.selectComponent) {
           case 'main':
+            this.$store.commit('setIsVideoMode',false)
             return 'ContentWrapper'
           case 'user':
             return 'UserInfo'
