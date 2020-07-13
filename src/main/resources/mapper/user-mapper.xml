@@ -6,14 +6,14 @@
              , MEM.PASSWORD
              , MEM.NAME
              , MEM.PHONE
-             , IFNULL(MEM.PICTURE, '/img/default-user-picture.png') AS PICTURE 
-          FROM MEMBER MEM
+             , IFNULL(MEM.PICTURE, '/img/default-user-picture.png') AS PICTURE
+          FROM member MEM
     </sql>
 
     <select id="thisChannelUserList" parameterType="java.lang.Integer" resultType="com.nineone.nocm.domain.User">
         <include refid="memberSql"/>
 
-    INNER JOIN JOININFO JI 
+    INNER JOIN JOININFO JI
             ON JI.MEMBER_EMAIL = MEM.EMAIL
            AND JI.CHANNEL_ID = #{channel_id}
 
@@ -27,7 +27,7 @@
                               WHERE IDENTIFIER = #{id}
                )
     </select>
-    
+
     <select id="getUserfindByEmail" resultType="com.nineone.nocm.domain.User">
         <include refid="memberSql"/>
          WHERE MEM.EMAIL = #{email}
@@ -51,7 +51,7 @@
     </select>
 
     <insert id="insertUser">
-        INSERT MEMBER ( NAME
+        INSERT member ( NAME
                       , PHONE
                       , EMAIL
                       , PICTURE
@@ -63,7 +63,7 @@
                       , #{password}
              )
     </insert>
-    
+
     <insert id="insertSNSInfo">
         INSERT SNS_INFO ( IDENTIFIER
                         , MEMBER_EMAIL
@@ -73,7 +73,7 @@
     </insert>
 
     <update id="updateUser">
-        UPDATE MEMBER SET NAME = #{name}
+        UPDATE member SET NAME = #{name}
                         , PHONE = #{phone}
                         , PICTURE = #{picture}
                     WHERE EMAIL = #{email}
