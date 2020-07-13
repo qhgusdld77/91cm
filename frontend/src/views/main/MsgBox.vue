@@ -1,7 +1,7 @@
 <template>
 <div>
   <li class="list-unstyled chat-message" v-if="!isMsgByLoginUser">
-    <div class="myflex" @mouseover="showMsgOption(msg.id)" @mouseleave="hideMsgOption(msg.id)"> 
+    <div class="myflex" @mouseover="showMsgOption(msg.id)" @mouseleave="hideMsgOption(msg.id)">
     <div class="icon" >
       <slot name="m-icon">
         <img  class="icon-round" :src="msg.user.picture" width="40" height="40"/>
@@ -36,10 +36,10 @@
                   </div>
                   <span style="font-size: 11px; margin:0px 3px; width:53px; ">{{ msg.str_send_date }}</span>
                   <a class="verti-align confirmMsgDel" :id="'confirmMsgDel' + msg.id" @click="confirmDelete(msg)">
-                    <v-icon style="font-size:16px;">delete_outline</v-icon>          
+                    <v-icon style="font-size:16px;">delete_outline</v-icon>
                   </a>
                </div>
-         
+
         </slot>
       </div>
       <!-- 채팅메시지내용끝 -->
@@ -55,7 +55,7 @@
         <slot name="m-content">
           <div style="display:flex;align-items: flex-end;">
             <a class="verti-align confirmMsgDel" :id="'confirmMsgDel' + msg.id" @click="confirmDelete(msg)">
-              <v-icon style="font-size:16px;">delete_outline</v-icon>          
+              <v-icon style="font-size:16px;">delete_outline</v-icon>
             </a>
             <span style="font-size: 11px; margin:0px 3px; width:53px; ">{{ msg.str_send_date }}</span>
           </div>
@@ -71,8 +71,7 @@
                   <!-- <b-img thumbnail rounded fluid  alt="이미지를 찾을 수 없습니다."
                          style="max-width: 200px" ></b-img> -->
                   <p class="file-name"><b>{{file.original_name}}</b></p>
-                  <p style="margin:0px;">file size : {{(file.file_size / 1024).toLocaleString(undefined,{minimumFractionDigits:2})}}
-                    kb</p>
+                  <p style="margin:0px;">{{formatBytes(file.file_size)}}</p>
                 </a>
               </b-col>
             </b-row>
@@ -111,6 +110,9 @@
       },
     },
     methods: {
+      formatBytes: function(byte){
+        return CommonClass.formatBytes(byte)
+      },
       showMsgOption:function(msgId) {
         if(this.msg.delete_yn === 'N' && (this.isMsgByLoginUser || this.isAdmin())){
           this.hideMsgOption()

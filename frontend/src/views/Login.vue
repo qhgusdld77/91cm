@@ -15,7 +15,6 @@
         <!--          <u>Bootstrapious</u></a>-->
         <!--        </p>-->
       </div>
-
       <!-- Registeration Form -->
       <div class="col-md-7 col-lg-6 ml-auto margincustom">
         <form action="/login" method="post" id="loginFrom" >
@@ -43,8 +42,6 @@
               <input id="password" type="password" name="password" placeholder="Password"
                      class="form-control bg-white border-left-0 border-md" v-model="password">
             </div>
-
-
             <!-- Submit Button -->
             <div class="form-group col-lg-12 mx-auto mb-0" >
               <button class="btn btn-primary btn-block py-2" type="submit">
@@ -62,15 +59,12 @@
               <!--        동작 에러 인해 주석처리-->
               <!--        <a href="/oauth2/authorization/kakao"><img class="social-logo" src="../assets/images/kakao_logo.png"></a>-->
             </div>
-
             <!-- Already Registered -->
             <br><br><br>
             <div class="text-center w-100">
               <p class="text-muted font-weight-bold">회원가입하기 <a href="/formSignUp" class="text-primary ml-2">Sign Up</a>
               </p>
             </div>
-
-
           </div>
         </form>
       </div>
@@ -89,15 +83,14 @@
         userid: 'root',
         password: 'root',
         */
-        userid: 'test@c.com',
-        password: 'test',
+        userid: '',
+        password: '',
         csrfToken: '',
 
       }
     },
     created(){
       let token = document.cookie.match('(^|;) ?' + 'XSRF-TOKEN' + '=([^;]*)(;|$)')
-      console.log(token[2])
       this.csrfToken = token[2]
     },
     methods: {

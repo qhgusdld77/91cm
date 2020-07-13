@@ -115,21 +115,6 @@
           content: '',
           username: ''
         },
-        // message: {
-        //   channel_id: 0,
-        //   content: '',
-        //   sender: '',
-        //   user: {}
-        // },
-        // 채널 옮길 때마다 초기화 되어야한다.
-        // cursorPoint: {
-        //   channel_id: 0,
-        //   first: true,
-        //   cursorId: 0,
-        //   empty: false
-        // },
-        //oldScrollHeight: 0,
-        //wrapperEl: null,
         msgPreviewBool: false,
         isGetMsgForPreview: false,
         isGetMsgForImgLoad: false,
@@ -137,10 +122,7 @@
       }
     },
     created() {
-      // 사용되지 않는 것 같음
-      // if (this.$store.state.currentChannel != null) {
-      //   this.getMessage()
-      // }
+
     },
     mounted() {
       this.$nextTick(() => {
@@ -201,10 +183,10 @@
       widthCheck() {
         this.$store.state.oldScrollHeight = this.$store.state.wrapperEl.scrollHeight
       },
-      splitData(data) {
-        this.message.content = data.split("-")[0]
-        this.selectedUserEmail = data.split("-")[1]
-      },
+      // splitData(data) {
+      //   this.message.content = data.split("-")[0]
+      //   this.selectedUserEmail = data.split("-")[1]
+      // },
       dropFile: function (e) {
         this.addFile(e.dataTransfer.files)
       },
@@ -212,26 +194,7 @@
         this.addFile(e.target.files)
         this.$refs.fileInput.value = null
       },
-      addFile: function (uploadFiles) {
-        this.progressValue = 0
-        const maxUploadSize = 100 * 1024 * 1024;
-        let fileSize = 0;
-        if (uploadFiles[0] == null) {
-          return;
-        }
-        let formData = new FormData();
-        ([...uploadFiles]).forEach(file => {
-          formData.append("files", file)
-          fileSize += file.size
-        });
-        if (fileSize >= maxUploadSize) {
-          this.$_alert('한번에 보낼 수 있는 파일 용량은 100MB 입니다.')
-          return;
-        }
-        /////////////////////////////////////
-        formData.append('channel_id', this.$store.state.currentChannel.id)
-        formData.append('sender', this.$store.state.currentUser.email)
-        formData.append('type','file')
+      uploadFile(formData){
         this.isFileUpload = true
         this.$http.post('/api/file/upload', formData,
           {
@@ -250,6 +213,35 @@
           this.progressValue = 0
           this.$_error('폴더는 업로드 할 수 없습니다.')
         })
+      },
+      addFile: function (uploadFiles) {
+        if (uploadFiles[0] == null) {
+          return;
+        }
+        this.progressValue = 0
+        const maxUploadSize = 100 * 1024 * 1024;
+        let fileSize = 0;
+        let formData = new FormData();
+        ([...uploadFiles]).forEach(file => {
+          if (file.size <= 0){
+            this.$_alert('0byte인 파일은 업로드 할 수 없습니다.')
+            return
+          }
+          formData.append("files", file)
+          fileSize += file.size
+        });
+        if (fileSize >= maxUploadSize) {
+          this.$_alert('한번에 보낼 수 있는 파일 용량은 100MB 입니다.')
+          return;
+        }else if (fileSize <= 0){
+          return;
+        }
+        formData.append('channel_id', this.$store.state.currentChannel.id)
+        formData.append('sender', this.$store.state.currentUser.email)
+        formData.append('type','file')
+
+        this.uploadFile(formData)
+
       },
       send: async function (e, isSysMsg) {
         if (e != null) {

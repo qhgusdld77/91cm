@@ -33,6 +33,9 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+    beforeEnter: function (to, from, next){
+      // 로그인한 유저가 로그인 페이지로 오는것을 막는 로직 필요
+    },
     props: true
   },
   {
@@ -55,8 +58,10 @@ const routes = [
     beforeEnter: async function (to, from, next) {
       await store.dispatch('initCurrentUser')
       console.log(store.state.currentUser)
-      console.log(store.state.currentUser.roles)
-      if (store.state.currentUser.roles.length == 0) {
+      if(store.state.currentUser == 'none'){
+        next('/')
+      }
+      else if (store.state.currentUser.roles.length == 0) {
         next('/signup')
       } else if (store.state.currentUser.roles.length == 1
         && store.state.currentUser.roles.includes('ROLE_ANON')) {
