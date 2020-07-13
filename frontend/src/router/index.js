@@ -33,9 +33,6 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-    beforeEnter: function (to, from, next){
-      // 로그인한 유저가 로그인 페이지로 오는것을 막는 로직 필요
-    },
     props: true
   },
   {
