@@ -7,7 +7,7 @@
              , MEM.NAME
              , MEM.PHONE
              , IFNULL(MEM.PICTURE, '/img/default-user-picture.png') AS PICTURE
-          FROM member MEM
+          FROM MEMBER MEM
     </sql>
 
     <select id="thisChannelUserList" parameterType="java.lang.Integer" resultType="com.nineone.nocm.domain.User">
@@ -51,7 +51,7 @@
     </select>
 
     <insert id="insertUser">
-        INSERT member ( NAME
+        INSERT MEMBER ( NAME
                       , PHONE
                       , EMAIL
                       , PICTURE
@@ -73,7 +73,7 @@
     </insert>
 
     <update id="updateUser">
-        UPDATE member SET NAME = #{name}
+        UPDATE MEMBER SET NAME = #{name}
                         , PHONE = #{phone}
                         , PICTURE = #{picture}
                     WHERE EMAIL = #{email}
