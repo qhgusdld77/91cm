@@ -107,6 +107,11 @@
         eventTitle: null,
         eventColor: null,
         config: {
+          header:{
+            left: 'prev,next',
+            center: 'title',
+            right: 'today'
+          },
           editable: false,
           defaultView: 'month',
           selectHelper: false,

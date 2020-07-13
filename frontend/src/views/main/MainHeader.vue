@@ -49,6 +49,7 @@
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
               <a class="dropdown-item" @click="callComponent('user')"><i class="ik ik-user dropdown-icon"></i> Profile</a>
               <a v-if="false" class="dropdown-item" @click="$router.push('/develop')"><i class="ik ik-settings dropdown-icon"></i> Setting</a>
+<!--              <a class="dropdown-item"><i class="ik ik-info dropdown-icon"></i> About</a>-->
               <a class="dropdown-item" v-if="isAdmin()" @click="callComponent('admin')"><i class="ik ik-settings dropdown-icon"></i> Permission</a>
               <a class="dropdown-item" @click="SignOut"><i class="ik ik-power dropdown-icon"></i> Logout</a>
             </div>
@@ -128,7 +129,7 @@
       //       await this.selectChannelList(channel) // 채널 id 값이 아니라 channel 객체를 줘야함
       //       //this.commit('setCurrentChannel', res.data) //채널 진입
       //       await this.subscribe("/sub/chat/room/" + alarm.channel_id, this.channelSubscribeCallBack)
-            
+
       //     })
       //     .catch(error => {
       //       console.error(error)
@@ -137,7 +138,7 @@
       // ,
       // // 거절 과 수락은 하나의 api로 해서 신호를 하나 줘서 분기 시키는게 더 좋을 듯
       // inviteRefuse: function (alarm, index) {
-        
+
       //   // 초대가 거절됐다는 메시지를 채널에 보내는 로직을 구현해야함
       //   this.$http.post('/api/invite/refuse', alarm)
       //     .then(res => {

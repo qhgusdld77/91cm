@@ -2,7 +2,10 @@
   <div class="card task-board">
     <div v-if="taskList.name != ''">
       <draggable :list="getTasks" :group="'tasks'" @change="taskEventHandler" draggable=".item"
-                 :disabled="disableCheck">
+                 :disabled="disableCheck"
+                 :scroll-sensitivity="200"
+                 :force-fallback="true"
+      >
         <div class="card-header">
           <div v-if="!edit">
             <h3>{{taskList.name}}</h3>
@@ -53,6 +56,8 @@
 
       <ol class="dd-list" name="task-list">
         <draggable :list="getTasks" :group="'tasks'" @change="taskEventHandler" draggable=".item"
+                   :scroll-sensitivity="200"
+                   :force-fallback="true"
                    :disabled="disableCheck">
           <li class="dd-item item" v-for="(task,index) in getTasks" :key="index">
 
