@@ -54,11 +54,10 @@ const routes = [
     component: Main,
     beforeEnter: async function (to, from, next) {
       await store.dispatch('initCurrentUser')
-      // console.log(store.state.currentUser)
-      // if(store.state.currentUser == 'none'){
-      //   next('/')
-      // }
-      if (store.state.currentUser.roles.length == 0) {
+      if(store.state.currentUser == 'none'){
+        next('/')
+      }
+      else if (store.state.currentUser.roles.length == 0) {
         next('/signup')
       } else if (store.state.currentUser.roles.length == 1
         && store.state.currentUser.roles.includes('ROLE_ANON')) {
