@@ -13,7 +13,7 @@
     </v-row>
     <v-row justify="center" align="center" no-gutters style="height: 90%;">
       <draggable v-model="videoList" style="display: flex; flex-wrap: wrap; justify-content: center;">
-        <v-col :cols="getVideoCols" v-for="(item,index) in videoList" :key="item" style="margin-top: 0px; padding: 5px;">
+        <v-col :cols="getVideoCols" v-for="(item,index) in videoList" :key="item.id" style="margin-top: 0px; padding: 5px;">
           <v-card class="d-inline" flat tile>
             <v-card
               v-bind:video="item"
@@ -76,7 +76,6 @@
         default: 'stun:stun.1.google.com:19302'
       },
       roomId: {
-        type: String,
         default: 'public-room'
       },
       socketURL: {
