@@ -73,53 +73,12 @@ new Vue({
             return newChannel.id == oldChannel.id
           })
           if (isEquals === undefined) {
-
             oldChannel.unsubscribe()
             //_this.$store.state.stompClient.unsubscribe(oldChannel.id)
           }
         })
       }
     },
-    // channelList: function (newChannelList, oldChannelList) {
-    //   console.log(oldChannelList)
-    //   let newChannelListCnt = newChannelList.length
-    //   let oldChannelListCnt = oldChannelList.length
-    //
-    //   //최초 진입 후 구독
-    //   if (oldChannelListCnt == 0 && newChannelListCnt > 0) {
-    //     $.each(newChannelList, function (index, channel) {
-    //       channel.subscribe()
-    //     })
-    //   }
-    //   //채널 삭제 후 구독 취소
-    //   else if (newChannelListCnt < oldChannelListCnt) {
-    //     oldChannelList.forEach(oldChannel => {
-    //      let isEquals = newChannelList.find(newChannel => {
-    //         return newChannel.id == oldChannel.id
-    //       })
-    //       console.log("main.js isEquals >>",isEquals)
-    //       console.log("main.js oldChannel >> ",oldChannel.unsubscribe())
-    //       if (isEquals == undefined){
-    //         oldChannel.unsubscribe()
-    //       }
-    //       if (isEquals === undefined) {
-    //         oldChannel = this.getChannel(oldChannel)
-    //         oldChannel.unsubscribe()
-    //       }
-    //     })
-    //     // $.each(oldChannelList, function (index, oldChannel) {
-    //     //   let isEquals = newChannelList.find(newChannel => {
-    //     //     console.log(index, newChannel, oldChannel)
-    //     //     return newChannel.id == oldChannel.id
-    //     //   })
-    //     //   console.log(index, isEquals)
-    //     //   if (isEquals === undefined) {
-    //     //     oldChannel = this.getChannel(oldChannel)
-    //     //     oldChannel.unsubscribe()
-    //     //   }
-    //     // })
-    //   }
-    // },
     currentChannel: function (newCurrentChannel, oldCurrentChannel) {
       if (oldCurrentChannel !== undefined) {
         if (oldCurrentChannel.id !== undefined) {

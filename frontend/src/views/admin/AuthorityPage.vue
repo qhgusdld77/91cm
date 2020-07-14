@@ -34,15 +34,14 @@
                 <v-autocomplete
                   v-model="editedItem.authority"
                   :items="authorityList"
-                  label="Authority
-                  "
+                  label="Authority"
                 ></v-autocomplete>
               </v-col>
             </v-row>
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <!--          <v-spacer></v-spacer>-->
           <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
           <v-btn color="blue darken-1" text @click="save">Save</v-btn>
         </v-card-actions>
@@ -52,7 +51,6 @@
 </template>
 
 <script>
-  import commonMixin from "../../mixins/commonMixin";
 
   export default {
     name: "AuthorityPage",
@@ -115,7 +113,9 @@
         this.editedIndex = this.authUserList.indexOf(item);
         this.editedItem = Object.assign({}, item);
         this.dialog = true;
-        if(this.isAdmin()) this.authorityList = this.authorityList.splice(1, 2)
+        if (this.isAdmin()) {
+          this.authorityList = this.authorityList.filter(item => item != 'ROLE_ADMIN')
+        }
       },
     }
   }
