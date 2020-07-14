@@ -85,7 +85,6 @@
 
   export default {
     components: {FilePreview},
-    props: ['modalObj'],
     name: 'RSidebar',
     computed: {
       getChannelFiles: function () {
@@ -108,12 +107,6 @@
     methods: {
       selectImage: function (file, option) {
         return CommonClass.checkFileType(file, option)
-      },
-      test: function () {
-        alert('test')
-      },
-      test2: function () {
-        alert('test2s')
       },
       toggleVideoMode: function () {
         this.$store.commit('setIsVideoMode', !this.isVideoMode)

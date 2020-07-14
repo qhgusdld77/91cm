@@ -25,11 +25,11 @@ let channelMixin = {
         }
         if (channel.subscribe === undefined) {
           channel.subscribe = function () {
-            result = _this.subscribe(_url + this.id, _this.channelSubscribeCallBack,{id:this.id})
+            result = _this.subscribe(_url + this.id, _this.channelSubscribeCallBack, {id: this.id})
           }
         }
         if (channel.unsubscribe === undefined) {
-          channel.unsubscribe = function() {
+          channel.unsubscribe = function () {
             _this.unsubscribe(this.id)
           }
         }
@@ -45,7 +45,7 @@ let channelMixin = {
           this.$store.commit('pushMsg', data)
           if (!this.$store.state.isfocus) {
             this.msgCountUpdate(data.channel_id, true)
-          }else{
+          } else {
             this.currentChannel.access()
           }
         } else {
@@ -156,6 +156,7 @@ let channelMixin = {
     },
     //채널 진입
     joinChannel: function (channel) {
+      this.$store.dispatch('loadChannelFiles', channel.id)
       this.commit('getSelectComponent', 'main')
       if (channel !== undefined && channel != null) {
         if (channel.id != this.currentChannel.id) {
@@ -164,7 +165,6 @@ let channelMixin = {
           this.selectChannelUserList(channel)//채널 사용자 조회
           this.selectMessageList(channel, true)//채널 메시지 조회
           this.hiddenChannelDelete()
-          this.$store.dispatch('loadChannelFiles',channel.id)
           if (window.innerWidth < 600) $(".app-sidebar").addClass("hide-sidebar")
           this.currentChannel.count = 0
           this.$store.state.isSearchMode = false
@@ -174,6 +174,7 @@ let channelMixin = {
         } else {
           this.selectChannelUserList(channel)//채널 사용자 조회
         }
+
       } else {
         this.commit('setCurrentChannel', null)
         this.initChannelUserList()
@@ -265,12 +266,12 @@ let channelMixin = {
         }
       }
     },
-    inviteAccept: function(alarm,index){
+    inviteAccept: function (alarm, index) {
       const message = {
         channel_id: alarm.channel_id,
         sender: null,
         content: this.$store.state.currentUser.name + '님이 채널에 초대되었습니다.',
-        message_type:'action'
+        message_type: 'action'
         // user: this.$store.state.currentUser
       }
       this.$http.post('/api/invite/accept', alarm)
@@ -278,7 +279,10 @@ let channelMixin = {
           //현재 채널을 변경하는 로직을 구현해야할듯
           this.$store.state.stompClient.send('/pub/chat/message', JSON.stringify(message))
           this.alarmList.splice(index, 1);
-          this.$store.state.stompClient.send('/pub/chat/room/' + alarm.channel_id, JSON.stringify({"message": "updateChannel", "error": "null"}))
+          this.$store.state.stompClient.send('/pub/chat/room/' + alarm.channel_id, JSON.stringify({
+            "message": "updateChannel",
+            "error": "null"
+          }))
           await this.selectChannelList(alarm.channel_id) // 채널 id 값이 아니라 channel 객체를 줘야함
           await this.subscribe("/sub/chat/room/" + alarm.channel_id, this.channelSubscribeCallBack)
           this.send("/sub/chat/room/" + alarm.channel_id, 'selectChannelUserList')
@@ -295,7 +299,7 @@ let channelMixin = {
             channel_id: alarm.channel_id,
             sender: null,
             content: this.$store.state.currentUser.name + '님이 채널 초대를 거부하셨습니다.',
-            message_type:'action'
+            message_type: 'action'
           }
           this.alarmList.splice(index, 1);
           this.$store.state.stompClient.send('/pub/chat/message', JSON.stringify(message))
@@ -362,7 +366,7 @@ let channelMixin = {
       return this.isAdmin() || this.isMine(user)
     },
     loadChannelFiles: function (channel_id) {
-      this.$store.dispatch('loadChannelFiles',channel_id)
+      this.$store.dispatch('loadChannelFiles', channel_id)
     }
   }
 };

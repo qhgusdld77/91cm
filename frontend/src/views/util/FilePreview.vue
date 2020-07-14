@@ -7,8 +7,8 @@
   >
     <v-progress-circular indeterminate size="64" v-show="!showFile"></v-progress-circular>
     <v-row justify="center" v-show="showFile">
-      <v-col cols="1" align-self="center" style="margin-top: 10px" v-if="index > 0">
-        <v-icon large @click="moveFile(--index)">keyboard_arrow_left</v-icon>
+      <v-col cols="1" align-self="center" style="margin-top: 10px" >
+        <v-icon v-if="index > 0" large @click="moveFile(--index)">keyboard_arrow_left</v-icon>
       </v-col>
       <v-col cols="10">
         <div class="myflex">
@@ -38,8 +38,8 @@
           </pdf>
         </div>
       </v-col>
-      <v-col cols="1" align-self="center" style="margin-top: 10px" v-if="index < channelFiles.length-1">
-        <v-icon large @click="moveFile(++index)">keyboard_arrow_right</v-icon>
+      <v-col cols="1" align-self="center" style="margin-top: 10px" >
+        <v-icon v-if="index < channelFiles.length-1" large @click="moveFile(++index)">keyboard_arrow_right</v-icon>
       </v-col>
     </v-row>
   </v-overlay>
@@ -80,9 +80,6 @@
         //     // this.callComponent('main')
         //   }
         // }
-      },
-      setFilesIndex: function (index) {
-        this.index = index
       },
       show: function (file) {
         document.addEventListener('keydown', this.clickEvent)

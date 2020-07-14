@@ -61,7 +61,6 @@
   import AdminPage from "../views/admin/AdminPage"
   import VideoChat from "./VideoChat";
   import FileDrawer from "./FileDrawer";
-  import Dashboard from "./Dashboard";
 
   export default {
     name: 'Main',
@@ -80,7 +79,6 @@
       'AdminPage': AdminPage,
       'VideoChat': VideoChat,
       'FileDrawer': FileDrawer,
-      'Dashboard': Dashboard
     },
     data() {
       return {
@@ -112,8 +110,6 @@
             return 'FileDrawer'
           // case 'videoChat':
           //   return 'VideoChat'
-          case "dash":
-            return "Dashboard";
           default:
             return 'ContentWrapper'
         }
@@ -127,8 +123,6 @@
     deactivated() {
     },
     async created() {
-      //await this.$store.dispatch('userListUpdate')
-      this.selectChannelList("dash");
       const currentChannel = this.$store.state.currentChannel
       if (currentChannel != null) {
         currentChannel.count = 0
