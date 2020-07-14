@@ -60,8 +60,8 @@
   import Calendar from "../views/calendar/Calendar";
   import AdminPage from "../views/admin/AdminPage"
   import VideoChat from "./VideoChat";
-  import channelMixin from "../mixins/channelMixin";
   import FileDrawer from "./FileDrawer";
+  import Dashboard from "./Dashboard";
 
   export default {
     name: 'Main',
@@ -79,7 +79,8 @@
       'Calendar': Calendar,
       'AdminPage': AdminPage,
       'VideoChat': VideoChat,
-      'FileDrawer': FileDrawer
+      'FileDrawer': FileDrawer,
+      'Dashboard': Dashboard
     },
     data() {
       return {
@@ -111,6 +112,8 @@
             return 'FileDrawer'
           // case 'videoChat':
           //   return 'VideoChat'
+          case "dash":
+            return "Dashboard";
           default:
             return 'ContentWrapper'
         }
@@ -125,6 +128,7 @@
     },
     async created() {
       //await this.$store.dispatch('userListUpdate')
+      this.selectChannelList("dash");
       const currentChannel = this.$store.state.currentChannel
       if (currentChannel != null) {
         currentChannel.count = 0

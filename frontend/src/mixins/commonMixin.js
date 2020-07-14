@@ -25,7 +25,6 @@ let commonMixin = {
       this.$store.commit(key, value)
     },
     post: function (url, params, callback) {
-      console.log(params)
       this.$http.post(url, params)
         .then(res => {
           if (callback !== undefined) {

@@ -45,6 +45,7 @@
 
     },
     beforeDestroy() {
+      console.log("videoChat beforeDestroy")
       this.$refs.webrtc.leave();
     },
     methods: {
