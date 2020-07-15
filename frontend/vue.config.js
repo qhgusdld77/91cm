@@ -7,6 +7,14 @@ module.exports = {
   devServer: {
     https: true,
     proxy: {
+      '/v1/translation/translate':{
+        target: 'https://kapi.kakao.com',
+
+        header: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
+        }
+      },
       '/api': {
         target: 'https://localhost:9191',
         // ws: false,

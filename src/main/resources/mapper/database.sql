@@ -1,3 +1,7 @@
+# 리눅스의 경우 대소문자 구분으로 환경 설정이 되어있는 경우도 있음으로 대소문자 구분 설정 확인 필요
+# show variables like 'lower_case_table_names';
+# 위의 명령어로 확인 가능 0이면 대소문자 구분 1이면 구분 안함
+
 drop database nocm;
 create database nocm default character set = utf8;
 use nocm;
@@ -44,7 +48,7 @@ channel_id int unsigned not null,
 content text,
 sender varchar(100) DEFAULT NULL,
 send_date datetime not null default CURRENT_TIMESTAMP,
-delete_yn varchar(1) DEFAULT NULL,
+delete_yn varchar(1) DEFAULT 'N',
 message_type varchar(10) default null
 );
 

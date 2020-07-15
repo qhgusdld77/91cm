@@ -7,7 +7,7 @@
   >
     <v-progress-circular indeterminate size="64" v-show="!showFile"></v-progress-circular>
     <v-row justify="center" v-show="showFile">
-      <v-col cols="1" align-self="center" style="margin-top: 10px" >
+      <v-col cols="1" align-self="center" style="margin-top: 10px">
         <v-icon v-if="index > 0" large @click="moveFile(--index)">keyboard_arrow_left</v-icon>
       </v-col>
       <v-col cols="10">
@@ -27,18 +27,18 @@
                eager
                @load="showFile = true;"
         ></v-img>
-        <div style="overflow:scroll; max-width: 45vw; height:80vh;" v-else>
+        <div style="overflow:scroll; width: 100%; height:80vh;" v-else>
           <pdf
             v-for="page in pages"
             :key="page"
             @progress="loadedRatio = $event"
             :src="pdfSrc"
             :page="page"
-            style="width: 100%">
+            style="width: 100%;">
           </pdf>
         </div>
       </v-col>
-      <v-col cols="1" align-self="center" style="margin-top: 10px" >
+      <v-col cols="1" align-self="center" style="margin-top: 10px">
         <v-icon v-if="index < channelFiles.length-1" large @click="moveFile(++index)">keyboard_arrow_right</v-icon>
       </v-col>
     </v-row>
@@ -137,5 +137,7 @@
 </script>
 
 <style scoped>
-
+ >>>canvas{
+   max-width: 45vw;
+ }
 </style>
